@@ -1,0 +1,639 @@
+.studio-page {
+  padding-top: 80px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Hero Section */
+.studio-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  padding: 6rem 4rem;
+  align-items: center;
+  background: linear-gradient(to right, #fff, #fdf2f2);
+}
+
+.studio-badge {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  background: rgba(128, 0, 0, 0.08);
+  color: #800000;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.studio-hero-content h1 {
+  font-size: 4rem;
+  color: var(--secondary);
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+
+.studio-hero-content h1 span {
+  font-family: var(--font-serif, "Playfair Display", serif);
+  font-style: italic;
+  color: #800000;
+}
+
+.studio-hero-content p {
+  font-size: 1.2rem;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+}
+
+.cta-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 2.5rem;
+  background: #800000;
+  color: white;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(128, 0, 0, 0.2);
+}
+
+.cta-btn-primary:hover {
+  transform: translateY(-3px);
+  background: #600000;
+  box-shadow: 0 15px 40px rgba(128, 0, 0, 0.3);
+}
+
+.studio-hero-image {
+  position: relative;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+}
+
+.studio-hero-image img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  display: block;
+}
+
+.studio-floating-card {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Perks Section */
+.studio-perks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 4rem;
+  background: white;
+}
+
+.perk-card {
+  padding: 3rem;
+  text-align: center;
+  border-radius: 30px;
+  background: #fdfdfd;
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
+}
+
+.perk-card:hover {
+  transform: translateY(-5px);
+  background: white;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.perk-icon {
+  width: 60px;
+  height: 60px;
+  background: #fdf2f2;
+  color: #800000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.perk-card h3 {
+  font-size: 1.4rem;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.perk-card p {
+  color: #888;
+  line-height: 1.6;
+}
+
+/* Schedule Section */
+.studio-schedule {
+  padding: 6rem 4rem;
+  background: #fdfdfd;
+}
+
+.section-title-alt {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--secondary);
+  margin-bottom: 4rem;
+  letter-spacing: 2px;
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+.class-card {
+  background: white;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.class-card-img {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.class-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.class-level {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255,255,255,0.9);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #800000;
+  backdrop-filter: blur(5px);
+}
+
+.class-card-body {
+  padding: 2rem;
+}
+
+.class-card-body h3 {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.class-meta {
+  display: flex;
+  gap: 1.5rem;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.class-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.class-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f5f5f5;
+}
+
+.class-price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #800000;
+}
+
+.class-spots {
+  font-size: 0.85rem;
+  color: #ff4d4d;
+  font-weight: 600;
+}
+
+.book-now-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 15px;
+  border: none;
+  background: var(--secondary);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-now-btn:hover {
+  background: #800000;
+}
+
+/* Gallery Section */
+.studio-gallery {
+  padding: 6rem 4rem;
+}
+
+.gallery-masonry {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 300px);
+  gap: 1.5rem;
+}
+
+.gallery-item {
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-item.large {
+  grid-row: span 2;
+}
+
+/* Booking Section */
+.booking-section {
+  padding: 8rem 4rem;
+  background: #fdf2f2;
+}
+
+.booking-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.booking-info h2 {
+  font-size: 3rem;
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+}
+
+.booking-info p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+.booking-form-wrapper {
+  background: white;
+  padding: 4rem;
+  border-radius: 40px;
+  box-shadow: 0 40px 100px rgba(128, 0, 0, 0.1);
+}
+
+.studio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.form-group input, .form-group select {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  background: #fdfdfd;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #800000;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.submit-booking-btn {
+  margin-top: 1rem;
+  padding: 1.2rem;
+  background: #800000;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-booking-btn:hover:not(:disabled) {
+  background: #600000;
+  transform: translateY(-2px);
+}
+
+.submit-booking-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.booking-success {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.booking-success h3 {
+  font-size: 2rem;
+  color: var(--secondary);
+  margin: 1.5rem 0 1rem;
+}
+
+.booking-success p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 1024px) {
+  .studio-hero, .booking-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 4rem 2rem;
+  }
+  .studio-hero-content { text-align: center; }
+  .studio-hero-content p { margin: 0 auto 2.5rem; }
+  .booking-info { text-align: center; }
+  .contact-details { display: flex; flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 768px) {
+  .studio-page { 
+    padding-top: 0; 
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .studio-hero, .studio-schedule, .studio-gallery, .booking-section, .studio-perks {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .studio-hero { 
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    background: #fdf2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .studio-hero-content {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .studio-hero-content h1 { 
+    font-size: 2.2rem; 
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+    width: 100%;
+  }
+
+  .studio-hero-content p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .studio-hero-image {
+    order: -1; 
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+  }
+
+  .studio-floating-card {
+    padding: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .studio-perks { 
+    grid-template-columns: 1fr; 
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .perk-card { padding: 2rem; }
+
+  /* Horizontal Snap Carousel for Classes on Mobile */
+  .studio-schedule { padding: 2rem 0; }
+  .section-title-alt { padding: 0 1.5rem; margin-bottom: 1.5rem; font-size: 1.8rem; }
+  
+  .classes-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0 1.5rem 1rem;
+    gap: 1rem;
+    scrollbar-width: none;
+  }
+
+  .classes-grid::-webkit-scrollbar { display: none; }
+
+  .class-card {
+    min-width: 280px;
+    scroll-snap-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  }
+
+  .class-card-img { height: 180px; }
+
+  /* Gallery Layout for Mobile */
+  .studio-gallery { padding: 2.5rem 1.5rem; }
+  .gallery-masonry { 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    grid-template-rows: none !important; /* Kill desktop grid inheritance */
+    grid-template-columns: none !important;
+  }
+  .gallery-item {
+    width: calc(50% - 0.5rem); /* Two columns minus half the gap */
+    height: 160px;
+  }
+  .gallery-item.large { 
+    width: 100%;
+    height: 220px;
+    margin-bottom: 0.2rem;
+  }
+  .gallery-item img {
+    border-radius: 20px;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Booking Section Mobile */
+  .booking-section { 
+    padding: 2.5rem 1.5rem; 
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+  .booking-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+  .booking-info { 
+    width: 100%;
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .booking-info h2 { 
+    font-size: 2rem; 
+    width: 100%;
+    margin-bottom: 0.8rem;
+  }
+  .booking-info p {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  .booking-form-wrapper { 
+    width: 100%;
+    max-width: 100%;
+    padding: 2rem 1.2rem; 
+    border-radius: 25px;
+    margin-top: 1rem;
+    box-sizing: border-box;
+  }
+
+  .form-row { grid-template-columns: 1fr; gap: 1rem; }
+  
+  /* Refined Sticky Mobile Action */
+  .studio-page::after {
+    content: '';
+    display: block;
+    height: 60px;
+  }
+
+  /* Target the hero CTA specifically if needed, but remove global fixed */
+  .studio-hero-content .cta-btn-primary {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    display: inline-flex;
+    margin-top: 1rem;
+  }
+
+  /* Create a dedicated sticky class for mobile booking */
+  .mobile-sticky-book {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3rem); /* Full width minus side margins */
+    max-width: 400px;
+    z-index: 100;
+    padding: 1.2rem;
+    background: #800000;
+    color: white;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    box-shadow: 0 15px 40px rgba(128, 0, 0, 0.4);
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100px) translateX(-50%); opacity: 0; }
+    to { transform: translateY(0) translateX(-50%); opacity: 1; }
+  }
+}

@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  /* User requested colors */
+  --color-main: #800000;
+  --color-secondary: #602B19;
+  --color-accent-1: #D893AA;
+  --color-accent-2: #B97771;
+  --color-base: #dbcdc0;
+
+  /* Font mapping */
+  --font-serif: "TAN Mon Cheri", "Playfair Display", serif;
+  --font-sans: "TT Commons Pro", "Montserrat", sans-serif;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  /* clip stops horizontal overflow WITHOUT creating a scroll context
+     so position:sticky still works correctly */
+  overflow-x: clip;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;    /* prevents horizontal scroll without creating a scroll context */
+  overscroll-behavior-y: none; /* prevents scroll chaining from drawers/sheets into page */
+  width: 100%;
+  font-family: var(--font-sans);
+  background-color: #faf8f7;
+  color: var(--color-secondary);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
