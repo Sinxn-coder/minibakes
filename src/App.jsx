@@ -505,7 +505,10 @@ function App() {
         </div>
         
         <div className="hero-top-left-content">
-          <p className="hero-celebration-text">Freshly baked for every celebration</p>
+          <p className="hero-celebration-text">
+            <span className="hero-sans">Freshly baked for every</span><br/>
+            <span className="hero-serif-accent">celebration</span>
+          </p>
         </div>
         {/* Hero content removed as per user request */}
       </section>
