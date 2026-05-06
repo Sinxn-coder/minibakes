@@ -359,6 +359,42 @@ body {
   z-index: 10;
 }
 
+.hero-message-container {
+  position: absolute;
+  top: 15%;
+  left: 6%;
+  z-index: 20;
+  text-align: left;
+  max-width: 500px;
+  pointer-events: none;
+}
+
+.hero-message-text {
+  font-family: var(--font-serif, "Playfair Display", serif);
+  font-size: 3.8rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  animation: messageFadeIn 1.5s ease-out;
+}
+
+@keyframes messageFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .hero-message-container {
+    top: 12%;
+    left: 8%;
+    max-width: 85%;
+  }
+  .hero-message-text {
+    font-size: 2.4rem;
+  }
+}
+
 .hero-logo {
   height: 280px;
   max-width: 80%;
@@ -368,30 +404,14 @@ body {
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
 }
 
-.hero-top-left-content {
-  position: absolute;
-  top: 10%;
-  left: 6%;
-  z-index: 10;
-  text-align: left;
-  max-width: 600px;
-  padding: 2rem;
-}
-
-.hero-message {
-  font-size: 3.5rem;
+.hero-tagline {
+  font-size: 3.5rem; /* Increased size since logo is gone */
   font-weight: 800;
   font-style: italic;
+  margin-bottom: 3rem;
   color: #fff0f3;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   letter-spacing: -1px;
-  line-height: 1.2;
-  animation: messageFadeIn 1.5s ease-out;
-}
-
-@keyframes messageFadeIn {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
 }
 
 .hero-cta-group {
@@ -726,16 +746,12 @@ body {
     margin-bottom: 0.5rem;
   }
   
-  .hero-top-left-content {
-    top: 5%;
-    left: 0;
-    width: 100%;
-    padding: 2rem 1.5rem;
-    text-align: center;
-  }
-  
-  .hero-message {
-    font-size: 2rem;
+  .hero-tagline {
+    font-size: 2.2rem;
+    font-weight: 800;
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    color: #fff0f3;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   }
   
