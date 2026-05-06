@@ -373,11 +373,11 @@ body {
   display: block;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 1.8rem;
+  font-size: 3rem; /* Increased from 1.8rem */
   color: var(--secondary);
-  line-height: 1.2;
+  line-height: 1.1;
   text-transform: none;
-  letter-spacing: -0.5px;
+  letter-spacing: -1.5px;
 }
 
 .hero-top-left-text .text-line-2 {
@@ -385,10 +385,11 @@ body {
   font-family: 'Playfair Display', serif;
   font-style: italic;
   font-weight: 600;
-  font-size: 3rem;
+  font-size: 6rem; /* Increased from 3rem */
   color: var(--secondary);
   line-height: 1;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
+  letter-spacing: -2px;
 }
 
 .hero-logo {
@@ -761,11 +762,11 @@ body {
   }
 
   .hero-top-left-text .text-line-1 {
-    font-size: 1.2rem;
+    font-size: 1.8rem;
   }
 
   .hero-top-left-text .text-line-2 {
-    font-size: 2.2rem;
+    font-size: 3.5rem;
   }
   
   .hero-cta-group {
