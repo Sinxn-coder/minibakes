@@ -504,6 +504,11 @@ function App() {
           <div className="hero-overlay"></div>
         </div>
         
+        <div className="hero-top-left-text">
+          <span className="text-line-1">Freshly baked for</span>
+          <span className="text-line-2">every celebration</span>
+        </div>
+        
         <div className="hero-content">
           <p className="hero-tagline">Made fresh, Made with love</p>
           <div className="hero-cta-group">
