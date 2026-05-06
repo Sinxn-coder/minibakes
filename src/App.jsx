@@ -505,7 +505,6 @@ function App() {
         </div>
         
         <div className="hero-content">
-          <img src={logo} alt="Mini Bakes Logo" className="hero-logo" />
           <p className="hero-tagline">Made fresh, Made with love</p>
           <div className="hero-cta-group">
             <button className="hero-cta primary" onClick={() => setCurrentView('menu')}>Order Now</button>
