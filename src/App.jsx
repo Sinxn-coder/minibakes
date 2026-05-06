@@ -504,7 +504,9 @@ function App() {
           <div className="hero-overlay"></div>
         </div>
         
-        {/* Hero content removed as per user request */}
+        <div className="hero-top-left-content">
+          <p className="hero-message">Freshly baked for every celebration</p>
+        </div>
       </section>
 
       {/* Featured Dessert Section */}
