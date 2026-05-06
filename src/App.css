@@ -362,8 +362,9 @@ body {
 
 .hero-top-left-text {
   position: absolute;
-  top: 10%;
+  top: 55%; /* Centered vertically and moved down slightly */
   left: 5%;
+  transform: translateY(-50%);
   z-index: 15;
   text-align: left;
   pointer-events: none;
@@ -754,9 +755,9 @@ body {
   }
 
   .hero-top-left-text {
-    top: 5%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 90%;
     text-align: center;
   }
