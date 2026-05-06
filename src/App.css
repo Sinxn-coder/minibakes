@@ -335,6 +335,7 @@ body {
   height: 100%;
   background-size: cover; /* Back to cover to prevent stretching/distortion */
   background-position: center;
+  background-attachment: fixed; /* Creates the parallax/fixed background effect */
   opacity: 0;
   transition: opacity 2.5s ease-in-out;
 }
