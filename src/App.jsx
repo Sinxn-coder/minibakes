@@ -510,7 +510,7 @@ function App() {
             <span className="hero-serif-accent">celebration</span>
           </p>
         </div>
-        {/* Hero content removed as per user request */}
+        <div className="hero-right-circle"></div>
       </section>
 
       {/* Featured Dessert Section */}
