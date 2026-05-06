@@ -394,7 +394,7 @@ body {
 .hero-right-circle {
   position: absolute;
   top: 50%;
-  right: 5%;
+  right: 15%; /* Moved further left from 5% */
   transform: translateY(-50%);
   width: 100px;
   height: 100px;
@@ -795,7 +795,7 @@ body {
   .hero-right-circle {
     width: 60px;
     height: 60px;
-    right: -20px; /* Partially hidden on mobile so it doesn't clutter */
+    right: 5%; /* Moved from -20px to fully visible and slightly inset */
   }
 
   .mobile-nav-link {
