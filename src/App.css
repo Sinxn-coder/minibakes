@@ -309,7 +309,8 @@ body {
 /* Hero Section Styles */
 .hero-section {
   position: relative;
-  height: calc(100vh - 100px); /* Perfect fit with header height */
+  height: 90vh; /* Increased for a grander entrance */
+  min-height: 700px;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -333,14 +334,16 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: cover; /* Back to cover to prevent stretching/distortion */
+  background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 2.5s ease-in-out;
+  transform: scale(1.1); /* Start slightly zoomed out for animation */
+  transition: opacity 2.5s ease-in-out, transform 8s linear;
 }
 
 .hero-bg-image.active {
   opacity: 1;
+  transform: scale(1); /* Zoom in effect */
 }
 
 .hero-overlay {
@@ -702,7 +705,8 @@ body {
   }
 
   .hero-section {
-    height: calc(100vh - 80px);
+    height: 85vh;
+    min-height: 500px;
   }
   
   .hero-logo {
