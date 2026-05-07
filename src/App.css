@@ -442,7 +442,7 @@ body {
   top: 100%; /* Bottom edge of the main circle */
   left: 50%;
   transform: translate(-50%, -100px); /* Move it higher up */
-  width: 450px;
+  width: 500px; /* Increased from 450px */
   height: 240px; /* Slightly reduced height to ensure no overlap */
   background-color: #fff;
   border-radius: 30px;
@@ -855,7 +855,7 @@ body {
   }
 
   .hero-info-box {
-    width: 280px;
+    width: 320px; /* Increased from 280px */
     height: 140px;
     transform: translate(-50%, -60px);
     border-radius: 20px;
