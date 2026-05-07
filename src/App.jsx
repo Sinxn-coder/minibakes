@@ -172,31 +172,79 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [orbitRotation, setOrbitRotation] = useState(0);
   const orbitItems = [
-    { angle: 0, img: orbitCupcake },
-    { angle: 45, img: orbitCake },
-    { angle: 90, img: orbitPops },
-    { angle: 135, img: orbitBrownie },
-    { angle: 180, img: orbitSicles },
-    { angle: 225, img: orbitHeart },
-    { angle: 270, img: orbitLove },
-    { angle: 315, img: orbitBento },
+    { 
+      angle: 0, 
+      img: orbitCupcake, 
+      name: "Gourmet Cupcakes", 
+      desc: "Handcrafted with premium vanilla bean and silky velvet frosting.",
+      price: "₹120 / piece"
+    },
+    { 
+      angle: 45, 
+      img: orbitCake, 
+      name: "Signature Round Cake", 
+      desc: "Elegant layers of moist sponge with seasonal fresh fruit filling.",
+      price: "₹1,200 / kg"
+    },
+    { 
+      angle: 90, 
+      img: orbitPops, 
+      name: "Artisan Cakepops", 
+      desc: "Delicious cake bites dipped in premium Belgian chocolate.",
+      price: "₹80 / piece"
+    },
+    { 
+      angle: 135, 
+      img: orbitBrownie, 
+      name: "Assorted Brownies", 
+      desc: "Rich, fudgy brownies made with the finest dark cocoa.",
+      price: "₹450 / box"
+    },
+    { 
+      angle: 180, 
+      img: orbitSicles, 
+      name: "Pastel Cakesicles", 
+      desc: "The perfect handheld treat for any boutique celebration.",
+      price: "₹150 / piece"
+    },
+    { 
+      angle: 225, 
+      img: orbitHeart, 
+      name: "Breakable Heart", 
+      desc: "A surprise-filled chocolate shell for your most special moments.",
+      price: "₹850 / piece"
+    },
+    { 
+      angle: 270, 
+      img: orbitLove, 
+      name: "Luxury Love Cake", 
+      desc: "Romantic heart-shaped cake with delicate piping details.",
+      price: "₹1,400 / kg"
+    },
+    { 
+      angle: 315, 
+      img: orbitBento, 
+      name: "Bento Box Cake", 
+      desc: "Minimalist aesthetic cakes perfect for intimate gifting.",
+      price: "₹650 / piece"
+    },
   ];
-  const [activeOrbitImg, setActiveOrbitImg] = useState(orbitCupcake);
+  const [activeOrbitItem, setActiveOrbitItem] = useState(orbitItems[0]);
 
-  const handleOrbitClick = (angle, img) => {
+  const handleOrbitClick = (item) => {
     // Calculate the shortest path for rotation to make it feel infinite
     const currentRot = orbitRotation;
     // Normalized current angle in the 0-360 range
     const normalizedCurrent = ((-currentRot % 360) + 360) % 360;
     
-    let diff = angle - normalizedCurrent;
+    let diff = item.angle - normalizedCurrent;
     
     // Find the shortest distance (-180 to 180)
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
     
     setOrbitRotation(currentRot - diff);
-    setActiveOrbitImg(img);
+    setActiveOrbitItem(item);
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
   const [cart, setCart] = useState(() => {
@@ -559,12 +607,21 @@ function App() {
                 backgroundImage: `url(${item.img})`,
                 '--orbit-rotation': `${orbitRotation}deg`
               }}
-              onClick={() => handleOrbitClick(item.angle, item.img)}
+              onClick={() => handleOrbitClick(item)}
             ></div>
           ))}
         </div>
-        <div className="hero-info-box"></div>
-        <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitImg})` }}></div>
+        <div className="hero-info-box">
+          <div className="info-box-content">
+            <h3 className="info-box-title">{activeOrbitItem.name}</h3>
+            <p className="info-box-price">{activeOrbitItem.price}</p>
+            <p className="info-box-desc">{activeOrbitItem.desc}</p>
+            <button className="info-box-btn" onClick={() => navigateTo('menu')}>
+              Shop Now
+            </button>
+          </div>
+        </div>
+        <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitItem.img})` }}></div>
       </section>
 
       {/* Featured Dessert Section */}
