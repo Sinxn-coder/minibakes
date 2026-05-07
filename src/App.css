@@ -413,8 +413,28 @@ body {
   right: -100px;
   bottom: -100px;
   border-radius: 50%;
-  border: 1.5px solid #000; /* Changed to black */
+  border: 1.5px dashed #000; /* Changed to black and dashed */
   opacity: 0.7;
+}
+
+.orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background-color: var(--secondary); /* Placeholder solid color */
+  border-radius: 50%;
+  /* 200px orbit radius (100px base circle radius + 100px gap) */
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle)));
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  border: 3px solid #fff;
+  transition: transform 0.3s ease;
+}
+
+.orbit-item:hover {
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle))) scale(1.1);
 }
 
 .hero-logo {
@@ -808,6 +828,17 @@ body {
     width: 120px; /* Increased from 90px */
     height: 120px; /* Increased from 90px */
     right: 15%; /* Moved further left on mobile */
+  }
+
+  .orbit-item {
+    width: 40px;
+    height: 40px;
+    /* 160px orbit radius on mobile (60px base circle radius + 100px gap) */
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .orbit-item:hover {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle))) scale(1.1);
   }
 
   .mobile-nav-link {
