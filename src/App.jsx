@@ -40,6 +40,14 @@ import style7 from './assets/style7.png';
 import style8 from './assets/style8.png';
 import miniIcon from './assets/mini_icon.png';
 import minibakesImg from './assets/minibakes.png';
+import orbitCupcake from './assets/cupcake1.png';
+import orbitCake from './assets/roundcake1.png';
+import orbitPops from './assets/cakepops.png';
+import orbitBrownie from './assets/brownies_box.png';
+import orbitSicles from './assets/cakesicles10.png';
+import orbitHeart from './assets/breakable_heart.png';
+import orbitLove from './assets/lovecake1.png';
+import orbitBento from './assets/bento_cake_aesthetic_1775218142199.png';
 import MenuPage from './MenuPage';
 import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
@@ -511,14 +519,14 @@ function App() {
           </p>
         </div>
         <div className="hero-orbit-container">
-          <div className="orbit-item" style={{ '--angle': '0deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '45deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '90deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '135deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '180deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '225deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '270deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '315deg' }}></div>
+          <div className="orbit-item" style={{ '--angle': '0deg', backgroundImage: `url(${orbitCupcake})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '45deg', backgroundImage: `url(${orbitCake})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '90deg', backgroundImage: `url(${orbitPops})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '135deg', backgroundImage: `url(${orbitBrownie})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '180deg', backgroundImage: `url(${orbitSicles})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '225deg', backgroundImage: `url(${orbitHeart})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '270deg', backgroundImage: `url(${orbitLove})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '315deg', backgroundImage: `url(${orbitBento})` }}></div>
         </div>
         <div className="hero-info-box"></div>
         <div className="hero-right-circle"></div>
