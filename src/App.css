@@ -394,14 +394,14 @@ body {
 .hero-right-circle {
   position: absolute;
   top: 50%;
-  right: 25%; /* Moved even further left */
+  right: 25%;
   transform: translateY(-50%);
-  width: 200px; /* Increased from 150px */
-  height: 200px; /* Increased from 150px */
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background-color: var(--primary);
   opacity: 0.85;
-  z-index: 20;
+  z-index: 20; /* High z-index to be on top of the box */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -439,15 +439,15 @@ body {
 
 .hero-info-box {
   position: absolute;
-  top: 100%; /* Bottom edge of the main circle */
-  left: 50%;
-  transform: translate(-50%, 20px); /* Positioned below the main circle */
+  top: 50%;
+  right: calc(25% - 150px); /* Aligns box center with circle center */
+  transform: translateY(-40px); /* Position it behind the circle, starting slightly above center */
   width: 500px;
   height: 300px;
   background-color: #fff;
   border-radius: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 15;
+  z-index: 10; /* Lower than the circle */
 }
 
 .hero-logo {
@@ -857,8 +857,10 @@ body {
   .hero-info-box {
     width: 320px;
     height: 180px;
-    transform: translate(-50%, 15px);
+    right: calc(15% - 100px);
+    transform: translateY(-30px);
     border-radius: 20px;
+    z-index: 10;
   }
 
   .mobile-nav-link {
