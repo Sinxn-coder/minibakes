@@ -187,18 +187,6 @@ function App() {
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
-  const orbitImages = [
-    orbitCupcake, orbitCake, orbitPops, orbitBrownie, 
-    orbitSicles, orbitHeart, orbitLove, orbitBento
-  ];
-  const [orbitIndex, setOrbitIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setOrbitIndex((prev) => (prev + 1) % orbitImages.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [orbitImages.length]);
 
   // Scroll observer for floating cart color change
   useEffect(() => {
@@ -530,22 +518,18 @@ function App() {
             <span className="hero-serif-accent">celebration</span>
           </p>
         </div>
-        <div className="hero-orbit-container" style={{ transform: `translateY(-50%) rotate(${orbitIndex * -45}deg)` }}>
-          {orbitImages.map((img, i) => (
-            <div 
-              key={i}
-              className="orbit-item" 
-              style={{ 
-                '--angle': `${i * 45}deg`, 
-                backgroundImage: `url(${img})`,
-                /* Counter-rotate to keep images upright */
-                transform: `translate(-50%, -50%) rotate(${i * 45 + orbitIndex * 45}deg) translateY(-200px) rotate(${-(i * 45 + orbitIndex * 45)}deg)`
-              }} 
-            />
-          ))}
+        <div className="hero-orbit-container">
+          <div className="orbit-item" style={{ '--angle': '0deg', backgroundImage: `url(${orbitCupcake})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '45deg', backgroundImage: `url(${orbitCake})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '90deg', backgroundImage: `url(${orbitPops})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '135deg', backgroundImage: `url(${orbitBrownie})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '180deg', backgroundImage: `url(${orbitSicles})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '225deg', backgroundImage: `url(${orbitHeart})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '270deg', backgroundImage: `url(${orbitLove})` }}></div>
+          <div className="orbit-item" style={{ '--angle': '315deg', backgroundImage: `url(${orbitBento})` }}></div>
         </div>
         <div className="hero-info-box"></div>
-        <div className="hero-right-circle" style={{ backgroundImage: `url(${orbitImages[orbitIndex]})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+        <div className="hero-right-circle" style={{ backgroundImage: `url(${orbitCupcake})` }}></div>
       </section>
 
       {/* Featured Dessert Section */}
