@@ -403,6 +403,7 @@ body {
   opacity: 0.85;
   z-index: 30; /* Top layer */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: background-image 0.8s ease-in-out;
 }
 
 .hero-orbit-container {
@@ -413,6 +414,7 @@ body {
   width: 200px;
   height: 200px;
   z-index: 10; /* Bottom layer */
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-orbit-container::before {
@@ -442,7 +444,7 @@ body {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   z-index: 10;
   border: 3px solid #fff;
-  transition: transform 0.3s ease;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 }
 
 .orbit-item:hover {
