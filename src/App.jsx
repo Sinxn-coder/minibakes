@@ -519,6 +519,8 @@ function App() {
           <div className="orbit-item" style={{ '--angle': '225deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '270deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '315deg' }}></div>
+          
+          <div className="hero-info-box"></div>
         </div>
       </section>
 

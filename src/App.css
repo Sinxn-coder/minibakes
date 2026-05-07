@@ -437,6 +437,19 @@ body {
   transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle))) scale(1.1);
 }
 
+.hero-info-box {
+  position: absolute;
+  top: 100%; /* Bottom edge of the main circle */
+  left: 50%;
+  transform: translate(-50%, 10px); /* 10px gap from the main circle */
+  width: 200px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
 .hero-logo {
   height: 280px;
   max-width: 80%;
@@ -839,6 +852,12 @@ body {
 
   .orbit-item:hover {
     transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle))) scale(1.1);
+  }
+
+  .hero-info-box {
+    width: 140px;
+    height: 40px;
+    transform: translate(-50%, 5px);
   }
 
   .mobile-nav-link {
