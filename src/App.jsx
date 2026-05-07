@@ -175,58 +175,42 @@ function App() {
     { 
       angle: 0, 
       img: orbitCupcake, 
-      name: "Gourmet Cupcakes", 
-      desc: "Handcrafted with premium vanilla bean and silky velvet frosting.",
-      price: "₹120 / piece"
+      desc: "A delicate swirl of velvet frosting atop a cloud-soft vanilla bean base."
     },
     { 
       angle: 45, 
       img: orbitCake, 
-      name: "Signature Round Cake", 
-      desc: "Elegant layers of moist sponge with seasonal fresh fruit filling.",
-      price: "₹1,200 / kg"
+      desc: "Layers of artisanal sponge whispering stories of seasonal sweetness and joy."
     },
     { 
       angle: 90, 
       img: orbitPops, 
-      name: "Artisan Cakepops", 
-      desc: "Delicious cake bites dipped in premium Belgian chocolate.",
-      price: "₹80 / piece"
+      desc: "A playful dance of rich cake and premium chocolate in every delightful bite."
     },
     { 
       angle: 135, 
       img: orbitBrownie, 
-      name: "Assorted Brownies", 
-      desc: "Rich, fudgy brownies made with the finest dark cocoa.",
-      price: "₹450 / box"
+      desc: "The deep, dark indulgence of cocoa crafted into fabled, fudgy perfection."
     },
     { 
       angle: 180, 
       img: orbitSicles, 
-      name: "Pastel Cakesicles", 
-      desc: "The perfect handheld treat for any boutique celebration.",
-      price: "₹150 / piece"
+      desc: "Boutique elegance captured in a whimsical, chocolate-dipped handheld treasure."
     },
     { 
       angle: 225, 
       img: orbitHeart, 
-      name: "Breakable Heart", 
-      desc: "A surprise-filled chocolate shell for your most special moments.",
-      price: "₹850 / piece"
+      desc: "A shimmering shell of Belgian cocoa waiting to reveal your sweetest secrets."
     },
     { 
       angle: 270, 
       img: orbitLove, 
-      name: "Luxury Love Cake", 
-      desc: "Romantic heart-shaped cake with delicate piping details.",
-      price: "₹1,400 / kg"
+      desc: "A poetic masterpiece of romantic piping and heart-shaped confectionery art."
     },
     { 
       angle: 315, 
       img: orbitBento, 
-      name: "Bento Box Cake", 
-      desc: "Minimalist aesthetic cakes perfect for intimate gifting.",
-      price: "₹650 / piece"
+      desc: "Charming, minimalist dreams perfectly sized for your most intimate celebrations."
     },
   ];
   const [activeOrbitItem, setActiveOrbitItem] = useState(orbitItems[0]);
@@ -613,12 +597,7 @@ function App() {
         </div>
         <div className="hero-info-box">
           <div className="info-box-content">
-            <h3 className="info-box-title">{activeOrbitItem.name}</h3>
-            <p className="info-box-price">{activeOrbitItem.price}</p>
             <p className="info-box-desc">{activeOrbitItem.desc}</p>
-            <button className="info-box-btn" onClick={() => navigateTo('menu')}>
-              Shop Now
-            </button>
           </div>
         </div>
         <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitItem.img})` }}></div>

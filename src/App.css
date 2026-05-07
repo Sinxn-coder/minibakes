@@ -466,57 +466,24 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   z-index: 20; /* Middle layer, covers orbit but below main circle */
   display: flex;
-  align-items: flex-end; /* Push content to bottom since circle covers top */
-  padding: 30px;
+  align-items: center; /* Center vertically since it's just one sentence now */
+  justify-content: center;
+  padding: 40px;
   text-align: center;
 }
 
 .info-box-content {
   width: 100%;
-  padding-top: 60px; /* Space for the circle overlapping top */
-}
-
-.info-box-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.info-box-price {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  color: var(--primary);
-  font-size: 1.1rem;
-  margin-bottom: 15px;
+  padding-top: 80px; /* Space for the circle overlapping top */
 }
 
 .info-box-desc {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 20px;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.info-box-btn {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 25px;
-  border-radius: 25px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.info-box-btn:hover {
-  background-color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Playfair Display', serif; /* Using serif for the fancy sentence */
+  font-size: 1.35rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
 }
 
 .hero-logo {
@@ -943,35 +910,22 @@ body {
     transform: translateY(-30px);
     border-radius: 20px;
     z-index: 20;
-    padding: 15px;
-    align-items: center; /* Center on mobile since there's less space */
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .info-box-content {
-    padding-top: 30px;
-  }
-
-  .info-box-title {
-    font-size: 1.2rem;
-  }
-
-  .info-box-price {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
+    padding-top: 40px;
   }
 
   .info-box-desc {
-    font-size: 0.75rem;
-    margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .info-box-btn {
-    padding: 5px 15px;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: #333;
+    margin: 0;
   }
 
   .mobile-nav-link {
