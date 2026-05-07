@@ -511,11 +511,14 @@ function App() {
           </p>
         </div>
         <div className="hero-right-circle">
+          <div className="orbit-item" style={{ '--angle': '0deg' }}></div>
+          <div className="orbit-item" style={{ '--angle': '45deg' }}></div>
+          <div className="orbit-item" style={{ '--angle': '90deg' }}></div>
+          <div className="orbit-item" style={{ '--angle': '135deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '180deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '225deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '270deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '315deg' }}></div>
-          <div className="orbit-item" style={{ '--angle': '360deg' }}></div>
         </div>
       </section>
 
