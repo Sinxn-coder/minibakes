@@ -441,13 +441,13 @@ body {
   position: absolute;
   top: 100%; /* Bottom edge of the main circle */
   left: 50%;
-  transform: translate(-50%, 10px); /* 10px gap from the main circle */
-  width: 200px;
-  height: 50px;
+  transform: translate(-50%, -100px); /* Move it higher up */
+  width: 450px;
+  height: 240px; /* Slightly reduced height to ensure no overlap */
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  z-index: 5;
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  z-index: 15;
 }
 
 .hero-logo {
@@ -855,9 +855,10 @@ body {
   }
 
   .hero-info-box {
-    width: 140px;
-    height: 40px;
-    transform: translate(-50%, 5px);
+    width: 280px;
+    height: 140px;
+    transform: translate(-50%, -60px);
+    border-radius: 20px;
   }
 
   .mobile-nav-link {
