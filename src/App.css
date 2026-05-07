@@ -405,6 +405,18 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
+.hero-right-circle::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  opacity: 0.7;
+}
+
 .hero-logo {
   height: 280px;
   max-width: 80%;
