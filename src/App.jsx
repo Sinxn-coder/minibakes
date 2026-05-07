@@ -510,7 +510,7 @@ function App() {
             <span className="hero-serif-accent">celebration</span>
           </p>
         </div>
-        <div className="hero-right-circle">
+        <div className="hero-orbit-container">
           <div className="orbit-item" style={{ '--angle': '0deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '45deg' }}></div>
           <div className="orbit-item" style={{ '--angle': '90deg' }}></div>
@@ -521,6 +521,7 @@ function App() {
           <div className="orbit-item" style={{ '--angle': '315deg' }}></div>
         </div>
         <div className="hero-info-box"></div>
+        <div className="hero-right-circle"></div>
       </section>
 
       {/* Featured Dessert Section */}

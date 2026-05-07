@@ -401,19 +401,29 @@ body {
   border-radius: 50%;
   background-color: var(--primary);
   opacity: 0.85;
-  z-index: 20; /* High z-index to be on top of the box */
+  z-index: 30; /* Top layer */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.hero-right-circle::before {
+.hero-orbit-container {
+  position: absolute;
+  top: 50%;
+  right: 25%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  z-index: 10; /* Bottom layer */
+}
+
+.hero-orbit-container::before {
   content: '';
   position: absolute;
-  top: -100px; /* Increased the gap even further */
+  top: -100px;
   left: -100px;
   right: -100px;
   bottom: -100px;
   border-radius: 50%;
-  border: 1.5px dashed #000; /* Changed to black and dashed */
+  border: 1.5px dashed #000;
   opacity: 0.7;
 }
 
@@ -440,14 +450,14 @@ body {
 .hero-info-box {
   position: absolute;
   top: 50%;
-  right: calc(25% - 150px); /* Aligns box center with circle center */
-  transform: translateY(-40px); /* Position it behind the circle, starting slightly above center */
+  right: calc(25% - 150px);
+  transform: translateY(-40px);
   width: 500px;
   height: 300px;
   background-color: #fff;
   border-radius: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 10; /* Lower than the circle */
+  z-index: 20; /* Middle layer, covers orbit but below main circle */
 }
 
 .hero-logo {
@@ -838,9 +848,20 @@ body {
   }
 
   .hero-right-circle {
-    width: 120px; /* Increased from 90px */
-    height: 120px; /* Increased from 90px */
-    right: 15%; /* Moved further left on mobile */
+    width: 120px;
+    height: 120px;
+    right: 15%;
+    z-index: 30;
+  }
+
+  .hero-orbit-container {
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    transform: translateY(-50%);
+    width: 120px;
+    height: 120px;
+    z-index: 10;
   }
 
   .orbit-item {
@@ -860,7 +881,7 @@ body {
     right: calc(15% - 100px);
     transform: translateY(-30px);
     border-radius: 20px;
-    z-index: 10;
+    z-index: 20;
   }
 
   .mobile-nav-link {
