@@ -170,6 +170,23 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [orbitRotation, setOrbitRotation] = useState(0);
+  const orbitItems = [
+    { angle: 0, img: orbitCupcake },
+    { angle: 45, img: orbitCake },
+    { angle: 90, img: orbitPops },
+    { angle: 135, img: orbitBrownie },
+    { angle: 180, img: orbitSicles },
+    { angle: 225, img: orbitHeart },
+    { angle: 270, img: orbitLove },
+    { angle: 315, img: orbitBento },
+  ];
+  const [activeOrbitImg, setActiveOrbitImg] = useState(orbitCupcake);
+
+  const handleOrbitClick = (angle, img) => {
+    setOrbitRotation(-angle);
+    setActiveOrbitImg(img);
+  };
   const [customizingProduct, setCustomizingProduct] = useState(null);
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('minibakes_cart');
@@ -518,18 +535,25 @@ function App() {
             <span className="hero-serif-accent">celebration</span>
           </p>
         </div>
-        <div className="hero-orbit-container">
-          <div className="orbit-item" style={{ '--angle': '0deg', backgroundImage: `url(${orbitCupcake})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '45deg', backgroundImage: `url(${orbitCake})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '90deg', backgroundImage: `url(${orbitPops})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '135deg', backgroundImage: `url(${orbitBrownie})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '180deg', backgroundImage: `url(${orbitSicles})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '225deg', backgroundImage: `url(${orbitHeart})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '270deg', backgroundImage: `url(${orbitLove})` }}></div>
-          <div className="orbit-item" style={{ '--angle': '315deg', backgroundImage: `url(${orbitBento})` }}></div>
+        <div 
+          className="hero-orbit-container" 
+          style={{ transform: `translateY(-50%) rotate(${orbitRotation}deg)` }}
+        >
+          {orbitItems.map((item, index) => (
+            <div 
+              key={index}
+              className="orbit-item" 
+              style={{ 
+                '--angle': `${item.angle}deg`, 
+                backgroundImage: `url(${item.img})`,
+                '--orbit-rotation': `${orbitRotation}deg`
+              }}
+              onClick={() => handleOrbitClick(item.angle, item.img)}
+            ></div>
+          ))}
         </div>
         <div className="hero-info-box"></div>
-        <div className="hero-right-circle" style={{ backgroundImage: `url(${orbitCupcake})` }}></div>
+        <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitImg})` }}></div>
       </section>
 
       {/* Featured Dessert Section */}

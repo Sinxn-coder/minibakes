@@ -415,6 +415,7 @@ body {
   width: 200px;
   height: 200px;
   z-index: 10; /* Bottom layer */
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-orbit-container::before {
@@ -440,15 +441,17 @@ body {
   background-position: center;
   border-radius: 50%;
   /* 200px orbit radius (100px base circle radius + 100px gap) */
-  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle)));
+  /* Added counter-rotation to keep images upright */
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg))));
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   z-index: 10;
   border: 3px solid #fff;
-  transition: transform 0.3s ease;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 .orbit-item:hover {
-  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle))) scale(1.1);
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg)))) scale(1.1);
 }
 
 .hero-info-box {
@@ -866,17 +869,19 @@ body {
     width: 120px;
     height: 120px;
     z-index: 10;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .orbit-item {
     width: 40px;
     height: 40px;
     /* 160px orbit radius on mobile (60px base circle radius + 100px gap) */
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle)));
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg))));
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .orbit-item:hover {
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle))) scale(1.1);
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg)))) scale(1.1);
   }
 
   .hero-info-box {
