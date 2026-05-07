@@ -441,9 +441,9 @@ body {
   position: absolute;
   top: 100%; /* Bottom edge of the main circle */
   left: 50%;
-  transform: translate(-50%, -140px); /* Move it higher up */
+  transform: translate(-50%, 20px); /* Positioned below the main circle */
   width: 500px;
-  height: 300px; /* Increased height */
+  height: 300px;
   background-color: #fff;
   border-radius: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
@@ -857,7 +857,7 @@ body {
   .hero-info-box {
     width: 320px;
     height: 180px;
-    transform: translate(-50%, -90px);
+    transform: translate(-50%, 15px);
     border-radius: 20px;
   }
 
