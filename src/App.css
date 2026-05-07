@@ -408,10 +408,10 @@ body {
 .hero-right-circle::before {
   content: '';
   position: absolute;
-  top: -35px; /* Increased the gap */
-  left: -35px;
-  right: -35px;
-  bottom: -35px;
+  top: -60px; /* Increased the gap further */
+  left: -60px;
+  right: -60px;
+  bottom: -60px;
   border-radius: 50%;
   border: 1.5px solid #fff;
   opacity: 0.7;
