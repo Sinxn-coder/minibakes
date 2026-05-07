@@ -184,7 +184,18 @@ function App() {
   const [activeOrbitImg, setActiveOrbitImg] = useState(orbitCupcake);
 
   const handleOrbitClick = (angle, img) => {
-    setOrbitRotation(-angle);
+    // Calculate the shortest path for rotation to make it feel infinite
+    const currentRot = orbitRotation;
+    // Normalized current angle in the 0-360 range
+    const normalizedCurrent = ((-currentRot % 360) + 360) % 360;
+    
+    let diff = angle - normalizedCurrent;
+    
+    // Find the shortest distance (-180 to 180)
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+    
+    setOrbitRotation(currentRot - diff);
     setActiveOrbitImg(img);
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
