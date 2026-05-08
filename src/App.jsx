@@ -617,7 +617,11 @@ function App() {
             <p className="info-box-desc" key={activeOrbitItem.desc}>{activeOrbitItem.desc}</p>
           </div>
         </div>
-        <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitItem.img})` }}></div>
+        <div 
+          className="hero-right-circle" 
+          key={activeOrbitItem.img} 
+          style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
+        ></div>
       </section>
 
       {/* Featured Dessert Section */}
