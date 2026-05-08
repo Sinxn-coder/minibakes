@@ -3,6 +3,7 @@
   max-width: 1200px;
   margin: 0 auto;
   min-height: 80vh;
+  overflow-x: hidden;
 }
 
 .menu-header {
@@ -489,8 +490,8 @@
   }
   
   .menu-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .menu-card {
@@ -508,7 +509,9 @@
   }
 
   .menu-card-desc {
-    display: none;
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
   }
 
   .hide-on-mobile {
