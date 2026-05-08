@@ -597,7 +597,7 @@ function App() {
         </div>
         <div 
           className="hero-orbit-container" 
-          style={{ transform: `translateY(-50%) rotate(${orbitRotation}deg)` }}
+          style={{ '--orbit-rotation': `${orbitRotation}deg` }}
         >
           {orbitItems.map((item, index) => (
             <div 
