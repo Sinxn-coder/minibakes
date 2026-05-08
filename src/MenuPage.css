@@ -23,14 +23,17 @@
 
 .menu-categories {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
   margin-bottom: 4rem;
   flex-wrap: nowrap;
   overflow-x: auto;
+  padding: 1rem 4rem;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  margin-left: -4rem;
+  margin-right: -4rem;
 }
 
 .menu-categories::-webkit-scrollbar {
@@ -47,6 +50,8 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .category-btn:hover {
@@ -473,8 +478,9 @@
   .menu-categories {
     gap: 0.5rem;
     margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    overflow-x: visible;
+    padding: 0.5rem 1.5rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
   }
   
   .category-btn {
