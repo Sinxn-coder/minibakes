@@ -1,22 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Facebook, Mail } from 'lucide-react';
-
-const FacebookIcon = ({ size = 24, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-  </svg>
-);
+import MenuPage from './MenuPage';
+import StudioPage from './StudioPage';
+import OrderPage from './OrderPage';
+import ProductDetailsPage from './ProductDetailsPage';
+import ContactPage from './ContactPage';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -39,7 +27,6 @@ const InstagramIcon = ({ size = 24, ...props }) => (
 import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
-import ContactPage from './ContactPage';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg.png';
 import bg2 from './assets/headerbg2.png';
@@ -504,10 +491,7 @@ function App() {
               {cart.length > 0 && <span className="nav-cart-badge">{cart.length}</span>}
             </a>
             <span className="nav-divider">|</span>
-            <a href="#contact" className="nav-link" onClick={(e) => {
-              e.preventDefault();
-              navigateTo('contact');
-            }}>Contact</a>
+            <a href="#contact" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}>Contact</a>
           </nav>
 
           <div className="menu-icon" onClick={() => setIsMobileMenuOpen(true)}>
@@ -743,12 +727,12 @@ function App() {
             Have a custom order or question? We'd love to hear from you.
           </p>
           <button className="contact-order-btn">Order now</button>
-        </div>
-        
-        <div className="contact-footer" ref={contactFooterRef}>
+      <section className="contact-section" id="contact">
+        <h2 className="section-title">CONTACT ME</h2>
+        <div className="contact-info-wrapper" ref={contactFooterRef}>
           <div 
             className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('location', 'https://maps.google.com?q=Ħaż-Żebbuġ, Malta')}
+            onClick={() => handleContactClick('location', 'https://maps.google.com/?q=Ħaż-Żebbuġ,Malta')}
           >
             <MapPin size={24} className="contact-icon" />
             <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
@@ -758,21 +742,28 @@ function App() {
             onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
           >
             <InstagramIcon size={24} className="contact-icon" />
-            <span className="contact-label">@minibakes2021</span>
+            <span className="contact-label">minibakes2021</span>
           </div>
           <div 
             className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
             onClick={() => handleContactClick('facebook', 'https://facebook.com/minibakes2021')}
           >
-            <FacebookIcon size={24} className="contact-icon" />
+            <Facebook size={24} className="contact-icon" />
             <span className="contact-label">minibakes2021</span>
           </div>
           <div 
-            className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
+            className={`contact-item ${expandedContactId['email'] ? 'expanded' : ''}`}
             onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
           >
             <Mail size={24} className="contact-icon" />
             <span className="contact-label">meganbriffa2001@gmail.com</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'phone' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('phone', 'tel:+35679820529')}
+          >
+            <Phone size={24} className="contact-icon" />
+            <span className="contact-label">+356 79820529</span>
           </div>
         </div>
       </section>
@@ -835,8 +826,7 @@ function App() {
         setCustomizingProduct(item);
         setCurrentView('product-details');
       }} />}
-       {currentView === 'studio' && <StudioPage />}
-      {currentView === 'contact' && <ContactPage onBack={() => setCurrentView('home')} />}
+      {currentView === 'studio' && <StudioPage />}
       {currentView === 'order' && <OrderPage 
         cart={cart} 
         onBack={() => setCurrentView('home')} 
@@ -849,14 +839,13 @@ function App() {
           onBack={() => setCurrentView('menu')} 
           onConfirm={(orderData) => {
             addToCart(orderData);
-            // We keep setCustomizingProduct(orderData.originalProduct) or similar? 
-            // The user said "keep that product page like that", so we just don't null it.
             if (window.innerWidth > 768) {
               setIsCartOpen(true);
             }
           }}
         />
       )}
+      {currentView === 'contact' && <ContactPage onBack={() => navigateTo('home')} />}
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
