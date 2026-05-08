@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Facebook } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -742,6 +742,13 @@ function App() {
           >
             <MapPin size={24} className="contact-icon" />
             <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('facebook', 'https://facebook.com/minibakes2021')}
+          >
+            <Facebook size={24} className="contact-icon" />
+            <span className="contact-label">minibakes2021</span>
           </div>
           <div 
             className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
