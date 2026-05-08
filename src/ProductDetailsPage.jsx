@@ -18,7 +18,6 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
   const productId = product?.id || '';
   const isCake = productId.startsWith('c');
   const isCupcake = productId.startsWith('cu');
-  const isTreat = productId.startsWith('t');
 
   const flavors = isCake ? ['Vanilla', 'Chocolate', 'Red Velvet', 'Strawberry'] : 
                  isCupcake ? ['Vanilla Bean', 'Chocolate Indulgence', 'Strawberry Dream', 'Red Velvet'] : 

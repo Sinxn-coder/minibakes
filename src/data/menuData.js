@@ -8,8 +8,6 @@ import customCake from '../assets/custom_theme_cake_pastel_1775218188608.png';
 import cupcake1 from '../assets/cupcake1.png';
 import cupcake2 from '../assets/cupcake2.png';
 import cupcake3 from '../assets/cupcake3.png';
-import cupcake4 from '../assets/cupcake4.png';
-import cupcake5 from '../assets/cupcake5.png';
 import cupcake6 from '../assets/cupcake6.png';
 
 import brownies from '../assets/brownies_box.png';
