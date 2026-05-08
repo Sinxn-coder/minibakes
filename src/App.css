@@ -886,7 +886,7 @@ body {
     height: 160px;
     left: 50%;
     right: auto;
-    top: 50%;
+    top: 58%;
     bottom: auto;
     transform: translate(-50%, -50%);
     z-index: 30;
@@ -897,7 +897,7 @@ body {
     position: absolute;
     left: 50%;
     right: auto;
-    top: 50%;
+    top: 58%;
     bottom: auto;
     transform: translate(-50%, -50%) rotate(var(--orbit-rotation, 0deg));
     width: 160px;
@@ -921,7 +921,7 @@ body {
   .hero-info-box {
     left: 50%;
     right: auto;
-    top: 50%;
+    top: 58%;
     bottom: auto;
     /* 30px below circle center — circle (radius 80px) overlaps top of box by 50px */
     transform: translate(-50%, 30px);
