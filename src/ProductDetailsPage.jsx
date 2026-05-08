@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, ShoppingBag, Image as ImageIcon, Upload } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
@@ -121,7 +121,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                     className="file-input-hidden"
                   />
                   <label htmlFor="ref-image" className="file-upload-label">
-                    {options.refImage ? `✓ ${options.refImage.name}` : 'Choose an image from gallery'}
+                    {options.refImage ? (
+                      <span className="file-name-display"><ImageIcon size={18} /> {options.refImage.name}</span>
+                    ) : (
+                      <span className="upload-prompt"><Upload size={18} /> Choose inspiration image</span>
+                    )}
                   </label>
                 </div>
               </div>

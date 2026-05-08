@@ -99,7 +99,22 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       {item.options.flavor && <span>{item.options.flavor}</span>}
                       {item.options.spread && <span> • {item.options.spread}</span>}
                     </p>
+                    {item.options.notes && (
+                      <p className="order-item-notes">" {item.options.notes} "</p>
+                    )}
                     
+                    {item.options.refImage && (
+                      <div className="order-item-ref">
+                        <span className="ref-label">Reference Image:</span>
+                        <img 
+                          src={URL.createObjectURL(item.options.refImage)} 
+                          alt="Reference" 
+                          className="ref-preview-img"
+                          onLoad={(e) => URL.revokeObjectURL(e.target.src)} // Cleanup
+                        />
+                      </div>
+                    )}
+
                     {item.layers && item.layers.length > 0 && (
                       <div className="order-item-layers">
                         {item.layers.map((layer, idx) => (
