@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, Columns } from 'lucide-react';
+import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower } from 'lucide-react';
 import './MenuPage.css';
 import Cake3D from './Cake3D';
 
@@ -293,13 +293,6 @@ export default function MenuPage({ onSelectProduct }) {
                         >
                           <ChevronDown size={20} />
                           <span className="designer-card-label">Bottom Shell</span>
-                        </button>
-                        <button 
-                          className={`designer-card ${cakeLayers[selectedLayerIndex]?.sidePiping ? 'active-design' : ''}`}
-                          onClick={() => toggleDesign('sidePiping')}
-                        >
-                          <Columns size={20} />
-                          <span className="designer-card-label">Side Piping</span>
                         </button>
 
                         <button 

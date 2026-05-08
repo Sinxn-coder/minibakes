@@ -280,12 +280,100 @@
   border-color: var(--secondary);
 }
 
+/* ── Option label hint text ── */
+.option-label-hint {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #aaa;
+  margin-left: 0.4rem;
+}
+
+/* ── Live Price Breakdown ── */
+.price-breakdown {
+  background: #fdf2f4;
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  margin-top: 1.5rem;
+  border: 1px solid #f5e0e2;
+}
+
+.price-breakdown-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--secondary);
+  margin-bottom: 0.8rem;
+  opacity: 0.7;
+}
+
+.price-breakdown-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-row-label {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.price-row-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.price-row-addon .price-row-label {
+  font-size: 0.82rem;
+  color: #888;
+  font-weight: 400;
+}
+
+.price-row-addon .price-row-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.price-row-free {
+  color: #2e8b57 !important;
+  font-size: 0.78rem !important;
+  background: #e8f5ed;
+  padding: 0.1rem 0.5rem;
+  border-radius: 50px;
+}
+
+.price-row-total {
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #e8c5c8;
+}
+
+.price-row-total .price-row-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.price-row-total .price-row-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--secondary);
+}
+
 .quantity-checkout-row {
   display: flex;
   align-items: center;
   gap: 2rem;
-  margin-top: 3rem;
-  padding-top: 2rem;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
   border-top: 1px solid #f0f0f0;
   position: sticky;
   bottom: 0;

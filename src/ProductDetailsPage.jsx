@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Minus, Plus, ShoppingBag, Image as ImageIcon, Upload } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
@@ -28,6 +28,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
 
   const spreads = ['Nutella', 'Biscoff', 'White Chocolate', 'Pistachio', 'Ferrero Rocher', 'Kinder'];
 
+  const basePrice = parseFloat(product.price.replace(/[^\d.]/g, '')) || 0;
+  const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
+  const unitTotal = basePrice + bowsTotal;
+  const grandTotal = unitTotal * quantity;
+
   return (
     <div className="product-details-page">
       <div className="details-container">
@@ -52,6 +57,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
             <p className="details-description">{product.description}</p>
 
             <div className="customization-section">
+
+              {/* Flavor */}
               <div className="option-group">
                 <label>Select Flavor</label>
                 <div className="option-grid">
@@ -67,15 +74,19 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                 </div>
               </div>
 
+              {/* Spread — cakes only, toggle-able */}
               {isCake && (
                 <div className="option-group">
-                  <label>Inner Spread (Optional)</label>
+                  <label>
+                    Inner Spread
+                    <span className="option-label-hint"> — Included</span>
+                  </label>
                   <div className="option-grid">
                     {spreads.map(s => (
                       <button 
                         key={s} 
                         className={`option-btn ${options.spread === s ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, spread: s})}
+                        onClick={() => setOptions({...options, spread: options.spread === s ? '' : s})}
                       >
                         {s}
                       </button>
@@ -86,7 +97,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
 
               {/* Bows Add-On */}
               <div className="option-group">
-                <label>Add-Ons (Optional)</label>
+                <label>
+                  Add-Ons
+                  <span className="option-label-hint"> — tap to add</span>
+                </label>
                 <div className="addon-grid">
                   <button
                     className={`addon-btn ${options.bows ? 'active' : ''}`}
@@ -94,11 +108,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                   >
                     <span className="addon-icon">🎀</span>
                     <span className="addon-label">Bows</span>
-                    <span className="addon-price">+€5</span>
+                    <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
                   </button>
                 </div>
               </div>
 
+              {/* Message */}
               <div className="option-group">
                 <label>Message / Text on Product</label>
                 <input 
@@ -110,8 +125,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                 />
               </div>
 
+              {/* Reference Image */}
               <div className="option-group">
-                <label>Upload Reference Image (Optional)</label>
+                <label>
+                  Upload Reference Image
+                  <span className="option-label-hint"> — Optional</span>
+                </label>
                 <div className="file-upload-wrapper">
                   <input 
                     type="file" 
@@ -130,6 +149,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                 </div>
               </div>
 
+              {/* Notes */}
               <div className="option-group">
                 <label>Special Instructions & Details</label>
                 <textarea 
@@ -140,6 +160,44 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                 ></textarea>
               </div>
 
+              {/* ── Live Price Breakdown ── */}
+              <div className="price-breakdown">
+                <h4 className="price-breakdown-title">Order Summary</h4>
+                <div className="price-breakdown-rows">
+                  <div className="price-row">
+                    <span className="price-row-label">{product.name}</span>
+                    <span className="price-row-value">€{basePrice.toFixed(2)}</span>
+                  </div>
+
+                  {options.spread && (
+                    <div className="price-row price-row-addon">
+                      <span className="price-row-label">↳ Spread: {options.spread}</span>
+                      <span className="price-row-value price-row-free">Included</span>
+                    </div>
+                  )}
+
+                  {options.bows && (
+                    <div className="price-row price-row-addon">
+                      <span className="price-row-label">↳ Bows 🎀</span>
+                      <span className="price-row-value">+€{BOW_ADDON_PRICE.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  {quantity > 1 && (
+                    <div className="price-row price-row-addon">
+                      <span className="price-row-label">↳ Qty × {quantity}</span>
+                      <span className="price-row-value">€{unitTotal.toFixed(2)} each</span>
+                    </div>
+                  )}
+
+                  <div className="price-row price-row-total">
+                    <span className="price-row-label">Total</span>
+                    <span className="price-row-value">€{grandTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quantity + Confirm */}
               <div className="quantity-checkout-row">
                 <div className="quantity-selector">
                   <button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={20} /></button>
@@ -150,9 +208,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                   className="add-to-order-final-btn"
                   onClick={() => onConfirm({ ...product, quantity, options })}
                 >
-                  Confirm Order • €{(((parseFloat(product.price.replace(/[^\d.]/g, '')) || 0) + (options.bows ? BOW_ADDON_PRICE : 0)) * quantity).toFixed(2) || '0.00'}
+                  Add to Order • €{grandTotal.toFixed(2)}
                 </button>
               </div>
+
             </div>
           </div>
         </div>
