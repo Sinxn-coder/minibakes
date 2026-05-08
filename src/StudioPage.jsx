@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from 'lucide-react';
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
-// Asset paths (from generated images)
-const heroImg     = `${import.meta.env.BASE_URL}baking_class_hero_1777704473859.png`;
-const workshopImg = `${import.meta.env.BASE_URL}cupcake_workshop_1777704501517.png`;
-const groupImg    = `${import.meta.env.BASE_URL}baking_studio_group_1777704537017.png`;
+import studio1 from './assets/studio/studio1.png';
+import studio2 from './assets/studio/studio2.png';
+import studio3 from './assets/studio/studio3.png';
+import studio4 from './assets/studio/studio4.png';
+
+const studioImages = [studio1, studio2, studio3, studio4];
 
 const upcomingClasses = [
   {
@@ -17,7 +19,7 @@ const upcomingClasses = [
     price: "€85",
     level: "Beginner Friendly",
     spots: "4 spots left",
-    img: workshopImg
+    img: studio2
   },
   {
     id: 2,
@@ -27,7 +29,7 @@ const upcomingClasses = [
     price: "€95",
     level: "Intermediate",
     spots: "2 spots left",
-    img: heroImg
+    img: studio3
   },
   {
     id: 3,
@@ -37,18 +39,26 @@ const upcomingClasses = [
     price: "€75",
     level: "All Levels",
     spots: "6 spots left",
-    img: groupImg
+    img: studio4
   }
 ];
 
 export default function StudioPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     classId: '',
     guests: '1'
   });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImgIndex((prev) => (prev + 1) % studioImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleBooking = (e) => {
     e.preventDefault();
@@ -71,7 +81,14 @@ export default function StudioPage() {
           <a href="#schedule" className="cta-btn-primary">View Upcoming Dates <ArrowRight size={18} /></a>
         </div>
         <div className="studio-hero-image">
-          <SafeImage src={heroImg} alt="Baking Studio Hero" />
+          {studioImages.map((img, idx) => (
+            <div 
+              key={idx} 
+              className={`hero-slide ${idx === currentImgIndex ? 'active' : ''}`}
+            >
+              <SafeImage src={img} alt={`Studio Moment ${idx + 1}`} />
+            </div>
+          ))}
           <div className="studio-floating-card">
             <Star className="star-icon" fill="#800000" color="#800000" />
             <div>
@@ -141,13 +158,16 @@ export default function StudioPage() {
         <h2 className="section-title-alt">CLASS MOMENTS</h2>
         <div className="gallery-masonry">
           <div className="gallery-item large">
-            <SafeImage src={groupImg} alt="Group baking" />
+            <SafeImage src={studio1} alt="Group baking" />
           </div>
           <div className="gallery-item">
-            <SafeImage src={workshopImg} alt="Cupcake work" />
+            <SafeImage src={studio2} alt="Cupcake work" />
           </div>
           <div className="gallery-item">
-            <SafeImage src={heroImg} alt="Cake design" />
+            <SafeImage src={studio3} alt="Cake design" />
+          </div>
+          <div className="gallery-item large">
+            <SafeImage src={studio4} alt="Studio session" />
           </div>
         </div>
       </section>
