@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Facebook, Mail } from 'lucide-react';
-import MenuPage from './MenuPage';
-import StudioPage from './StudioPage';
-import OrderPage from './OrderPage';
-import ProductDetailsPage from './ProductDetailsPage';
-import ContactPage from './ContactPage';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -24,6 +19,7 @@ const InstagramIcon = ({ size = 24, ...props }) => (
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
+import ContactPage from './ContactPage';
 import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
@@ -249,7 +245,6 @@ function App() {
   const [expandedDesktopCard, setExpandedDesktopCard] = useState(null);
   const [expandedMobileCard, setExpandedMobileCard] = useState(null);
   const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
-  const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
 
@@ -277,30 +272,10 @@ function App() {
     window.scrollTo(0, 0);
   };
 
-  const contactFooterRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (contactFooterRef.current && !contactFooterRef.current.contains(event.target)) {
-        setExpandedContactId(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   // Scroll to top when switching views
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
-
-  const handleContactClick = (id, link) => {
-    if (expandedContactId === id || window.innerWidth > 768) {
-      window.open(link, id === 'phone' ? '_self' : '_blank');
-    } else {
-      setExpandedContactId(id);
-    }
-  };
 
   const backgrounds = [bg1, bg2, bg3];
 
@@ -491,7 +466,10 @@ function App() {
               {cart.length > 0 && <span className="nav-cart-badge">{cart.length}</span>}
             </a>
             <span className="nav-divider">|</span>
-            <a href="#contact" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}>Contact</a>
+            <a href="#contact" className="nav-link" onClick={(e) => {
+              e.preventDefault();
+              navigateTo('contact');
+            }}>Contact</a>
           </nav>
 
           <div className="menu-icon" onClick={() => setIsMobileMenuOpen(true)}>
@@ -719,54 +697,7 @@ function App() {
         </div>
       </section>
       
-      {/* Contact Section */}
-      <section id="contact" className="contact-section">
-        <div className="contact-main">
-          <h2 className="contact-title">CONTACT US</h2>
-          <p className="contact-subtitle">
-            Have a custom order or question? We'd love to hear from you.
-          </p>
-          <button className="contact-order-btn">Order now</button>
-      <section className="contact-section" id="contact">
-        <h2 className="section-title">CONTACT ME</h2>
-        <div className="contact-info-wrapper" ref={contactFooterRef}>
-          <div 
-            className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('location', 'https://maps.google.com/?q=Ħaż-Żebbuġ,Malta')}
-          >
-            <MapPin size={24} className="contact-icon" />
-            <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
-          >
-            <InstagramIcon size={24} className="contact-icon" />
-            <span className="contact-label">minibakes2021</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('facebook', 'https://facebook.com/minibakes2021')}
-          >
-            <Facebook size={24} className="contact-icon" />
-            <span className="contact-label">minibakes2021</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId['email'] ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
-          >
-            <Mail size={24} className="contact-icon" />
-            <span className="contact-label">meganbriffa2001@gmail.com</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'phone' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('phone', 'tel:+35679820529')}
-          >
-            <Phone size={24} className="contact-icon" />
-            <span className="contact-label">+356 79820529</span>
-          </div>
-        </div>
-      </section>
+
 
       {/* Mobile Popup Modal */}
       {expandedMobileCard !== null && (
@@ -827,6 +758,7 @@ function App() {
         setCurrentView('product-details');
       }} />}
       {currentView === 'studio' && <StudioPage />}
+      {currentView === 'contact' && <ContactPage />}
       {currentView === 'order' && <OrderPage 
         cart={cart} 
         onBack={() => setCurrentView('home')} 
@@ -839,13 +771,14 @@ function App() {
           onBack={() => setCurrentView('menu')} 
           onConfirm={(orderData) => {
             addToCart(orderData);
+            // We keep setCustomizingProduct(orderData.originalProduct) or similar? 
+            // The user said "keep that product page like that", so we just don't null it.
             if (window.innerWidth > 768) {
               setIsCartOpen(true);
             }
           }}
         />
       )}
-      {currentView === 'contact' && <ContactPage onBack={() => navigateTo('home')} />}
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
