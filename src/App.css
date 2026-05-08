@@ -651,14 +651,14 @@ body {
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  background-color: #fff; /* Ensure no gaps if image doesn't cover fully */
+  background-color: var(--secondary); /* Use section color instead of white */
 }
 
 .founder-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(0.85); /* "Zoom out" effect */
+  transform: scale(0.92); /* Less aggressive zoom out */
 }
 
 .founder-text-box {
@@ -1057,7 +1057,7 @@ body {
     position: relative;
     z-index: 3;
     border: 8px solid var(--secondary); /* Creates a cutout effect over the pink line */
-    background-color: #fff;
+    background-color: var(--secondary);
   }
   
   .founder-text-box {
