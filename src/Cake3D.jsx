@@ -7,7 +7,7 @@ const flowerModelUrl = `${import.meta.env.BASE_URL}3d/flower.glb`;
 
 // --- Layer size config ---
 const BASE_RADIUS = 1.35; // constant base width
-const LAYER_HEIGHTS = { '6': 0.65, '8': 0.95 }; // '8' is taller than '6'
+const LAYER_HEIGHTS = { '6': 0.85, '8': 0.95 }; // '8' is taller than '6'
 const SHRINK_FACTOR = 0.82; // each stacked layer is 82% of the one below
 
 // --- Heart shape helper ---
@@ -233,44 +233,76 @@ function FlowerCluster({ radius, yOffset, isHeart = false, size = 0, sizeNum = '
   );
 }
 
-// --- Filling Effect Helper (Replaces DripEffect) ---
-function FillingEffect({ radius, color, isHeart = false, size = 0 }) {
-  const fillingColor = color === 'Nutella' ? '#3d1e16' : 
-                       color === 'White Chocolate' ? '#f5ebd6' :
-                       color === 'Pistachio' ? '#a2d187' :
-                       color === 'Ferrero Rocher' ? '#5c3a21' :
-                       color === 'Kinder' ? '#e8d8c8' :
-                       '#b07d4b'; // Biscoff / default
+// --- Drip Effect Helper ---
+function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }) {
+  const dripColor = color === 'Nutella' ? '#3d1e16' : 
+                    color === 'White Chocolate' ? '#f5ebd6' :
+                    color === 'Pistachio' ? '#a2d187' :
+                    color === 'Ferrero Rocher' ? '#5c3a21' :
+                    color === 'Kinder' ? '#e8d8c8' :
+                    '#b07d4b'; // Biscoff / default
   
-  const fillingMesh = useMemo(() => {
-    // Render a thin band in the horizontal center of the layer
-    const thickness = 0.06; // Thickness of the filling
+  const drips = useMemo(() => {
+    const arr = [];
+    const dripCount = isHeart ? 40 : 30;
+    const dripLength = 0.25;
     
+    // 1. Top "Sauce" Coating
     if (isHeart) {
-      // For hearts, make it slightly wider than the cake so it's visible as a stripe
-      const shape = createHeartShape(size * 1.015); 
-      const extrudeSettings = { depth: thickness, bevelEnabled: false, curveSegments: 64 };
-      const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      geo.translate(0, 0, -thickness / 2);
-      geo.rotateX(-Math.PI / 2);
-      
-      return (
-        <mesh geometry={geo} position={[0, 0, 0]} castShadow>
-          <meshStandardMaterial color={fillingColor} roughness={0.4} metalness={0.1} />
+      const shape = createHeartShape(size * 1.02); // slightly larger than cake
+      const extrudeSettings = { depth: 0.02, bevelEnabled: false };
+      const sauceGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      sauceGeo.rotateX(-Math.PI / 2);
+      arr.push(
+        <mesh key="sauce-top" geometry={sauceGeo} position={[0, yOffset + 0.01, 0]} receiveShadow>
+          <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
         </mesh>
       );
     } else {
-      // For round cakes, a cylinder slightly wider than the cake layer
-      return (
-        <mesh position={[0, 0, 0]} castShadow>
-          <cylinderGeometry args={[radius * 1.015, radius * 1.015, thickness, 64]} />
-          <meshStandardMaterial color={fillingColor} roughness={0.4} metalness={0.1} />
+      arr.push(
+        <mesh key="sauce-top" position={[0, yOffset + 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <circleGeometry args={[radius * 0.98, 64]} />
+          <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
         </mesh>
       );
     }
-  }, [radius, fillingColor, isHeart, size]);
 
-  return <group>{fillingMesh}</group>;
+    // 2. The Drips
+    for (let i = 0; i < dripCount; i++) {
+      const t = i / dripCount;
+      let pos = new THREE.Vector3();
+      
+      if (isHeart && curve) {
+        pos = curve.getPointAt(t);
+        pos.set(pos.x, yOffset, -pos.y);
+      } else {
+        const angle = t * Math.PI * 2;
+        pos.set(Math.cos(angle) * (radius * 0.98), yOffset, Math.sin(angle) * (radius * 0.98));
+      }
+
+      // Randomize drip length and thickness for realism
+      const h = 0.15 + Math.random() * 0.25;
+      const thick = 0.03 + Math.random() * 0.02;
+      
+      arr.push(
+        <group key={`drip-${i}`} position={pos}>
+          {/* Main Drip Body */}
+          <mesh position={[0, -h/2, 0]} castShadow>
+            <cylinderGeometry args={[thick, thick * 0.6, h, 8]} />
+            <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+          </mesh>
+          {/* Drip Droplet Tip */}
+          <mesh position={[0, -h, 0]} castShadow>
+            <sphereGeometry args={[thick * 1.1, 8, 8]} />
+            <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+          </mesh>
+        </group>
+      );
+    }
+    return arr;
+  }, [curve, radius, yOffset, dripColor, isHeart, size]);
+
+  return <group>{drips}</group>;
 }
 
 useGLTF.preload(flowerModelUrl);
@@ -308,7 +340,7 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
         <cylinderGeometry args={[radius * 0.95, radius, height, 64]} />
         <meshStandardMaterial color={color} roughness={0.35} metalness={0.05} />
       </mesh>
-      {spread && <FillingEffect radius={radius * 0.95} color={spread} />}
+      {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
@@ -339,7 +371,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       <mesh geometry={cakeGeo} castShadow>
         <meshStandardMaterial color={color} roughness={0.35} metalness={0.05} />
       </mesh>
-      {spread && <FillingEffect isHeart size={size} color={spread} />}
+      {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
