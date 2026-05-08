@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Facebook } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -17,6 +17,23 @@ const InstagramIcon = ({ size = 24, ...props }) => (
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+const FacebookIcon = ({ size = 24, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
   </svg>
 );
 import './App.css';
@@ -744,13 +761,6 @@ function App() {
             <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
           </div>
           <div 
-            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('facebook', 'https://facebook.com/minibakes2021')}
-          >
-            <Facebook size={24} className="contact-icon" />
-            <span className="contact-label">minibakes2021</span>
-          </div>
-          <div 
             className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
             onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
           >
@@ -763,6 +773,13 @@ function App() {
           >
             <Mail size={24} className="contact-icon" />
             <span className="contact-label">meganbriffa2001@gmail.com</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('facebook', 'https://www.facebook.com/minibakes2021')}
+          >
+            <FacebookIcon size={24} className="contact-icon" />
+            <span className="contact-label">minibakes2021</span>
           </div>
         </div>
       </section>
