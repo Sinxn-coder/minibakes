@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Users, Camera, ArrowRight, CheckCircle2, MapPin, Clock, Star } from 'lucide-react';
+import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from 'lucide-react';
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
@@ -92,12 +92,12 @@ export default function StudioPage() {
         <div className="perk-card">
           <div className="perk-icon"><Users size={24} /></div>
           <h3>Small Groups</h3>
-          <p>Intimate classes of max 8 people for personalized attention.</p>
+          <p>Maximum of 15 people for a fun, personalized experience.</p>
         </div>
         <div className="perk-card">
-          <div className="perk-icon"><Camera size={24} /></div>
-          <h3>Photo Ready</h3>
-          <p>Your event venue becomes the classroom — beautiful, personal, and ready for memories.</p>
+          <div className="perk-icon"><Clock size={24} /></div>
+          <h3>Duration</h3>
+          <p>Around 1.5 hours of hands-on decorating fun.</p>
         </div>
         <div className="perk-card">
           <div className="perk-icon"><CheckCircle2 size={24} /></div>
