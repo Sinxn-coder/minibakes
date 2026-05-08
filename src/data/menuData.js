@@ -29,21 +29,41 @@ export const menuData = [
     ]
   },
   {
-    category: "Cupcakes & Mini Treats",
+    category: "Cupcakes",
     items: [
       { id: 'cu1', name: 'Box of 6 Cupcakes', price: '€18.00', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes in your choice of flavors.' },
       { id: 'cu2', name: 'Box of 12 Cupcakes', price: '€31.20', img: cupcake2, description: 'A full dozen cupcakes. Perfect for sharing at any celebration.' },
       { id: 'cu3', name: 'Single Cupcake', price: '€2.40', img: cupcake3, description: 'One perfectly baked cupcake. Choice of Chocolate, Vanilla, or Red Velvet.' },
+    ]
+  },
+  {
+    category: "Cake Pops",
+    items: [
       { id: 'cu4', name: 'Custom Cake Pops', price: '€1.70 each', img: cakepops, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet.' },
+    ]
+  },
+  {
+    category: "Brownies",
+    items: [
+      { id: 't1', name: 'Loaded Brownies Box', price: '€32.00', img: brownies, description: 'Rich chocolate brownies with optional spreads (Pistachio, Nutella, Lotus, etc.).' },
+    ]
+  },
+  {
+    category: "Breakable Hearts",
+    items: [
+      { id: 't2', name: 'Breakable Heart Box', price: '€37.00', img: breakableHeart, description: 'White chocolate heart filled with marshmallows & 8 cakesicles.' },
+    ]
+  },
+  {
+    category: "Mini Cakes",
+    items: [
       { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: bentoCake, description: 'Bite-sized indulgence. Choice of 1 signature spread.' },
       { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: cupcake6, description: 'The perfect mini treat. Large individual portion.' },
     ]
   },
   {
-    category: "Signature Boxes",
+    category: "Cakesicles",
     items: [
-      { id: 't1', name: 'Loaded Brownies Box', price: '€32.00', img: brownies, description: 'Rich chocolate brownies with optional spreads (Pistachio, Nutella, Lotus, etc.).' },
-      { id: 't2', name: 'Breakable Heart Box', price: '€37.00', img: breakableHeart, description: 'White chocolate heart filled with marshmallows & 8 cakesicles.' },
       { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17.00', img: cakesicles5, description: 'Cake truffles shaped like popsicles. (Minimum order).' },
       { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29.00', img: cakesicles5, description: 'A larger box of 10 delicious cakesicles in assorted flavors.' },
     ]
