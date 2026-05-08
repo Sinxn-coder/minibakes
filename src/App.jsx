@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -19,7 +19,6 @@ const InstagramIcon = ({ size = 24, ...props }) => (
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
-import ContactPage from './ContactPage';
 import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
@@ -245,6 +244,7 @@ function App() {
   const [expandedDesktopCard, setExpandedDesktopCard] = useState(null);
   const [expandedMobileCard, setExpandedMobileCard] = useState(null);
   const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
+  const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
 
@@ -272,10 +272,30 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  const contactFooterRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (contactFooterRef.current && !contactFooterRef.current.contains(event.target)) {
+        setExpandedContactId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // Scroll to top when switching views
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
+
+  const handleContactClick = (id, link) => {
+    if (expandedContactId === id || window.innerWidth > 768) {
+      window.open(link, id === 'phone' ? '_self' : '_blank');
+    } else {
+      setExpandedContactId(id);
+    }
+  };
 
   const backgrounds = [bg1, bg2, bg3];
 
@@ -468,7 +488,11 @@ function App() {
             <span className="nav-divider">|</span>
             <a href="#contact" className="nav-link" onClick={(e) => {
               e.preventDefault();
-              navigateTo('contact');
+              navigateTo('home');
+              setTimeout(() => {
+                const contactSection = document.getElementById('contact');
+                contactSection?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
             }}>Contact</a>
           </nav>
 
@@ -518,7 +542,11 @@ function App() {
             <div className="nav-item-wrapper">
               <a href="#contact" className="mobile-nav-link" onClick={(e) => { 
                 e.preventDefault();
-                navigateTo('contact');
+                navigateTo('home');
+                setTimeout(() => {
+                  const contactSection = document.getElementById('contact');
+                  contactSection?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
               }}>Contact</a>
             </div>
           </nav>
@@ -697,7 +725,40 @@ function App() {
         </div>
       </section>
       
-
+      {/* Contact Section */}
+      <section id="contact" className="contact-section">
+        <div className="contact-main">
+          <h2 className="contact-title">CONTACT US</h2>
+          <p className="contact-subtitle">
+            Have a custom order or question? We'd love to hear from you.
+          </p>
+          <button className="contact-order-btn">Order now</button>
+        </div>
+        
+        <div className="contact-footer" ref={contactFooterRef}>
+          <div 
+            className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('location', 'https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54&entry=gps&shh=CAE&lucs=,94297699,94284475,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic')}
+          >
+            <MapPin size={24} className="contact-icon" />
+            <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
+          >
+            <InstagramIcon size={24} className="contact-icon" />
+            <span className="contact-label">minibakes2021</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
+          >
+            <Mail size={24} className="contact-icon" />
+            <span className="contact-label">meganbriffa2001@gmail.com</span>
+          </div>
+        </div>
+      </section>
 
       {/* Mobile Popup Modal */}
       {expandedMobileCard !== null && (
@@ -758,7 +819,6 @@ function App() {
         setCurrentView('product-details');
       }} />}
       {currentView === 'studio' && <StudioPage />}
-      {currentView === 'contact' && <ContactPage />}
       {currentView === 'order' && <OrderPage 
         cart={cart} 
         onBack={() => setCurrentView('home')} 

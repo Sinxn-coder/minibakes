@@ -1108,7 +1108,7 @@ body {
 
 /* Contact Section */
 .contact-section {
-  background-color: #fcf1e6; /* Light cream/beige */
+  background: linear-gradient(180deg, #fdf6f7 0%, #fae8eb 100%); /* Warmer, softer pink gradient */
   padding: 6rem 2rem 4rem;
   text-align: center;
 }
@@ -1169,9 +1169,9 @@ body {
 }
 
 .contact-subtitle {
-  color: #5c0d1b; /* Dark maroon/brown */
+  color: var(--secondary);
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.4;
   margin-bottom: 3rem;
   max-width: 600px;
@@ -1180,7 +1180,7 @@ body {
 }
 
 .contact-order-btn {
-  background-color: #4a7c0f; /* Green as in image */
+  background-color: var(--secondary); /* Aligned with brand */
   color: #fff;
   border: none;
   padding: 1rem 3rem;
@@ -1188,12 +1188,14 @@ body {
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(92, 13, 27, 0.2);
 }
 
 .contact-order-btn:hover {
-  background-color: #3d660c;
-  transform: scale(1.05);
+  background-color: #4a0914; /* Slightly darker maroon on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(92, 13, 27, 0.3);
 }
 
 .contact-footer {
