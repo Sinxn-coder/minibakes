@@ -301,9 +301,9 @@
 }
 
 .gallery-item {
-  border-radius: 30px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
 }
 
 .gallery-item img {
@@ -313,7 +313,8 @@
 }
 
 .gallery-item.large {
-  grid-row: span 2;
+  grid-column: span 1;
+  grid-row: span 1;
 }
 
 /* Booking Section */

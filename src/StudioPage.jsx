@@ -3,10 +3,10 @@ import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from '
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
-import studio1 from './assets/studio/studio1.png';
-import studio2 from './assets/studio/studio2.png';
-import studio3 from './assets/studio/studio3.png';
-import studio4 from './assets/studio/studio4.png';
+const studio1 = `${import.meta.env.BASE_URL}studio1.png`;
+const studio2 = `${import.meta.env.BASE_URL}studio2.png`;
+const studio3 = `${import.meta.env.BASE_URL}studio3.png`;
+const studio4 = `${import.meta.env.BASE_URL}studio4.png`;
 
 const studioImages = [studio1, studio2, studio3, studio4];
 
@@ -158,16 +158,16 @@ export default function StudioPage() {
         <h2 className="section-title-alt">CLASS MOMENTS</h2>
         <div className="gallery-masonry">
           <div className="gallery-item large">
-            <SafeImage src={studio1} alt="Group baking" />
+            <SafeImage src={studio1} alt="Class moment 1" />
           </div>
           <div className="gallery-item">
-            <SafeImage src={studio2} alt="Cupcake work" />
+            <SafeImage src={studio2} alt="Class moment 2" />
           </div>
           <div className="gallery-item">
-            <SafeImage src={studio3} alt="Cake design" />
+            <SafeImage src={studio3} alt="Class moment 3" />
           </div>
-          <div className="gallery-item large">
-            <SafeImage src={studio4} alt="Studio session" />
+          <div className="gallery-item">
+            <SafeImage src={studio4} alt="Class moment 4" />
           </div>
         </div>
       </section>
