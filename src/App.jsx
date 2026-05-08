@@ -46,7 +46,7 @@ import bg3 from './assets/headerbg3.png';
 import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
-import founderImg from './assets/founder.png';
+import founderImg from './assets/founder.jpeg';
 import style1 from './assets/style1.png';
 import style2 from './assets/style2.png';
 import style3 from './assets/stlye3.png';
