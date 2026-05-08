@@ -402,9 +402,12 @@ body {
   background-color: var(--primary);
   background-size: cover;
   background-position: center;
-  opacity: 1; /* Made opaque to show the image clearly */
-  z-index: 30; /* Top layer */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  z-index: 30;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 2px rgba(255, 215, 0, 0.3); /* Subtle gold inner ring */
+  border: 4px solid #fff;
 }
 
 .hero-orbit-container {
@@ -414,8 +417,8 @@ body {
   transform: translateY(-50%);
   width: 200px;
   height: 200px;
-  z-index: 10; /* Bottom layer */
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1); /* Smoother premium easing */
 }
 
 .hero-orbit-container::before {
@@ -426,32 +429,30 @@ body {
   right: -100px;
   bottom: -100px;
   border-radius: 50%;
-  border: 1.5px dashed #000;
-  opacity: 0.7;
+  border: 1px dashed rgba(0, 0, 0, 0.2); /* Finer, more subtle line */
 }
 
 .orbit-item {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 60px;
-  height: 60px;
+  width: 70px; /* Slightly larger for better detail */
+  height: 70px;
   background-color: #fff;
   background-size: cover;
   background-position: center;
   border-radius: 50%;
-  /* 200px orbit radius (100px base circle radius + 100px gap) */
-  /* Added counter-rotation to keep images upright */
   transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg))));
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
   z-index: 10;
   border: 3px solid #fff;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
 }
 
 .orbit-item:hover {
-  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg)))) scale(1.1);
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg)))) scale(1.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
 }
 
 .hero-info-box {
@@ -459,31 +460,38 @@ body {
   top: 50%;
   right: calc(25% - 150px);
   transform: translateY(-40px);
-  width: 500px;
-  height: 300px;
-  background-color: #fff;
-  border-radius: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 20; /* Middle layer, covers orbit but below main circle */
+  width: 550px; /* Slightly wider */
+  height: 320px;
+  background: rgba(255, 255, 255, 0.75); /* Glass effect */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.08),
+    0 1px 1px rgba(255, 255, 255, 0.5) inset;
+  z-index: 20;
   display: flex;
-  align-items: center; /* Center vertically since it's just one sentence now */
+  align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 50px;
   text-align: center;
 }
 
 .info-box-content {
   width: 100%;
-  padding-top: 80px; /* Space for the circle overlapping top */
+  padding-top: 90px;
 }
 
 .info-box-desc {
-  font-family: 'Playfair Display', serif; /* Using serif for the fancy sentence */
-  font-size: 1.35rem;
-  color: #333;
-  line-height: 1.6;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  line-height: 1.7;
   margin: 0;
   font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .hero-logo {
@@ -892,11 +900,11 @@ body {
   }
 
   .orbit-item {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     /* 160px orbit radius on mobile (60px base circle radius + 100px gap) */
     transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * (var(--angle) + var(--orbit-rotation, 0deg))));
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .orbit-item:hover {
@@ -908,23 +916,27 @@ body {
     height: 180px;
     right: calc(15% - 100px);
     transform: translateY(-30px);
-    border-radius: 20px;
+    border-radius: 30px;
     z-index: 20;
-    padding: 20px;
+    padding: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   }
 
   .info-box-content {
-    padding-top: 40px;
+    padding-top: 45px;
   }
 
   .info-box-desc {
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
     font-style: italic;
-    color: #333;
+    color: #1a1a1a;
     margin: 0;
   }
 
