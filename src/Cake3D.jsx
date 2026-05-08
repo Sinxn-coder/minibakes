@@ -128,76 +128,7 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
   return <group>{dollops}</group>;
 }
 
-// --- Pearl Border Helper ---
-function PearlBorder({ curve, radius, yOffset, color, inset = 0 }) {
-  const pearlRadius = 0.038;
-  const geo = useMemo(() => new THREE.SphereGeometry(pearlRadius, 32, 32), []);
 
-  const pearls = useMemo(() => {
-    const arr = [];
-    const rows = 2; // Stacked double pearl border
-    
-    // Calculate perfect count so the balls touch side-by-side
-    let perimeter = 0;
-    if (curve) {
-      perimeter = curve.getLength();
-    } else {
-      const actualRadius = radius - inset;
-      perimeter = 2 * Math.PI * actualRadius;
-    }
-    const count = Math.round(perimeter / (pearlRadius * 2));
-
-    for (let r = 0; r < rows; r++) {
-      // Base sits exactly on the floor. Top row is nested in the honeycomb gaps.
-      const currentYOffset = yOffset + pearlRadius + r * (pearlRadius * 1.65);
-      
-      // Distance from the cake edge (positive is outward, negative is inward)
-      // Base row (r=0) sits slightly outward. Top row (r=1) is tucked inward.
-      const edgeOffset = (-inset) - r * (pearlRadius * 0.9);
-      const phaseOffset = r * 0.5; // Stagger the top row to nest in gaps
-      
-      for (let i = 0; i < count; i++) {
-        let pos = new THREE.Vector3();
-        let tangent = new THREE.Vector3();
-        let adjustedI = i + phaseOffset;
-
-        if (curve) {
-          let t = (adjustedI / count) % 1.0;
-          if (t < 0) t += 1.0;
-          pos = curve.getPointAt(t);
-          tangent = curve.getTangentAt(t);
-          pos.set(pos.x, currentYOffset, -pos.y);
-          tangent.set(tangent.x, 0, -tangent.y);
-          
-          if (edgeOffset !== 0) {
-            // Normal points OUTWARD
-            const normal = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
-            pos.addScaledVector(normal, edgeOffset);
-          }
-        } else {
-          const angle = (adjustedI / count) * Math.PI * 2;
-          const actualRadius = radius + edgeOffset;
-          pos.set(Math.cos(angle) * actualRadius, currentYOffset, Math.sin(angle) * actualRadius);
-          tangent.set(-Math.sin(angle), 0, Math.cos(angle));
-        }
-
-        const dummy = new THREE.Object3D();
-        dummy.position.copy(pos);
-        dummy.lookAt(pos.clone().add(tangent));
-        dummy.updateMatrix();
-
-        arr.push(
-          <mesh key={`${r}-${i}`} position={dummy.position} quaternion={dummy.quaternion} geometry={geo} castShadow>
-            <meshStandardMaterial color={color} roughness={0.15} metalness={0.05} />
-          </mesh>
-        );
-      }
-    }
-    return arr;
-  }, [curve, radius, yOffset, color, inset, geo]);
-
-  return <group>{pearls}</group>;
-}
 
 // --- Flower Model from GLB ---
 function FlowerCluster({ radius, yOffset, isHeart = false, size = 0, sizeNum = '8' }) {
@@ -344,7 +275,7 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-      {pearlBottom && <PearlBorder radius={radius} inset={-0.015} yOffset={-height / 2} color="#ffffff" />}
+
       {flowerCluster && <FlowerCluster radius={radius} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
@@ -375,7 +306,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-      {pearlBottom && <PearlBorder curve={curve} inset={-0.055} yOffset={-height / 2} color="#ffffff" />}
+
       {flowerCluster && <FlowerCluster isHeart size={size} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
@@ -414,18 +345,18 @@ function CakeModel({ layers }) {
     const color = layer.color || '#F9C6C9';
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
-    const pearlBottom = layer.pearlBottom || false;
+
     const flowerCluster = layer.flowerCluster || false;
     const spread = layer.spread || null;
     const customText = layer.customText || '';
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} pearlBottom={pearlBottom} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} pearlBottom={pearlBottom} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 

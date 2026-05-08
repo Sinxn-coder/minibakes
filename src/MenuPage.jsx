@@ -294,13 +294,7 @@ export default function MenuPage({ onSelectProduct }) {
                           <ChevronDown size={20} />
                           <span className="designer-card-label">Bottom Shell</span>
                         </button>
-                        <button 
-                          className={`designer-card ${cakeLayers[selectedLayerIndex]?.pearlBottom ? 'active-design' : ''}`}
-                          onClick={() => toggleDesign('pearlBottom')}
-                        >
-                          <GripHorizontal size={20} />
-                          <span className="designer-card-label">Pearl Bottom</span>
-                        </button>
+
                         <button 
                           className={`designer-card ${cakeLayers[selectedLayerIndex]?.flowerCluster ? 'active-design' : ''}`}
                           onClick={() => toggleDesign('flowerCluster')}
