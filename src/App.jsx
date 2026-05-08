@@ -614,7 +614,7 @@ function App() {
         </div>
         <div className="hero-info-box">
           <div className="info-box-content">
-            <p className="info-box-desc">{activeOrbitItem.desc}</p>
+            <p className="info-box-desc" key={activeOrbitItem.desc}>{activeOrbitItem.desc}</p>
           </div>
         </div>
         <div className="hero-right-circle" style={{ backgroundImage: `url(${activeOrbitItem.img})` }}></div>
