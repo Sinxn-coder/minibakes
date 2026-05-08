@@ -3,7 +3,7 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, useGLTF, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const flowerModelUrl = '/3d/flower.glb';
+const flowerModelUrl = `${import.meta.env.BASE_URL}3d/flower.glb`;
 
 // --- Layer size config ---
 const BASE_RADIUS = 1.35; // constant base width
