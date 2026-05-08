@@ -468,33 +468,35 @@
 
 @media (max-width: 768px) {
   .menu-page {
-    padding: 6rem 1.2rem 2rem;
+    padding: 6rem 1.5rem 2rem;
+    overflow-x: hidden;
   }
   
   .menu-header {
     margin-bottom: 2rem;
+    text-align: center;
   }
 
   .menu-header h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .menu-header p {
     font-size: 1rem;
   }
   
-  /* Fix horizontal swipe — match the 1.2rem padding of .menu-page on mobile */
+  /* On mobile, remove the negative-margin trick — just let chips scroll inside normal padding */
   .menu-categories {
     gap: 0.6rem;
     margin-bottom: 2rem;
-    padding: 0.4rem 1.2rem;
-    margin-left: -1.2rem;
-    margin-right: -1.2rem;
+    padding: 0.4rem 0;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   .category-btn {
-    padding: 0.55rem 1.1rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
   
   .menu-grid {
@@ -503,18 +505,17 @@
   }
 
   .menu-card {
-    padding: 0.85rem;
-    border-radius: 18px;
+    padding: 1rem;
+    border-radius: 20px;
   }
 
   .menu-card-image {
-    border-radius: 12px;
-    margin-bottom: 0.8rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
   }
 
   .menu-card-content h3 {
-    font-size: 0.92rem;
-    margin-bottom: 0.4rem;
+    font-size: 1rem;
   }
 
   .menu-card-desc {
@@ -526,16 +527,16 @@
   }
 
   .menu-card-price {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .menu-add-btn {
     padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .menu-card-footer {
-    padding-top: 0.7rem;
+    padding-top: 0.8rem;
   }
 
   .full-width-card {
