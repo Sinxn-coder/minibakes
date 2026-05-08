@@ -476,6 +476,12 @@ body {
   justify-content: center;
   padding: 50px;
   text-align: center;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.hero-info-box.fading {
+  opacity: 0;
+  filter: blur(10px);
 }
 
 .info-box-content {
@@ -526,6 +532,13 @@ body {
     inset 0 0 0 2px rgba(255, 215, 0, 0.3); /* Subtle gold inner ring */
   border: 4px solid #fff;
   animation: heroImagePulse 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+}
+
+.hero-right-circle.fading {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(-50%) scale(0.9);
 }
 
 @keyframes heroImagePulse {
@@ -935,6 +948,13 @@ body {
     z-index: 30;
     border: 4px solid #fff;
     animation: heroImagePulseMobile 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+  }
+
+  .hero-right-circle.fading {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate(-50%, -50%) scale(0.9);
   }
 
   @keyframes heroImagePulseMobile {

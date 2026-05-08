@@ -43,9 +43,6 @@ import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg.png';
 import bg2 from './assets/headerbg2.png';
 import bg3 from './assets/headerbg3.png';
-import brownieImg from './assets/brownies_box.png';
-import cupcakeImg from './assets/cupcake4.png';
-import cakeImg from './assets/roundcake1.png';
 import founderImg from './assets/founder.png';
 import style1 from './assets/style1.png';
 import style2 from './assets/style2.png';
@@ -55,8 +52,7 @@ import style5 from './assets/style5.png';
 import style6 from './assets/style6.png';
 import style7 from './assets/style7.png';
 import style8 from './assets/style8.png';
-import miniIcon from './assets/mini_icon.png';
-import minibakesImg from './assets/minibakes.png';
+import style8 from './assets/style8.png';
 import orbitCupcake from './assets/cupcake1.png';
 import orbitCake from './assets/roundcake1.png';
 import orbitPops from './assets/cakepops.png';
@@ -188,6 +184,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [orbitRotation, setOrbitRotation] = useState(0);
+  const [isChanging, setIsChanging] = useState(false);
   const orbitItems = [
     { 
       angle: 0, 
@@ -238,14 +235,21 @@ function App() {
     // Normalized current angle in the 0-360 range
     const normalizedCurrent = ((-currentRot % 360) + 360) % 360;
     
-    let diff = item.angle - normalizedCurrent;
-    
-    // Find the shortest distance (-180 to 180)
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
+    const diff = (() => {
+      let d = item.angle - normalizedCurrent;
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      return d;
+    })();
     
     setOrbitRotation(currentRot - diff);
-    setActiveOrbitItem(item);
+    
+    // Start fade out
+    setIsChanging(true);
+    setTimeout(() => {
+      setActiveOrbitItem(item);
+      setIsChanging(false);
+    }, 400); // Match CSS transition duration
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
   const [cart, setCart] = useState(() => {
@@ -612,13 +616,13 @@ function App() {
             ></div>
           ))}
         </div>
-        <div className="hero-info-box">
+        <div className={`hero-info-box ${isChanging ? 'fading' : ''}`}>
           <div className="info-box-content">
             <p className="info-box-desc" key={activeOrbitItem.desc}>{activeOrbitItem.desc}</p>
           </div>
         </div>
         <div 
-          className="hero-right-circle" 
+          className={`hero-right-circle ${isChanging ? 'fading' : ''}`} 
           key={activeOrbitItem.img} 
           style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
         ></div>
