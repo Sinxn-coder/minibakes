@@ -1028,75 +1028,77 @@ body {
 
   /* Mobile Contact Section */
   .contact-section {
-    padding: 4rem 1.5rem;
+    padding: 4rem 1.5rem 3rem;
   }
   
+  .contact-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
   .contact-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-order-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
   }
   
   .contact-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
     padding-top: 3rem;
-    align-items: center;
     border-top: 1px solid rgba(92, 13, 27, 0.1);
+    max-width: 360px;
+    margin: 0 auto;
   }
   
   .contact-item {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(92, 13, 27, 0.08);
+    border-radius: 20px;
+    padding: 1.2rem 0.8rem;
     cursor: pointer;
+    transition: all 0.3s ease;
     color: #5c0d1b;
-    min-width: 40px;
+    text-align: center;
   }
 
-  /* Anchor icons to their positions */
-  .contact-item:nth-child(1) { justify-content: flex-start; }
-  .contact-item:nth-child(2) { justify-content: center; }
-  .contact-item:nth-child(3) { 
-    justify-content: flex-end; 
-    flex-direction: row-reverse;
+  .contact-item:hover, .contact-item.expanded {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 25px rgba(92, 13, 27, 0.12);
+    transform: translateY(-2px);
   }
 
   .contact-label {
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.4s ease;
-    white-space: nowrap;
-  }
-
-  .contact-item.expanded {
-    background: white;
-    padding: 0.8rem 1rem;
-    border-radius: 50px;
-    box-shadow: 0 8px 20px rgba(92, 13, 27, 0.12);
-  }
-
-  .contact-item.expanded .contact-label {
-    max-width: 150px;
+    display: block;
+    max-width: 100%;
     opacity: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #5c0d1b;
   }
 
-  .contact-item:nth-child(1).expanded .contact-label,
-  .contact-item:nth-child(2).expanded .contact-label {
-    margin-left: 0.8rem;
-  }
-
-  .contact-item:nth-child(3).expanded .contact-label {
-    margin-right: 0.8rem;
+  .contact-icon {
+    width: 22px;
+    height: 22px;
   }
 
   .contact-item svg {
-    width: 24px;
-    height: 24px;
-    stroke-width: 1.5px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
   }
 }
