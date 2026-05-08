@@ -128,6 +128,48 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
   return <group>{dollops}</group>;
 }
 
+// --- Side Piping Helper ---
+function SidePiping({ curve, radius, height, color, isHeart = false, size = 0 }) {
+  const dollops = useMemo(() => {
+    const arr = [];
+    const verticalLines = isHeart ? 12 : 16;
+    const dotsPerLine = 10;
+    
+    for (let i = 0; i < verticalLines; i++) {
+      const t = i / verticalLines;
+      let lineBasePos = new THREE.Vector3();
+      let normal = new THREE.Vector3();
+
+      if (isHeart && curve) {
+        lineBasePos = curve.getPointAt(t);
+        const tangent = curve.getTangentAt(t);
+        normal.set(-tangent.y, 0, tangent.x).normalize();
+        lineBasePos.set(lineBasePos.x, 0, -lineBasePos.y);
+      } else {
+        const angle = t * Math.PI * 2;
+        lineBasePos.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+        normal.set(Math.cos(angle), 0, Math.sin(angle));
+      }
+
+      for (let j = 0; j < dotsPerLine; j++) {
+        const jt = (j / (dotsPerLine - 1)) - 0.5; // -0.5 to 0.5
+        const dotPos = lineBasePos.clone().addScaledVector(new THREE.Vector3(0, 1, 0), jt * height * 0.95);
+        dotPos.addScaledVector(normal, 0.02);
+
+        arr.push(
+          <mesh key={`${i}-${j}`} position={dotPos} castShadow>
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color={color} roughness={0.3} metalness={0.05} />
+          </mesh>
+        );
+      }
+    }
+    return arr;
+  }, [curve, radius, height, color, isHeart, size]);
+
+  return <group>{dollops}</group>;
+}
+
 
 
 // --- Flower Model from GLB ---
@@ -264,25 +306,29 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
 }
 
 // --- Single Round Layer ---
-function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, flowerCluster, spread, customText, sizeNum }) {
+function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, sidePiping, flowerCluster, spread, customText, sizeNum }) {
+  const cakeGeo = useMemo(() => {
+    const g = new THREE.CylinderGeometry(radius * 0.95, radius, height, 64);
+    return g;
+  }, [radius, height]);
+
   return (
     <group position={[0, posY, 0]}>
-      <mesh castShadow>
-        <cylinderGeometry args={[radius * 0.95, radius, height, 64]} />
+      <mesh geometry={cakeGeo} castShadow>
         <meshStandardMaterial color={color} roughness={0.35} metalness={0.05} />
       </mesh>
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-
+      {sidePiping && <SidePiping radius={radius * 0.98} height={height} color={color} />}
       {flowerCluster && <FlowerCluster radius={radius} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
 }
 
 // --- Single Heart Layer ---
-function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, flowerCluster, spread, customText, sizeNum }) {
+function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePiping, flowerCluster, spread, customText, sizeNum }) {
   const { cakeGeo, curve } = useMemo(() => {
     const shape = createHeartShape(size);
     const extrudeSettings = { depth: height, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6, curveSegments: 64 };
@@ -306,7 +352,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-
+      {sidePiping && <SidePiping isHeart curve={curve} size={size} radius={size} height={height} color={color} />}
       {flowerCluster && <FlowerCluster isHeart size={size} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
@@ -345,6 +391,7 @@ function CakeModel({ layers }) {
     const color = layer.color || '#F9C6C9';
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
+    const sidePiping = layer.sidePiping || false;
 
     const flowerCluster = layer.flowerCluster || false;
     const spread = layer.spread || null;
@@ -352,11 +399,11 @@ function CakeModel({ layers }) {
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 

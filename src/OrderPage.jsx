@@ -124,6 +124,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                               {layer.type.includes('6') ? '6"' : '8"'} {layer.type.includes('heart') ? 'Heart' : 'Round'} 
                               {layer.topBorder && ' • Shell Top'}
                               {layer.bottomBorder && ' • Shell Bottom'}
+                              {layer.sidePiping && ' • Side Piping'}
 
                               {layer.flowerCluster && ' • Flowers'}
                             </span>
