@@ -299,6 +299,39 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
         </group>
       );
     }
+
+    // 3. Biscuits for Biscoff spread
+    if (color === 'Biscoff') {
+      const biscuitCount = isHeart ? 16 : 12;
+      // Use a seeded random or just Math.random. Since it's in useMemo, it will be stable until dependencies change.
+      for (let i = 0; i < biscuitCount; i++) {
+        let posX, posZ;
+        if (isHeart) {
+          // Keep biscuits mostly in the center area of the heart
+          const r = Math.random() * (size * 0.6);
+          const theta = Math.random() * Math.PI * 2;
+          posX = Math.cos(theta) * r + (size * 0.1); 
+          posZ = Math.sin(theta) * r - (size * 0.1);
+        } else {
+          const r = Math.random() * (radius * 0.7);
+          const theta = Math.random() * Math.PI * 2;
+          posX = Math.cos(theta) * r;
+          posZ = Math.sin(theta) * r;
+        }
+
+        const rotX = Math.random() * Math.PI;
+        const rotY = Math.random() * Math.PI;
+        const rotZ = Math.random() * Math.PI;
+        
+        arr.push(
+          <mesh key={`biscuit-${i}`} position={[posX, yOffset + 0.03, posZ]} rotation={[rotX, rotY, rotZ]} castShadow>
+             <boxGeometry args={[0.12, 0.04, 0.08]} />
+             <meshStandardMaterial color="#d49b64" roughness={0.9} />
+          </mesh>
+        );
+      }
+    }
+
     return arr;
   }, [curve, radius, yOffset, dripColor, isHeart, size]);
 
