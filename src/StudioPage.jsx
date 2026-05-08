@@ -4,9 +4,9 @@ import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
 // Asset paths (from generated images)
-const heroImg = '/baking_class_hero_1777704473859.png';
-const workshopImg = '/cupcake_workshop_1777704501517.png';
-const groupImg = '/baking_studio_group_1777704537017.png';
+const heroImg     = `${import.meta.env.BASE_URL}baking_class_hero_1777704473859.png`;
+const workshopImg = `${import.meta.env.BASE_URL}cupcake_workshop_1777704501517.png`;
+const groupImg    = `${import.meta.env.BASE_URL}baking_studio_group_1777704537017.png`;
 
 const upcomingClasses = [
   {
