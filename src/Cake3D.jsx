@@ -235,7 +235,12 @@ function FlowerCluster({ radius, yOffset, isHeart = false, size = 0, sizeNum = '
 
 // --- Drip Effect Helper ---
 function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }) {
-  const dripColor = color === 'Nutella' ? '#3d1e16' : '#b07d4b'; // Nutella vs Biscoff
+  const dripColor = color === 'Nutella' ? '#3d1e16' : 
+                    color === 'White Chocolate' ? '#f5ebd6' :
+                    color === 'Pistachio' ? '#a2d187' :
+                    color === 'Ferrero Rocher' ? '#5c3a21' :
+                    color === 'Kinder' ? '#e8d8c8' :
+                    '#b07d4b'; // Biscoff / default
   
   const drips = useMemo(() => {
     const arr = [];

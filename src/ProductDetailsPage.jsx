@@ -26,7 +26,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                  isCupcake ? ['Vanilla Bean', 'Chocolate Indulgence', 'Strawberry Dream', 'Red Velvet'] : 
                  ['Classic Chocolate', 'Sea Salt Caramel', 'Hazelnut'];
 
-  const spreads = ['Lotus Biscoff', 'Nutella', 'Strawberry Jam', 'Salted Caramel'];
+  const spreads = ['Nutella', 'Biscoff', 'White Chocolate', 'Pistachio', 'Ferrero Rocher', 'Kinder'];
 
   return (
     <div className="product-details-page">
