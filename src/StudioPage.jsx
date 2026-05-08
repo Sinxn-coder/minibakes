@@ -65,10 +65,10 @@ export default function StudioPage() {
       {/* Hero Section */}
       <section className="studio-hero">
         <div className="studio-hero-content">
-          <span className="studio-badge">The Baking Studio</span>
-          <h1>Master the Art of <br/><span>MiniBaking</span></h1>
-          <p>Join Megan Briffa in our premium studio for hands-on workshops. Learn the secrets behind our minimalist designs and signature flavors.</p>
-          <a href="#schedule" className="cta-btn-primary">View Schedule <ArrowRight size={18} /></a>
+          <span className="studio-badge">Cupcake Decorating Experiences</span>
+          <h1>A Sweet Experience, <br/><span>Brought to You</span></h1>
+          <p>Megan Briffa comes to <em>you</em> — your home, venue, or event space — for a fun, hands-on cupcake decorating experience. Perfect for birthdays, hen parties, team events, and more.</p>
+          <a href="#schedule" className="cta-btn-primary">View Upcoming Dates <ArrowRight size={18} /></a>
         </div>
         <div className="studio-hero-image">
           <SafeImage src={heroImg} alt="Baking Studio Hero" />
@@ -84,7 +84,7 @@ export default function StudioPage() {
 
       {/* Mobile Floating Button */}
       <a href="#booking-form" className="mobile-sticky-book mobile-only">
-        Book Your Class <ArrowRight size={18} />
+        Book an Experience <ArrowRight size={18} />
       </a>
 
       {/* Why Join Us */}
@@ -97,7 +97,7 @@ export default function StudioPage() {
         <div className="perk-card">
           <div className="perk-icon"><Camera size={24} /></div>
           <h3>Photo Ready</h3>
-          <p>Our studio is designed for beautiful social media moments.</p>
+          <p>Your event venue becomes the classroom — beautiful, personal, and ready for memories.</p>
         </div>
         <div className="perk-card">
           <div className="perk-icon"><CheckCircle2 size={24} /></div>
@@ -108,7 +108,7 @@ export default function StudioPage() {
 
       {/* Upcoming Schedule */}
       <section id="schedule" className="studio-schedule">
-        <h2 className="section-title-alt">UPCOMING CLASSES</h2>
+        <h2 className="section-title-alt">UPCOMING DATES</h2>
         <div className="classes-grid">
           {upcomingClasses.map(cls => (
             <div key={cls.id} className="class-card">
@@ -138,7 +138,7 @@ export default function StudioPage() {
 
       {/* Gallery Section */}
       <section className="studio-gallery">
-        <h2 className="section-title-alt">STUDIO MOMENTS</h2>
+        <h2 className="section-title-alt">CLASS MOMENTS</h2>
         <div className="gallery-masonry">
           <div className="gallery-item large">
             <SafeImage src={groupImg} alt="Group baking" />
@@ -157,15 +157,15 @@ export default function StudioPage() {
         <div className="booking-container">
           <div className="booking-info">
             <h2>Reserve Your Spot</h2>
-            <p>Ready to bake? Fill out the form and we'll confirm your spot within 24 hours.</p>
+            <p>Ready to book? Fill out the form and Megan will confirm your date and location within 24 hours.</p>
             <div className="contact-details">
               <div className="contact-item">
                 <MapPin size={20} />
-                <span>The Strand, Sliema, Malta</span>
+                <span>We come to you — home, venue, or event space</span>
               </div>
               <div className="contact-item">
                 <Clock size={20} />
-                <span>Open Mon-Sat, 9AM - 6PM</span>
+                <span>Flexible scheduling, weekdays & weekends</span>
               </div>
             </div>
           </div>
