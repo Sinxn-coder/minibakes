@@ -10,8 +10,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
     flavor: '',
     spread: '',
     message: '',
-    notes: ''
+    notes: '',
+    bows: false
   });
+
+  const BOW_ADDON_PRICE = 5;
 
   if (!product) return null;
 
@@ -81,6 +84,21 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                 </div>
               )}
 
+              {/* Bows Add-On */}
+              <div className="option-group">
+                <label>Add-Ons (Optional)</label>
+                <div className="addon-grid">
+                  <button
+                    className={`addon-btn ${options.bows ? 'active' : ''}`}
+                    onClick={() => setOptions({...options, bows: !options.bows})}
+                  >
+                    <span className="addon-icon">🎀</span>
+                    <span className="addon-label">Bows</span>
+                    <span className="addon-price">+€5</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="option-group">
                 <label>Message / Text on Product</label>
                 <input 
@@ -128,7 +146,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
                   className="add-to-order-final-btn"
                   onClick={() => onConfirm({ ...product, quantity, options })}
                 >
-                  Confirm Order • €{((parseFloat(product.price.replace(/[^\d.]/g, '')) || 0) * quantity).toFixed(2) || '0.00'}
+                  Confirm Order • €{(((parseFloat(product.price.replace(/[^\d.]/g, '')) || 0) + (options.bows ? BOW_ADDON_PRICE : 0)) * quantity).toFixed(2) || '0.00'}
                 </button>
               </div>
             </div>

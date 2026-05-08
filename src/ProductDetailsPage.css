@@ -134,6 +134,64 @@
   gap: 0.6rem;
 }
 
+.addon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.addon-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.2rem;
+  border: 1.5px solid #eee;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.addon-btn:hover {
+  border-color: var(--secondary);
+}
+
+.addon-btn.active {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  box-shadow: 0 4px 12px rgba(155, 45, 48, 0.15);
+}
+
+.addon-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.addon-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.addon-btn.active .addon-label {
+  color: white;
+}
+
+.addon-price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(0,0,0,0.06);
+  color: #666;
+  padding: 0.15rem 0.5rem;
+  border-radius: 50px;
+}
+
+.addon-btn.active .addon-price {
+  background: rgba(255,255,255,0.25);
+  color: white;
+}
+
 .option-btn {
   padding: 0.6rem 1.2rem;
   border: 1.5px solid #eee;
