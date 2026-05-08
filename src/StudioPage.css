@@ -76,7 +76,8 @@
 
 .studio-hero-image img {
   width: 100%;
-  aspect-ratio: 4/5;
+  aspect-ratio: 4/3;
+  max-height: 380px;
   object-fit: cover;
   display: block;
 }
