@@ -26,7 +26,22 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 4rem;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menu-categories::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .menu-categories {
+    justify-content: flex-start;
+  }
 }
 
 .category-btn {
@@ -39,6 +54,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .category-btn:hover {
