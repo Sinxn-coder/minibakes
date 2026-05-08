@@ -1,5 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Facebook, Mail } from 'lucide-react';
+
+const FacebookIcon = ({ size = 24, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -22,6 +39,7 @@ const InstagramIcon = ({ size = 24, ...props }) => (
 import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
+import ContactPage from './ContactPage';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg.png';
 import bg2 from './assets/headerbg2.png';
@@ -488,11 +506,7 @@ function App() {
             <span className="nav-divider">|</span>
             <a href="#contact" className="nav-link" onClick={(e) => {
               e.preventDefault();
-              navigateTo('home');
-              setTimeout(() => {
-                const contactSection = document.getElementById('contact');
-                contactSection?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+              navigateTo('contact');
             }}>Contact</a>
           </nav>
 
@@ -542,11 +556,7 @@ function App() {
             <div className="nav-item-wrapper">
               <a href="#contact" className="mobile-nav-link" onClick={(e) => { 
                 e.preventDefault();
-                navigateTo('home');
-                setTimeout(() => {
-                  const contactSection = document.getElementById('contact');
-                  contactSection?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
+                navigateTo('contact');
               }}>Contact</a>
             </div>
           </nav>
@@ -738,24 +748,31 @@ function App() {
         <div className="contact-footer" ref={contactFooterRef}>
           <div 
             className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('location', 'https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54&entry=gps&shh=CAE&lucs=,94297699,94284475,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic')}
+            onClick={() => handleContactClick('location', 'https://maps.google.com?q=Ħaż-Żebbuġ, Malta')}
           >
             <MapPin size={24} className="contact-icon" />
-            <span className="contact-label">Malta</span>
+            <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
           </div>
           <div 
             className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
             onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
           >
             <InstagramIcon size={24} className="contact-icon" />
+            <span className="contact-label">@minibakes2021</span>
+          </div>
+          <div 
+            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('facebook', 'https://facebook.com/minibakes2021')}
+          >
+            <FacebookIcon size={24} className="contact-icon" />
             <span className="contact-label">minibakes2021</span>
           </div>
           <div 
-            className={`contact-item ${expandedContactId === 'phone' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('phone', 'tel:+35679820529')}
+            className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
+            onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
           >
-            <Phone size={24} className="contact-icon" />
-            <span className="contact-label">+356 79820529</span>
+            <Mail size={24} className="contact-icon" />
+            <span className="contact-label">meganbriffa2001@gmail.com</span>
           </div>
         </div>
       </section>
@@ -818,7 +835,8 @@ function App() {
         setCustomizingProduct(item);
         setCurrentView('product-details');
       }} />}
-      {currentView === 'studio' && <StudioPage />}
+       {currentView === 'studio' && <StudioPage />}
+      {currentView === 'contact' && <ContactPage onBack={() => setCurrentView('home')} />}
       {currentView === 'order' && <OrderPage 
         cart={cart} 
         onBack={() => setCurrentView('home')} 

@@ -1108,9 +1108,10 @@ body {
 
 /* Contact Section */
 .contact-section {
-  background-color: #fcf1e6; /* Light cream/beige */
-  padding: 6rem 2rem 4rem;
+  background: linear-gradient(to bottom, #fffafa, #ffe9e9); /* Warmer peach/pink gradient */
+  padding: 8rem 2rem 6rem;
   text-align: center;
+  position: relative;
 }
 
 .contact-main {
@@ -1198,24 +1199,55 @@ body {
 
 .contact-footer {
   display: flex;
-  justify-content: space-between;
-  padding-top: 4rem;
-  border-top: 1px solid rgba(92, 13, 27, 0.1);
-  max-width: 1000px;
+  justify-content: center; /* Center them for a cleaner look */
+  flex-wrap: wrap;
+  gap: 3rem;
+  padding-top: 5rem;
+  border-top: 1px solid rgba(255, 141, 161, 0.2);
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .contact-item {
   display: flex;
+  flex-direction: column; /* Stack vertically for more personality */
   align-items: center;
-  gap: 1rem;
-  color: #5c0d1b;
-  font-size: 1.3rem;
-  font-weight: 600;
+  gap: 0.8rem;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+  border-radius: 20px;
+  min-width: 180px;
+}
+
+.contact-item:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .contact-icon {
-  color: #5c0d1b;
+  color: var(--primary, #ff8da1);
+  background: #fff;
+  padding: 12px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover .contact-icon {
+  transform: scale(1.1);
+  background: var(--primary, #ff8da1);
+  color: #fff;
+}
+
+.contact-label {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-style: italic;
 }
 
 /* Featured Section Styles */
