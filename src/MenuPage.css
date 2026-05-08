@@ -468,54 +468,62 @@
 
 @media (max-width: 768px) {
   .menu-page {
-    padding: 6rem 1.5rem 2rem;
+    padding: 6rem 1.2rem 3rem;
     overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
   }
-  
+
   .menu-header {
-    margin-bottom: 2rem;
     text-align: center;
+    padding: 0 0.5rem;
   }
 
   .menu-header h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    word-break: break-word;
   }
 
   .menu-header p {
     font-size: 1rem;
   }
-  
-  /* On mobile, remove the negative-margin trick — just let chips scroll inside normal padding */
+
   .menu-categories {
-    gap: 0.6rem;
+    gap: 0.5rem;
     margin-bottom: 2rem;
-    padding: 0.4rem 0;
-    margin-left: 0;
-    margin-right: 0;
+    padding: 0.5rem 1.2rem;
+    margin-left: -1.2rem;
+    margin-right: -1.2rem;
   }
-  
+
   .category-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
   }
-  
+
   .menu-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .menu-card {
-    padding: 1rem;
-    border-radius: 20px;
+    padding: 0.8rem;
+    border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .menu-card-image {
-    border-radius: 15px;
-    margin-bottom: 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
   }
 
   .menu-card-content h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
   }
 
   .menu-card-desc {
@@ -526,17 +534,19 @@
     display: none;
   }
 
+  .menu-card-footer {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-top: 0.6rem;
+  }
+
   .menu-card-price {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .menu-add-btn {
     padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-  }
-
-  .menu-card-footer {
-    padding-top: 0.8rem;
+    font-size: 0.8rem;
   }
 
   .full-width-card {
@@ -548,13 +558,13 @@
     justify-content: flex-start;
     padding: 1rem;
     gap: 1.5rem;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
   }
 
   .designer-ui::-webkit-scrollbar {
-    display: none; /* Chrome/Safari/Webkit */
+    display: none;
   }
 
   .designer-column {
