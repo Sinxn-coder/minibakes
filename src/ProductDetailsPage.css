@@ -405,18 +405,20 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      padding: 1rem 1.5rem;
+      box-sizing: border-box; /* Fix overflow issue */
+      padding: 1rem 1rem;
       background: white;
       box-shadow: 0 -10px 30px rgba(0,0,0,0.08);
       margin-top: 0;
-      gap: 1rem;
+      gap: 0.5rem;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .quantity-selector {
-      padding: 0.4rem 0.8rem;
-      gap: 1rem;
+      padding: 0.4rem 0.6rem;
+      gap: 0.8rem;
       flex: none;
     }
 
@@ -425,10 +427,12 @@
     }
 
     .add-to-order-final-btn {
-      padding: 0.8rem 1.2rem;
-      font-size: 0.9rem;
+      padding: 0.8rem 0.5rem;
+      font-size: 0.85rem;
       border-radius: 12px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       width: auto;
       flex: 1;
     }
