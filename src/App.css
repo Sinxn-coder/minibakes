@@ -2064,8 +2064,10 @@ body {
 
   .hero-bg-image {
     background-attachment: scroll !important;
-    background-size: 100% 100% !important; /* Forces the whole image to fit the container */
+    background-size: contain !important; /* Shows the whole image without cropping or stretching */
+    background-repeat: no-repeat;
     background-position: center center;
+    background-color: #fcf4f4; /* Matches your brand's soft cream/pink tone */
   }
 }
 
