@@ -38,6 +38,8 @@ export const menuData = [
     category: "Cake Pops",
     items: [
       { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: cakepops, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: cakepops, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
+      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: cakepops, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
