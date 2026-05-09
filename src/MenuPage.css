@@ -547,7 +547,13 @@
     border-radius: 16px;
     width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to show designer buttons */
+    position: relative;
+  }
+
+  .full-width-card {
+    grid-column: 1 / -1;
+    margin-bottom: 8rem; /* Extra space for the two stacked buttons below the card */
   }
 
   .menu-card-image {
