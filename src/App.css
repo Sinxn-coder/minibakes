@@ -2061,6 +2061,12 @@ body {
     right: 1.5rem;
     z-index: 1001; /* Above mobile menu if needed */
   }
+
+  .hero-bg-image {
+    background-attachment: scroll !important;
+    background-size: 100% 100% !important; /* Forces the whole image to fit the container */
+    background-position: center center;
+  }
 }
 
 /* Page Transition Loader */
