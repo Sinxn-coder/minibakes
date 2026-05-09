@@ -196,7 +196,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [orbitRotation, setOrbitRotation] = useState(0);
-  const [isChanging, setIsChanging] = useState(false);
+
   const orbitItems = [
     { 
       angle: 0, 
@@ -255,13 +255,7 @@ function App() {
     })();
     
     setOrbitRotation(currentRot - diff);
-    
-    // Start fade out
-    setIsChanging(true);
-    setTimeout(() => {
-      setActiveOrbitItem(item);
-      setIsChanging(false);
-    }, 400); // Match CSS transition duration
+    setActiveOrbitItem(item);
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
   // Preload critical Home Page assets
@@ -643,14 +637,13 @@ function App() {
             ></div>
           ))}
         </div>
-        <div className={`hero-info-box ${isChanging ? 'fading' : ''}`}>
+        <div className="hero-info-box">
           <div className="info-box-content">
-            <p className="info-box-desc" key={activeOrbitItem.desc}>{activeOrbitItem.desc}</p>
+            <p className="info-box-desc">{activeOrbitItem.desc}</p>
           </div>
         </div>
         <div 
-          className={`hero-right-circle ${isChanging ? 'fading' : ''}`} 
-          key={activeOrbitItem.img} 
+          className="hero-right-circle" 
           style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
         ></div>
       </section>
