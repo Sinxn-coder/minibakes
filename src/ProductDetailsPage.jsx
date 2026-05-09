@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
 
-export default function ProductDetailsPage({ product, onBack, onConfirm }) {
+export default function ProductDetailsPage({ product, onBack, onConfirm, cartCount, onOpenCart }) {
   const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState({
     flavor: '',
@@ -40,9 +40,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
   return (
     <div className="product-details-page">
       <div className="details-container">
-        <button className="back-btn-details" onClick={onBack}>
-          <ArrowLeft size={24} /> <span>Back to browsing</span>
-        </button>
+        <div className="details-header-nav">
+          <button className="back-btn-details" onClick={onBack}>
+            <ArrowLeft size={24} /> <span>Back to browsing</span>
+          </button>
+          
+          <button className="cart-btn-details" onClick={onOpenCart}>
+            <div className="cart-icon-wrapper-details">
+              <ShoppingBag size={24} />
+              {cartCount > 0 && <span className="cart-badge-details">{cartCount}</span>}
+            </div>
+          </button>
+        </div>
 
         <div className="details-layout">
           <div className="details-image-side">

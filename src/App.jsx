@@ -923,6 +923,14 @@ function App() {
           <ProductDetailsPage 
             product={customizingProduct} 
             onBack={() => setCurrentView('menu')} 
+            cartCount={cart.length}
+            onOpenCart={() => {
+              if (window.innerWidth > 768) {
+                setIsCartOpen(true);
+              } else {
+                setCurrentView('order');
+              }
+            }}
             onConfirm={(orderData) => {
               addToCart(orderData);
               if (window.innerWidth > 768) {
