@@ -551,13 +551,7 @@ body {
     opacity: 1;
   }
 }
-  height: 280px;
-  max-width: 80%;
-  width: auto;
-  object-fit: contain;
-  margin-bottom: 0; /* Fully removed gap */
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
-}
+
 
 .hero-tagline {
   font-size: 3.5rem; /* Increased size since logo is gone */
