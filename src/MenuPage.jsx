@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower } from 'lucide-react';
+import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare } from 'lucide-react';
 import './MenuPage.css';
 import Cake3D from './Cake3D';
 
