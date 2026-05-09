@@ -7,8 +7,13 @@ const studio1 = `${import.meta.env.BASE_URL}studio1.png`;
 const studio2 = `${import.meta.env.BASE_URL}studio2.png`;
 const studio3 = `${import.meta.env.BASE_URL}studio3.png`;
 const studio4 = `${import.meta.env.BASE_URL}studio4.png`;
+const studio5 = `${import.meta.env.BASE_URL}studio5.png`;
+const studio6 = `${import.meta.env.BASE_URL}studio6.png`;
+const studio7 = `${import.meta.env.BASE_URL}studio7.png`;
+const studio8 = `${import.meta.env.BASE_URL}studio8.png`;
 
-const studioImages = [studio1, studio2, studio3, studio4];
+// 8 unique studio images from public folder
+const studioImages = [studio1, studio2, studio3, studio4, studio5, studio6, studio7, studio8];
 
 const upcomingClasses = [
   {
@@ -46,7 +51,7 @@ const upcomingClasses = [
 export default function StudioPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0); // Track expanded gallery card
+  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0); // First card expanded by default
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -59,6 +64,30 @@ export default function StudioPage() {
       setCurrentImgIndex((prev) => (prev + 1) % studioImages.length);
     }, 4000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-45% 0% -45% 0%', // Target a narrow band in the center
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (window.innerWidth > 768) return;
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = parseInt(entry.target.getAttribute('data-index'));
+          setActiveGalleryIdx(idx);
+        }
+      });
+    }, observerOptions);
+
+    const cards = document.querySelectorAll('.gallery-card');
+    cards.forEach(card => observer.observe(card));
+
+    return () => observer.disconnect();
   }, []);
 
   const handleBooking = (e) => {
@@ -161,6 +190,7 @@ export default function StudioPage() {
           {studioImages.map((img, idx) => (
             <div 
               key={idx}
+              data-index={idx}
               className={`gallery-card ${activeGalleryIdx === idx ? 'expanded' : ''}`}
               onClick={() => setActiveGalleryIdx(idx)}
             >
