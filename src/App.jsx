@@ -367,6 +367,13 @@ function App() {
     window.scrollTo(0, 0);
   }, [currentView]);
 
+  // Refresh Instagram Embeds when home view is active
+  useEffect(() => {
+    if (currentView === 'home' && window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+  }, [currentView]);
+
   const handleContactClick = (id, link) => {
     if (expandedContactId === id || window.innerWidth > 768) {
       window.open(link, id === 'phone' ? '_self' : '_blank');
@@ -761,17 +768,28 @@ function App() {
         </div>
         
         <div className="insta-feed-container">
-          {/* This is a wrapper for the Instagram Widget. 
-              To make it live, you can use a free service like Behold.so 
-              and paste their embed code below. */}
           <div className="insta-row">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="insta-card-placeholder">
-                <div className="insta-img-shimmer">
-                  <InstagramIcon size={32} opacity={0.2} />
-                </div>
-              </div>
-            ))}
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DX1pOqsRkRB/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DXZ8a33kixp/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DXKXOOpEdhV/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DWZb2LTEc9q/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DVysXwGEWJt/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DVHDBcvjPtM/" data-instgrm-version="14"></blockquote>
+            </div>
+            <div className="insta-card">
+              <blockquote className="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DU3lFo7EaXQ/" data-instgrm-version="14"></blockquote>
+            </div>
           </div>
           
           <div className="insta-footer">

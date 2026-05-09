@@ -767,6 +767,24 @@ body {
   display: none;
 }
 
+.insta-card {
+  flex: 0 0 350px;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+/* Ensure Instagram blockquote doesn't overflow or add weird margins */
+.insta-card blockquote {
+  margin: 0 !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .insta-card-placeholder {
   flex: 0 0 280px;
   aspect-ratio: 1;
