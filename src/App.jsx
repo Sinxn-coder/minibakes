@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
@@ -63,10 +63,10 @@ import orbitSicles from './assets/cakesicles10.png';
 import orbitHeart from './assets/breakable_heart.png';
 import orbitLove from './assets/lovecake1.png';
 import orbitBento from './assets/bento_cake_aesthetic_1775218142199.png';
-import MenuPage from './MenuPage';
-import OrderPage from './OrderPage';
-import ProductDetailsPage from './ProductDetailsPage';
-import StudioPage from './StudioPage';
+const MenuPage = lazy(() => import('./MenuPage'));
+const OrderPage = lazy(() => import('./OrderPage'));
+const ProductDetailsPage = lazy(() => import('./ProductDetailsPage'));
+const StudioPage = lazy(() => import('./StudioPage'));
 
 const patternCoords = [
   // Row 1 (Top)
@@ -180,6 +180,16 @@ function FeaturedCarousel({ items, onViewDetails }) {
   );
 }
 
+// Premium Page Loader Component
+const PageLoader = () => (
+  <div className="page-transition-loader">
+    <div className="loader-content">
+      <div className="loader-shimmer"></div>
+      <p>Crafting Sweetness...</p>
+    </div>
+  </div>
+);
+
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -254,6 +264,21 @@ function App() {
     }, 400); // Match CSS transition duration
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
+  // Preload critical Home Page assets
+  useEffect(() => {
+    const imagesToPreload = [
+      ...backgrounds,
+      ...orbitItems.map(item => item.img),
+      ...featuredItems.map(item => item.img),
+      logo
+    ];
+
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('minibakes_cart');
     return savedCart ? JSON.parse(savedCart) : [];
@@ -848,31 +873,31 @@ function App() {
         </div>
       )}
 
-      {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
-        setCustomizingProduct(item);
-        setCurrentView('product-details');
-      }} />}
-      {currentView === 'studio' && <StudioPage />}
-      {currentView === 'order' && <OrderPage 
-        cart={cart} 
-        onBack={() => setCurrentView('home')} 
-        onRemoveItem={removeFromCart}
-        onUpdateQuantity={updateQuantity}
-      />}
-      {currentView === 'product-details' && (
-        <ProductDetailsPage 
-          product={customizingProduct} 
-          onBack={() => setCurrentView('menu')} 
-          onConfirm={(orderData) => {
-            addToCart(orderData);
-            // We keep setCustomizingProduct(orderData.originalProduct) or similar? 
-            // The user said "keep that product page like that", so we just don't null it.
-            if (window.innerWidth > 768) {
-              setIsCartOpen(true);
-            }
-          }}
-        />
-      )}
+      <Suspense fallback={<PageLoader />}>
+        {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
+          setCustomizingProduct(item);
+          setCurrentView('product-details');
+        }} />}
+        {currentView === 'studio' && <StudioPage />}
+        {currentView === 'order' && <OrderPage 
+          cart={cart} 
+          onBack={() => setCurrentView('home')} 
+          onRemoveItem={removeFromCart}
+          onUpdateQuantity={updateQuantity}
+        />}
+        {currentView === 'product-details' && (
+          <ProductDetailsPage 
+            product={customizingProduct} 
+            onBack={() => setCurrentView('menu')} 
+            onConfirm={(orderData) => {
+              addToCart(orderData);
+              if (window.innerWidth > 768) {
+                setIsCartOpen(true);
+              }
+            }}
+          />
+        )}
+      </Suspense>
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
