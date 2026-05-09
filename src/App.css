@@ -880,7 +880,7 @@ body {
   }
 
   .hero-section {
-    height: calc(100vh - 80px);
+    height: 75vh;
   }
   
   .hero-logo {
@@ -2064,10 +2064,9 @@ body {
 
   .hero-bg-image {
     background-attachment: scroll !important;
-    background-size: contain !important; /* Shows the whole image without cropping or stretching */
-    background-repeat: no-repeat;
+    background-size: cover !important; /* Fills the area perfectly */
     background-position: center center;
-    background-color: #fcf4f4; /* Matches your brand's soft cream/pink tone */
+    background-color: #fcf4f4;
   }
 }
 
