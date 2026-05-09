@@ -67,6 +67,7 @@ import MenuPage from './MenuPage';
 import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
 import StudioPage from './StudioPage';
+import CakeCarePage from './CakeCarePage';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -612,6 +613,9 @@ function App() {
               <a href="#studio" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('studio'); }}>Classes</a>
             </div>
             <div className="nav-item-wrapper">
+              <a href="#care" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('care'); }}>Cake Care</a>
+            </div>
+            <div className="nav-item-wrapper">
               <a href="#order" className="mobile-nav-link" onClick={() => { navigateTo('order'); }}>
                 Order {cart.length > 0 && `(${cart.length})`}
               </a>
@@ -938,6 +942,9 @@ function App() {
               }
             }}
           />
+        )}
+        {currentView === 'care' && (
+          <CakeCarePage onBack={() => setCurrentView('home')} />
         )}
 
       {/* Desktop Cart Drawer */}

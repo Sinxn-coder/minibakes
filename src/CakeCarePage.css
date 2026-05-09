@@ -1,0 +1,107 @@
+.cake-care-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+  z-index: 3000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpCare 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpCare {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.care-page-header {
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back-btn-care {
+  background: none;
+  border: none;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.care-page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--secondary);
+  margin: 0;
+}
+
+.care-page-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  width: 100%;
+}
+
+.care-intro {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.care-intro p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #666;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Ensure the guide inside the page doesn't have extra shadow/padding if it's already on a clean page */
+.cake-care-page .cake-care-section {
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.care-footer-note {
+  margin-top: 5rem;
+  padding: 3rem;
+  background: #fdf2f4;
+  border-radius: 24px;
+  text-align: center;
+}
+
+.care-footer-note p {
+  font-size: 1.1rem;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .care-page-header h1 {
+    display: none; /* Hide title on small mobile to make room for back btn */
+  }
+  
+  .care-page-content {
+    padding: 2rem 1.5rem;
+  }
+  
+  .care-intro p {
+    font-size: 1rem;
+  }
+}

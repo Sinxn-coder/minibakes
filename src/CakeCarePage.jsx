@@ -1,0 +1,31 @@
+import React from 'react';
+import { ArrowLeft } from 'lucide-react';
+import CakeCareGuide from './components/CakeCareGuide';
+import './CakeCarePage.css';
+
+const CakeCarePage = ({ onBack }) => {
+  return (
+    <div className="cake-care-page">
+      <div className="care-page-header">
+        <button className="back-btn-care" onClick={onBack}>
+          <ArrowLeft size={24} /> <span>Back to Home</span>
+        </button>
+        <h1>Cake Care & Handling</h1>
+      </div>
+      
+      <div className="care-page-content">
+        <div className="care-intro">
+          <p>Ensuring your cake stays perfect from pickup to first bite. Follow our essential guide for handling, transporting, and storing your Mini Bakes treats.</p>
+        </div>
+        
+        <CakeCareGuide />
+        
+        <div className="care-footer-note">
+          <p>If you have any questions during your event, feel free to reach out to us via WhatsApp!</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CakeCarePage;
