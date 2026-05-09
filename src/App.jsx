@@ -63,10 +63,10 @@ import orbitSicles from './assets/cakesicles10.png';
 import orbitHeart from './assets/breakable_heart.png';
 import orbitLove from './assets/lovecake1.png';
 import orbitBento from './assets/bento_cake_aesthetic_1775218142199.png';
-const MenuPage = lazy(() => import('./MenuPage'));
-const OrderPage = lazy(() => import('./OrderPage'));
-const ProductDetailsPage = lazy(() => import('./ProductDetailsPage'));
-const StudioPage = lazy(() => import('./StudioPage'));
+import MenuPage from './MenuPage';
+import OrderPage from './OrderPage';
+import ProductDetailsPage from './ProductDetailsPage';
+import StudioPage from './StudioPage';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -908,7 +908,6 @@ function App() {
         </div>
       )}
 
-      <Suspense fallback={<PageLoader />}>
         {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
           setCustomizingProduct(item);
           setCurrentView('product-details');
@@ -932,7 +931,6 @@ function App() {
             }}
           />
         )}
-      </Suspense>
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
