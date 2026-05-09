@@ -46,6 +46,7 @@ const upcomingClasses = [
 export default function StudioPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0); // Track expanded gallery card
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -156,19 +157,19 @@ export default function StudioPage() {
       {/* Gallery Section */}
       <section className="studio-gallery">
         <h2 className="section-title-alt">CLASS MOMENTS</h2>
-        <div className="gallery-masonry">
-          <div className="gallery-item large">
-            <SafeImage src={studio1} alt="Class moment 1" />
-          </div>
-          <div className="gallery-item">
-            <SafeImage src={studio2} alt="Class moment 2" />
-          </div>
-          <div className="gallery-item">
-            <SafeImage src={studio3} alt="Class moment 3" />
-          </div>
-          <div className="gallery-item">
-            <SafeImage src={studio4} alt="Class moment 4" />
-          </div>
+        <div className="expanding-gallery">
+          {studioImages.map((img, idx) => (
+            <div 
+              key={idx}
+              className={`gallery-card ${activeGalleryIdx === idx ? 'expanded' : ''}`}
+              onClick={() => setActiveGalleryIdx(idx)}
+            >
+              <SafeImage src={img} alt={`Class moment ${idx + 1}`} />
+              <div className="gallery-card-overlay">
+                <span>View Moment {idx + 1}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

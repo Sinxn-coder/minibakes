@@ -293,28 +293,97 @@
   padding: 6rem 4rem;
 }
 
-.gallery-masonry {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 300px);
-  gap: 1.5rem;
+.expanding-gallery {
+  display: flex;
+  width: 100%;
+  height: 500px;
+  gap: 1.2rem;
+  padding: 0 1rem;
 }
 
-.gallery-item {
-  border-radius: 20px;
+.gallery-card {
+  position: relative;
+  flex: 0.7;
+  height: 100%;
+  border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  filter: grayscale(0.4);
 }
 
-.gallery-item img {
+.gallery-card:hover {
+  flex: 0.9;
+  filter: grayscale(0.2);
+}
+
+.gallery-card.expanded {
+  flex: 5;
+  filter: grayscale(0);
+  cursor: default;
+}
+
+.gallery-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.7s ease;
 }
 
-.gallery-item.large {
-  grid-column: span 1;
-  grid-row: span 1;
+.gallery-card.expanded img {
+  transform: scale(1.02);
+}
+
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(128, 0, 0, 0.6), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.gallery-card:not(.expanded):hover .gallery-card-overlay {
+  opacity: 1;
+}
+
+.gallery-card-overlay span {
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  transform: translateY(10px);
+  transition: transform 0.5s ease;
+}
+
+.gallery-card:hover .gallery-card-overlay span {
+  transform: translateY(0);
+}
+
+.gallery-card.expanded .gallery-card-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .expanding-gallery {
+    flex-direction: column;
+    height: auto;
+    gap: 1rem;
+  }
+  
+  .gallery-card {
+    flex: none;
+    height: 120px;
+    width: 100%;
+  }
+  
+  .gallery-card.expanded {
+    height: 350px;
+    flex: none;
+  }
 }
 
 /* Booking Section */
@@ -544,30 +613,7 @@
 
   .class-card-img { height: 180px; }
 
-  /* Gallery Layout for Mobile */
-  .studio-gallery { padding: 2.5rem 1.5rem; }
-  .gallery-masonry { 
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    grid-template-rows: none !important; /* Kill desktop grid inheritance */
-    grid-template-columns: none !important;
-  }
-  .gallery-item {
-    width: calc(50% - 0.5rem); /* Two columns minus half the gap */
-    height: 160px;
-  }
-  .gallery-item.large { 
-    width: 100%;
-    height: 220px;
-    margin-bottom: 0.2rem;
-  }
-  .gallery-item img {
-    border-radius: 20px;
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
-  }
+  /* Gallery Section is handled in the main component styles above for consistency */
 
   /* Booking Section Mobile */
   .booking-section { 
