@@ -1,0 +1,97 @@
+/* Cake Care Guide Styles */
+.cake-care-section {
+  margin-top: 3rem;
+  padding: 2.5rem;
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.care-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--secondary);
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.care-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--secondary);
+  opacity: 0.5;
+}
+
+.care-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.care-card {
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.care-card:hover {
+  transform: translateY(-5px);
+}
+
+.care-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  background: #fdf5f5;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  color: var(--secondary);
+  border: 1px solid rgba(155, 45, 48, 0.1);
+}
+
+.care-icon {
+  width: 28px;
+  height: 28px;
+  stroke-width: 1.5;
+}
+
+.care-card h4 {
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.care-card p {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .cake-care-section {
+    padding: 1.5rem;
+  }
+  .care-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .care-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}

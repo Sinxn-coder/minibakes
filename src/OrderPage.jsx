@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User } from 'lucide-react';
 import './OrderPage.css';
+import CakeCareGuide from './components/CakeCareGuide';
 
 export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
   const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
@@ -18,6 +19,8 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     const priceNum = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
     return acc + (priceNum * item.quantity);
   }, 0);
+  
+  const hasCake = cart.some(item => item.id.startsWith('c') && !item.id.startsWith('cu'));
 
   // Minimum date is today + 2 days
   const getMinDate = () => {
@@ -56,6 +59,13 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
             </div>
           </div>
           <p className="whatsapp-notice">We'll contact you via WhatsApp shortly to confirm your pickup details.</p>
+          
+          {hasCake && (
+            <div className="success-care-guide">
+              <CakeCareGuide />
+            </div>
+          )}
+
           <button className="continue-btn" onClick={onBack}>Back to Home</button>
         </div>
       </div>
