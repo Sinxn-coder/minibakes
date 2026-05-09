@@ -8,7 +8,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
   const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState({
     flavor: '',
-    spread: '',
+    spreads: [], // Changed to array for multi-select support
     message: '',
     notes: '',
     bows: false
@@ -19,14 +19,17 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
   if (!product) return null;
 
   const productId = product?.id || '';
-  const isCake = productId.startsWith('c');
-  const isCupcake = productId.startsWith('cu');
+  const isCake = productId.startsWith('c') && !productId.startsWith('cu');
+  const isCupcake = productId.startsWith('cu') && !['cu5', 'cu6'].includes(productId);
+  const isMiniCake = ['cu5', 'cu6'].includes(productId);
+  const isBrownie = productId === 't1';
+  const hasSpreads = isCake || isMiniCake || isBrownie;
 
-  const flavors = isCake ? ['Vanilla', 'Chocolate', 'Red Velvet', 'Strawberry'] : 
-                 isCupcake ? ['Vanilla Bean', 'Chocolate Indulgence', 'Strawberry Dream', 'Red Velvet'] : 
-                 ['Classic Chocolate', 'Sea Salt Caramel', 'Hazelnut'];
+  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') 
+                  ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
+                  ['Classic Chocolate'];
 
-  const spreads = ['Nutella', 'Biscoff', 'White Chocolate', 'Pistachio', 'Ferrero Rocher', 'Kinder'];
+  const spreads = ['Pistachio', 'Biscoff', 'Nutella', 'Kinder', 'White Chocolate', 'Ferrero Rocher'];
 
   const basePrice = parseFloat(product.price.replace(/[^\d.]/g, '')) || 0;
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
@@ -75,22 +78,35 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
               </div>
 
               {/* Spread — cakes only, toggle-able */}
-              {isCake && (
+              {hasSpreads && (
                 <div className="option-group">
                   <label>
-                    Inner Spread
+                    {isBrownie ? 'Select Spreads (Up to 3)' : 'Inner Spread'}
                     <span className="option-label-hint"> — Included</span>
                   </label>
                   <div className="option-grid">
-                    {spreads.map(s => (
-                      <button 
-                        key={s} 
-                        className={`option-btn ${options.spread === s ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, spread: options.spread === s ? '' : s})}
-                      >
-                        {s}
-                      </button>
-                    ))}
+                    {spreads.map(s => {
+                      const isActive = options.spreads.includes(s);
+                      return (
+                        <button 
+                          key={s} 
+                          className={`option-btn ${isActive ? 'active' : ''}`}
+                          onClick={() => {
+                            if (isBrownie) {
+                              if (isActive) {
+                                setOptions({...options, spreads: options.spreads.filter(item => item !== s)});
+                              } else if (options.spreads.length < 3) {
+                                setOptions({...options, spreads: [...options.spreads, s]});
+                              }
+                            } else {
+                              setOptions({...options, spreads: isActive ? [] : [s]});
+                            }
+                          }}
+                        >
+                          {s}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
