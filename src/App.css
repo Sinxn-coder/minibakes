@@ -767,27 +767,9 @@ body {
   display: none;
 }
 
-.insta-card {
-  flex: 0 0 350px;
-  min-height: 500px;
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid #f0f0f0;
-}
-
-/* Ensure Instagram blockquote doesn't overflow or add weird margins */
-.insta-card blockquote {
-  margin: 0 !important;
-  width: 100% !important;
-  min-width: 100% !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
 .insta-card-placeholder {
-  flex: 0 0 280px;
-  aspect-ratio: 1;
+  flex: 0 0 220px; /* Reduced width for vertical look */
+  aspect-ratio: 9/16; /* Vertical Reel size */
   background: #fafafa;
   border-radius: 20px;
   overflow: hidden;
@@ -1863,6 +1845,24 @@ body {
   .footer-email-text {
     font-size: 0.95rem;
     text-align: left;
+  }
+
+  .instagram-section {
+    padding: 4rem 1.5rem;
+  }
+  
+  .insta-title {
+    font-size: 2.2rem;
+  }
+  
+  .insta-card-placeholder {
+    flex: 0 0 160px;
+    border-radius: 15px;
+  }
+  
+  .insta-row {
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem;
   }
 }
 
