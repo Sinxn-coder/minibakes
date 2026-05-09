@@ -22,7 +22,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm }) {
   const isCake = productId.startsWith('c') && !productId.startsWith('cu');
   const isCupcake = productId.startsWith('cu') && !['cu5', 'cu6'].includes(productId);
   const isMiniCake = ['cu5', 'cu6'].includes(productId);
-  const isBrownie = productId === 't1';
+  const isBrownie = productId.startsWith('t1');
   const hasSpreads = isCake || isMiniCake || isBrownie;
 
   const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') 

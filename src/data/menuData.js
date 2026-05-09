@@ -45,9 +45,11 @@ export const menuData = [
   {
     category: "Brownies",
     items: [
-      { id: 't1', name: 'Brownies (Single Box)', price: '€32', img: brownies, description: 'Classic chocolate brownies. Custom cuts: 6, 9, 12, 16 or 20 pieces. Choice of up to 3 spreads.' },
-      { id: 't1-2', name: 'Brownies (Double Box)', price: '€60', img: brownies, description: 'Two boxes of our signature brownies. Perfect for larger gatherings. Custom cuts available.' },
-      { id: 't1-3', name: 'Brownies (Triple Box)', price: '€85', img: brownies, description: 'Three boxes for the ultimate chocolate indulgence. Best value for parties.' },
+      { id: 't1-6', name: 'Brownies (Box of 6)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 6 large pieces. Choice of up to 3 spreads.' },
+      { id: 't1-9', name: 'Brownies (Box of 9)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 9 pieces. Choice of up to 3 spreads.' },
+      { id: 't1-12', name: 'Brownies (Box of 12)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 12 pieces. Choice of up to 3 spreads.' },
+      { id: 't1-16', name: 'Brownies (Box of 16)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 16 snack-sized pieces. Choice of up to 3 spreads.' },
+      { id: 't1-20', name: 'Brownies (Box of 20)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 20 bite-sized pieces. Choice of up to 3 spreads.' },
     ]
   },
   {
