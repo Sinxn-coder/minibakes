@@ -402,9 +402,13 @@
 .designer-order-wrapper {
   position: absolute;
   top: 100%; 
-  left: 3rem; /* Moved to left */
-  transform: translateY(-2px); /* Removed translateX(-50%) */
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
   z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .designer-order-btn {
@@ -418,11 +422,41 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 10px 25px rgba(155, 45, 48, 0.2);
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   font-weight: 800;
   font-size: 1.1rem;
   letter-spacing: 2px;
   white-space: nowrap;
+}
+
+.designer-order-btn:hover:not(:disabled) {
+  background: #b22d30;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(155, 45, 48, 0.3);
+}
+
+.designer-whatsapp-btn {
+  background: #25D366; /* WhatsApp Green */
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.designer-whatsapp-btn:hover {
+  background: #128C7E; /* WhatsApp Darker Green */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(18, 140, 126, 0.3);
 }
 
 .designer-order-btn:disabled {

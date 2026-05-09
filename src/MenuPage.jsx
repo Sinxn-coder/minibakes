@@ -379,6 +379,15 @@ export default function MenuPage({ onSelectProduct }) {
                 >
                   <span>ORDER</span>
                 </button>
+                <a 
+                  href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'm%20using%20the%203D%20Cake%20Designer%20and%20I'd%20like%20some%20help%20with%20a%20special%20request%20for%20my%20custom%20cake."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="designer-whatsapp-btn"
+                >
+                  <MessageSquare size={20} />
+                  <span>SPECIAL REQUESTS?</span>
+                </a>
               </div>
             )}
           </div>
