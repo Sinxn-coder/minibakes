@@ -751,6 +751,37 @@ function App() {
         />
       </section>
 
+      {/* Instagram Feed Section */}
+      <section className="instagram-section">
+        <div className="insta-header">
+          <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
+          <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
+            @minibakes2021
+          </a>
+        </div>
+        
+        <div className="insta-feed-container">
+          {/* This is a wrapper for the Instagram Widget. 
+              To make it live, you can use a free service like Behold.so 
+              and paste their embed code below. */}
+          <div className="insta-row">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="insta-card-placeholder">
+                <div className="insta-img-shimmer">
+                  <InstagramIcon size={32} opacity={0.2} />
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="insta-footer">
+            <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
+              View on Instagram
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Meet the Founder Section */}
       <section className="founder-section">
         {/* Decorative Top-Left Waves */}

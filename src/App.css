@@ -717,6 +717,106 @@ body {
 }
 
 /* Client Reviews Section */
+.instagram-section {
+  padding: 6rem 4rem;
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.03);
+}
+
+.insta-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.insta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.insta-handle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #888;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.insta-handle:hover {
+  color: var(--secondary);
+}
+
+.insta-feed-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.insta-row {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0 2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.insta-row::-webkit-scrollbar {
+  display: none;
+}
+
+.insta-card-placeholder {
+  flex: 0 0 280px;
+  aspect-ratio: 1;
+  background: #fafafa;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #f0f0f0;
+}
+
+.insta-img-shimmer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #fafafa 0%, #f5f5f5 50%, #fafafa 100%);
+  background-size: 200% 100%;
+  animation: instaShimmer 2s infinite;
+}
+
+@keyframes instaShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.insta-footer {
+  margin-top: 3.5rem;
+  text-align: center;
+}
+
+.insta-btn {
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  border: 2.5px solid var(--secondary);
+  color: var(--secondary);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.insta-btn:hover {
+  background: var(--secondary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(128, 0, 0, 0.2);
+}
+
 .reviews-section {
   background-color: var(--secondary);
   padding: 6rem 4rem;
