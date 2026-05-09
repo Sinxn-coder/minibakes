@@ -196,7 +196,42 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [orbitRotation, setOrbitRotation] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchStartRotation, setTouchStartRotation] = useState(0);
 
+  const handleTouchStart = (e) => {
+    if (window.innerWidth > 768) return;
+    setTouchStart(e.touches[0].clientX);
+    setTouchStartRotation(orbitRotation);
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStart === null) return;
+    const currentTouch = e.touches[0].clientX;
+    const delta = (touchStart - currentTouch) * 0.8; // Control sensitivity
+    setOrbitRotation(touchStartRotation - delta);
+    
+    // Prevent page scroll when rotating the wheel
+    if (e.cancelable) e.preventDefault();
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart === null) return;
+    setTouchStart(null);
+    
+    // Snap to the nearest 45deg position
+    const snapped = Math.round(orbitRotation / 45) * 45;
+    setOrbitRotation(snapped);
+    
+    // Update active item based on the snapped position
+    const normalizedAngle = ((-snapped % 360) + 360) % 360;
+    const nearestItem = orbitItems.reduce((prev, curr) => {
+      const prevDiff = Math.min(Math.abs(prev.angle - normalizedAngle), 360 - Math.abs(prev.angle - normalizedAngle));
+      const currDiff = Math.min(Math.abs(curr.angle - normalizedAngle), 360 - Math.abs(curr.angle - normalizedAngle));
+      return currDiff < prevDiff ? curr : prev;
+    });
+    setActiveOrbitItem(nearestItem);
+  };
   const orbitItems = [
     { 
       angle: 0, 
@@ -622,7 +657,13 @@ function App() {
         </div>
         <div 
           className="hero-orbit-container" 
-          style={{ '--orbit-rotation': `${orbitRotation}deg` }}
+          style={{ 
+            '--orbit-rotation': `${orbitRotation}deg`,
+            transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {orbitItems.map((item, index) => (
             <div 
@@ -631,7 +672,8 @@ function App() {
               style={{ 
                 '--angle': `${item.angle}deg`, 
                 backgroundImage: `url(${item.img})`,
-                '--orbit-rotation': `${orbitRotation}deg`
+                '--orbit-rotation': `${orbitRotation}deg`,
+                transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
               }}
               onClick={() => handleOrbitClick(item)}
             ></div>
