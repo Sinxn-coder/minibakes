@@ -3,7 +3,6 @@ import cake2layer8 from '../assets/2layer8inch.png';
 import cake3layer from '../assets/3layer.png';
 import loveCake from '../assets/lovecake1.png';
 import bentoCake from '../assets/bento_cake_aesthetic_1775218142199.png';
-import customCake from '../assets/custom_theme_cake_pastel_1775218188608.png';
 
 import cupcake1 from '../assets/cupcake1.png';
 import cupcake2 from '../assets/cupcake2.png';
@@ -19,53 +18,54 @@ export const menuData = [
   {
     category: "Cakes",
     items: [
-      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: cake2layer6, description: 'Serves ~10. Classic round cake. The perfect size for intimate gatherings.' },
-      { id: 'c2', name: '6 inch, 2 Layer (Heart)', price: '€50', img: bentoCake, description: 'Serves ~10. A beautiful aesthetic heart-shaped design. +€5 from round.' },
-      { id: 'c3', name: '8 inch, 2 Layer (Round)', price: '€65', img: cake2layer8, description: 'Serves ~20 - 25. Perfect for medium parties and celebrations.' },
-      { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: loveCake, description: 'Serves ~20 - 25. Show extra love with this large heart-shaped masterpiece. +€7 from round.' },
-      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: cake3layer, description: 'Serves ~40 - 45. A tall, impressive 3-layer cake for grand celebrations.' },
-      { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: loveCake, description: 'Serves ~40 - 45. Our grandest 3-layer cake, shaped as a beautiful heart. +€10 from round.' },
-      { id: 'c6', name: 'Bespoke Custom Cake', price: 'Varies', img: customCake, description: 'Fully custom design service to bring your ultimate cake vision to life.', isFullWidth: true },
+      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: cake2layer6, description: 'Serves ~10. Classic round cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c2', name: '6 inch, 2 Layer (Heart)', price: '€50', img: bentoCake, description: 'Serves ~10. Elegant heart-shaped design. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c3', name: '8 inch, 2 Layer (Round)', price: '€65', img: cake2layer8, description: 'Serves ~20 - 25. Perfect for celebrations. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: loveCake, description: 'Serves ~20 - 25. Show extra love with a large heart shape. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: cake3layer, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: loveCake, description: 'Serves ~40 - 45. Tall and impressive heart-shaped cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
     ]
   },
   {
     category: "Cupcakes",
     items: [
-      { id: 'cu1', name: 'Box of 6 Cupcakes', price: '€18.00', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes in your choice of flavors.' },
-      { id: 'cu2', name: 'Box of 12 Cupcakes', price: '€31.20', img: cupcake2, description: 'A full dozen cupcakes. Perfect for sharing at any celebration.' },
-      { id: 'cu3', name: 'Single Cupcake', price: '€2.40', img: cupcake3, description: 'One perfectly baked cupcake. Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€18', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€31.20', img: cupcake2, description: 'A full dozen premium cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.40', img: cupcake3, description: 'Add an individual cupcake to your order. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
     category: "Cake Pops",
     items: [
-      { id: 'cu4', name: 'Custom Cake Pops', price: '€1.70 each', img: cakepops, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: cakepops, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
     ]
   },
   {
     category: "Brownies",
     items: [
-      { id: 't1', name: 'Loaded Brownies Box', price: '€32.00', img: brownies, description: 'Rich chocolate brownies with optional spreads (Pistachio, Nutella, Lotus, etc.).' },
+      { id: 't1', name: 'Brownies (Box)', price: '€32', img: brownies, description: 'Classic chocolate brownies. Custom cuts: 6, 9, 12, 16 or 20 pieces. Choice of up to 3 spreads.' },
     ]
   },
   {
     category: "Breakable Hearts",
     items: [
-      { id: 't2', name: 'Breakable Heart Box', price: '€37.00', img: breakableHeart, description: 'White chocolate heart filled with marshmallows & 8 cakesicles.' },
+      { id: 't2', name: 'Breakable Heart Box', price: '€37', img: breakableHeart, description: 'Heart made of White Chocolate filled with marshmallows & chopsticks. Includes 8 cakesicles.' },
     ]
   },
   {
     category: "Mini Cakes",
     items: [
-      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: bentoCake, description: 'Bite-sized indulgence. Choice of 1 signature spread.' },
-      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: cupcake6, description: 'The perfect mini treat. Large individual portion.' },
+      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: bentoCake, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
+      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: cupcake6, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
     ]
   },
   {
     category: "Cakesicles",
     items: [
-      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17.00', img: cakesicles5, description: 'Cake truffles shaped like popsicles. (Minimum order).' },
-      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29.00', img: cakesicles5, description: 'A larger box of 10 delicious cakesicles in assorted flavors.' },
+      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: cakesicles5, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: cakesicles5, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't5', name: 'Cakesicle (Additional)', price: '€2.60', img: cakesicles5, description: 'Add an extra cakesicle to your box. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't6', name: 'Cakesicles (20+ pieces)', price: '€2.40 each', img: cakesicles5, description: 'Bulk order discount for 20 or more cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
     ]
   }
 ];
