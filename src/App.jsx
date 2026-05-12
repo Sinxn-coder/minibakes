@@ -70,6 +70,7 @@ import StudioPage from './StudioPage';
 import CakeCarePage from './CakeCarePage';
 import review1 from './assets/reviews/one.jpg';
 import review2 from './assets/reviews/two.jpg';
+import review3 from './assets/reviews/three.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -122,13 +123,13 @@ const clientReviews = [
   },
   {
     text: "We ordered a cake on very short notice (just two days!), and Mini Bakes absolutely delivered! The design was exactly what we wanted — beautifully done and perfectly matched our request. Not only did it look amazing, but it also tasted incredible. Everyone loved it! Highly recommend for both creativity and great service.",
-    author: "Ananya M.",
+    author: "Audrey Abela",
     img: review2
   },
   {
-    text: "Ordered for a small celebration and everyone loved it. Will definitely order again!",
-    author: "Lily S.",
-    img: "https://i.pravatar.cc/150?u=lily"
+    text: "The birthday cake I ordered from Mini Bakes was both stunning and delicious. Beautifully decorated and full of flavour! Highly recommend 🎂💕",
+    author: "Chiara Scerri",
+    img: review3
   }
 ];
 
