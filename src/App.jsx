@@ -75,6 +75,18 @@ import review4 from './assets/reviews/four.jpg';
 import review5 from './assets/reviews/5th.jpg';
 import review6 from './assets/reviews/6th.jpg';
 import ig1 from './assets/instgram/ig1.png';
+import ig2 from './assets/instgram/ig2.png';
+
+const instaPosts = [
+  { 
+    img: ig1, 
+    link: 'https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig2, 
+    link: 'https://www.instagram.com/p/DLFxTWjoR1p/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
+  }
+];
 
 const patternCoords = [
   // Row 1 (Top)
@@ -790,23 +802,26 @@ function App() {
               To make it live, you can use a free service like Behold.so 
               and paste their embed code below. */}
               <div className="insta-row">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="insta-card-placeholder">
-                    {i === 1 ? (
-                      <img 
-                        src={ig1} 
-                        alt="Instagram Reel" 
-                        className="insta-real-img" 
-                        style={{ cursor: 'pointer' }}
-                        onDoubleClick={() => window.open('https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==', '_blank')}
-                      />
-                    ) : (
-                      <div className="insta-img-shimmer">
-                        <InstagramIcon size={32} opacity={0.2} />
-                      </div>
-                    )}
-                  </div>
-                ))}
+                {[0, 1, 2, 3, 4, 5].map((i) => {
+                  const post = instaPosts[i];
+                  return (
+                    <div key={i} className="insta-card-placeholder">
+                      {post ? (
+                        <img 
+                          src={post.img} 
+                          alt={`Instagram Reel ${i + 1}`} 
+                          className="insta-real-img" 
+                          style={{ cursor: 'pointer' }}
+                          onDoubleClick={() => window.open(post.link, '_blank')}
+                        />
+                      ) : (
+                        <div className="insta-img-shimmer">
+                          <InstagramIcon size={32} opacity={0.2} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="insta-footer">
