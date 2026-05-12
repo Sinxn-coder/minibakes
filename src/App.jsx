@@ -79,6 +79,7 @@ import ig2 from './assets/instgram/ig2.png';
 import ig3 from './assets/instgram/ig3.png';
 import ig4 from './assets/instgram/ig4.png';
 import ig5 from './assets/instgram/ig5.png';
+import ig6 from './assets/instgram/ig6.png';
 
 const instaPosts = [
   { 
@@ -100,6 +101,10 @@ const instaPosts = [
   { 
     img: ig5, 
     link: 'https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link' 
+  },
+  { 
+    img: ig6, 
+    link: 'https://instagram.com/minibakes2021' 
   }
 ];
 
@@ -377,23 +382,6 @@ function App() {
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
-
-  // Load Instagram embed script for real embeds
-  useEffect(() => {
-    if (!document.getElementById('instagram-embed-script')) {
-      const script = document.createElement('script');
-      script.id = 'instagram-embed-script';
-      script.src = 'https://www.instagram.com/embed.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-    const timer = setTimeout(() => {
-      if (window.instgrm) {
-        window.instgrm.Embeds.process();
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [currentView]);
 
   // Scroll observer for floating cart color change
   useEffect(() => {
@@ -836,19 +824,6 @@ function App() {
               <div className="insta-row">
                 {[0, 1, 2, 3, 4, 5].map((i) => {
                   const post = instaPosts[i];
-                  // 6th card (index 5) is the real embed provided by the user
-                  if (i === 5) {
-                    return (
-                      <div key={i} className="insta-card-placeholder" style={{ background: 'transparent', border: 'none' }}>
-                        <div 
-                          style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center' }}
-                          dangerouslySetInnerHTML={{ __html: `
-                            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:20px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:0; padding:0; width:220px; height:390px;"><a href="https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank"></a></blockquote>
-                          ` }}
-                        />
-                      </div>
-                    );
-                  }
                   return (
                     <div key={i} className="insta-card-placeholder">
                       {post ? (
