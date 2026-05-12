@@ -73,6 +73,7 @@ import review2 from './assets/reviews/two.jpg';
 import review3 from './assets/reviews/three.jpg';
 import review4 from './assets/reviews/four.jpg';
 import review5 from './assets/reviews/5th.jpg';
+import review6 from './assets/reviews/6th.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -142,6 +143,11 @@ const clientReviews = [
     text: "Second time ordering from Mini Bakes and always amazing service, beautiful cakes with the best flavours! Impeccable customer service too! Cannot recommend her enough!",
     author: "Tamara Farrugia Drakard",
     img: review5
+  },
+  {
+    text: "High Recommended!! Had a last minute order and they were kind enough to accept it 🩷 Amazing Taste and very presentable ⭐️⭐️⭐️⭐️⭐️",
+    author: "Maxine Mifsud",
+    img: review6
   }
 ];
 
