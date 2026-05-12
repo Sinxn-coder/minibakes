@@ -121,7 +121,7 @@ const clientReviews = [
     img: review1
   },
   {
-    text: "Beautiful presentation and the taste was even better. You can really tell it's made with love.",
+    text: "We ordered a cake on very short notice (just two days!), and Mini Bakes absolutely delivered! The design was exactly what we wanted — beautifully done and perfectly matched our request. Not only did it look amazing, but it also tasted incredible. Everyone loved it! Highly recommend for both creativity and great service.",
     author: "Ananya M.",
     img: review2
   },

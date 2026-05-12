@@ -908,6 +908,20 @@ body {
   font-weight: 500;
   margin-bottom: 2rem;
   flex-grow: 1;
+  max-height: 5.5rem; /* Limits to roughly 3-4 lines */
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 0, 0, 0.2) transparent;
+}
+
+.review-text::-webkit-scrollbar {
+  width: 4px;
+}
+
+.review-text::-webkit-scrollbar-thumb {
+  background: rgba(128, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .review-author {
