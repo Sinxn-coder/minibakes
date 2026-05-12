@@ -72,6 +72,7 @@ import review1 from './assets/reviews/one.jpg';
 import review2 from './assets/reviews/two.jpg';
 import review3 from './assets/reviews/three.jpg';
 import review4 from './assets/reviews/four.jpg';
+import review5 from './assets/reviews/5th.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -136,6 +137,11 @@ const clientReviews = [
     text: "Went in with a vision and minibakes exceeded all my expectations. The cake was stunning, and the taste was to die for. Would recommend 1000% !",
     author: "Sheridianne Sammut",
     img: review4
+  },
+  {
+    text: "Second time ordering from Mini Bakes and always amazing service, beautiful cakes with the best flavours! Impeccable customer service too! Cannot recommend her enough!",
+    author: "Tamara Farrugia Drakard",
+    img: review5
   }
 ];
 
