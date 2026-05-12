@@ -793,7 +793,13 @@ function App() {
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="insta-card-placeholder">
                     {i === 1 ? (
-                      <img src={ig1} alt="Instagram Reel" className="insta-real-img" />
+                      <img 
+                        src={ig1} 
+                        alt="Instagram Reel" 
+                        className="insta-real-img" 
+                        style={{ cursor: 'pointer' }}
+                        onDoubleClick={() => window.open('https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==', '_blank')}
+                      />
                     ) : (
                       <div className="insta-img-shimmer">
                         <InstagramIcon size={32} opacity={0.2} />
