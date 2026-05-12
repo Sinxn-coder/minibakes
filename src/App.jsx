@@ -121,8 +121,8 @@ const clientReviews = [
     img: review1
   },
   {
-    text: "Always get my brownies from here! My family absolutely loves them and they're always so fresh and chocolatey. Highly recommend!",
-    author: "Sarah K.",
+    text: "Beautiful presentation and the taste was even better. You can really tell it's made with love.",
+    author: "Ananya M.",
     img: review2
   },
   {
