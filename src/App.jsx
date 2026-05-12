@@ -69,6 +69,7 @@ import ProductDetailsPage from './ProductDetailsPage';
 import StudioPage from './StudioPage';
 import CakeCarePage from './CakeCarePage';
 import review1 from './assets/reviews/one.jpg';
+import review2 from './assets/reviews/two.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -116,13 +117,13 @@ const patternCoords = [
 const clientReviews = [
   {
     text: "I ordered a cake for my 21st. Everyone loved it. Very pleased with the service. Thank you",
-    author: "Elena R.",
+    author: "Ella Marney.",
     img: review1
   },
   {
-    text: "Beautiful presentation and the taste was even better. You can really tell it's made with love.",
-    author: "Ananya M.",
-    img: "https://i.pravatar.cc/150?u=ananya"
+    text: "Always get my brownies from here! My family absolutely loves them and they're always so fresh and chocolatey. Highly recommend!",
+    author: "Sarah K.",
+    img: review2
   },
   {
     text: "Ordered for a small celebration and everyone loved it. Will definitely order again!",
@@ -147,8 +148,8 @@ function FeaturedCarousel({ items, onViewDetails }) {
 
   return (
     <div className="mobile-featured-container mobile-only">
-      <div 
-        className="mobile-featured-scroll" 
+      <div
+        className="mobile-featured-scroll"
         ref={scrollRef}
         onScroll={handleScroll}
       >
@@ -167,8 +168,8 @@ function FeaturedCarousel({ items, onViewDetails }) {
       </div>
       <div className="carousel-dots">
         {items.map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className={`carousel-dot ${active === i ? 'active' : ''}`}
             onClick={() => {
               if (scrollRef.current) {
@@ -215,7 +216,7 @@ function App() {
     const currentTouch = e.touches[0].clientX;
     const delta = (touchStart - currentTouch) * 0.8; // Control sensitivity
     setOrbitRotation(touchStartRotation - delta);
-    
+
     // Prevent page scroll when rotating the wheel
     if (e.cancelable) e.preventDefault();
   };
@@ -223,11 +224,11 @@ function App() {
   const handleTouchEnd = () => {
     if (touchStart === null) return;
     setTouchStart(null);
-    
+
     // Snap to the nearest 45deg position
     const snapped = Math.round(orbitRotation / 45) * 45;
     setOrbitRotation(snapped);
-    
+
     // Update active item based on the snapped position
     const normalizedAngle = ((-snapped % 360) + 360) % 360;
     const nearestItem = orbitItems.reduce((prev, curr) => {
@@ -238,44 +239,44 @@ function App() {
     setActiveOrbitItem(nearestItem);
   };
   const orbitItems = [
-    { 
-      angle: 0, 
-      img: orbitCupcake, 
+    {
+      angle: 0,
+      img: orbitCupcake,
       desc: "A delicate swirl of velvet frosting atop a cloud-soft vanilla bean base."
     },
-    { 
-      angle: 45, 
-      img: orbitCake, 
+    {
+      angle: 45,
+      img: orbitCake,
       desc: "Layers of artisanal sponge whispering stories of seasonal sweetness and joy."
     },
-    { 
-      angle: 90, 
-      img: orbitPops, 
+    {
+      angle: 90,
+      img: orbitPops,
       desc: "A playful dance of rich cake and premium chocolate in every delightful bite."
     },
-    { 
-      angle: 135, 
-      img: orbitBrownie, 
+    {
+      angle: 135,
+      img: orbitBrownie,
       desc: "The deep, dark indulgence of cocoa crafted into fabled, fudgy perfection."
     },
-    { 
-      angle: 180, 
-      img: orbitSicles, 
+    {
+      angle: 180,
+      img: orbitSicles,
       desc: "Boutique elegance captured in a whimsical, chocolate-dipped handheld treasure."
     },
-    { 
-      angle: 225, 
-      img: orbitHeart, 
+    {
+      angle: 225,
+      img: orbitHeart,
       desc: "A shimmering shell of Belgian cocoa waiting to reveal your sweetest secrets."
     },
-    { 
-      angle: 270, 
-      img: orbitLove, 
+    {
+      angle: 270,
+      img: orbitLove,
       desc: "A poetic masterpiece of romantic piping and heart-shaped confectionery art."
     },
-    { 
-      angle: 315, 
-      img: orbitBento, 
+    {
+      angle: 315,
+      img: orbitBento,
       desc: "Charming, minimalist dreams perfectly sized for your most intimate celebrations."
     },
   ];
@@ -286,14 +287,14 @@ function App() {
     const currentRot = orbitRotation;
     // Normalized current angle in the 0-360 range
     const normalizedCurrent = ((-currentRot % 360) + 360) % 360;
-    
+
     const diff = (() => {
       let d = item.angle - normalizedCurrent;
       if (d > 180) d -= 360;
       if (d < -180) d += 360;
       return d;
     })();
-    
+
     setOrbitRotation(currentRot - diff);
     setActiveOrbitItem(item);
   };
@@ -336,7 +337,7 @@ function App() {
       ([entry]) => {
         setIsOverDark(entry.isIntersecting);
       },
-      { 
+      {
         threshold: 0.1,
         rootMargin: '-130px 0px 0px 0px' // Offset to match the cart button's top position
       }
@@ -391,7 +392,7 @@ function App() {
 
   const updateQuantity = (cartId, newQty) => {
     if (newQty < 1) return;
-    setCart(prev => prev.map(item => 
+    setCart(prev => prev.map(item =>
       item.cartId === cartId ? { ...item, quantity: newQty } : item
     ));
   };
@@ -402,11 +403,11 @@ function App() {
       return acc + (priceNum * item.quantity);
     }, 0);
   };
-  
+
   const featuredItems = [
     { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
     { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
-    { id: 'c-featured', img: cakeImg,    name: 'Best Seller cake',   price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
+    { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ];
 
   const featuredRef = useRef(null);
@@ -488,13 +489,13 @@ function App() {
         <div className="logo-container">
           <img src={logo} alt="Mini Bakes Logo" />
         </div>
-        
+
         <div className="header-right">
           <div className={`search-wrapper ${isSearchOpen ? 'open' : ''}`}>
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Search desserts..." 
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search desserts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsSearchOpen(true)}
@@ -513,11 +514,11 @@ function App() {
                   const categoryMatches = menuData
                     .filter(cat => cat.category.toLowerCase().includes(q))
                     .flatMap(cat => cat.items);
-                  
+
                   const nameMatches = menuData
                     .flatMap(cat => cat.items)
-                    .filter(item => 
-                      item.name.toLowerCase().includes(q) && 
+                    .filter(item =>
+                      item.name.toLowerCase().includes(q) &&
                       !categoryMatches.some(cm => cm.id === item.id)
                     );
 
@@ -532,8 +533,8 @@ function App() {
                   }
 
                   return allResults.map(item => (
-                    <div 
-                      key={item.id} 
+                    <div
+                      key={item.id}
                       className="search-result-item"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -559,8 +560,8 @@ function App() {
             <span className="nav-divider">|</span>
             <a href="#studio" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('studio'); }}>Classes</a>
             <span className="nav-divider">|</span>
-            <a href="#order" className="nav-link" onClick={(e) => { 
-              e.preventDefault(); 
+            <a href="#order" className="nav-link" onClick={(e) => {
+              e.preventDefault();
               if (window.innerWidth > 768) setIsCartOpen(true);
               else navigateTo('order');
             }}>
@@ -587,8 +588,8 @@ function App() {
 
       {/* Floating Cart Button (Visible when cart has items and NOT on order page) */}
       {cart.length > 0 && currentView !== 'order' && !isCartOpen && (
-        <div 
-          className={`floating-cart-btn ${isOverDark ? 'white' : ''}`} 
+        <div
+          className={`floating-cart-btn ${isOverDark ? 'white' : ''}`}
           onClick={() => {
             if (window.innerWidth > 768) setIsCartOpen(true);
             else setCurrentView('order');
@@ -604,7 +605,7 @@ function App() {
         <button className="menu-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
           <X size={36} strokeWidth={1.5} />
         </button>
-        
+
         <div className="menu-content">
           <nav className="mobile-nav">
             <div className="nav-item-wrapper">
@@ -625,7 +626,7 @@ function App() {
               </a>
             </div>
             <div className="nav-item-wrapper">
-              <a href="#contact" className="mobile-nav-link" onClick={(e) => { 
+              <a href="#contact" className="mobile-nav-link" onClick={(e) => {
                 e.preventDefault();
                 navigateTo('home');
                 setTimeout(() => {
@@ -635,7 +636,7 @@ function App() {
               }}>Contact</a>
             </div>
           </nav>
-          
+
           <div className="menu-footer">
             <p>Handcrafted with love by Mini Bakes</p>
           </div>
@@ -646,282 +647,282 @@ function App() {
         <>
           {/* Hero Section */}
           <section className="hero-section">
-        <div className="hero-bg-container">
-          {backgrounds.map((bg, index) => (
-            <div 
-              key={index}
-              className={`hero-bg-image ${currentBg === index ? 'active' : ''}`}
-              style={{ backgroundImage: `url(${bg})` }}
-            />
-          ))}
-          <div className="hero-overlay"></div>
-        </div>
-        
-        <div className="hero-top-left-content">
-          <p className="hero-celebration-text">
-            <span className="hero-sans">Freshly baked for every</span><br/>
-            <span className="hero-serif-accent">celebration</span>
-          </p>
-        </div>
-        <div 
-          className="hero-orbit-container" 
-          style={{ 
-            '--orbit-rotation': `${orbitRotation}deg`,
-            transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
-          }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {orbitItems.map((item, index) => (
-            <div 
-              key={index}
-              className="orbit-item" 
-              style={{ 
-                '--angle': `${item.angle}deg`, 
-                backgroundImage: `url(${item.img})`,
+            <div className="hero-bg-container">
+              {backgrounds.map((bg, index) => (
+                <div
+                  key={index}
+                  className={`hero-bg-image ${currentBg === index ? 'active' : ''}`}
+                  style={{ backgroundImage: `url(${bg})` }}
+                />
+              ))}
+              <div className="hero-overlay"></div>
+            </div>
+
+            <div className="hero-top-left-content">
+              <p className="hero-celebration-text">
+                <span className="hero-sans">Freshly baked for every</span><br />
+                <span className="hero-serif-accent">celebration</span>
+              </p>
+            </div>
+            <div
+              className="hero-orbit-container"
+              style={{
                 '--orbit-rotation': `${orbitRotation}deg`,
                 transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
               }}
-              onClick={() => handleOrbitClick(item)}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {orbitItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="orbit-item"
+                  style={{
+                    '--angle': `${item.angle}deg`,
+                    backgroundImage: `url(${item.img})`,
+                    '--orbit-rotation': `${orbitRotation}deg`,
+                    transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
+                  }}
+                  onClick={() => handleOrbitClick(item)}
+                ></div>
+              ))}
+            </div>
+            <div className="hero-info-box">
+              <div className="info-box-content">
+                <p className="info-box-desc">{activeOrbitItem.desc}</p>
+              </div>
+            </div>
+            <div
+              className="hero-right-circle"
+              style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
             ></div>
-          ))}
-        </div>
-        <div className="hero-info-box">
-          <div className="info-box-content">
-            <p className="info-box-desc">{activeOrbitItem.desc}</p>
-          </div>
-        </div>
-        <div 
-          className="hero-right-circle" 
-          style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
-        ></div>
-      </section>
+          </section>
 
-      {/* Featured Dessert Section */}
-      <section 
-        className={`featured-section ${featuredInView ? 'reveal' : ''}`} 
-        ref={featuredRef}
-      >
-        <h2 className="section-title">FEATURED DESSERT</h2>
+          {/* Featured Dessert Section */}
+          <section
+            className={`featured-section ${featuredInView ? 'reveal' : ''}`}
+            ref={featuredRef}
+          >
+            <h2 className="section-title">FEATURED DESSERT</h2>
 
-        {/* Desktop Grid / Expanded Card */}
-        <div className="desktop-only">
-          {expandedDesktopCard !== null ? (
-            <div className="expanded-card">
-              <button className="close-expanded-btn" onClick={() => setExpandedDesktopCard(null)}>
-                <X size={30} strokeWidth={1.5} />
-              </button>
-              <div className="expanded-card-content">
-                <div className="expanded-image-wrapper">
-                  <SafeImage src={featuredItems[expandedDesktopCard].img} alt={featuredItems[expandedDesktopCard].name} />
+            {/* Desktop Grid / Expanded Card */}
+            <div className="desktop-only">
+              {expandedDesktopCard !== null ? (
+                <div className="expanded-card">
+                  <button className="close-expanded-btn" onClick={() => setExpandedDesktopCard(null)}>
+                    <X size={30} strokeWidth={1.5} />
+                  </button>
+                  <div className="expanded-card-content">
+                    <div className="expanded-image-wrapper">
+                      <SafeImage src={featuredItems[expandedDesktopCard].img} alt={featuredItems[expandedDesktopCard].name} />
+                    </div>
+                    <div className="expanded-info">
+                      <h3>{featuredItems[expandedDesktopCard].name}</h3>
+                      <p className="expanded-price">{featuredItems[expandedDesktopCard].price}</p>
+                      <p className="expanded-description">
+                        Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love.
+                      </p>
+                      <button className="add-to-cart-btn" onClick={() => {
+                        setCustomizingProduct(featuredItems[expandedDesktopCard]);
+                        setExpandedDesktopCard(null);
+                        setCurrentView('product-details');
+                      }}>Add to Order</button>
+                    </div>
+                  </div>
                 </div>
-                <div className="expanded-info">
-                  <h3>{featuredItems[expandedDesktopCard].name}</h3>
-                  <p className="expanded-price">{featuredItems[expandedDesktopCard].price}</p>
-                  <p className="expanded-description">
+              ) : (
+                <div className="featured-grid">
+                  {featuredItems.map((item, idx) => (
+                    <div className="featured-card" key={idx}>
+                      <div className="card-image-wrapper">
+                        <SafeImage src={item.img} alt={item.name} />
+                      </div>
+                      <div className="card-info">
+                        <h3>{item.name}</h3>
+                        <p>{item.price}</p>
+                        <button className="view-details-btn" onClick={() => setExpandedDesktopCard(idx)}>View Details</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Carousel */}
+            <FeaturedCarousel
+              items={featuredItems}
+              onViewDetails={(idx) => setExpandedMobileCard(idx)}
+            />
+          </section>
+
+          {/* Instagram Feed Section */}
+          <section className="instagram-section">
+            <div className="insta-header">
+              <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
+              <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
+                @minibakes2021
+              </a>
+            </div>
+
+            <div className="insta-feed-container">
+              {/* This is a wrapper for the Instagram Widget. 
+              To make it live, you can use a free service like Behold.so 
+              and paste their embed code below. */}
+              <div className="insta-row">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="insta-card-placeholder">
+                    <div className="insta-img-shimmer">
+                      <InstagramIcon size={32} opacity={0.2} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="insta-footer">
+                <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
+                  View on Instagram
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* Meet the Founder Section */}
+          <section className="founder-section">
+            {/* Decorative Top-Left Waves */}
+            <div className="founder-decoration">
+              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                <path d="M-50,150 Q100,0 200,100 T450,-50" fill="none" stroke="#fff" strokeWidth="4" opacity="0.9" />
+                <path d="M-50,50 Q150,150 250,50 T450,150" fill="none" stroke="#fff" strokeWidth="1.5" opacity="0.6" />
+              </svg>
+            </div>
+
+            <h2 className="founder-title">MEET THE FOUNDER</h2>
+
+            <div className="founder-content">
+              <div className="founder-image-wrapper">
+                <img src={founderImg} alt="Megan Briffa - Founder of Mini Bakes" />
+              </div>
+
+              <div className="founder-text-box">
+                <p>
+                  Hi, I'm Megan Briffa - the baker behind Mini Bakes. What started as a love for baking turned into creating homemade treats that are fresh, simple, and made with love.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Explore Menu Section */}
+          <section className="explore-section">
+            <div className="explore-pattern">
+              {patternCoords.map((item, idx) => (
+                <img
+                  key={idx}
+                  src={item.img}
+                  className={`pattern-icon ${item.hideOnMobile ? 'hide-on-mobile' : ''}`}
+                  style={{ top: item.top, left: item.left, transform: `rotate(${item.rot}deg)` }}
+                  alt=""
+                />
+              ))}
+            </div>
+            <div className="explore-content">
+              <h2 className="explore-title">EXPLORE OUR MENU</h2>
+              <button className="explore-btn" onClick={() => setCurrentView('menu')}>View Full Menu</button>
+            </div>
+          </section>
+
+          {/* Client Reviews Section */}
+          <section
+            className={`reviews-section ${reviewsInView ? 'reveal' : ''}`}
+            ref={reviewsRef}
+          >
+            <h2 className="reviews-title">CLIENT REVIEWS</h2>
+            <div className="reviews-grid">
+              {clientReviews.map((review, idx) => (
+                <div key={idx} className="review-card">
+                  <div className="review-client-photo">
+                    <img src={review.img} alt={review.author} />
+                  </div>
+                  <div className="review-stars">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={24} fill="currentColor" strokeWidth={0} />
+                    ))}
+                  </div>
+                  <p className="review-text">"{review.text}"</p>
+                  <p className="review-author">— {review.author}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact" className="contact-section">
+            <div className="contact-main">
+              <h2 className="contact-title">CONTACT US</h2>
+              <p className="contact-subtitle">
+                Have a custom order or question? We'd love to hear from you.
+              </p>
+              <button className="contact-order-btn">Order now</button>
+            </div>
+
+            <div className="contact-footer" ref={contactFooterRef}>
+              <div
+                className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
+                onClick={() => handleContactClick('location', 'https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54&entry=gps&shh=CAE&lucs=,94297699,94284475,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic')}
+              >
+                <MapPin size={24} className="contact-icon" />
+                <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
+              </div>
+              <div
+                className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
+                onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
+              >
+                <InstagramIcon size={24} className="contact-icon" />
+                <span className="contact-label">minibakes2021</span>
+              </div>
+              <div
+                className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
+                onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
+              >
+                <Mail size={24} className="contact-icon" />
+                <span className="contact-label">meganbriffa2001@gmail.com</span>
+              </div>
+              <div
+                className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
+                onClick={() => handleContactClick('facebook', 'https://www.facebook.com/minibakes2021')}
+              >
+                <FacebookIcon size={24} className="contact-icon" />
+                <span className="contact-label">minibakes2021</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Mobile Popup Modal */}
+          {expandedMobileCard !== null && (
+            <div className="mobile-popup-overlay">
+              <div className="mobile-popup-content">
+                <button className="close-popup-btn" onClick={() => setExpandedMobileCard(null)}>
+                  <X size={28} strokeWidth={1.5} />
+                </button>
+                <div className="popup-image-wrapper">
+                  <SafeImage src={featuredItems[expandedMobileCard].img} alt={featuredItems[expandedMobileCard].name} />
+                </div>
+                <div className="popup-info">
+                  <h3>{featuredItems[expandedMobileCard].name}</h3>
+                  <p className="popup-price">{featuredItems[expandedMobileCard].price}</p>
+                  <p className="popup-description">
                     Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love.
                   </p>
                   <button className="add-to-cart-btn" onClick={() => {
-                    setCustomizingProduct(featuredItems[expandedDesktopCard]);
-                    setExpandedDesktopCard(null);
+                    setCustomizingProduct(featuredItems[expandedMobileCard]);
+                    setExpandedMobileCard(null);
                     setCurrentView('product-details');
                   }}>Add to Order</button>
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="featured-grid">
-              {featuredItems.map((item, idx) => (
-                <div className="featured-card" key={idx}>
-                  <div className="card-image-wrapper">
-                    <SafeImage src={item.img} alt={item.name} />
-                  </div>
-                  <div className="card-info">
-                    <h3>{item.name}</h3>
-                    <p>{item.price}</p>
-                    <button className="view-details-btn" onClick={() => setExpandedDesktopCard(idx)}>View Details</button>
-                  </div>
-                </div>
-              ))}
-            </div>
           )}
-        </div>
-
-        {/* Mobile Carousel */}
-        <FeaturedCarousel 
-          items={featuredItems} 
-          onViewDetails={(idx) => setExpandedMobileCard(idx)} 
-        />
-      </section>
-
-      {/* Instagram Feed Section */}
-      <section className="instagram-section">
-        <div className="insta-header">
-          <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
-          <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
-            @minibakes2021
-          </a>
-        </div>
-        
-        <div className="insta-feed-container">
-          {/* This is a wrapper for the Instagram Widget. 
-              To make it live, you can use a free service like Behold.so 
-              and paste their embed code below. */}
-          <div className="insta-row">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="insta-card-placeholder">
-                <div className="insta-img-shimmer">
-                  <InstagramIcon size={32} opacity={0.2} />
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="insta-footer">
-            <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
-              View on Instagram
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Meet the Founder Section */}
-      <section className="founder-section">
-        {/* Decorative Top-Left Waves */}
-        <div className="founder-decoration">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <path d="M-50,150 Q100,0 200,100 T450,-50" fill="none" stroke="#fff" strokeWidth="4" opacity="0.9"/>
-            <path d="M-50,50 Q150,150 250,50 T450,150" fill="none" stroke="#fff" strokeWidth="1.5" opacity="0.6"/>
-          </svg>
-        </div>
-
-        <h2 className="founder-title">MEET THE FOUNDER</h2>
-        
-        <div className="founder-content">
-          <div className="founder-image-wrapper">
-            <img src={founderImg} alt="Megan Briffa - Founder of Mini Bakes" />
-          </div>
-          
-          <div className="founder-text-box">
-            <p>
-              Hi, I'm Megan Briffa - the baker behind Mini Bakes. What started as a love for baking turned into creating homemade treats that are fresh, simple, and made with love.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Explore Menu Section */}
-      <section className="explore-section">
-        <div className="explore-pattern">
-          {patternCoords.map((item, idx) => (
-            <img 
-              key={idx} 
-              src={item.img} 
-              className={`pattern-icon ${item.hideOnMobile ? 'hide-on-mobile' : ''}`} 
-              style={{ top: item.top, left: item.left, transform: `rotate(${item.rot}deg)` }} 
-              alt="" 
-            />
-          ))}
-        </div>
-        <div className="explore-content">
-          <h2 className="explore-title">EXPLORE OUR MENU</h2>
-          <button className="explore-btn" onClick={() => setCurrentView('menu')}>View Full Menu</button>
-        </div>
-      </section>
-
-      {/* Client Reviews Section */}
-      <section 
-        className={`reviews-section ${reviewsInView ? 'reveal' : ''}`} 
-        ref={reviewsRef}
-      >
-        <h2 className="reviews-title">CLIENT REVIEWS</h2>
-        <div className="reviews-grid">
-          {clientReviews.map((review, idx) => (
-            <div key={idx} className="review-card">
-              <div className="review-client-photo">
-                <img src={review.img} alt={review.author} />
-              </div>
-              <div className="review-stars">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={24} fill="currentColor" strokeWidth={0} />
-                ))}
-              </div>
-              <p className="review-text">"{review.text}"</p>
-              <p className="review-author">— {review.author}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      
-      {/* Contact Section */}
-      <section id="contact" className="contact-section">
-        <div className="contact-main">
-          <h2 className="contact-title">CONTACT US</h2>
-          <p className="contact-subtitle">
-            Have a custom order or question? We'd love to hear from you.
-          </p>
-          <button className="contact-order-btn">Order now</button>
-        </div>
-        
-        <div className="contact-footer" ref={contactFooterRef}>
-          <div 
-            className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('location', 'https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54&entry=gps&shh=CAE&lucs=,94297699,94284475,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic')}
-          >
-            <MapPin size={24} className="contact-icon" />
-            <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
-          >
-            <InstagramIcon size={24} className="contact-icon" />
-            <span className="contact-label">minibakes2021</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
-          >
-            <Mail size={24} className="contact-icon" />
-            <span className="contact-label">meganbriffa2001@gmail.com</span>
-          </div>
-          <div 
-            className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
-            onClick={() => handleContactClick('facebook', 'https://www.facebook.com/minibakes2021')}
-          >
-            <FacebookIcon size={24} className="contact-icon" />
-            <span className="contact-label">minibakes2021</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Mobile Popup Modal */}
-      {expandedMobileCard !== null && (
-        <div className="mobile-popup-overlay">
-          <div className="mobile-popup-content">
-            <button className="close-popup-btn" onClick={() => setExpandedMobileCard(null)}>
-              <X size={28} strokeWidth={1.5} />
-            </button>
-            <div className="popup-image-wrapper">
-              <SafeImage src={featuredItems[expandedMobileCard].img} alt={featuredItems[expandedMobileCard].name} />
-            </div>
-            <div className="popup-info">
-              <h3>{featuredItems[expandedMobileCard].name}</h3>
-              <p className="popup-price">{featuredItems[expandedMobileCard].price}</p>
-              <p className="popup-description">
-                Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love.
-              </p>
-              <button className="add-to-cart-btn" onClick={() => {
-                setCustomizingProduct(featuredItems[expandedMobileCard]);
-                setExpandedMobileCard(null);
-                setCurrentView('product-details');
-              }}>Add to Order</button>
-            </div>
-          </div>
-        </div>
-      )}
-      </>
+        </>
       )}
 
       {/* Search Product Popup Modal */}
@@ -950,40 +951,40 @@ function App() {
         </div>
       )}
 
-        {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
-          setCustomizingProduct(item);
-          setCurrentView('product-details');
-        }} />}
-        {currentView === 'studio' && <StudioPage />}
-        {currentView === 'order' && <OrderPage 
-          cart={cart} 
-          onBack={() => setCurrentView('home')} 
-          onRemoveItem={removeFromCart}
-          onUpdateQuantity={updateQuantity}
-        />}
-        {currentView === 'product-details' && (
-          <ProductDetailsPage 
-            product={customizingProduct} 
-            onBack={() => setCurrentView('menu')} 
-            cartCount={cart.length}
-            onOpenCart={() => {
-              if (window.innerWidth > 768) {
-                setIsCartOpen(true);
-              } else {
-                setCurrentView('order');
-              }
-            }}
-            onConfirm={(orderData) => {
-              addToCart(orderData);
-              if (window.innerWidth > 768) {
-                setIsCartOpen(true);
-              }
-            }}
-          />
-        )}
-        {currentView === 'care' && (
-          <CakeCarePage onBack={() => setCurrentView('home')} />
-        )}
+      {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
+        setCustomizingProduct(item);
+        setCurrentView('product-details');
+      }} />}
+      {currentView === 'studio' && <StudioPage />}
+      {currentView === 'order' && <OrderPage
+        cart={cart}
+        onBack={() => setCurrentView('home')}
+        onRemoveItem={removeFromCart}
+        onUpdateQuantity={updateQuantity}
+      />}
+      {currentView === 'product-details' && (
+        <ProductDetailsPage
+          product={customizingProduct}
+          onBack={() => setCurrentView('menu')}
+          cartCount={cart.length}
+          onOpenCart={() => {
+            if (window.innerWidth > 768) {
+              setIsCartOpen(true);
+            } else {
+              setCurrentView('order');
+            }
+          }}
+          onConfirm={(orderData) => {
+            addToCart(orderData);
+            if (window.innerWidth > 768) {
+              setIsCartOpen(true);
+            }
+          }}
+        />
+      )}
+      {currentView === 'care' && (
+        <CakeCarePage onBack={() => setCurrentView('home')} />
+      )}
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
@@ -994,7 +995,7 @@ function App() {
               <X size={28} />
             </button>
           </div>
-          
+
           <div className="cart-drawer-content">
             {cart.length === 0 ? (
               <div className="empty-cart-state">
@@ -1026,14 +1027,14 @@ function App() {
               </div>
             )}
           </div>
-          
+
           <div className="cart-drawer-footer">
             <div className="cart-total-row">
               <span>Total</span>
               <span>€{calculateTotal().toFixed(2)}</span>
             </div>
-            <button 
-              className="buy-now-btn" 
+            <button
+              className="buy-now-btn"
               disabled={cart.length === 0}
               onClick={() => {
                 setCurrentView('order');
