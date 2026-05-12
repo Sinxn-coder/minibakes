@@ -76,6 +76,7 @@ import review5 from './assets/reviews/5th.jpg';
 import review6 from './assets/reviews/6th.jpg';
 import ig1 from './assets/instgram/ig1.png';
 import ig2 from './assets/instgram/ig2.png';
+import ig3 from './assets/instgram/ig3.png';
 
 const instaPosts = [
   { 
@@ -85,6 +86,10 @@ const instaPosts = [
   { 
     img: ig2, 
     link: 'https://www.instagram.com/p/DLFxTWjoR1p/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig3, 
+    link: 'https://www.instagram.com/reel/DX1pOqsRkRB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
   }
 ];
 
