@@ -841,15 +841,30 @@ body {
 }
 
 .reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 3rem;
-  max-width: 1400px; /* Increased to fit 4 better */
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping to force horizontal scroll */
+  overflow-x: auto;
+  gap: 2.5rem;
+  padding: 1rem 2rem 4rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 100vw;
   margin: 0 auto;
-  justify-content: center;
+  cursor: grab;
+}
+
+.reviews-grid:active {
+  cursor: grabbing;
+}
+
+.reviews-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .review-card {
+  flex: 0 0 450px; /* Slightly wider for luxury desktop feel */
+  scroll-snap-align: center;
   background-color: #fff;
   border-radius: 40px;
   padding: 3.5rem 2.5rem;
