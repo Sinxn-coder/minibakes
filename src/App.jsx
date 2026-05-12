@@ -184,6 +184,30 @@ const clientReviews = [
   }
 ];
 
+const InstaPost = ({ post, index }) => {
+  const [loaded, setLoaded] = useState(false);
+  
+  return (
+    <div className="insta-card-placeholder">
+      {(!loaded || !post) && (
+        <div className="insta-img-shimmer">
+          <InstagramIcon size={32} opacity={0.2} />
+        </div>
+      )}
+      {post && (
+        <img 
+          src={post.img} 
+          alt={`Instagram Reel ${index + 1}`} 
+          className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
+          style={{ cursor: 'pointer' }}
+          onLoad={() => setLoaded(true)}
+          onDoubleClick={() => window.open(post.link, '_blank')}
+        />
+      )}
+    </div>
+  );
+};
+
 /* ── Mobile-only Horizontal Scroll Carousel ── */
 function FeaturedCarousel({ items, onViewDetails }) {
   const [active, setActive] = useState(0);
@@ -822,26 +846,9 @@ function App() {
               To make it live, you can use a free service like Behold.so 
               and paste their embed code below. */}
               <div className="insta-row">
-                {[0, 1, 2, 3, 4, 5].map((i) => {
-                  const post = instaPosts[i];
-                  return (
-                    <div key={i} className="insta-card-placeholder">
-                      {post ? (
-                        <img 
-                          src={post.img} 
-                          alt={`Instagram Reel ${i + 1}`} 
-                          className="insta-real-img" 
-                          style={{ cursor: 'pointer' }}
-                          onDoubleClick={() => window.open(post.link, '_blank')}
-                        />
-                      ) : (
-                        <div className="insta-img-shimmer">
-                          <InstagramIcon size={32} opacity={0.2} />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <InstaPost key={i} post={instaPosts[i]} index={i} />
+                ))}
               </div>
 
               <div className="insta-footer">
