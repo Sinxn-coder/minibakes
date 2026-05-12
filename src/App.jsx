@@ -68,6 +68,7 @@ import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
 import StudioPage from './StudioPage';
 import CakeCarePage from './CakeCarePage';
+import review1 from './assets/reviews/one.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -114,9 +115,9 @@ const patternCoords = [
 
 const clientReviews = [
   {
-    text: "The cupcakes were so fresh and soft, honestly some of the best I've had!",
-    author: "Sarah K.",
-    img: "https://i.pravatar.cc/150?u=sarah"
+    text: "I ordered a cake for my 21st. Everyone loved it. Very pleased with the service. Thank you",
+    author: "Elena R.",
+    img: review1
   },
   {
     text: "Beautiful presentation and the taste was even better. You can really tell it's made with love.",
