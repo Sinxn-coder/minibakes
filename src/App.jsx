@@ -74,6 +74,7 @@ import review3 from './assets/reviews/three.jpg';
 import review4 from './assets/reviews/four.jpg';
 import review5 from './assets/reviews/5th.jpg';
 import review6 from './assets/reviews/6th.jpg';
+import ig1 from './assets/instgram/ig1.png';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -791,9 +792,13 @@ function App() {
               <div className="insta-row">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="insta-card-placeholder">
-                    <div className="insta-img-shimmer">
-                      <InstagramIcon size={32} opacity={0.2} />
-                    </div>
+                    {i === 1 ? (
+                      <img src={ig1} alt="Instagram Reel" className="insta-real-img" />
+                    ) : (
+                      <div className="insta-img-shimmer">
+                        <InstagramIcon size={32} opacity={0.2} />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
