@@ -74,6 +74,34 @@ import review3 from './assets/reviews/three.jpg';
 import review4 from './assets/reviews/four.jpg';
 import review5 from './assets/reviews/5th.jpg';
 import review6 from './assets/reviews/6th.jpg';
+import ig1 from './assets/instgram/ig1.png';
+import ig2 from './assets/instgram/ig2.png';
+import ig3 from './assets/instgram/ig3.png';
+import ig4 from './assets/instgram/ig4.png';
+import ig5 from './assets/instgram/ig5.png';
+
+const instaPosts = [
+  { 
+    img: ig1, 
+    link: 'https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig2, 
+    link: 'https://www.instagram.com/p/DLFxTWjoR1p/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig3, 
+    link: 'https://www.instagram.com/reel/DX1pOqsRkRB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig4, 
+    link: 'https://www.instagram.com/p/DU8xauIEe7_/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
+  },
+  { 
+    img: ig5, 
+    link: 'https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link' 
+  }
+];
 
 const patternCoords = [
   // Row 1 (Top)
@@ -350,6 +378,23 @@ function App() {
   const [currentView, setCurrentView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
 
+  // Load Instagram embed script for real embeds
+  useEffect(() => {
+    if (!document.getElementById('instagram-embed-script')) {
+      const script = document.createElement('script');
+      script.id = 'instagram-embed-script';
+      script.src = 'https://www.instagram.com/embed.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    const timer = setTimeout(() => {
+      if (window.instgrm) {
+        window.instgrm.Embeds.process();
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [currentView]);
+
   // Scroll observer for floating cart color change
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -390,21 +435,6 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentView]);
-
-  // Load Instagram Reels Widget
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://widgets.sociablekit.com/instagram-reels/widget.js";
-    script.defer = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Clean up script on unmount if needed
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
 
   const handleContactClick = (id, link) => {
     if (expandedContactId === id || window.innerWidth > 768) {
@@ -800,8 +830,50 @@ function App() {
             </div>
 
             <div className="insta-feed-container">
-              {/* SociableKIT Instagram Reels Widget */}
-              <div className="sk-ww-instagram-reels" data-embed-id="25681189"></div>
+              {/* This is a wrapper for the Instagram Widget. 
+              To make it live, you can use a free service like Behold.so 
+              and paste their embed code below. */}
+              <div className="insta-row">
+                {[0, 1, 2, 3, 4, 5].map((i) => {
+                  const post = instaPosts[i];
+                  // 6th card (index 5) is the real embed provided by the user
+                  if (i === 5) {
+                    return (
+                      <div key={i} className="insta-card-placeholder" style={{ background: 'transparent', border: 'none' }}>
+                        <div 
+                          style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center' }}
+                          dangerouslySetInnerHTML={{ __html: `
+                            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:20px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:0; padding:0; width:220px; height:390px;"><a href="https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank"></a></blockquote>
+                          ` }}
+                        />
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={i} className="insta-card-placeholder">
+                      {post ? (
+                        <img 
+                          src={post.img} 
+                          alt={`Instagram Reel ${i + 1}`} 
+                          className="insta-real-img" 
+                          style={{ cursor: 'pointer' }}
+                          onDoubleClick={() => window.open(post.link, '_blank')}
+                        />
+                      ) : (
+                        <div className="insta-img-shimmer">
+                          <InstagramIcon size={32} opacity={0.2} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="insta-footer">
+                <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
+                  View on Instagram
+                </a>
+              </div>
             </div>
           </section>
 
