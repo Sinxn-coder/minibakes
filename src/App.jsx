@@ -116,14 +116,17 @@ const clientReviews = [
   {
     text: "The cupcakes were so fresh and soft, honestly some of the best I've had!",
     author: "Sarah K.",
+    img: "https://i.pravatar.cc/150?u=sarah"
   },
   {
     text: "Beautiful presentation and the taste was even better. You can really tell it's made with love.",
     author: "Ananya M.",
+    img: "https://i.pravatar.cc/150?u=ananya"
   },
   {
     text: "Ordered for a small celebration and everyone loved it. Will definitely order again!",
     author: "Lily S.",
+    img: "https://i.pravatar.cc/150?u=lily"
   }
 ];
 
@@ -835,6 +838,9 @@ function App() {
         <div className="reviews-grid">
           {clientReviews.map((review, idx) => (
             <div key={idx} className="review-card">
+              <div className="review-client-photo">
+                <img src={review.img} alt={review.author} />
+              </div>
               <div className="review-stars">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={24} fill="currentColor" strokeWidth={0} />
