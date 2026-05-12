@@ -71,6 +71,7 @@ import CakeCarePage from './CakeCarePage';
 import review1 from './assets/reviews/one.jpg';
 import review2 from './assets/reviews/two.jpg';
 import review3 from './assets/reviews/three.jpg';
+import review4 from './assets/reviews/four.jpg';
 
 const patternCoords = [
   // Row 1 (Top)
@@ -130,6 +131,11 @@ const clientReviews = [
     text: "The birthday cake I ordered from Mini Bakes was both stunning and delicious. Beautifully decorated and full of flavour! Highly recommend 🎂💕",
     author: "Chiara Scerri",
     img: review3
+  },
+  {
+    text: "Went in with a vision and minibakes exceeded all my expectations. The cake was stunning, and the taste was to die for. Would recommend 1000% !",
+    author: "Sheridianne Sammut",
+    img: review4
   }
 ];
 
