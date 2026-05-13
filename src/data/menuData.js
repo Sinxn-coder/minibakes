@@ -30,9 +30,9 @@ export const menuData = [
   {
     category: "Cupcakes",
     items: [
-      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€18', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€31.20', img: cupcake2, description: 'A full dozen premium cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.40', img: cupcake3, description: 'Add an individual cupcake to your order. Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€15', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€28.80', img: cupcake2, description: 'A full dozen premium cupcakes. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.20', img: cupcake3, description: 'Add an individual cupcake to your order. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
