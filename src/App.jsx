@@ -740,6 +740,8 @@ function App() {
               <div className="hero-overlay"></div>
             </div>
 
+            <div className="hero-bg-backdrop-circle"></div>
+
             <div className="hero-top-left-content">
               <p className="hero-celebration-text">
                 <span className="hero-sans">Freshly baked for every</span><br />
