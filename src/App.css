@@ -405,8 +405,8 @@ body {
 .hero-bg-backdrop-circle {
   position: absolute;
   top: -850px; /* High position for the sweeping arc */
-  right: -1450px; /* Shifted further right to start after the logo */
-  width: 2600px; 
+  right: -900px; /* Re-adjusted to bring more of the left-side curve into view */
+  width: 2100px; /* Slightly reduced width to make the left entrance more curved */
   height: 1500px;
   background-color: rgba(250, 235, 225, 0.95); /* Warmer creamy beige */
   border-radius: 50%;
@@ -1148,9 +1148,9 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: 1600px;
+    width: 1300px;
     height: 900px;
-    right: -900px; /* Shifted right to clear logo on mobile */
+    right: -600px; /* Bringing more curve into the mobile view */
     top: -500px;
     background-color: rgba(250, 235, 225, 0.95);
   }
