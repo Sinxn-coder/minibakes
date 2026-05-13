@@ -193,7 +193,29 @@
 
 @media (max-width: 768px) {
   .menu-fixed-whatsapp {
-    display: none !important;
+    bottom: 1.5rem;
+    right: 1.2rem;
+    padding: 0.6rem 1.2rem 0.6rem 0.6rem;
+    gap: 0.8rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+
+  .whatsapp-icon-circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .whatsapp-icon-circle svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .whatsapp-title {
+    font-size: 0.95rem;
+  }
+
+  .whatsapp-subtitle {
+    display: none;
   }
 }
 

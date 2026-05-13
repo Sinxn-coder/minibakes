@@ -397,23 +397,21 @@ export default function MenuPage({ onSelectProduct }) {
         ))}
       </div>
 
-      {/* Desktop Fixed WhatsApp Button */}
-      <div className="desktop-only">
-        <a 
-          href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="menu-fixed-whatsapp"
-        >
-          <div className="whatsapp-icon-circle">
-            <MessageSquare size={24} />
-          </div>
-          <div className="whatsapp-content">
-            <span className="whatsapp-title">Special Request?</span>
-            <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
-          </div>
-        </a>
-      </div>
+      {/* Fixed WhatsApp Button */}
+      <a 
+        href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="menu-fixed-whatsapp"
+      >
+        <div className="whatsapp-icon-circle">
+          <MessageSquare size={24} />
+        </div>
+        <div className="whatsapp-content">
+          <span className="whatsapp-title">Special Request?</span>
+          <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
+        </div>
+      </a>
     </div>
   );
 }
