@@ -395,7 +395,7 @@ export default function MenuPage({ onSelectProduct }) {
                   href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'm%20using%20the%203D%20Cake%20Designer%20and%20I'd%20like%20some%20help%20with%20a%20special%20request%20for%20my%20custom%20cake."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="designer-whatsapp-btn"
+                  className="designer-whatsapp-btn mobile-only"
                 >
                   <MessageSquare size={20} />
                   <span>SPECIAL REQUESTS?</span>
@@ -404,6 +404,24 @@ export default function MenuPage({ onSelectProduct }) {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Desktop Fixed WhatsApp Button */}
+      <div className="desktop-only">
+        <a 
+          href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="menu-fixed-whatsapp"
+        >
+          <div className="whatsapp-icon-circle">
+            <MessageSquare size={24} />
+          </div>
+          <div className="whatsapp-content">
+            <span className="whatsapp-title">Special Request?</span>
+            <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
+          </div>
+        </a>
       </div>
     </div>
   );
