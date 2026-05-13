@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -800px; /* Adjusted to keep the curve high and compact */
-  right: -700px; /* Keeping the same curved entrance */
+  top: -850px; /* Top edge stays fixed */
+  right: -700px; /* Sides stay fixed */
   width: 1800px; 
-  height: 1100px; /* Reduced height for a flatter, sleeker profile */
+  height: 1420px; /* Reduced from 1500px to lift the bottom edge slightly */
   background-color: rgba(250, 235, 225, 0.95); /* Warmer creamy beige */
   border-radius: 50%;
   z-index: 5;
@@ -1149,9 +1149,9 @@ body {
 
   .hero-bg-backdrop-circle {
     width: 1100px;
-    height: 700px; /* Reduced height on mobile */
-    right: -400px; 
-    top: -400px; /* Adjusted top for mobile balance */
+    height: 850px; /* Slightly reduced on mobile */
+    right: -400px;
+    top: -500px;
     background-color: rgba(250, 235, 225, 0.95);
   }
 
