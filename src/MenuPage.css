@@ -225,7 +225,7 @@
     flex-direction: column;
     white-space: nowrap;
     padding-left: 0.5rem;
-    padding-right: 1.5rem;
+    padding-right: 2.2rem;
     opacity: 0;
     animation: fadeInOutContent 6s infinite;
     z-index: 1;
@@ -246,7 +246,7 @@
       background: var(--secondary);
     }
     50%, 95% { 
-      width: 195px; 
+      width: 205px; 
       background: white;
     }
     100% { 
