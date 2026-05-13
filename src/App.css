@@ -373,7 +373,7 @@ body {
 
 .hero-top-left-content {
   position: absolute;
-  top: 2.5rem;
+  top: 6rem;
   left: 4rem;
   z-index: 20;
   text-align: left;
@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -300px; /* Shifted up to connect with header nav */
-  right: -8%;
-  width: 1200px;
-  height: 1200px;
+  top: -600px; /* Anchored from the very top */
+  right: -12%;
+  width: 1500px; /* Larger for better coverage from top */
+  height: 1500px;
   background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
   border-radius: 50%;
   z-index: 5;
@@ -1069,7 +1069,7 @@ body {
   }
 
   .hero-top-left-content {
-    top: 1.5rem;
+    top: 3rem;
     left: 1.5rem;
     max-width: 90%;
   }
@@ -1148,9 +1148,10 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: min(110vw, 600px);
-    right: -10%;
-    top: 58%; /* Center on orbital system */
+    width: 900px;
+    height: 900px;
+    right: -25%;
+    top: -350px; /* Anchor from top on mobile too */
     background-color: rgba(252, 244, 244, 0.9);
   }
 
