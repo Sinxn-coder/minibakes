@@ -407,7 +407,7 @@ body {
   top: -850px; /* Top edge stays fixed */
   right: -700px; /* Sides stay fixed */
   width: 1800px; 
-  height: 1420px; /* Reduced from 1500px to lift the bottom edge slightly */
+  height: 1320px; /* Reduced further to lift the bottom curve significantly */
   background-color: rgba(250, 235, 225, 0.95); /* Warmer creamy beige */
   border-radius: 50%;
   z-index: 5;
@@ -1149,7 +1149,7 @@ body {
 
   .hero-bg-backdrop-circle {
     width: 1100px;
-    height: 850px; /* Slightly reduced on mobile */
+    height: 780px; /* Reduced further on mobile */
     right: -400px;
     top: -500px;
     background-color: rgba(250, 235, 225, 0.95);
