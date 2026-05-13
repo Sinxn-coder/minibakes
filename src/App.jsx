@@ -375,18 +375,29 @@ function App() {
     setActiveOrbitItem(item);
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
-  // Preload critical Home Page assets
+  // Preload critical Home Page assets with prioritization
   useEffect(() => {
-    const imagesToPreload = [
-      ...backgrounds,
+    const priorityImages = [...backgrounds, logo];
+    const secondaryImages = [
       ...orbitItems.map(item => item.img),
-      ...featuredItems.map(item => item.img),
-      logo
+      ...featuredItems.map(item => item.img)
     ];
 
-    imagesToPreload.forEach(src => {
-      const img = new Image();
-      img.src = src;
+    // Function to load a set of images
+    const loadImages = (list) => {
+      return Promise.all(list.map(src => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = resolve;
+          img.onerror = resolve; // Continue even if one fails
+        });
+      }));
+    };
+
+    // Staggered loading: Priority first, then secondary
+    loadImages(priorityImages).then(() => {
+      loadImages(secondaryImages);
     });
   }, []);
 
@@ -553,12 +564,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Preload background images for instant loading
-    backgrounds.forEach(bg => {
-      const img = new Image();
-      img.src = bg;
-    });
-
     const interval = setInterval(() => {
       setCurrentBg((prev) => (prev + 1) % backgrounds.length);
     }, 5000);
@@ -740,16 +745,11 @@ function App() {
               <div className="hero-overlay"></div>
             </div>
 
-            <div className="hero-bg-backdrop-circle"></div>
-
             <div className="hero-top-left-content">
               <p className="hero-celebration-text">
                 <span className="hero-sans">Freshly baked for every</span><br />
                 <span className="hero-serif-accent">celebration</span>
               </p>
-              <div className="hero-dynamic-desc-wrapper">
-                <p className="hero-dynamic-desc">{activeOrbitItem.desc}</p>
-              </div>
             </div>
             <div
               className="hero-orbit-container"
@@ -774,6 +774,11 @@ function App() {
                   onClick={() => handleOrbitClick(item)}
                 ></div>
               ))}
+            </div>
+            <div className="hero-info-box">
+              <div className="info-box-content">
+                <p className="info-box-desc">{activeOrbitItem.desc}</p>
+              </div>
             </div>
             <div
               className="hero-right-circle"
