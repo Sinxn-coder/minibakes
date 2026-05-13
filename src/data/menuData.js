@@ -16,6 +16,11 @@ import pops2 from '../assets/cake pops/pops2.png';
 import pops3 from '../assets/cake pops/pops3.png';
 import pops4 from '../assets/cake pops/pops4.png';
 import heart1 from '../assets/heartbrake/1.png';
+import sicles1 from '../assets/cake sicles/cakesicles (1).png';
+import sicles2 from '../assets/cake sicles/cakesicles (2).png';
+import sicles3 from '../assets/cake sicles/cakesicles (3).png';
+import sicles4 from '../assets/cake sicles/cakesicles (4).png';
+import sicles5 from '../assets/cake sicles/cakesicles (5).png';
 import mini1 from '../assets/minicakes/1.png';
 import mini2 from '../assets/minicakes/2.png';
 import cakesicles5 from '../assets/cakesicles5.png';
@@ -76,10 +81,10 @@ export const menuData = [
   {
     category: "Cakesicles",
     items: [
-      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: cakesicles5, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: cakesicles5, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't5', name: 'Cakesicle (Additional)', price: '€2.60', img: cakesicles5, description: 'Add an extra cakesicle to your box. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't6', name: 'Cakesicles (20+ pieces)', price: '€2.40 each', img: cakesicles5, description: 'Bulk order discount for 20 or more cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't5', name: 'Cakesicle (Additional)', price: '€2.60', img: sicles4, description: 'Add an extra cakesicle to your box. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't6', name: 'Cakesicles (20+ pieces)', price: '€2.40 each', img: sicles2, img2: sicles5, description: 'Bulk order discount for 20 or more cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
     ]
   }
 ];
