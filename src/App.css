@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -350px; /* Shifted up to connect with header nav */
-  right: -55%; /* Pushed even further out for whisper-thin edge */
-  width: 1800px; /* Massive size for very shallow curve */
-  height: 1800px;
+  top: -850px; /* Shifted much higher to sweep down from the top */
+  right: -55%; /* Maintaining the whisper-thin edge */
+  width: 2200px; /* Massive size to maintain curve profile */
+  height: 2200px;
   background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
   border-radius: 50%;
   z-index: 5;
@@ -1148,10 +1148,10 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: 1000px;
-    height: 1000px;
-    right: -50%; /* Pushed further out on mobile too */
-    top: 55%; /* Center on orbital system */
+    width: 1200px;
+    height: 1200px;
+    right: -50%;
+    top: -400px; /* Shifted up on mobile too */
     background-color: rgba(252, 244, 244, 0.9);
   }
 
