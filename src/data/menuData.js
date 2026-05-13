@@ -15,6 +15,7 @@ import pops1 from '../assets/cake pops/pops1.png';
 import pops2 from '../assets/cake pops/pops2.png';
 import pops3 from '../assets/cake pops/pops3.png';
 import pops4 from '../assets/cake pops/pops4.png';
+import heart1 from '../assets/heartbrake/1.png';
 import mini1 from '../assets/minicakes/1.png';
 import mini2 from '../assets/minicakes/2.png';
 import cakesicles5 from '../assets/cakesicles5.png';
@@ -62,7 +63,7 @@ export const menuData = [
   {
     category: "Breakable Hearts",
     items: [
-      { id: 't2', name: 'Breakable Heart Box', price: '€37', img: breakableHeart, description: 'Heart made of White Chocolate filled with marshmallows & chopsticks. Includes 8 cakesicles.' },
+      { id: 't2', name: 'Breakable Heart Box', price: '€37', img: heart1, description: 'Heart made of White Chocolate filled with marshmallows & chopsticks. Includes 8 cakesicles.' },
     ]
   },
   {
