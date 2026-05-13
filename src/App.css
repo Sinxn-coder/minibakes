@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -1200px; /* Shifted even higher for a high-horizon arc */
-  right: -55%; /* Maintaining the minimalist edge */
-  width: 2500px; /* Massive size to maintain a shallow curve at this height */
-  height: 2500px;
+  top: -150px; /* Reduced shift for a more compact look */
+  right: -5%; /* Re-centered towards the corner */
+  width: 900px; /* Reduced size for a more focused glow */
+  height: 900px;
   background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
   border-radius: 50%;
   z-index: 5;
@@ -1148,10 +1148,10 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: 1500px;
-    height: 1500px;
-    right: -50%;
-    top: -600px; /* Shifted even higher on mobile */
+    width: 600px;
+    height: 600px;
+    right: -10%;
+    top: -100px; /* Adjusted for smaller size */
     background-color: rgba(252, 244, 244, 0.9);
   }
 
