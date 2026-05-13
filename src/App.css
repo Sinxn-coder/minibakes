@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -850px; /* High position for the sweeping arc */
-  right: -700px; /* Shifted left to bring more of the rounded entrance into view */
-  width: 1800px; /* Reduced width to accentuate the curvature on the left */
-  height: 1500px;
+  top: -800px; /* Adjusted to keep the curve high and compact */
+  right: -700px; /* Keeping the same curved entrance */
+  width: 1800px; 
+  height: 1100px; /* Reduced height for a flatter, sleeker profile */
   background-color: rgba(250, 235, 225, 0.95); /* Warmer creamy beige */
   border-radius: 50%;
   z-index: 5;
@@ -1149,9 +1149,9 @@ body {
 
   .hero-bg-backdrop-circle {
     width: 1100px;
-    height: 900px;
-    right: -400px; /* More rounded entrance on mobile */
-    top: -500px;
+    height: 700px; /* Reduced height on mobile */
+    right: -400px; 
+    top: -400px; /* Adjusted top for mobile balance */
     background-color: rgba(250, 235, 225, 0.95);
   }
 
