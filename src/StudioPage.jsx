@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from 'lucide-react';
+import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
@@ -47,6 +47,76 @@ const upcomingClasses = [
     img: studio4
   }
 ];
+
+const bookedDates = [
+  new Date(2026, 4, 15),
+  new Date(2026, 4, 22),
+  new Date(2026, 4, 23),
+  new Date(2026, 5, 2),
+  new Date(2026, 5, 10),
+  new Date(2026, 5, 14),
+];
+
+const StudioCalendar = ({ bookedDates }) => {
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Default to May 2026 for demo
+
+  const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
+
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  
+  const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+  const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+
+  const isBooked = (day) => {
+    return bookedDates.some(d => 
+      d.getDate() === day && 
+      d.getMonth() === currentDate.getMonth() && 
+      d.getFullYear() === currentDate.getFullYear()
+    );
+  };
+
+  const renderDays = () => {
+    const totalDays = daysInMonth(currentDate.getMonth(), currentDate.getFullYear());
+    const startDay = firstDayOfMonth(currentDate.getMonth(), currentDate.getFullYear());
+    const days = [];
+
+    for (let i = 0; i < startDay; i++) {
+      days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+    }
+
+    for (let d = 1; d <= totalDays; d++) {
+      const booked = isBooked(d);
+      days.push(
+        <div key={d} className={`calendar-day ${booked ? 'booked' : 'available'}`}>
+          <span className="day-number">{d}</span>
+          <span className="day-status">{booked ? 'Fully Booked' : 'Available'}</span>
+        </div>
+      );
+    }
+    return days;
+  };
+
+  return (
+    <div className="studio-calendar-container">
+      <div className="calendar-header">
+        <button className="cal-nav-btn" onClick={prevMonth}><ChevronLeft size={24} /></button>
+        <h2>{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+        <button className="cal-nav-btn" onClick={nextMonth}><ChevronRight size={24} /></button>
+      </div>
+      <div className="calendar-weekdays">
+        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+      </div>
+      <div className="calendar-grid">
+        {renderDays()}
+      </div>
+      <div className="calendar-legend">
+        <div className="legend-item"><span className="dot available"></span> Available</div>
+        <div className="legend-item"><span className="dot booked"></span> Fully Booked</div>
+      </div>
+    </div>
+  );
+};
 
 export default function StudioPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
@@ -153,34 +223,11 @@ export default function StudioPage() {
         </div>
       </section>
 
-      {/* Upcoming Schedule */}
+      {/* Availability Calendar */}
       <section id="schedule" className="studio-schedule">
-        <h2 className="section-title-alt">UPCOMING DATES</h2>
-        <div className="classes-grid">
-          {upcomingClasses.map(cls => (
-            <div key={cls.id} className="class-card">
-              <div className="class-card-img">
-                <SafeImage src={cls.img} alt={cls.title} />
-                <span className="class-level">{cls.level}</span>
-              </div>
-              <div className="class-card-body">
-                <h3>{cls.title}</h3>
-                <div className="class-meta">
-                  <span><Calendar size={14} /> {cls.date}</span>
-                  <span><Clock size={14} /> {cls.time}</span>
-                </div>
-                <div className="class-footer">
-                  <span className="class-price">{cls.price}</span>
-                  <span className="class-spots">{cls.spots}</span>
-                </div>
-                <button className="book-now-btn" onClick={() => {
-                  setFormData({...formData, classId: cls.id});
-                  document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
-                }}>Quick Book</button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <h2 className="section-title-alt">AVAILABILITY</h2>
+        <p className="calendar-intro">Megan is available for bookings at your preferred location. Check the calendar below for open dates.</p>
+        <StudioCalendar bookedDates={bookedDates} />
       </section>
 
       {/* Gallery Section */}
