@@ -41,16 +41,25 @@ body {
 
 /* Header Styles */
 .header {
-  background-color: var(--bg-white);
+  background-color: transparent; /* Transparent over hero */
   height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 4rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: none; /* No shadow on hero */
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.header.scrolled {
+  background-color: rgba(255, 255, 255, 0.98);
+  height: 85px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .logo-container img {
@@ -395,12 +404,11 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: 50%;
-  right: -5%;
-  transform: translateY(-50%);
-  width: min(100vw, 900px);
-  aspect-ratio: 1/1;
-  background-color: rgba(252, 244, 244, 0.85); /* Warm cream/pinkish glow */
+  top: -300px; /* Shifted up to connect with header nav */
+  right: -8%;
+  width: 1200px;
+  height: 1200px;
+  background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
   border-radius: 50%;
   z-index: 5;
   pointer-events: none;
