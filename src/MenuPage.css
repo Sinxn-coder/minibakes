@@ -152,10 +152,12 @@
   border: 1px solid rgba(0,0,0,0.05);
 }
 
-.menu-fixed-whatsapp:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 15px 50px rgba(0,0,0,0.18);
-  border-color: var(--secondary);
+@media (hover: hover) {
+  .menu-fixed-whatsapp:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.18);
+    border-color: var(--secondary);
+  }
 }
 
 .whatsapp-icon-circle {
@@ -171,8 +173,10 @@
   transition: transform 0.4s ease;
 }
 
-.menu-fixed-whatsapp:hover .whatsapp-icon-circle {
-  transform: rotate(15deg) scale(1.1);
+@media (hover: hover) {
+  .menu-fixed-whatsapp:hover .whatsapp-icon-circle {
+    transform: rotate(15deg) scale(1.1);
+  }
 }
 
 .whatsapp-content {
