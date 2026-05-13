@@ -408,7 +408,7 @@ body {
   right: -700px; /* Sides stay fixed */
   width: 1800px; 
   height: 1320px; /* Reduced further to lift the bottom curve significantly */
-  background-color: rgba(92, 13, 27, 0.12); /* Soft brand brown/maroon to match branding */
+  background-color: rgba(62, 39, 35, 0.12); /* Rich brand brown to match boutique identity */
   border-radius: 50%;
   z-index: 5;
   pointer-events: none;
@@ -1152,7 +1152,7 @@ body {
     height: 780px;
     right: -400px;
     top: -500px;
-    background-color: rgba(92, 13, 27, 0.12); /* Match brand brown */
+    background-color: rgba(62, 39, 35, 0.12); /* Match rich brand brown */
   }
 
   .mobile-nav-link {
