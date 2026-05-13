@@ -404,10 +404,10 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -650px; /* Centering the 1300px circle at the corner */
-  right: -650px;
-  width: 1300px; 
-  height: 1300px;
+  top: -600px; /* Centered vertically for 1200px height */
+  right: -1000px; /* Centered horizontally for 2000px width - extends further left */
+  width: 2000px; 
+  height: 1200px;
   background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
   border-radius: 50%;
   z-index: 5;
@@ -1148,10 +1148,10 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: 800px;
+    width: 1200px;
     height: 800px;
-    right: -400px; /* Centered at corner */
-    top: -400px;
+    right: -600px; /* Centered horizontally */
+    top: -400px; /* Centered vertically */
     background-color: rgba(252, 244, 244, 0.9);
   }
 
