@@ -30,7 +30,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
                   ['Classic Chocolate'];
 
-  const spreads = ['Pistachio', 'Biscoff', 'Nutella', 'Kinder', 'White Chocolate', 'Ferrero Rocher'];
+  const spreads = ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
 
   const basePrice = parseFloat(product.price.replace(/[^\d.]/g, '')) || 0;
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;

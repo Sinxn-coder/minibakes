@@ -248,25 +248,11 @@ export default function MenuPage({ onSelectProduct }) {
                           <span className="designer-card-label">Biscoff</span>
                         </button>
                         <button 
-                          className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === 'White Chocolate' ? 'active-design' : ''}`}
-                          onClick={() => toggleSpread('White Chocolate')}
-                        >
-                          <Droplet size={20} color="#f5ebd6" />
-                          <span className="designer-card-label">White Choc</span>
-                        </button>
-                        <button 
                           className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === 'Pistachio' ? 'active-design' : ''}`}
                           onClick={() => toggleSpread('Pistachio')}
                         >
                           <Droplet size={20} color="#a2d187" />
                           <span className="designer-card-label">Pistachio</span>
-                        </button>
-                        <button 
-                          className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === 'Ferrero Rocher' ? 'active-design' : ''}`}
-                          onClick={() => toggleSpread('Ferrero Rocher')}
-                        >
-                          <Droplet size={20} color="#5c3a21" />
-                          <span className="designer-card-label">Ferrero</span>
                         </button>
                         <button 
                           className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === 'Kinder' ? 'active-design' : ''}`}
