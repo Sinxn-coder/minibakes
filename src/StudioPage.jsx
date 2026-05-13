@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from 'lucide-react';
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
 
@@ -15,104 +15,73 @@ const studio8 = `${import.meta.env.BASE_URL}studio8.png`;
 // 8 unique studio images from public folder
 const studioImages = [studio1, studio2, studio3, studio4, studio5, studio6, studio7, studio8];
 
-const upcomingClasses = [
-  {
-    id: 1,
-    title: "Minimalist Cake Artistry",
-    date: "May 15, 2026",
-    time: "10:00 AM - 1:00 PM",
-    price: "€85",
-    level: "Beginner Friendly",
-    spots: "4 spots left",
-    img: studio2
-  },
-  {
-    id: 2,
-    title: "Mastering Buttercream Florals",
-    date: "May 22, 2026",
-    time: "2:00 PM - 5:00 PM",
-    price: "€95",
-    level: "Intermediate",
-    spots: "2 spots left",
-    img: studio3
-  },
-  {
-    id: 3,
-    title: "The Ultimate Cupcake Workshop",
-    date: "June 05, 2026",
-    time: "11:00 AM - 2:00 PM",
-    price: "€75",
-    level: "All Levels",
-    spots: "6 spots left",
-    img: studio4
-  }
+// Example booked dates for the calendar
+const BOOKED_DATES = [
+  '2026-05-15',
+  '2026-05-22',
+  '2026-05-28',
+  '2026-06-05',
+  '2026-06-12',
+  '2026-06-25'
 ];
 
-const bookedDates = [
-  new Date(2026, 4, 15),
-  new Date(2026, 4, 22),
-  new Date(2026, 4, 23),
-  new Date(2026, 5, 2),
-  new Date(2026, 5, 10),
-  new Date(2026, 5, 14),
-];
-
-const StudioCalendar = ({ bookedDates }) => {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 4, 1)); // Default to May 2026 for demo
-
-  const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
-  const firstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
-
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const StudioCalendar = ({ onDateSelect, selectedDate }) => {
+  const [viewDate, setViewDate] = useState(new Date(2026, 4, 1)); // Start at May 2026
   
-  const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
-  const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
-
-  const isBooked = (day) => {
-    return bookedDates.some(d => 
-      d.getDate() === day && 
-      d.getMonth() === currentDate.getMonth() && 
-      d.getFullYear() === currentDate.getFullYear()
+  const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+  
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const monthName = viewDate.toLocaleString('default', { month: 'long' });
+  
+  const days = [];
+  // Fill empty spots for first week
+  for (let i = 0; i < firstDayOfMonth(year, month); i++) {
+    days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+  }
+  
+  // Fill actual days
+  for (let d = 1; d <= daysInMonth(year, month); d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const isBooked = BOOKED_DATES.includes(dateStr);
+    const isSelected = selectedDate === dateStr;
+    const isToday = new Date().toISOString().split('T')[0] === dateStr;
+    
+    days.push(
+      <div 
+        key={d} 
+        className={`calendar-day ${isBooked ? 'booked' : 'available'} ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}`}
+        onClick={() => !isBooked && onDateSelect(dateStr)}
+      >
+        <span className="day-number">{d}</span>
+        {isBooked && <span className="booked-label">BOOKED</span>}
+        {!isBooked && <span className="available-dot"></span>}
+      </div>
     );
-  };
+  }
 
-  const renderDays = () => {
-    const totalDays = daysInMonth(currentDate.getMonth(), currentDate.getFullYear());
-    const startDay = firstDayOfMonth(currentDate.getMonth(), currentDate.getFullYear());
-    const days = [];
-
-    for (let i = 0; i < startDay; i++) {
-      days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
-    }
-
-    for (let d = 1; d <= totalDays; d++) {
-      const booked = isBooked(d);
-      days.push(
-        <div key={d} className={`calendar-day ${booked ? 'booked' : 'available'}`}>
-          <span className="day-number">{d}</span>
-          <span className="day-status">{booked ? 'Fully Booked' : 'Available'}</span>
-        </div>
-      );
-    }
-    return days;
+  const changeMonth = (offset) => {
+    setViewDate(new Date(year, month + offset, 1));
   };
 
   return (
-    <div className="studio-calendar-container">
+    <div className="calendar-container">
       <div className="calendar-header">
-        <button className="cal-nav-btn" onClick={prevMonth}><ChevronLeft size={24} /></button>
-        <h2>{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
-        <button className="cal-nav-btn" onClick={nextMonth}><ChevronRight size={24} /></button>
+        <button onClick={() => changeMonth(-1)} className="month-nav-btn">&lt;</button>
+        <h3>{monthName} {year}</h3>
+        <button onClick={() => changeMonth(1)} className="month-nav-btn">&gt;</button>
       </div>
       <div className="calendar-weekdays">
-        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <div key={d}>{d}</div>)}
       </div>
       <div className="calendar-grid">
-        {renderDays()}
+        {days}
       </div>
       <div className="calendar-legend">
-        <div className="legend-item"><span className="dot available"></span> Available</div>
-        <div className="legend-item"><span className="dot booked"></span> Fully Booked</div>
+        <div className="legend-item"><span className="legend-box available"></span> Available</div>
+        <div className="legend-item"><span className="legend-box booked"></span> Fully Booked</div>
+        <div className="legend-item"><span className="legend-box selected"></span> Your Selection</div>
       </div>
     </div>
   );
@@ -125,7 +94,7 @@ export default function StudioPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    classId: '',
+    date: '',
     guests: '1'
   });
 
@@ -225,9 +194,21 @@ export default function StudioPage() {
 
       {/* Availability Calendar */}
       <section id="schedule" className="studio-schedule">
-        <h2 className="section-title-alt">AVAILABILITY</h2>
-        <p className="calendar-intro">Megan is available for bookings at your preferred location. Check the calendar below for open dates.</p>
-        <StudioCalendar bookedDates={bookedDates} />
+        <div className="section-header-alt">
+          <span className="section-badge">Booking Availability</span>
+          <h2 className="section-title-alt">SELECT YOUR DATE</h2>
+          <p>Check my availability below. Maroon dates are already reserved for private events.</p>
+        </div>
+        
+        <div className="calendar-wrapper">
+          <StudioCalendar 
+            selectedDate={formData.date}
+            onDateSelect={(date) => {
+              setFormData({...formData, date});
+              document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+        </div>
       </section>
 
       {/* Gallery Section */}
@@ -272,7 +253,7 @@ export default function StudioPage() {
               <div className="booking-success">
                 <CheckCircle2 size={64} color="#800000" />
                 <h3>Request Sent!</h3>
-                <p>We've received your booking request for {upcomingClasses.find(c => c.id == formData.classId)?.title || 'the class'}. We'll email you soon.</p>
+                <p>We've received your booking request for {formData.date}. We'll email you soon to confirm the details.</p>
                 <button className="cta-btn-primary" onClick={() => setBookingStatus(null)}>Book Another</button>
               </div>
             ) : (
