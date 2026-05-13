@@ -405,7 +405,7 @@ body {
 .hero-bg-backdrop-circle {
   position: absolute;
   top: -500px; /* Centered vertically for 1000px height */
-  right: -750px; /* Shifted slightly left from the corner */
+  right: -650px; /* Shifted further left for more visibility */
   width: 1700px; 
   height: 1000px;
   background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
@@ -1150,7 +1150,7 @@ body {
   .hero-bg-backdrop-circle {
     width: 1000px;
     height: 600px;
-    right: -400px; /* Shifted slightly left */
+    right: -300px; /* Shifted further left */
     top: -300px; /* Centered vertically */
     background-color: rgba(252, 244, 244, 0.9);
   }
