@@ -404,11 +404,11 @@ body {
 
 .hero-bg-backdrop-circle {
   position: absolute;
-  top: -500px; /* Centered vertically for 1000px height */
-  right: -650px; /* Shifted further left for more visibility */
-  width: 1700px; 
-  height: 1000px;
-  background-color: rgba(252, 244, 244, 0.9); /* Warm cream/pinkish glow */
+  top: -850px; /* High position to create the wide sweeping arc */
+  right: -1100px; /* Shifted right to anchor the curve at the corner */
+  width: 2600px; 
+  height: 1500px;
+  background-color: rgba(250, 235, 225, 0.95); /* Warmer creamy beige like the image */
   border-radius: 50%;
   z-index: 5;
   pointer-events: none;
@@ -1148,11 +1148,11 @@ body {
   }
 
   .hero-bg-backdrop-circle {
-    width: 1000px;
-    height: 600px;
-    right: -300px; /* Shifted further left */
-    top: -300px; /* Centered vertically */
-    background-color: rgba(252, 244, 244, 0.9);
+    width: 1600px;
+    height: 900px;
+    right: -700px;
+    top: -500px;
+    background-color: rgba(250, 235, 225, 0.95);
   }
 
   .mobile-nav-link {
