@@ -553,6 +553,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Preload background images for instant loading
+    backgrounds.forEach(bg => {
+      const img = new Image();
+      img.src = bg;
+    });
+
     const interval = setInterval(() => {
       setCurrentBg((prev) => (prev + 1) % backgrounds.length);
     }, 5000);
@@ -739,6 +745,9 @@ function App() {
                 <span className="hero-sans">Freshly baked for every</span><br />
                 <span className="hero-serif-accent">celebration</span>
               </p>
+              <div className="hero-dynamic-desc-wrapper">
+                <p className="hero-dynamic-desc">{activeOrbitItem.desc}</p>
+              </div>
             </div>
             <div
               className="hero-orbit-container"
@@ -763,11 +772,6 @@ function App() {
                   onClick={() => handleOrbitClick(item)}
                 ></div>
               ))}
-            </div>
-            <div className="hero-info-box">
-              <div className="info-box-content">
-                <p className="info-box-desc">{activeOrbitItem.desc}</p>
-              </div>
             </div>
             <div
               className="hero-right-circle"
