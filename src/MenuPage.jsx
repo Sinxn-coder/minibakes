@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare } from 'lucide-react';
 import './MenuPage.css';
 import Cake3D from './Cake3D';
@@ -7,6 +7,32 @@ import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
+
+const MenuCardImage = ({ item }) => {
+  const [showSecond, setShowSecond] = useState(false);
+
+  useEffect(() => {
+    if (item.img2) {
+      const interval = setInterval(() => {
+        setShowSecond(prev => !prev);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [item.img2]);
+
+  if (!item.img2) return <SafeImage src={item.img} alt={item.name} />;
+
+  return (
+    <div className="menu-card-image-stack">
+      <div className={`fade-img ${showSecond ? 'hide' : 'show'}`}>
+        <SafeImage src={item.img} alt={item.name} />
+      </div>
+      <div className={`fade-img ${showSecond ? 'show' : 'hide'}`}>
+        <SafeImage src={item.img2} alt={item.name} />
+      </div>
+    </div>
+  );
+};
 
 export default function MenuPage({ onSelectProduct }) {
   const [activeCategory, setActiveCategory] = useState("Cakes");
@@ -112,7 +138,7 @@ export default function MenuPage({ onSelectProduct }) {
               {item.isFullWidth ? (
                 <Cake3D layers={cakeLayers} />
               ) : (
-                <SafeImage src={item.img} alt={item.name} />
+                <MenuCardImage item={item} />
               )}
             </div>
             <div className="menu-card-content">
