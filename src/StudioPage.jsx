@@ -105,19 +105,22 @@ export default function StudioPage() {
   });
   const [showGuestLimit, setShowGuestLimit] = useState(false);
 
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState(null);
+
   useEffect(() => {
-    // Scroll expansion effect for mobile
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) return;
+
     const observerOptions = {
-      threshold: 0.6,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.8,
+      rootMargin: '-10% 0px -10% 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('expanded');
-        } else {
-          entry.target.classList.remove('expanded');
+          const idx = parseInt(entry.target.getAttribute('data-index'));
+          setActiveGalleryIndex(idx);
         }
       });
     }, observerOptions);
@@ -242,7 +245,7 @@ export default function StudioPage() {
             <div 
               key={idx}
               data-index={idx}
-              className="gallery-card"
+              className={`gallery-card ${activeGalleryIndex === idx ? 'expanded' : ''}`}
             >
               <SafeImage src={img} alt={`Class moment ${idx + 1}`} />
               <div className="gallery-card-overlay">
