@@ -297,16 +297,15 @@ export default function StudioPage() {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Guests</label>
-                    <select 
+                    <label>Guests (Max 15)</label>
+                    <input 
+                      type="number"
+                      min="1"
+                      max="15"
                       value={formData.guests}
+                      required
                       onChange={e => setFormData({...formData, guests: e.target.value})}
-                    >
-                      <option value="1">1 Person</option>
-                      <option value="2">2 People</option>
-                      <option value="3">3 People</option>
-                      <option value="4">Small Group (4+)</option>
-                    </select>
+                    />
                   </div>
                 </div>
                 <button type="submit" className="submit-booking-btn" disabled={bookingStatus === 'loading'}>
