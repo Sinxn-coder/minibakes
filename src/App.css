@@ -1417,6 +1417,14 @@ body {
     margin: 0;
   }
 
+  .divider-line-left .dot, .divider-line-right .dot {
+    border-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .divider-line-left .line, .divider-line-right .line {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
   .mobile-nav-link {
     font-size: 3rem;
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Heart } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -791,7 +791,9 @@ function App() {
                     <span className="dot"></span>
                     <span className="line"></span>
                   </div>
-                  <span className="divider-heart">❤</span>
+                  <div className="divider-heart">
+                    <Heart size={16} fill="#fff" strokeWidth={0} />
+                  </div>
                   <div className="divider-line-right">
                     <span className="line"></span>
                     <span className="dot"></span>
