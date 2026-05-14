@@ -783,8 +783,19 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 2;
+  transition: opacity 1s ease-in-out;
+}
+
+.insta-real-img.fade-in {
+  opacity: 1;
+}
+
+.insta-real-img.fade-out {
+  opacity: 0;
 }
 
 .insta-img-shimmer {

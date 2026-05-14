@@ -185,23 +185,46 @@ const clientReviews = [
 ];
 
 const InstaPost = ({ post, index }) => {
-  const [loaded, setLoaded] = useState(false);
-  
+  const [displayPost, setDisplayPost] = useState(post);
+  const [nextPost, setNextPost] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    if (post?.img !== displayPost?.img) {
+      setNextPost(post);
+      setIsTransitioning(true);
+      
+      const timer = setTimeout(() => {
+        setDisplayPost(post);
+        setNextPost(null);
+        setIsTransitioning(false);
+      }, 1000); // Matches CSS transition
+      
+      return () => clearTimeout(timer);
+    }
+  }, [post?.img]);
+
   return (
     <div className="insta-card-placeholder">
-      {(!loaded || !post) && (
-        <div className="insta-img-shimmer">
-          <InstagramIcon size={32} opacity={0.2} />
-        </div>
-      )}
-      {post && (
+      <div className="insta-img-shimmer">
+        <InstagramIcon size={32} opacity={0.2} />
+      </div>
+      
+      {/* Current Image */}
+      <img 
+        src={displayPost?.img} 
+        alt={`Instagram Moment`} 
+        className={`insta-real-img ${isTransitioning ? 'fade-out' : 'fade-in'}`}
+        onDoubleClick={() => window.open(displayPost?.link, '_blank')}
+      />
+
+      {/* Next Image (Incoming) */}
+      {nextPost && (
         <img 
-          src={post.img} 
-          alt={`Instagram Reel ${index + 1}`} 
-          className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
-          style={{ cursor: 'pointer' }}
-          onLoad={() => setLoaded(true)}
-          onDoubleClick={() => window.open(post.link, '_blank')}
+          src={nextPost.img} 
+          alt={`Instagram Moment Incoming`} 
+          className="insta-real-img fade-in"
+          style={{ zIndex: 3 }}
         />
       )}
     </div>
@@ -416,6 +439,20 @@ function App() {
   const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
+  const [instaIndices, setInstaIndices] = useState([0, 1, 2, 3, 4, 5]);
+
+  useEffect(() => {
+    if (currentView !== 'home') return;
+    const interval = setInterval(() => {
+      setInstaIndices(prev => {
+        const next = [...prev];
+        const last = next.pop();
+        next.unshift(last);
+        return next;
+      });
+    }, 4500); // Rotate every 4.5s
+    return () => clearInterval(interval);
+  }, [currentView]);
   const [isOverDark, setIsOverDark] = useState(false);
 
   // Scroll observer for floating cart color change
@@ -858,7 +895,7 @@ function App() {
               and paste their embed code below. */}
               <div className="insta-row">
                 {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <InstaPost key={i} post={instaPosts[i]} index={i} />
+                  <InstaPost key={i} post={instaPosts[instaIndices[i]]} index={i} />
                 ))}
               </div>
 
