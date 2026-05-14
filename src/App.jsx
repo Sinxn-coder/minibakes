@@ -68,6 +68,7 @@ import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
 import StudioPage from './StudioPage';
 import CakeCarePage from './CakeCarePage';
+import ContactPage from './ContactPage';
 import review1 from './assets/reviews/one.jpg';
 import review2 from './assets/reviews/two.jpg';
 import review3 from './assets/reviews/three.jpg';
@@ -658,11 +659,7 @@ function App() {
             <span className="nav-divider">|</span>
             <a href="#contact" className="nav-link" onClick={(e) => {
               e.preventDefault();
-              navigateTo('home');
-              setTimeout(() => {
-                const contactSection = document.getElementById('contact');
-                contactSection?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+              navigateTo('contact');
             }}>Contact</a>
           </nav>
 
@@ -715,11 +712,7 @@ function App() {
             <div className="nav-item-wrapper">
               <a href="#contact" className="mobile-nav-link" onClick={(e) => {
                 e.preventDefault();
-                navigateTo('home');
-                setTimeout(() => {
-                  const contactSection = document.getElementById('contact');
-                  contactSection?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
+                navigateTo('contact');
               }}>Contact</a>
             </div>
           </nav>
@@ -1087,6 +1080,9 @@ function App() {
       )}
       {currentView === 'care' && (
         <CakeCarePage onBack={() => setCurrentView('home')} />
+      )}
+      {currentView === 'contact' && (
+        <ContactPage onBack={() => setCurrentView('home')} />
       )}
 
       {/* Desktop Cart Drawer */}
