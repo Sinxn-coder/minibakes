@@ -55,14 +55,65 @@ import style5 from './assets/style5.png';
 import style6 from './assets/style6.png';
 import style7 from './assets/style7.png';
 import style8 from './assets/style8.png';
-import orbitCupcake from './assets/cupcakes/cupcake (1).png';
-import orbitRoundCake from './assets/cakes/round/round (1).png';
-import orbitPop from './assets/cake pops/pops1.png';
-import orbitBrownie from './assets/brownies_box.png';
-import orbitSicle from './assets/cake sicles/cakesicles (1).png';
-import orbitBreakableHeart from './assets/heartbrake/1.png';
-import orbitHeartCake from './assets/cakes/heart/heart (1).png';
-import orbitBento from './assets/minicakes/1.png';
+// Orbit Asset Imports
+import round_1 from './assets/cakes/round/round (1).png';
+import round_2 from './assets/cakes/round/round (2).png';
+import round_3 from './assets/cakes/round/round (3).png';
+import round_4 from './assets/cakes/round/round (4).png';
+import round_5 from './assets/cakes/round/round (5).png';
+import round_6 from './assets/cakes/round/round (6).png';
+import round_7 from './assets/cakes/round/round (7).png';
+import round_8 from './assets/cakes/round/round (8).png';
+import round_9 from './assets/cakes/round/round (9).png';
+import round_10 from './assets/cakes/round/round (10).png';
+import round_11 from './assets/cakes/round/round (11).png';
+import round_12 from './assets/cakes/round/round (12).png';
+import round_13 from './assets/cakes/round/round (13).png';
+import round_14 from './assets/cakes/round/round (14).png';
+import round_15 from './assets/cakes/round/round (15).png';
+import round_16 from './assets/cakes/round/round (16).png';
+import round_17 from './assets/cakes/round/round (17).png';
+import round_18 from './assets/cakes/round/round (18).png';
+
+import heart_1 from './assets/cakes/heart/heart (1).png';
+import heart_2 from './assets/cakes/heart/heart (2).png';
+import heart_3 from './assets/cakes/heart/heart (3).png';
+import heart_4 from './assets/cakes/heart/heart (4).png';
+import heart_5 from './assets/cakes/heart/heart (5).png';
+import heart_6 from './assets/cakes/heart/heart (6).png';
+
+import cupcake_1 from './assets/cupcakes/cupcake (1).png';
+import cupcake_2 from './assets/cupcakes/cupcake (2).png';
+import cupcake_3 from './assets/cupcakes/cupcake (3).png';
+import cupcake_4 from './assets/cupcakes/cupcake (4).png';
+import cupcake_5 from './assets/cupcakes/cupcake (5).png';
+import cupcake_6 from './assets/cupcakes/cupcake (6).png';
+import cupcake_7 from './assets/cupcakes/cupcake (7).png';
+
+import pop_1 from './assets/cake pops/pops1.png';
+import pop_2 from './assets/cake pops/pops2.png';
+import pop_3 from './assets/cake pops/pops3.png';
+import pop_4 from './assets/cake pops/pops4.png';
+import pop_5 from './assets/cake pops/pops5.png';
+
+import brownie_1 from './assets/brownies/brownie (1).png';
+import brownie_2 from './assets/brownies/brownie (2).png';
+import brownie_3 from './assets/brownies/brownie (3).png';
+import brownie_4 from './assets/brownies/brownie (4).png';
+import brownie_5 from './assets/brownies/brownie (5).png';
+import brownie_6 from './assets/brownies/brownie (6).png';
+import brownie_7 from './assets/brownies/brownie (7).png';
+
+import sicle_1 from './assets/cake sicles/cakesicles (1).png';
+import sicle_2 from './assets/cake sicles/cakesicles (2).png';
+import sicle_3 from './assets/cake sicles/cakesicles (3).png';
+import sicle_4 from './assets/cake sicles/cakesicles (4).png';
+import sicle_5 from './assets/cake sicles/cakesicles (5).png';
+
+import mini_1 from './assets/minicakes/1.png';
+import mini_2 from './assets/minicakes/2.png';
+
+import heart_break_1 from './assets/heartbrake/1.png';
 import MenuPage from './MenuPage';
 import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
@@ -279,6 +330,35 @@ const PageLoader = () => (
   </div>
 );
 
+const OrbitItemImage = ({ images, angle }) => {
+  const [currentIdx, setCurrentIdx] = useState(() => {
+    // Desynchronize based on angle
+    return Math.abs(Math.floor(angle / 45)) % images.length;
+  });
+
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIdx((prev) => (prev + 1) % images.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [images]);
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="orbit-item-image-container">
+      {images.map((img, idx) => (
+        <div
+          key={idx}
+          className={`orbit-item-image ${idx === currentIdx ? 'active' : ''}`}
+          style={{ backgroundImage: `url(${img})` }}
+        />
+      ))}
+    </div>
+  );
+};
+
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -324,42 +404,42 @@ function App() {
   const orbitItems = [
     {
       angle: 0,
-      img: orbitCupcake,
+      images: [cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6, cupcake_7],
       desc: "A delicate swirl of velvet frosting atop a cloud-soft vanilla bean base."
     },
     {
       angle: 45,
-      img: orbitRoundCake,
+      images: [round_1, round_2, round_3, round_4, round_5, round_6, round_7, round_8, round_9, round_10, round_11, round_12, round_13, round_14, round_15, round_16, round_17, round_18],
       desc: "Layers of artisanal sponge whispering stories of seasonal sweetness and joy."
     },
     {
       angle: 90,
-      img: orbitPop,
+      images: [pop_1, pop_2, pop_3, pop_4, pop_5],
       desc: "A playful dance of rich cake and premium chocolate in every delightful bite."
     },
     {
       angle: 135,
-      img: orbitBrownie,
+      images: [brownie_1, brownie_2, brownie_3, brownie_4, brownie_5, brownie_6, brownie_7],
       desc: "The deep, dark indulgence of cocoa crafted into fabled, fudgy perfection."
     },
     {
       angle: 180,
-      img: orbitSicle,
+      images: [sicle_1, sicle_2, sicle_3, sicle_4, sicle_5],
       desc: "Boutique elegance captured in a whimsical, chocolate-dipped handheld treasure."
     },
     {
       angle: 225,
-      img: orbitBreakableHeart,
+      images: [heart_break_1],
       desc: "A shimmering shell of Belgian cocoa waiting to reveal your sweetest secrets."
     },
     {
       angle: 270,
-      img: orbitHeartCake,
+      images: [heart_1, heart_2, heart_3, heart_4, heart_5, heart_6],
       desc: "A poetic masterpiece of romantic piping and heart-shaped confectionery art."
     },
     {
       angle: 315,
-      img: orbitBento,
+      images: [mini_1, mini_2],
       desc: "Charming, minimalist dreams perfectly sized for your most intimate celebrations."
     },
   ];
@@ -766,12 +846,13 @@ function App() {
                   className="orbit-item"
                   style={{
                     '--angle': `${item.angle}deg`,
-                    backgroundImage: `url(${item.img})`,
                     '--orbit-rotation': `${orbitRotation}deg`,
                     transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
                   }}
                   onClick={() => handleOrbitClick(item)}
-                ></div>
+                >
+                  <OrbitItemImage images={item.images} angle={item.angle} />
+                </div>
               ))}
             </div>
             <div className="hero-info-box">
