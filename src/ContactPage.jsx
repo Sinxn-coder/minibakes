@@ -41,6 +41,7 @@ import './ContactPage.css';
 const ContactPage = ({ onBack }) => {
   return (
     <div className="contact-page">
+      <div className="contact-bg-text">CONTACT</div>
       <div className="contact-container">
         <button className="contact-back-btn" onClick={onBack}>
           <ArrowLeft size={20} />
