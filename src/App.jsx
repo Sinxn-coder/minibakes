@@ -180,7 +180,8 @@ const clientReviews = [
   {
     text: "Second time ordering from Mini Bakes and always amazing service, beautiful cakes with the best flavours! Impeccable customer service too! Cannot recommend her enough!",
     author: "Tamara Farrugia Drakard",
-    img: review5
+    img: review5,
+    fbLink: "https://www.facebook.com/share/p/1AoSsYKJNE/"
   },
   {
     text: "High Recommended!! Had a last minute order and they were kind enough to accept it 🩷 Amazing Taste and very presentable ⭐️⭐️⭐️⭐️⭐️",
