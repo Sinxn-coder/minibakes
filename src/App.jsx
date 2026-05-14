@@ -776,6 +776,9 @@ function App() {
               ))}
             </div>
             <div className="hero-info-box">
+              <img src={style4} className="dome-style-img style-left" alt="" />
+              <img src={style5} className="dome-style-img style-top" alt="" />
+              <img src={style6} className="dome-style-img style-right" alt="" />
               <div className="info-box-content">
                 <p className="info-box-desc" key={activeOrbitItem.desc}>
                   {activeOrbitItem.desc.split(' ').map((word, i) => (

@@ -541,6 +541,8 @@ body {
 }
 
 .info-box-content {
+  position: relative; /* Context for style images */
+  z-index: 5;
   text-align: left; /* Aligned left as in reference */
   transition: opacity 0.4s ease, filter 0.4s ease;
   width: 100%;
@@ -548,6 +550,44 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.dome-style-img {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.9;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+  animation: floatStyle 4s ease-in-out infinite;
+}
+
+.style-left {
+  width: 120px;
+  top: 15%;
+  left: 10%;
+  transform: rotate(-15deg);
+  animation-delay: 0s;
+}
+
+.style-top {
+  width: 80px;
+  top: -10%;
+  right: 40%;
+  transform: rotate(10deg);
+  animation-delay: -1s;
+}
+
+.style-right {
+  width: 100px;
+  bottom: 20%;
+  right: 5%;
+  transform: rotate(20deg);
+  animation-delay: -2s;
+}
+
+@keyframes floatStyle {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) + 5deg)); }
 }
 
 .info-box-divider {
