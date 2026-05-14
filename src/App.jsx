@@ -40,7 +40,7 @@ import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
 import logo from './assets/mini_logo.png';
-import bg1 from './assets/headerbg.png';
+import bg1 from './assets/headerbg3.png';
 import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';

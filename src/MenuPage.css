@@ -911,8 +911,6 @@
   right: 10px;
 }
 
-}
-
 @keyframes fadeInLightbox {
   from { opacity: 0; }
   to { opacity: 1; }

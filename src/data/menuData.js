@@ -1,8 +1,4 @@
-import cake2layer6 from '../assets/2layer6inch.png';
-import cake2layer8 from '../assets/2layer8inch.png';
-import cake3layer from '../assets/3layer.png';
 import loveCake from '../assets/lovecake1.png';
-import bentoCake from '../assets/bento_cake_aesthetic_1775218142199.png';
 
 import cupcake1 from '../assets/cupcake1.png';
 import cupcake2 from '../assets/cupcake2.png';
