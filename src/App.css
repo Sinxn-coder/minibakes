@@ -432,12 +432,10 @@ body {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-color: #fff; /* White background for better contrast with contain */
-  background-size: contain;
+  background-color: #fff;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 15px;
-  background-origin: content-box;
   opacity: 1;
   z-index: 30;
   box-shadow:
@@ -1337,11 +1335,9 @@ body {
     z-index: 30;
     border: 4px solid #fff;
     background-color: #fff;
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-origin: content-box;
-    padding: 12px;
     animation: heroImagePulseMobile 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
   }
