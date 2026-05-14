@@ -123,6 +123,13 @@ export default function StudioPage() {
     return () => clearInterval(timer);
   }, []);
 
+  const handleBooking = (e) => {
+    e.preventDefault();
+    setBookingStatus('loading');
+    // Simulate booking
+    setTimeout(() => {
+      setBookingStatus('success');
+      setFormData({ name: '', email: '', date: '', guests: '1' });
     }, 1500);
   };
 
