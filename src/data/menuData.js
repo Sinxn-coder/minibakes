@@ -63,6 +63,19 @@ const roundImages = [
   round_13, round_14, round_15, round_16, round_17, round_18
 ];
 
+// Cupcake Gallery
+import cupcake_1 from '../assets/cupcakes/cupcake (1).png';
+import cupcake_2 from '../assets/cupcakes/cupcake (2).png';
+import cupcake_3 from '../assets/cupcakes/cupcake (3).png';
+import cupcake_4 from '../assets/cupcakes/cupcake (4).png';
+import cupcake_5 from '../assets/cupcakes/cupcake (5).png';
+import cupcake_6 from '../assets/cupcakes/cupcake (6).png';
+import cupcake_7 from '../assets/cupcakes/cupcake (7).png';
+
+const cupcakeImages = [
+  cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6, cupcake_7
+];
+
 export const menuData = [
   {
     category: "Cakes",
@@ -79,9 +92,9 @@ export const menuData = [
   {
     category: "Cupcakes",
     items: [
-      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€15', img: cupcake1, description: 'A half-dozen of our fluffiest cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
-      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€28.80', img: cupcake2, description: 'A full dozen premium cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
-      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.20', img: cupcake3, description: 'Add an individual cupcake to your order. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
+      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€15', img: cupcake_1, images: cupcakeImages, description: 'A half-dozen of our fluffiest cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
+      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€28.80', img: cupcake_2, images: cupcakeImages, description: 'A full dozen premium cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
+      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.20', img: cupcake_3, images: cupcakeImages, description: 'Add an individual cupcake to your order. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
     ]
   },
   {
