@@ -339,6 +339,27 @@
   color: #666;
 }
 
+@media (min-width: 769px) {
+  .calendar-container {
+    padding: 1.5rem 3rem 2rem;
+  }
+  .calendar-header {
+    margin-bottom: 1.5rem;
+  }
+  .calendar-grid {
+    gap: 8px;
+  }
+  .calendar-day {
+    aspect-ratio: 1.4 / 1;
+    font-size: 1rem;
+    border-radius: 14px;
+  }
+  .calendar-legend {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+}
+
 .legend-box {
   width: 16px;
   height: 16px;
