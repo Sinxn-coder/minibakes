@@ -494,40 +494,51 @@ body {
 
 .hero-info-box {
   position: absolute;
-  bottom: 0;
-  right: calc(25% - 275px);
-  width: 760px;
-  height: 400px;
-  background: #800000;
-  /* Solid brand brown */
-  border-radius: 380px 380px 0 0;
-  /* Perfect Semi-circle */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: none;
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.15),
-    0 1px 1px rgba(255, 255, 255, 0.2) inset;
+  bottom: 40px;
+  right: calc(25% - 220px);
+  width: 600px;
+  height: 350px;
+  background: rgba(255, 255, 255, 0.8); /* Translucent white like the image */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 60px; /* Rounded rectangle like the image */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
   z-index: 20;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 80px 100px 30px;
-  /* Further adjusted padding */
+  justify-content: flex-end; /* Text at bottom half */
+  padding: 40px;
+}
+
+.hero-floating-img {
+  position: absolute;
+  top: -140px; /* Halfway off the top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 10px solid #fff;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  z-index: 21;
+  animation: heroImagePulse 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .info-box-content {
   text-align: center;
   transition: opacity 0.4s ease, filter 0.4s ease;
   width: 100%;
-  padding-top: 60px;
-  /* Adjusted for dome */
+  padding-bottom: 20px;
 }
 
 .info-box-desc {
   font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
-  color: white;
-  /* Changed to white for brown background */
+  color: #1a1a1a; /* Dark text for white background */
   line-height: 1.7;
   margin: 0;
   font-style: italic;
@@ -550,27 +561,7 @@ body {
   }
 }
 
-.hero-right-circle {
-  position: absolute;
-  top: 50%;
-  right: 25%;
-  transform: translateY(-50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  background-size: cover;
-  background-position: center;
-  opacity: 1;
-  z-index: 30;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.15),
-    inset 0 0 0 2px rgba(255, 215, 0, 0.3);
-  /* Subtle gold inner ring */
-  border: 4px solid #fff;
-  animation: heroImagePulse 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
-}
+/* Removed hero-right-circle */
 
 
 
