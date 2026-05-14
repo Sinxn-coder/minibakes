@@ -804,3 +804,10 @@
     to { transform: translateY(0) translateX(-50%); opacity: 1; }
   }
 }
+
+.readonly-input {
+  background: #f9f9f9 !important;
+  color: #888;
+  cursor: default;
+  border-color: #eee !important;
+}

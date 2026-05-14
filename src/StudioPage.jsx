@@ -280,17 +280,15 @@ export default function StudioPage() {
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Select Class</label>
-                    <select 
-                      value={formData.classId}
+                    <label>Selected Date</label>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      placeholder="Select from calendar above"
+                      value={formData.date}
                       required
-                      onChange={e => setFormData({...formData, classId: e.target.value})}
-                    >
-                      <option value="">Choose a workshop...</option>
-                      {upcomingClasses.map(c => (
-                        <option key={c.id} value={c.id}>{c.title}</option>
-                      ))}
-                    </select>
+                      className="readonly-input"
+                    />
                   </div>
                   <div className="form-group">
                     <label>Guests</label>
