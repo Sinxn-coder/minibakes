@@ -168,7 +168,8 @@ const clientReviews = [
   {
     text: "The birthday cake I ordered from Mini Bakes was both stunning and delicious. Beautifully decorated and full of flavour! Highly recommend 🎂💕",
     author: "Chiara Scerri",
-    img: review3
+    img: review3,
+    fbLink: "https://www.facebook.com/share/p/1DpYoESAoy/"
   },
   {
     text: "Went in with a vision and minibakes exceeded all my expectations. The cake was stunning, and the taste was to die for. Would recommend 1000% !",
