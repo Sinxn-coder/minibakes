@@ -194,19 +194,21 @@ export default function StudioPage() {
 
       {/* Availability Calendar */}
       <section id="schedule" className="studio-schedule">
-        <div className="section-header-alt">
-          <span className="section-badge">Booking Availability</span>
-          <h2 className="section-title-alt">SELECT YOUR DATE</h2>
-        </div>
-        
-        <div className="calendar-wrapper">
-          <StudioCalendar 
-            selectedDate={formData.date}
-            onDateSelect={(date) => {
-              setFormData({...formData, date});
-              document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
-            }}
-          />
+        <div className="calendar-main-layout">
+          <div className="section-header-alt">
+            <span className="section-badge">Booking Availability</span>
+            <h2 className="section-title-alt">SELECT YOUR DATE</h2>
+          </div>
+          
+          <div className="calendar-wrapper">
+            <StudioCalendar 
+              selectedDate={formData.date}
+              onDateSelect={(date) => {
+                setFormData({...formData, date});
+                document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
+              }}
+            />
+          </div>
         </div>
       </section>
 
