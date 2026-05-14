@@ -80,9 +80,15 @@
   position: relative;
 }
 
-.menu-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+@media (min-width: 769px) {
+  .menu-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-card:hover .menu-card-image img {
+    transform: scale(1.05);
+  }
 }
 
 .menu-card.full-width-card:hover {
@@ -103,10 +109,6 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
-}
-
-.menu-card:hover .menu-card-image img {
-  transform: scale(1.05);
 }
 
 .menu-card-image-stack {
