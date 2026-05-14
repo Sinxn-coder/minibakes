@@ -574,6 +574,7 @@ body {
 
 .reveal-word {
   display: inline-block;
+  margin-right: 0.35em; /* Restores space between words */
   opacity: 0;
   transform: translateY(12px);
   filter: blur(4px);
