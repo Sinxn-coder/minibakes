@@ -939,10 +939,10 @@ function App() {
                 <div key={idx} className="review-card">
                   {review.fbLink ? (
                     <a href={review.fbLink} target="_blank" rel="noopener noreferrer" className="review-fb-link">
-                      <FacebookIcon size={18} className="review-fb-icon" />
+                      <FacebookIcon size={22} className="review-fb-icon" />
                     </a>
                   ) : (
-                    <FacebookIcon size={18} className="review-fb-icon" />
+                    <FacebookIcon size={22} className="review-fb-icon" />
                   )}
                   <div className="review-client-photo">
                     <img src={review.img} alt={review.author} />
