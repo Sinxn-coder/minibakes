@@ -7,6 +7,7 @@ import CakeCareGuide from './components/CakeCareGuide';
 
 export default function ProductDetailsPage({ product, onBack, onConfirm, cartCount, onOpenCart }) {
   const [quantity, setQuantity] = useState(1);
+  const [showNotification, setShowNotification] = useState(false);
   const [options, setOptions] = useState({
     flavor: '',
     spreads: [], // Changed to array for multi-select support
@@ -39,6 +40,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   return (
     <div className="product-details-page">
+      {showNotification && (
+        <div className="added-notification">
+          <span className="notification-icon">✨</span>
+          Successfully added to your order!
+        </div>
+      )}
       <div className="details-container">
         <div className="details-header-nav">
           <button className="back-btn-details" onClick={onBack}>
@@ -232,7 +239,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
                 <button 
                   className="add-to-order-final-btn"
-                  onClick={() => onConfirm({ ...product, quantity, options })}
+                  onClick={() => {
+                    onConfirm({ ...product, quantity, options });
+                    setShowNotification(true);
+                    setTimeout(() => setShowNotification(false), 3000);
+                  }}
                 >
                   Add to Order • €{grandTotal.toFixed(2)}
                 </button>
