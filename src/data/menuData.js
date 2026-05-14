@@ -69,11 +69,11 @@ export const menuData = [
   {
     category: "Cakes",
     items: [
-      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: round_1, images: roundImages, description: 'Serves ~10. Classic round cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: round_3, images: roundImages, description: 'Serves ~10. Classic round cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c2', name: '6 inch, 2 Layer (Heart)', price: '€50', img: heart_1, images: heartImages, description: 'Serves ~10. Elegant heart-shaped design. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c3', name: '8 inch, 2 Layer (Round)', price: '€65', img: round_2, images: roundImages, description: 'Serves ~20 - 25. Perfect for celebrations. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: heart_2, images: heartImages, description: 'Serves ~20 - 25. Show extra love with a large heart shape. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: round_3, images: roundImages, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: round_11, images: roundImages, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: heart_3, images: heartImages, description: 'Serves ~40 - 45. Tall and impressive heart-shaped cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c-3d', name: '3D Custom Cake Designer', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
     ]
