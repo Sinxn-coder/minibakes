@@ -105,6 +105,31 @@ export default function StudioPage() {
   });
   const [showGuestLimit, setShowGuestLimit] = useState(false);
 
+  useEffect(() => {
+    // Scroll expansion effect for mobile
+    const observerOptions = {
+      threshold: 0.6,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('expanded');
+        } else {
+          entry.target.classList.remove('expanded');
+        }
+      });
+    }, observerOptions);
+
+    const cards = document.querySelectorAll('.gallery-card');
+    cards.forEach(card => observer.observe(card));
+
+    return () => {
+      cards.forEach(card => observer.unobserve(card));
+    };
+  }, []);
+
   const handleGuestChange = (e) => {
     const val = e.target.value;
     if (parseInt(val) > 15) {
