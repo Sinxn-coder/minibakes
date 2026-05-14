@@ -89,8 +89,8 @@ const ContactPage = ({ onBack }) => {
               </div>
               <div className="contact-card-content">
                 <h3>Email</h3>
-                <p>hello@minibakes.com</p>
-                <a href="mailto:hello@minibakes.com" className="contact-action-link">Send Email</a>
+                <p>meganbriffa2001@gmail.com</p>
+                <a href="mailto:meganbriffa2001@gmail.com" className="contact-action-link">Send Email</a>
               </div>
             </div>
 
@@ -100,8 +100,15 @@ const ContactPage = ({ onBack }) => {
               </div>
               <div className="contact-card-content">
                 <h3>Location</h3>
-                <p>Naxxar, Malta</p>
-                <p className="contact-sub-text">Visit us by appointment only</p>
+                <p>Ħaż-Żebbuġ, Malta</p>
+                <a 
+                  href="https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="contact-action-link"
+                >
+                  View on Maps
+                </a>
               </div>
             </div>
           </div>
@@ -114,7 +121,7 @@ const ContactPage = ({ onBack }) => {
                 <InstagramIcon size={32} />
                 <span>Instagram</span>
               </a>
-              <a href="https://facebook.com/minibakes" target="_blank" rel="noopener noreferrer" className="social-box facebook">
+              <a href="https://facebook.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="social-box facebook">
                 <FacebookIcon size={32} />
                 <span>Facebook</span>
               </a>
