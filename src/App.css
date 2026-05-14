@@ -1357,16 +1357,7 @@ body {
   }
 
   .hero-orbit-container {
-    position: absolute;
-    left: 50%;
-    right: auto;
-    top: 58%;
-    bottom: auto;
-    transform: translate(-50%, -50%) rotate(var(--orbit-rotation, 0deg));
-    width: 160px;
-    height: 160px;
-    z-index: 10;
-    transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    display: none;
   }
 
   .orbit-item {

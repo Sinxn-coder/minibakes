@@ -804,6 +804,9 @@ function App() {
             <div
               className="hero-right-circle"
               style={{ backgroundImage: `url("${activeOrbitItem.img}")` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             ></div>
           </section>
 
