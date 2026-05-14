@@ -97,7 +97,6 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
 export default function StudioPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0); // First card expanded by default
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -124,37 +123,6 @@ export default function StudioPage() {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-45% 0% -45% 0%', // Target a narrow band in the center
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      if (window.innerWidth > 768) return;
-      
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const idx = parseInt(entry.target.getAttribute('data-index'));
-          setActiveGalleryIdx(idx);
-        }
-      });
-    }, observerOptions);
-
-    const cards = document.querySelectorAll('.gallery-card');
-    cards.forEach(card => observer.observe(card));
-
-    return () => observer.disconnect();
-  }, []);
-
-  const handleBooking = (e) => {
-    e.preventDefault();
-    setBookingStatus('loading');
-    // Simulate booking
-    setTimeout(() => {
-      setBookingStatus('success');
-      setFormData({ name: '', email: '', classId: '', guests: '1' });
     }, 1500);
   };
 
@@ -237,8 +205,7 @@ export default function StudioPage() {
             <div 
               key={idx}
               data-index={idx}
-              className={`gallery-card ${activeGalleryIdx === idx ? 'expanded' : ''}`}
-              onClick={() => setActiveGalleryIdx(idx)}
+              className="gallery-card"
             >
               <SafeImage src={img} alt={`Class moment ${idx + 1}`} />
               <div className="gallery-card-overlay">

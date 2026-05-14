@@ -440,15 +440,13 @@
   filter: brightness(1.05);
 }
 
-.gallery-card.expanded {
-  flex: 6; /* Much wider when clicked */
-  filter: brightness(1);
-  cursor: default;
-}
-
 @media (min-width: 769px) {
-  .gallery-card:hover {
-    flex: 6;
+  .expanding-gallery:hover .gallery-card {
+    flex: 0.6; /* Shrink others when gallery is hovered */
+  }
+  
+  .expanding-gallery .gallery-card:hover {
+    flex: 6; /* Expand current */
     filter: brightness(1);
   }
   
