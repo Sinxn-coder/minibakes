@@ -461,7 +461,7 @@ body {
 .hero-info-box {
   position: absolute;
   bottom: 0;
-  right: calc(25% - 240px);
+  right: calc(25% - 255px);
   width: 760px;
   height: 400px;
   background: rgba(255, 255, 255, 0.75); /* Glass effect */
