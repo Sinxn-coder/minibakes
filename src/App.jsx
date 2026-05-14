@@ -185,7 +185,8 @@ const clientReviews = [
   {
     text: "High Recommended!! Had a last minute order and they were kind enough to accept it 🩷 Amazing Taste and very presentable ⭐️⭐️⭐️⭐️⭐️",
     author: "Maxine Mifsud",
-    img: review6
+    img: review6,
+    fbLink: "https://www.facebook.com/share/p/18jeuyMgC9/"
   }
 ];
 
