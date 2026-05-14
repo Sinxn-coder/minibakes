@@ -78,6 +78,7 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
           <div className="legend-item"><span className="legend-box available"></span> Available</div>
           <div className="legend-item"><span className="legend-box booked"></span> Fully Booked</div>
           <div className="legend-item"><span className="legend-box selected"></span> Your Selection</div>
+          <p className="calendar-note">Maroon dates are already reserved for private events.</p>
         </div>
         
         <div className="calendar-body">
