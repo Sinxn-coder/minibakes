@@ -766,7 +766,7 @@ function App() {
                   className="orbit-item"
                   style={{
                     '--angle': `${item.angle}deg`,
-                    backgroundImage: `url(${item.img})`,
+                    backgroundImage: `url("${item.img}")`,
                     '--orbit-rotation': `${orbitRotation}deg`,
                     transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
                   }}
