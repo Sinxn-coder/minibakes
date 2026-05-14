@@ -41,8 +41,6 @@ import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg.png';
-import bg2 from './assets/headerbg2.png';
-import bg3 from './assets/headerbg3.png';
 import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
@@ -288,7 +286,7 @@ function App() {
   const [customizingProduct, setCustomizingProduct] = useState(null);
   // Preload critical Home Page assets with prioritization
   useEffect(() => {
-    const priorityImages = [...backgrounds, logo];
+    const priorityImages = [bg1, logo];
     const secondaryImages = [
       ...featuredItems.map(item => item.img)
     ];
@@ -319,7 +317,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('minibakes_cart', JSON.stringify(cart));
   }, [cart]);
-  const [currentBg, setCurrentBg] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [expandedDesktopCard, setExpandedDesktopCard] = useState(null);
   const [expandedMobileCard, setExpandedMobileCard] = useState(null);
@@ -376,8 +373,6 @@ function App() {
       setExpandedContactId(id);
     }
   };
-
-  const backgrounds = [bg1, bg2, bg3];
 
   const addToCart = (item) => {
     setCart(prev => [...prev, { ...item, cartId: Date.now() }]);
@@ -472,13 +467,6 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgrounds.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [backgrounds.length]);
 
   return (
     <div className="main-layout">
@@ -637,13 +625,10 @@ function App() {
           {/* Hero Section */}
           <section className="hero-section">
             <div className="hero-bg-container">
-              {backgrounds.map((bg, index) => (
-                <div
-                  key={index}
-                  className={`hero-bg-image ${currentBg === index ? 'active' : ''}`}
-                  style={{ backgroundImage: `url("${bg}")` }}
-                />
-              ))}
+              <div
+                className="hero-bg-image active"
+                style={{ backgroundImage: `url("${bg1}")` }}
+              />
               <div className="hero-overlay"></div>
             </div>
 
