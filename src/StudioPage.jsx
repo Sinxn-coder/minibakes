@@ -197,7 +197,6 @@ export default function StudioPage() {
         <div className="section-header-alt">
           <span className="section-badge">Booking Availability</span>
           <h2 className="section-title-alt">SELECT YOUR DATE</h2>
-          <p>Check my availability below. Maroon dates are already reserved for private events.</p>
         </div>
         
         <div className="calendar-wrapper">
