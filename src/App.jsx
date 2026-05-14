@@ -184,58 +184,24 @@ const clientReviews = [
   }
 ];
 
-const InstaPost = ({ posts, activeIndex, index }) => {
-  const [currentPost, setCurrentPost] = useState(posts[activeIndex]);
-  const [nextPost, setNextPost] = useState(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  useEffect(() => {
-    if (posts[activeIndex].img !== currentPost.img) {
-      setNextPost(posts[activeIndex]);
-      setIsTransitioning(true);
-      
-      const timer = setTimeout(() => {
-        setCurrentPost(posts[activeIndex]);
-        setNextPost(null);
-        setIsTransitioning(false);
-      }, 1000); // Smooth transition duration
-      return () => clearTimeout(timer);
-    }
-  }, [activeIndex, posts, currentPost.img]);
-
+const InstaPost = ({ post, index }) => {
+  const [loaded, setLoaded] = useState(false);
+  
   return (
-    <div className="insta-card-placeholder" style={{ position: 'relative', overflow: 'hidden' }}>
-      <img 
-        src={currentPost.img} 
-        alt={`Instagram Reel ${index + 1}`} 
-        className="insta-real-img"
-        style={{ 
-          cursor: 'pointer',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-          opacity: isTransitioning ? 0 : 1,
-          transition: 'opacity 1s ease-in-out'
-        }}
-        onDoubleClick={() => window.open(currentPost.link, '_blank')}
-      />
-      {nextPost && (
+    <div className="insta-card-placeholder">
+      {(!loaded || !post) && (
+        <div className="insta-img-shimmer">
+          <InstagramIcon size={32} opacity={0.2} />
+        </div>
+      )}
+      {post && (
         <img 
-          src={nextPost.img} 
-          alt={`Instagram Reel ${index + 1} Next`} 
-          className="insta-real-img"
-          style={{ 
-            cursor: 'pointer',
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: isTransitioning ? 1 : 0,
-            transition: 'opacity 1s ease-in-out'
-          }}
-          onDoubleClick={() => window.open(nextPost.link, '_blank')}
+          src={post.img} 
+          alt={`Instagram Reel ${index + 1}`} 
+          className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
+          style={{ cursor: 'pointer' }}
+          onLoad={() => setLoaded(true)}
+          onDoubleClick={() => window.open(post.link, '_blank')}
         />
       )}
     </div>
@@ -469,20 +435,6 @@ function App() {
 
     return () => darkSections.forEach(section => observer.unobserve(section));
   }, [currentView]); // Re-run when view changes to find new elements
-
-  const [instaIndices, setInstaIndices] = useState([0, 1, 2, 3, 4, 5]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setInstaIndices(prev => {
-        const next = [...prev];
-        const first = next.shift();
-        next.push(first);
-        return next;
-      });
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
 
   const navigateTo = (view) => {
     setCurrentView(view);
@@ -906,12 +858,7 @@ function App() {
               and paste their embed code below. */}
               <div className="insta-row">
                 {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <InstaPost 
-                    key={i} 
-                    posts={instaPosts} 
-                    activeIndex={instaIndices[i]} 
-                    index={i} 
-                  />
+                  <InstaPost key={i} post={instaPosts[i]} index={i} />
                 ))}
               </div>
 

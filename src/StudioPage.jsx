@@ -141,7 +141,12 @@ export default function StudioPage() {
           <span className="studio-badge">Cupcake Decorating Experiences</span>
           <h1>A Sweet Experience, <br/><span>Brought to You</span></h1>
           <p>Megan Briffa comes to <em>you</em> — your home, venue, or event space — for a fun, hands-on cupcake decorating experience. Perfect for birthdays, hen parties, team events, and more.</p>
-          <a href="#schedule" className="cta-btn-primary">Request a Booking <ArrowRight size={18} /></a>
+          <button 
+            onClick={() => document.getElementById('schedule').scrollIntoView({ behavior: 'smooth' })} 
+            className="cta-btn-primary"
+          >
+            Request a Booking <ArrowRight size={18} />
+          </button>
         </div>
         <div className="studio-hero-image">
           {studioImages.map((img, idx) => (
