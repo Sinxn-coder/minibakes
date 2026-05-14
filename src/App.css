@@ -461,13 +461,13 @@ body {
 .hero-info-box {
   position: absolute;
   bottom: 0;
-  right: calc(25% - 195px);
-  width: 640px;
-  height: 320px;
+  right: calc(25% - 240px);
+  width: 760px;
+  height: 400px;
   background: rgba(255, 255, 255, 0.75); /* Glass effect */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-radius: 320px 320px 0 0; /* Perfect Semi-circle */
+  border-radius: 380px 380px 0 0; /* Perfect Semi-circle */
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-bottom: none;
   box-shadow: 
@@ -477,7 +477,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 80px 30px; /* Adjusted padding for the dome shape */
+  padding: 80px 100px 30px; /* Further adjusted padding */
 }
 .info-box-content {
   text-align: center;
