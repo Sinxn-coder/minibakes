@@ -446,7 +446,7 @@
   }
   
   .expanding-gallery .gallery-card:hover {
-    flex: 6; /* Expand current */
+    flex: 4.5; /* Slightly less wide expansion */
     filter: brightness(1);
   }
   
