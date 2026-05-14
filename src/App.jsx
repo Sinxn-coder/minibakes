@@ -198,7 +198,7 @@ const InstaPost = ({ post, index }) => {
         setDisplayPost(post);
         setNextPost(null);
         setIsTransitioning(false);
-      }, 1000); // Matches CSS transition
+      }, 600); // Matches CSS transition
       
       return () => clearTimeout(timer);
     }
@@ -450,7 +450,7 @@ function App() {
         next.unshift(last);
         return next;
       });
-    }, 4500); // Rotate every 4.5s
+    }, 2000); // Rotate every 2s
     return () => clearInterval(interval);
   }, [currentView]);
   const [isOverDark, setIsOverDark] = useState(false);

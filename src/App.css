@@ -787,7 +787,7 @@ body {
   top: 0;
   left: 0;
   z-index: 2;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 0.6s ease-in-out;
 }
 
 .insta-real-img.fade-in {
