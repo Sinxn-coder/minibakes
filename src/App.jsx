@@ -936,6 +936,7 @@ function App() {
             <div className="reviews-grid">
               {clientReviews.map((review, idx) => (
                 <div key={idx} className="review-card">
+                  <FacebookIcon size={18} className="review-fb-icon" />
                   <div className="review-client-photo">
                     <img src={review.img} alt={review.author} />
                   </div>
