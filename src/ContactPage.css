@@ -13,12 +13,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 18vw;
+  width: 100%;
+  text-align: center;
+  font-size: 22vw;
   font-weight: 900;
-  color: rgba(92, 13, 27, 0.03);
+  color: rgba(89, 45, 18, 0.05);
   z-index: 0;
   pointer-events: none;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
