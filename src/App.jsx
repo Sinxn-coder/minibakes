@@ -162,7 +162,8 @@ const clientReviews = [
   {
     text: "We ordered a cake on very short notice (just two days!), and Mini Bakes absolutely delivered! The design was exactly what we wanted — beautifully done and perfectly matched our request. Not only did it look amazing, but it also tasted incredible. Everyone loved it! Highly recommend for both creativity and great service.",
     author: "Audrey Abela",
-    img: review2
+    img: review2,
+    fbLink: "https://www.facebook.com/share/p/1BUob1V3v7/"
   },
   {
     text: "The birthday cake I ordered from Mini Bakes was both stunning and delicious. Beautifully decorated and full of flavour! Highly recommend 🎂💕",
