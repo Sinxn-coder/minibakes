@@ -509,9 +509,9 @@ body {
     inset 0 2px 2px rgba(255, 255, 255, 0.3); /* Sharp top light edge from image */
   z-index: 20;
   display: flex;
-  align-items: center;
-  justify-content: flex-end; /* Push content to the right area */
-  padding: 80px 100px 30px 40px; /* Keep text inside the shape */
+  align-items: flex-end; /* Align to bottom */
+  justify-content: flex-end; /* Keep on the right */
+  padding: 0 100px 60px 40px; /* Positioned at the bottom right */
 }
 
 .info-box-content {
