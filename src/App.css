@@ -492,32 +492,6 @@ body {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
 }
 
-.orbit-item-image-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.orbit-item-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.orbit-item-image.active {
-  opacity: 1;
-}
-
 .hero-info-box {
   position: absolute;
   bottom: 0;

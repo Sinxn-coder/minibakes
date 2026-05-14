@@ -9,45 +9,23 @@ import cupcake2 from '../assets/cupcake2.png';
 import cupcake3 from '../assets/cupcake3.png';
 import cupcake6 from '../assets/cupcake6.png';
 
-// Brownie Gallery
-import brownie_1 from '../assets/brownies/brownie (1).png';
-import brownie_2 from '../assets/brownies/brownie (2).png';
-import brownie_3 from '../assets/brownies/brownie (3).png';
-import brownie_4 from '../assets/brownies/brownie (4).png';
-import brownie_5 from '../assets/brownies/brownie (5).png';
-import brownie_6 from '../assets/brownies/brownie (6).png';
-import brownie_7 from '../assets/brownies/brownie (7).png';
-
-const brownieImages = [brownie_1, brownie_2, brownie_3, brownie_4, brownie_5, brownie_6, brownie_7];
-
-// Cake Pops Gallery
-import pop_1 from '../assets/cake pops/pops1.png';
-import pop_2 from '../assets/cake pops/pops2.png';
-import pop_3 from '../assets/cake pops/pops3.png';
-import pop_4 from '../assets/cake pops/pops4.png';
-import pop_5 from '../assets/cake pops/pops5.png';
-
-const popImages = [pop_1, pop_2, pop_3, pop_4, pop_5];
-
-// Cakesicles Gallery
-import sicle_1 from '../assets/cake sicles/cakesicles (1).png';
-import sicle_2 from '../assets/cake sicles/cakesicles (2).png';
-import sicle_3 from '../assets/cake sicles/cakesicles (3).png';
-import sicle_4 from '../assets/cake sicles/cakesicles (4).png';
-import sicle_5 from '../assets/cake sicles/cakesicles (5).png';
-
-const sicleImages = [sicle_1, sicle_2, sicle_3, sicle_4, sicle_5];
-
-// Mini Cakes Gallery
-import mini_1 from '../assets/minicakes/1.png';
-import mini_2 from '../assets/minicakes/2.png';
-
-const miniImages = [mini_1, mini_2];
-
-// Breakable Heart Gallery
-import heart_break_1 from '../assets/heartbrake/1.png';
-
-const breakableHeartImages = [heart_break_1];
+import brownies from '../assets/brownies_box.png';
+import cakepops from '../assets/cakepops.png';
+import pops1 from '../assets/cake pops/pops1.png';
+import pops2 from '../assets/cake pops/pops2.png';
+import pops3 from '../assets/cake pops/pops3.png';
+import pops4 from '../assets/cake pops/pops4.png';
+import pops5 from '../assets/cake pops/pops5.png';
+import heart1 from '../assets/heartbrake/1.png';
+import sicles1 from '../assets/cake sicles/cakesicles (1).png';
+import sicles2 from '../assets/cake sicles/cakesicles (2).png';
+import sicles3 from '../assets/cake sicles/cakesicles (3).png';
+import sicles4 from '../assets/cake sicles/cakesicles (4).png';
+import sicles5 from '../assets/cake sicles/cakesicles (5).png';
+import mini1 from '../assets/minicakes/1.png';
+import mini2 from '../assets/minicakes/2.png';
+import cakesicles5 from '../assets/cakesicles5.png';
+import breakableHeart from '../assets/breakable_heart.png';
 
 // Heart Cake Gallery
 import heart_1 from '../assets/cakes/heart/heart (1).png';
@@ -122,41 +100,41 @@ export const menuData = [
   {
     category: "Cake Pops",
     items: [
-      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pop_1, images: popImages, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pop_2, images: popImages, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
-      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pop_3, images: popImages, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pops1, img2: pops5, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pops2, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
+      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pops3, img2: pops4, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
     category: "Brownies",
     items: [
-      { id: 't1-6', name: 'Brownies (Box of 6)', price: '€32', img: brownie_1, images: brownieImages, description: 'Rich chocolate brownies cut into 6 large pieces. Choice of up to 3 spreads.' },
-      { id: 't1-9', name: 'Brownies (Box of 9)', price: '€32', img: brownie_2, images: brownieImages, description: 'Rich chocolate brownies cut into 9 pieces. Choice of up to 3 spreads.' },
-      { id: 't1-12', name: 'Brownies (Box of 12)', price: '€32', img: brownie_3, images: brownieImages, description: 'Rich chocolate brownies cut into 12 pieces. Choice of up to 3 spreads.' },
-      { id: 't1-16', name: 'Brownies (Box of 16)', price: '€32', img: brownie_4, images: brownieImages, description: 'Rich chocolate brownies cut into 16 snack-sized pieces. Choice of up to 3 spreads.' },
-      { id: 't1-20', name: 'Brownies (Box of 20)', price: '€32', img: brownie_5, images: brownieImages, description: 'Rich chocolate brownies cut into 20 bite-sized pieces. Choice of up to 3 spreads.' },
+      { id: 't1-6', name: 'Brownies (Box of 6)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 6 large pieces. Choice of up to 3 spreads.' },
+      { id: 't1-9', name: 'Brownies (Box of 9)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 9 pieces. Choice of up to 3 spreads.' },
+      { id: 't1-12', name: 'Brownies (Box of 12)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 12 pieces. Choice of up to 3 spreads.' },
+      { id: 't1-16', name: 'Brownies (Box of 16)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 16 snack-sized pieces. Choice of up to 3 spreads.' },
+      { id: 't1-20', name: 'Brownies (Box of 20)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 20 bite-sized pieces. Choice of up to 3 spreads.' },
     ]
   },
   {
     category: "Breakable Hearts",
     items: [
-      { id: 't2', name: 'Breakable Heart Box', price: '€37', img: heart_break_1, images: breakableHeartImages, description: 'Heart made of White Chocolate filled with marshmallows & chopsticks. Includes 8 cakesicles.' },
+      { id: 't2', name: 'Breakable Heart Box', price: '€37', img: heart1, description: 'Heart made of White Chocolate filled with marshmallows & chopsticks. Includes 8 cakesicles.' },
     ]
   },
   {
     category: "Mini Cakes",
     items: [
-      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: mini_1, images: miniImages, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
-      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: mini_2, images: miniImages, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
+      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: mini1, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
+      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: mini2, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
     ]
   },
   {
     category: "Cakesicles",
     items: [
-      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicle_1, images: sicleImages, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicle_3, images: sicleImages, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't5', name: 'Cakesicle (Additional)', price: '€2.60', img: sicle_4, images: sicleImages, description: 'Add an extra cakesicle to your box. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't6', name: 'Cakesicles (20+ pieces)', price: '€2.40 each', img: sicle_2, images: sicleImages, description: 'Bulk order discount for 20 or more cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't5', name: 'Cakesicle (Additional)', price: '€2.60', img: sicles4, description: 'Add an extra cakesicle to your box. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't6', name: 'Cakesicles (20+ pieces)', price: '€2.40 each', img: sicles2, img2: sicles5, description: 'Bulk order discount for 20 or more cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
     ]
   }
 ];
