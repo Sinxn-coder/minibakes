@@ -738,7 +738,7 @@ function App() {
                 <div
                   key={index}
                   className={`hero-bg-image ${currentBg === index ? 'active' : ''}`}
-                  style={{ backgroundImage: `url(${bg})` }}
+                  style={{ backgroundImage: `url("${bg}")` }}
                 />
               ))}
               <div className="hero-overlay"></div>
@@ -801,7 +801,7 @@ function App() {
             </div>
             <div
               className="hero-right-circle"
-              style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
+              style={{ backgroundImage: `url("${activeOrbitItem.img}")` }}
             ></div>
           </section>
 
