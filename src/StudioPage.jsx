@@ -104,6 +104,18 @@ export default function StudioPage() {
     date: '',
     guests: '1'
   });
+  const [showGuestLimit, setShowGuestLimit] = useState(false);
+
+  const handleGuestChange = (e) => {
+    const val = e.target.value;
+    if (parseInt(val) > 15) {
+      setFormData({...formData, guests: '15'});
+      setShowGuestLimit(true);
+      setTimeout(() => setShowGuestLimit(false), 4000);
+    } else {
+      setFormData({...formData, guests: val});
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -304,8 +316,13 @@ export default function StudioPage() {
                       max="15"
                       value={formData.guests}
                       required
-                      onChange={e => setFormData({...formData, guests: e.target.value})}
+                      onChange={handleGuestChange}
                     />
+                    {showGuestLimit && (
+                      <div className="guest-limit-note">
+                        Maximum capacity is 15 guests. For larger groups, please contact us!
+                      </div>
+                    )}
                   </div>
                 </div>
                 <button type="submit" className="submit-booking-btn" disabled={bookingStatus === 'loading'}>

@@ -907,3 +907,20 @@
   cursor: default;
   border-color: #eee !important;
 }
+
+.guest-limit-note {
+  font-size: 0.75rem;
+  color: #800000;
+  background: #fff5f5;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  border: 1px solid rgba(128,0,0,0.1);
+  animation: guestFadeIn 0.3s ease;
+  font-weight: 500;
+}
+
+@keyframes guestFadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
