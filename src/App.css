@@ -562,8 +562,8 @@ body {
 
 .style-left {
   width: 60px;
-  top: 40%;
-  left: 42%;
+  top: 75%;
+  left: 15%;
   transform: translate(-50%, -50%) rotate(-10deg);
 }
 
