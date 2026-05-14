@@ -37,7 +37,7 @@ const FacebookIcon = ({ size = 24, ...props }) => (
   </svg>
 );
 import './App.css';
-import { menuData } from './data/menuData';
+import { menuData, roundImages, heartImages, cupcakeImages, popsImages, brownieImages, heartBreakImages, miniCakeImages, cakesicleImages } from './data/menuData';
 import SafeImage from './components/SafeImage';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg.png';
@@ -269,6 +269,47 @@ function FeaturedCarousel({ items, onViewDetails }) {
   );
 }
 
+const OrbitItemImage = ({ gallery, cycle, angle }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    // Determine new index based on cycle
+    // We use angle to desynchronize different items
+    const newIndex = (cycle + Math.floor(angle / 45)) % gallery.length;
+    
+    if (newIndex !== currentIndex) {
+      setNextIndex(newIndex);
+      setIsTransitioning(true);
+      
+      const timer = setTimeout(() => {
+        setCurrentIndex(newIndex);
+        setIsTransitioning(false);
+      }, 800); // Match CSS transition
+      
+      return () => clearTimeout(timer);
+    }
+  }, [cycle, gallery, angle]);
+
+  return (
+    <div className="orbit-image-stack">
+      <img 
+        src={gallery[currentIndex]} 
+        alt="Product" 
+        className={`orbit-main-img ${isTransitioning ? 'fade-out' : ''}`} 
+      />
+      {isTransitioning && (
+        <img 
+          src={gallery[nextIndex]} 
+          alt="Product Next" 
+          className="orbit-next-img fade-in" 
+        />
+      )}
+    </div>
+  );
+};
+
 // Premium Page Loader Component
 const PageLoader = () => (
   <div className="page-transition-loader">
@@ -283,6 +324,7 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [orbitCycle, setOrbitCycle] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [orbitRotation, setOrbitRotation] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
@@ -314,6 +356,7 @@ function App() {
 
     // Update active item based on the snapped position
     const normalizedAngle = ((-snapped % 360) + 360) % 360;
+    setOrbitCycle(prev => prev + 1);
     const nearestItem = orbitItems.reduce((prev, curr) => {
       const prevDiff = Math.min(Math.abs(prev.angle - normalizedAngle), 360 - Math.abs(prev.angle - normalizedAngle));
       const currDiff = Math.min(Math.abs(curr.angle - normalizedAngle), 360 - Math.abs(curr.angle - normalizedAngle));
@@ -325,41 +368,49 @@ function App() {
     {
       angle: 0,
       img: orbitCupcake,
+      gallery: cupcakeImages,
       desc: "A delicate swirl of velvet frosting atop a cloud-soft vanilla bean base."
     },
     {
       angle: 45,
       img: orbitCake,
+      gallery: roundImages,
       desc: "Layers of artisanal sponge whispering stories of seasonal sweetness and joy."
     },
     {
       angle: 90,
       img: orbitPops,
+      gallery: popsImages,
       desc: "A playful dance of rich cake and premium chocolate in every delightful bite."
     },
     {
       angle: 135,
       img: orbitBrownie,
+      gallery: brownieImages,
       desc: "The deep, dark indulgence of cocoa crafted into fabled, fudgy perfection."
     },
     {
       angle: 180,
       img: orbitSicles,
+      gallery: cakesicleImages,
       desc: "Boutique elegance captured in a whimsical, chocolate-dipped handheld treasure."
     },
     {
       angle: 225,
       img: orbitHeart,
+      gallery: heartBreakImages,
       desc: "A shimmering shell of Belgian cocoa waiting to reveal your sweetest secrets."
     },
     {
       angle: 270,
       img: orbitLove,
+      gallery: heartImages,
       desc: "A poetic masterpiece of romantic piping and heart-shaped confectionery art."
     },
     {
       angle: 315,
       img: orbitBento,
+      gallery: miniCakeImages,
       desc: "Charming, minimalist dreams perfectly sized for your most intimate celebrations."
     },
   ];
@@ -379,6 +430,7 @@ function App() {
     })();
 
     setOrbitRotation(currentRot - diff);
+    setOrbitCycle(prev => prev + 1);
     setActiveOrbitItem(item);
   };
   const [customizingProduct, setCustomizingProduct] = useState(null);
@@ -766,12 +818,17 @@ function App() {
                   className="orbit-item"
                   style={{
                     '--angle': `${item.angle}deg`,
-                    backgroundImage: `url(${item.img})`,
                     '--orbit-rotation': `${orbitRotation}deg`,
                     transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
                   }}
                   onClick={() => handleOrbitClick(item)}
-                ></div>
+                >
+                  <OrbitItemImage 
+                    gallery={item.gallery} 
+                    cycle={orbitCycle} 
+                    angle={item.angle} 
+                  />
+                </div>
               ))}
             </div>
             <div className="hero-info-box">
@@ -799,10 +856,13 @@ function App() {
                 </div>
               </div>
             </div>
-            <div
-              className="hero-right-circle"
-              style={{ backgroundImage: `url(${activeOrbitItem.img})` }}
-            ></div>
+            <div className="hero-right-circle">
+              <OrbitItemImage 
+                gallery={activeOrbitItem.gallery} 
+                cycle={orbitCycle} 
+                angle={activeOrbitItem.angle} 
+              />
+            </div>
           </section>
 
           {/* Featured Dessert Section */}
