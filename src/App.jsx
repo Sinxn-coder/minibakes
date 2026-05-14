@@ -174,7 +174,8 @@ const clientReviews = [
   {
     text: "Went in with a vision and minibakes exceeded all my expectations. The cake was stunning, and the taste was to die for. Would recommend 1000% !",
     author: "Sheridianne Sammut",
-    img: review4
+    img: review4,
+    fbLink: "https://www.facebook.com/share/p/1E537jwHW3/"
   },
   {
     text: "Second time ordering from Mini Bakes and always amazing service, beautiful cakes with the best flavours! Impeccable customer service too! Cannot recommend her enough!",
