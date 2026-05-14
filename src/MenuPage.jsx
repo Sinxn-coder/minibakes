@@ -8,23 +8,9 @@ import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
 
-const MenuCardImage = ({ item, onOpenGallery }) => {
+const MenuCardImage = ({ item }) => {
   return (
-    <>
-      <SafeImage src={item.img} alt={item.name} />
-      {item.images && item.images.length > 0 && (
-        <button 
-          className="menu-gallery-btn" 
-          onClick={(e) => {
-            e.stopPropagation();
-            onOpenGallery(item.images);
-          }}
-        >
-          <ImageIcon size={16} />
-          View Gallery
-        </button>
-      )}
-    </>
+    <SafeImage src={item.img} alt={item.name} />
   );
 };
 
@@ -140,7 +126,7 @@ export default function MenuPage({ onSelectProduct }) {
               {item.isFullWidth ? (
                 <Cake3D layers={cakeLayers} />
               ) : (
-                <MenuCardImage item={item} onOpenGallery={openGallery} />
+                <MenuCardImage item={item} />
               )}
             </div>
             <div className="menu-card-content">
@@ -398,6 +384,31 @@ export default function MenuPage({ onSelectProduct }) {
           </div>
         ))}
       </div>
+
+      {/* Fixed Cake Gallery Button */}
+      {activeCategory === "Cakes" && (
+        <button 
+          className="menu-fixed-gallery-btn"
+          onClick={() => {
+            const cakeCat = menuData.find(c => c.category === "Cakes");
+            if (!cakeCat) return;
+            const allCakeImages = Array.from(new Set(
+              cakeCat.items.flatMap(item => item.images || [])
+            ));
+            if (allCakeImages.length > 0) {
+              openGallery(allCakeImages);
+            }
+          }}
+        >
+          <div className="whatsapp-icon-circle gallery-circle">
+            <ImageIcon size={24} />
+          </div>
+          <div className="whatsapp-content">
+            <span className="whatsapp-title">Cake Gallery</span>
+            <span className="whatsapp-subtitle">View all our designs</span>
+          </div>
+        </button>
+      )}
 
       {/* Fixed WhatsApp Button */}
       <a 

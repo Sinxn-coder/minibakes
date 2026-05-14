@@ -911,7 +911,63 @@
   right: 10px;
 }
 
+}
+
 @keyframes fadeInLightbox {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Fixed Gallery Button */
+.menu-fixed-gallery-btn {
+  position: fixed;
+  bottom: calc(2.5rem + 80px);
+  right: 2.5rem;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.8rem 1.5rem 0.8rem 0.8rem;
+  border-radius: 60px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+  text-decoration: none;
+  color: var(--secondary);
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer;
+  outline: none;
+}
+
+@media (hover: hover) {
+  .menu-fixed-gallery-btn:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.18);
+    border-color: var(--secondary);
+  }
+  .menu-fixed-gallery-btn:hover .gallery-circle {
+    transform: rotate(15deg) scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-fixed-gallery-btn {
+    bottom: calc(1.5rem + 65px);
+    right: 1.2rem;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    justify-content: flex-start;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    overflow: hidden;
+    animation: expandContract 6s infinite;
+    animation-delay: 3s; /* Take turns expanding with WhatsApp */
+    background: var(--secondary);
+    border: none;
+  }
+  
+  .menu-fixed-gallery-btn .whatsapp-content {
+    animation-delay: 3s;
+  }
 }
