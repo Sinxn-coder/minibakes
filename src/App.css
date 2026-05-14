@@ -495,8 +495,7 @@ body {
 .hero-info-box {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  right: calc(25% - 275px);
   width: 760px;
   height: 400px;
   background: none; /* Move background to pseudo-element for perfect layering */
@@ -508,8 +507,8 @@ body {
   z-index: 20;
   display: flex;
   align-items: flex-end; /* Align to bottom */
-  justify-content: center; /* Centered content */
-  padding: 0 40px 60px; /* Symmetrical padding */
+  justify-content: flex-end; /* Keep on the right */
+  padding: 0 100px 60px 40px; /* Positioned at the bottom right */
 }
 
 /* Maroon Top Layer */
@@ -544,7 +543,7 @@ body {
 .info-box-content {
   position: relative; /* Context for style images */
   z-index: 5;
-  text-align: center; /* Centered as requested */
+  text-align: left; /* Aligned left as in reference */
   transition: opacity 0.4s ease, filter 0.4s ease;
   width: 100%;
   max-width: 440px; /* Constrain text width */
@@ -563,23 +562,23 @@ body {
 
 .style-left {
   width: 60px;
-  top: 15%;
-  left: 8%;
-  transform: rotate(-10deg);
+  top: 40%;
+  left: 42%;
+  transform: translate(-50%, -50%) rotate(-10deg);
 }
 
 .style-top {
   width: 45px;
-  top: 35%;
-  left: 5%;
-  transform: rotate(5deg);
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(5deg);
 }
 
 .style-right {
   width: 55px;
-  top: 55%;
-  left: 7%;
-  transform: rotate(15deg);
+  top: 45%;
+  left: 58%;
+  transform: translate(-50%, -50%) rotate(15deg);
 }
 
 .info-box-divider {
