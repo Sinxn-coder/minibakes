@@ -9,27 +9,27 @@ import SafeImage from './components/SafeImage';
 const MAX_LAYERS = 3;
 
 const MenuCardImage = ({ item }) => {
-  const [showSecond, setShowSecond] = useState(false);
+  const [index, setIndex] = useState(0);
+  const displayImages = item.images && item.images.length > 0 ? item.images : (item.img2 ? [item.img, item.img2] : [item.img]);
 
   useEffect(() => {
-    if (item.img2) {
+    if (displayImages.length > 1) {
       const interval = setInterval(() => {
-        setShowSecond(prev => !prev);
+        setIndex(prev => (prev + 1) % displayImages.length);
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [item.img2]);
+  }, [displayImages]);
 
-  if (!item.img2) return <SafeImage src={item.img} alt={item.name} />;
+  if (displayImages.length === 1) return <SafeImage src={displayImages[0]} alt={item.name} />;
 
   return (
     <div className="menu-card-image-stack">
-      <div className={`fade-img ${showSecond ? 'hide' : 'show'}`}>
-        <SafeImage src={item.img} alt={item.name} />
-      </div>
-      <div className={`fade-img ${showSecond ? 'show' : 'hide'}`}>
-        <SafeImage src={item.img2} alt={item.name} />
-      </div>
+      {displayImages.map((img, i) => (
+        <div key={i} className={`fade-img ${index === i ? 'show' : 'hide'}`}>
+          <SafeImage src={img} alt={item.name} />
+        </div>
+      ))}
     </div>
   );
 };
