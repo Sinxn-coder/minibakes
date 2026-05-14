@@ -540,6 +540,12 @@ body {
   opacity: 0.9;
 }
 
+@media (max-width: 768px) {
+  .hero-info-box::before {
+    display: none;
+  }
+}
+
 .info-box-content {
   position: relative; /* Context for style images */
   z-index: 5;
