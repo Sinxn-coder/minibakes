@@ -37,15 +37,41 @@ import heart_6 from '../assets/cakes/heart/heart (6).png';
 
 const heartImages = [heart_1, heart_2, heart_3, heart_4, heart_5, heart_6];
 
+// Round Cake Gallery
+import round_1 from '../assets/cakes/round/round (1).png';
+import round_2 from '../assets/cakes/round/round (2).png';
+import round_3 from '../assets/cakes/round/round (3).png';
+import round_4 from '../assets/cakes/round/round (4).png';
+import round_5 from '../assets/cakes/round/round (5).png';
+import round_6 from '../assets/cakes/round/round (6).png';
+import round_7 from '../assets/cakes/round/round (7).png';
+import round_8 from '../assets/cakes/round/round (8).png';
+import round_9 from '../assets/cakes/round/round (9).png';
+import round_10 from '../assets/cakes/round/round (10).png';
+import round_11 from '../assets/cakes/round/round (11).png';
+import round_12 from '../assets/cakes/round/round (12).png';
+import round_13 from '../assets/cakes/round/round (13).png';
+import round_14 from '../assets/cakes/round/round (14).png';
+import round_15 from '../assets/cakes/round/round (15).png';
+import round_16 from '../assets/cakes/round/round (16).png';
+import round_17 from '../assets/cakes/round/round (17).png';
+import round_18 from '../assets/cakes/round/round (18).png';
+
+const roundImages = [
+  round_1, round_2, round_3, round_4, round_5, round_6, 
+  round_7, round_8, round_9, round_10, round_11, round_12, 
+  round_13, round_14, round_15, round_16, round_17, round_18
+];
+
 export const menuData = [
   {
     category: "Cakes",
     items: [
-      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: cake2layer6, description: 'Serves ~10. Classic round cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c1', name: '6 inch, 2 Layer (Round)', price: '€45', img: round_1, images: roundImages, description: 'Serves ~10. Classic round cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c2', name: '6 inch, 2 Layer (Heart)', price: '€50', img: heart_1, images: heartImages, description: 'Serves ~10. Elegant heart-shaped design. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'c3', name: '8 inch, 2 Layer (Round)', price: '€65', img: cake2layer8, description: 'Serves ~20 - 25. Perfect for celebrations. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c3', name: '8 inch, 2 Layer (Round)', price: '€65', img: round_2, images: roundImages, description: 'Serves ~20 - 25. Perfect for celebrations. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: heart_2, images: heartImages, description: 'Serves ~20 - 25. Show extra love with a large heart shape. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: cake3layer, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: round_3, images: roundImages, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: heart_3, images: heartImages, description: 'Serves ~40 - 45. Tall and impressive heart-shaped cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c-3d', name: '3D Custom Cake Designer', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
     ]
