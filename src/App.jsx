@@ -156,7 +156,8 @@ const clientReviews = [
   {
     text: "I ordered a cake for my 21st. Everyone loved it. Very pleased with the service. Thank you",
     author: "Ella Marney.",
-    img: review1
+    img: review1,
+    fbLink: "https://www.facebook.com/share/p/17JxKm3mw8/"
   },
   {
     text: "We ordered a cake on very short notice (just two days!), and Mini Bakes absolutely delivered! The design was exactly what we wanted — beautifully done and perfectly matched our request. Not only did it look amazing, but it also tasted incredible. Everyone loved it! Highly recommend for both creativity and great service.",
@@ -936,7 +937,13 @@ function App() {
             <div className="reviews-grid">
               {clientReviews.map((review, idx) => (
                 <div key={idx} className="review-card">
-                  <FacebookIcon size={18} className="review-fb-icon" />
+                  {review.fbLink ? (
+                    <a href={review.fbLink} target="_blank" rel="noopener noreferrer" className="review-fb-link">
+                      <FacebookIcon size={18} className="review-fb-icon" />
+                    </a>
+                  ) : (
+                    <FacebookIcon size={18} className="review-fb-icon" />
+                  )}
                   <div className="review-client-photo">
                     <img src={review.img} alt={review.author} />
                   </div>
