@@ -60,8 +60,8 @@ const ContactPage = ({ onBack }) => {
               </div>
               <div className="contact-card-content">
                 <h3>Phone</h3>
-                <p>+356 000 000 00</p>
-                <a href="tel:+35600000000" className="contact-action-link">Call Now</a>
+                <p>+356 7982 0529</p>
+                <a href="tel:+35679820529" className="contact-action-link">Call Now</a>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ const ContactPage = ({ onBack }) => {
                 <h3>WhatsApp</h3>
                 <p>Quick chat for orders & inquiries</p>
                 <a 
-                  href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry." 
+                  href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry." 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="contact-action-link"
