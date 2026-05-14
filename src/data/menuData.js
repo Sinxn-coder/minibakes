@@ -50,17 +50,10 @@ import round_9 from '../assets/cakes/round/round (9).png';
 import round_10 from '../assets/cakes/round/round (10).png';
 import round_11 from '../assets/cakes/round/round (11).png';
 import round_12 from '../assets/cakes/round/round (12).png';
-import round_13 from '../assets/cakes/round/round (13).png';
-import round_14 from '../assets/cakes/round/round (14).png';
-import round_15 from '../assets/cakes/round/round (15).png';
-import round_16 from '../assets/cakes/round/round (16).png';
-import round_17 from '../assets/cakes/round/round (17).png';
-import round_18 from '../assets/cakes/round/round (18).png';
 
 const roundImages = [
   round_1, round_2, round_3, round_4, round_5, round_6, 
-  round_7, round_8, round_9, round_10, round_11, round_12, 
-  round_13, round_14, round_15, round_16, round_17, round_18
+  round_7, round_8, round_9, round_10, round_11, round_12
 ];
 
 // Cupcake Gallery

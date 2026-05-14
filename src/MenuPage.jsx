@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare } from 'lucide-react';
+import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import './MenuPage.css';
 import Cake3D from './Cake3D';
 
@@ -8,37 +8,23 @@ import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
 
-const MenuCardImage = ({ item }) => {
-  const displayImages = item.images && item.images.length > 0 ? item.images : (item.img2 ? [item.img, item.img2] : [item.img]);
-  
-  // Use a hash of the ID to start on a different image for each card
-  const getStartIdx = () => {
-    if (!item.id || displayImages.length <= 1) return 0;
-    const charSum = item.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return charSum % displayImages.length;
-  };
-
-  const [index, setIndex] = useState(getStartIdx());
-
-  useEffect(() => {
-    if (displayImages.length > 1) {
-      const interval = setInterval(() => {
-        setIndex(prev => (prev + 1) % displayImages.length);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [displayImages]);
-
-  if (displayImages.length === 1) return <SafeImage src={displayImages[0]} alt={item.name} />;
-
+const MenuCardImage = ({ item, onOpenGallery }) => {
   return (
-    <div className="menu-card-image-stack">
-      {displayImages.map((img, i) => (
-        <div key={i} className={`fade-img ${index === i ? 'show' : 'hide'}`}>
-          <SafeImage src={img} alt={item.name} />
-        </div>
-      ))}
-    </div>
+    <>
+      <SafeImage src={item.img} alt={item.name} />
+      {item.images && item.images.length > 0 && (
+        <button 
+          className="menu-gallery-btn" 
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenGallery(item.images);
+          }}
+        >
+          <ImageIcon size={16} />
+          View Gallery
+        </button>
+      )}
+    </>
   );
 };
 
@@ -47,6 +33,14 @@ export default function MenuPage({ onSelectProduct }) {
   const [cakeLayers, setCakeLayers] = useState([]);
   const [toastMessage, setToastMessage] = useState(null);
   const [selectedLayerIndex, setSelectedLayerIndex] = useState(null);
+
+  const [galleryImages, setGalleryImages] = useState(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
+  const openGallery = (images) => {
+    setGalleryImages(images);
+    setGalleryIndex(0);
+  };
 
   const addLayer = (type) => {
     if (cakeLayers.length >= MAX_LAYERS) {
@@ -146,7 +140,7 @@ export default function MenuPage({ onSelectProduct }) {
               {item.isFullWidth ? (
                 <Cake3D layers={cakeLayers} />
               ) : (
-                <MenuCardImage item={item} />
+                <MenuCardImage item={item} onOpenGallery={openGallery} />
               )}
             </div>
             <div className="menu-card-content">
@@ -420,6 +414,45 @@ export default function MenuPage({ onSelectProduct }) {
           <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
         </div>
       </a>
+
+      {/* Lightbox Gallery */}
+      {galleryImages && (
+        <div className="menu-lightbox">
+          <div className="lightbox-overlay" onClick={() => setGalleryImages(null)}></div>
+          <button className="lightbox-close" onClick={() => setGalleryImages(null)}>
+            <X size={32} />
+          </button>
+          
+          <button 
+            className="lightbox-nav prev" 
+            onClick={(e) => {
+              e.stopPropagation();
+              setGalleryIndex(prev => (prev > 0 ? prev - 1 : galleryImages.length - 1));
+            }}
+          >
+            <ChevronLeft size={36} />
+          </button>
+
+          <img 
+            src={galleryImages[galleryIndex]} 
+            alt="Gallery" 
+            className="lightbox-img" 
+          />
+
+          <button 
+            className="lightbox-nav next" 
+            onClick={(e) => {
+              e.stopPropagation();
+              setGalleryIndex(prev => (prev < galleryImages.length - 1 ? prev + 1 : 0));
+            }}
+          >
+            <ChevronRight size={36} />
+          </button>
+          <div className="lightbox-counter">
+            {galleryIndex + 1} / {galleryImages.length}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
