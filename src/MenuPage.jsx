@@ -9,8 +9,16 @@ import SafeImage from './components/SafeImage';
 const MAX_LAYERS = 3;
 
 const MenuCardImage = ({ item }) => {
-  const [index, setIndex] = useState(0);
   const displayImages = item.images && item.images.length > 0 ? item.images : (item.img2 ? [item.img, item.img2] : [item.img]);
+  
+  // Use a hash of the ID to start on a different image for each card
+  const getStartIdx = () => {
+    if (!item.id || displayImages.length <= 1) return 0;
+    const charSum = item.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return charSum % displayImages.length;
+  };
+
+  const [index, setIndex] = useState(getStartIdx());
 
   useEffect(() => {
     if (displayImages.length > 1) {
