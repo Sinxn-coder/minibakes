@@ -228,7 +228,7 @@ export default function StudioPage() {
         <div className="booking-container">
           <div className="booking-info">
             <h2>Reserve Your Spot</h2>
-            <p>Ready to book? Fill out the form and Megan will confirm your date and location within 24 hours.</p>
+            <p>Ready to book? Fill out the form and we will confirm your date and location within 24 hours.</p>
             <div className="contact-details">
               <div className="contact-item">
                 <MapPin size={20} />
