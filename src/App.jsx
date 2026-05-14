@@ -184,47 +184,58 @@ const clientReviews = [
   }
 ];
 
-const InstaPost = ({ post, index }) => {
-  const [displayPost, setDisplayPost] = useState(post);
+const InstaPost = ({ posts, activeIndex, index }) => {
+  const [currentPost, setCurrentPost] = useState(posts[activeIndex]);
   const [nextPost, setNextPost] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    if (post?.img !== displayPost?.img) {
-      setNextPost(post);
+    if (posts[activeIndex].img !== currentPost.img) {
+      setNextPost(posts[activeIndex]);
       setIsTransitioning(true);
       
       const timer = setTimeout(() => {
-        setDisplayPost(post);
+        setCurrentPost(posts[activeIndex]);
         setNextPost(null);
         setIsTransitioning(false);
-      }, 600); // Matches CSS transition
-      
+      }, 1000); // Smooth transition duration
       return () => clearTimeout(timer);
     }
-  }, [post?.img]);
+  }, [activeIndex, posts, currentPost.img]);
 
   return (
-    <div className="insta-card-placeholder">
-      <div className="insta-img-shimmer">
-        <InstagramIcon size={32} opacity={0.2} />
-      </div>
-      
-      {/* Current Image */}
+    <div className="insta-card-placeholder" style={{ position: 'relative', overflow: 'hidden' }}>
       <img 
-        src={displayPost?.img} 
-        alt={`Instagram Moment`} 
-        className={`insta-real-img ${isTransitioning ? 'fade-out' : 'fade-in'}`}
-        onDoubleClick={() => window.open(displayPost?.link, '_blank')}
+        src={currentPost.img} 
+        alt={`Instagram Reel ${index + 1}`} 
+        className="insta-real-img"
+        style={{ 
+          cursor: 'pointer',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
+          opacity: isTransitioning ? 0 : 1,
+          transition: 'opacity 1s ease-in-out'
+        }}
+        onDoubleClick={() => window.open(currentPost.link, '_blank')}
       />
-
-      {/* Next Image (Incoming) */}
       {nextPost && (
         <img 
           src={nextPost.img} 
-          alt={`Instagram Moment Incoming`} 
-          className="insta-real-img fade-in"
-          style={{ zIndex: 3 }}
+          alt={`Instagram Reel ${index + 1} Next`} 
+          className="insta-real-img"
+          style={{ 
+            cursor: 'pointer',
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: isTransitioning ? 1 : 0,
+            transition: 'opacity 1s ease-in-out'
+          }}
+          onDoubleClick={() => window.open(nextPost.link, '_blank')}
         />
       )}
     </div>
@@ -439,20 +450,6 @@ function App() {
   const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
-  const [instaIndices, setInstaIndices] = useState([0, 1, 2, 3, 4, 5]);
-
-  useEffect(() => {
-    if (currentView !== 'home') return;
-    const interval = setInterval(() => {
-      setInstaIndices(prev => {
-        const next = [...prev];
-        const last = next.pop();
-        next.unshift(last);
-        return next;
-      });
-    }, 2000); // Rotate every 2s
-    return () => clearInterval(interval);
-  }, [currentView]);
   const [isOverDark, setIsOverDark] = useState(false);
 
   // Scroll observer for floating cart color change
@@ -472,6 +469,20 @@ function App() {
 
     return () => darkSections.forEach(section => observer.unobserve(section));
   }, [currentView]); // Re-run when view changes to find new elements
+
+  const [instaIndices, setInstaIndices] = useState([0, 1, 2, 3, 4, 5]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setInstaIndices(prev => {
+        const next = [...prev];
+        const first = next.shift();
+        next.push(first);
+        return next;
+      });
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   const navigateTo = (view) => {
     setCurrentView(view);
@@ -895,7 +906,12 @@ function App() {
               and paste their embed code below. */}
               <div className="insta-row">
                 {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <InstaPost key={i} post={instaPosts[instaIndices[i]]} index={i} />
+                  <InstaPost 
+                    key={i} 
+                    posts={instaPosts} 
+                    activeIndex={instaIndices[i]} 
+                    index={i} 
+                  />
                 ))}
               </div>
 
