@@ -777,7 +777,13 @@ function App() {
             </div>
             <div className="hero-info-box">
               <div className="info-box-content">
-                <p className="info-box-desc">{activeOrbitItem.desc}</p>
+                <p className="info-box-desc" key={activeOrbitItem.desc}>
+                  {activeOrbitItem.desc.split(' ').map((word, i) => (
+                    <span key={i} className="reveal-word" style={{ animationDelay: `${i * 0.08}s` }}>
+                      {word}{' '}
+                    </span>
+                  ))}
+                </p>
                 <div className="info-box-divider">
                   <div className="divider-line-left">
                     <span className="dot"></span>
