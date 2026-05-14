@@ -987,7 +987,7 @@ function App() {
                 onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
               >
                 <InstagramIcon size={24} className="contact-icon" />
-                <span className="contact-label">minibakes2021</span>
+                <span className="contact-label">Mini Bakes</span>
               </div>
               <div
                 className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
@@ -1001,7 +1001,7 @@ function App() {
                 onClick={() => handleContactClick('facebook', 'https://www.facebook.com/minibakes2021')}
               >
                 <FacebookIcon size={24} className="contact-icon" />
-                <span className="contact-label">minibakes2021</span>
+                <span className="contact-label">Mini Bakes</span>
               </div>
             </div>
           </section>

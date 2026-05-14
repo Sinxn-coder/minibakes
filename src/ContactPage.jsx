@@ -119,11 +119,11 @@ const ContactPage = ({ onBack }) => {
             <div className="contact-social-links">
               <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="social-box instagram">
                 <InstagramIcon size={32} />
-                <span>Instagram</span>
+                <span>Mini Bakes</span>
               </a>
               <a href="https://facebook.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="social-box facebook">
                 <FacebookIcon size={32} />
-                <span>Facebook</span>
+                <span>Mini Bakes</span>
               </a>
             </div>
             
