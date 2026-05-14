@@ -885,13 +885,6 @@
 
   .form-row { grid-template-columns: 1fr; gap: 1rem; }
   
-  /* Refined Sticky Mobile Action */
-  .studio-page::after {
-    content: '';
-    display: block;
-    height: 60px;
-  }
-
   /* Target the hero CTA specifically if needed, but remove global fixed */
   .studio-hero-content .cta-btn-primary {
     position: relative;
@@ -901,34 +894,6 @@
     width: auto;
     display: inline-flex;
     margin-top: 1rem;
-  }
-
-  /* Create a dedicated sticky class for mobile booking */
-  .mobile-sticky-book {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 3rem); /* Full width minus side margins */
-    max-width: 400px;
-    z-index: 100;
-    padding: 1.2rem;
-    background: #800000;
-    color: white;
-    border-radius: 50px;
-    font-weight: 700;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    box-shadow: 0 15px 40px rgba(128, 0, 0, 0.4);
-    animation: slideUp 0.5s ease-out;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100px) translateX(-50%); opacity: 0; }
-    to { transform: translateY(0) translateX(-50%); opacity: 1; }
   }
 }
 
