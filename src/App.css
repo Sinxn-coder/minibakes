@@ -556,38 +556,29 @@ body {
   position: absolute;
   pointer-events: none;
   z-index: 2;
-  opacity: 0.9;
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-  animation: floatStyle 4s ease-in-out infinite;
+  opacity: 0.8;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
 }
 
 .style-left {
-  width: 120px;
+  width: 60px;
   top: 15%;
-  left: 10%;
-  transform: rotate(-15deg);
-  animation-delay: 0s;
+  left: 8%;
+  transform: rotate(-10deg);
 }
 
 .style-top {
-  width: 80px;
-  top: -10%;
-  right: 40%;
-  transform: rotate(10deg);
-  animation-delay: -1s;
+  width: 45px;
+  top: 35%;
+  left: 5%;
+  transform: rotate(5deg);
 }
 
 .style-right {
-  width: 100px;
-  bottom: 20%;
-  right: 5%;
-  transform: rotate(20deg);
-  animation-delay: -2s;
-}
-
-@keyframes floatStyle {
-  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
-  50% { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) + 5deg)); }
+  width: 55px;
+  top: 55%;
+  left: 7%;
+  transform: rotate(15deg);
 }
 
 .info-box-divider {
