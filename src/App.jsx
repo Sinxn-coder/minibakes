@@ -778,6 +778,17 @@ function App() {
             <div className="hero-info-box">
               <div className="info-box-content">
                 <p className="info-box-desc">{activeOrbitItem.desc}</p>
+                <div className="info-box-divider">
+                  <div className="divider-line-left">
+                    <span className="dot"></span>
+                    <span className="line"></span>
+                  </div>
+                  <span className="divider-heart">❤</span>
+                  <div className="divider-line-right">
+                    <span className="line"></span>
+                    <span className="dot"></span>
+                  </div>
+                </div>
               </div>
             </div>
             <div
