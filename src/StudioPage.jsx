@@ -72,16 +72,22 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
         <h3>{monthName} {year}</h3>
         <button onClick={() => changeMonth(1)} className="month-nav-btn">&gt;</button>
       </div>
-      <div className="calendar-weekdays">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <div key={d}>{d}</div>)}
-      </div>
-      <div className="calendar-grid">
-        {days}
-      </div>
-      <div className="calendar-legend">
-        <div className="legend-item"><span className="legend-box available"></span> Available</div>
-        <div className="legend-item"><span className="legend-box booked"></span> Fully Booked</div>
-        <div className="legend-item"><span className="legend-box selected"></span> Your Selection</div>
+      
+      <div className="calendar-main-content">
+        <div className="calendar-legend">
+          <div className="legend-item"><span className="legend-box available"></span> Available</div>
+          <div className="legend-item"><span className="legend-box booked"></span> Fully Booked</div>
+          <div className="legend-item"><span className="legend-box selected"></span> Your Selection</div>
+        </div>
+        
+        <div className="calendar-body">
+          <div className="calendar-weekdays">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <div key={d}>{d}</div>)}
+          </div>
+          <div className="calendar-grid">
+            {days}
+          </div>
+        </div>
       </div>
     </div>
   );

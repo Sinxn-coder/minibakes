@@ -339,26 +339,48 @@
   color: #666;
 }
 
+.calendar-main-content {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.calendar-body {
+  flex: 1;
+}
+
 @media (min-width: 769px) {
   .calendar-container {
-    padding: 1.5rem 3rem 2rem;
+    padding: 2.5rem 3rem 3rem;
   }
   .calendar-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .calendar-main-content {
+    flex-direction: row;
+    gap: 3rem;
+    align-items: flex-start;
   }
   .calendar-grid {
-    gap: 8px;
+    gap: 10px;
   }
   .calendar-day {
-    aspect-ratio: 1.4 / 1;
-    font-size: 1rem;
-    border-radius: 14px;
+    aspect-ratio: 1.2 / 1;
+    font-size: 1.05rem;
+    border-radius: 16px;
   }
   .calendar-legend {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    flex-direction: column;
+    width: 220px;
+    border-top: none;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    padding-top: 1rem;
+    padding-right: 2.5rem;
+    margin-top: 1rem;
+    gap: 1.5rem;
     justify-content: flex-start;
-    gap: 2rem;
+  }
+  .legend-item {
+    font-size: 0.95rem;
   }
 }
 
