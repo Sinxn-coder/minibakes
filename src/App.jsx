@@ -284,109 +284,12 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [orbitRotation, setOrbitRotation] = useState(0);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchStartRotation, setTouchStartRotation] = useState(0);
 
-  const handleTouchStart = (e) => {
-    if (window.innerWidth > 768) return;
-    setTouchStart(e.touches[0].clientX);
-    setTouchStartRotation(orbitRotation);
-  };
-
-  const handleTouchMove = (e) => {
-    if (touchStart === null) return;
-    const currentTouch = e.touches[0].clientX;
-    const delta = (touchStart - currentTouch) * 0.8; // Control sensitivity
-    setOrbitRotation(touchStartRotation - delta);
-
-    // Prevent page scroll when rotating the wheel
-    if (e.cancelable) e.preventDefault();
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart === null) return;
-    setTouchStart(null);
-
-    // Snap to the nearest 45deg position
-    const snapped = Math.round(orbitRotation / 45) * 45;
-    setOrbitRotation(snapped);
-
-    // Update active item based on the snapped position
-    const normalizedAngle = ((-snapped % 360) + 360) % 360;
-    const nearestItem = orbitItems.reduce((prev, curr) => {
-      const prevDiff = Math.min(Math.abs(prev.angle - normalizedAngle), 360 - Math.abs(prev.angle - normalizedAngle));
-      const currDiff = Math.min(Math.abs(curr.angle - normalizedAngle), 360 - Math.abs(curr.angle - normalizedAngle));
-      return currDiff < prevDiff ? curr : prev;
-    });
-    setActiveOrbitItem(nearestItem);
-  };
-  const orbitItems = [
-    {
-      angle: 0,
-      img: orbitCupcake,
-      desc: "A delicate swirl of velvet frosting atop a cloud-soft vanilla bean base."
-    },
-    {
-      angle: 45,
-      img: orbitRoundCake,
-      desc: "Layers of artisanal sponge whispering stories of seasonal sweetness and joy."
-    },
-    {
-      angle: 90,
-      img: orbitPop,
-      desc: "A playful dance of rich cake and premium chocolate in every delightful bite."
-    },
-    {
-      angle: 135,
-      img: orbitBrownie,
-      desc: "The deep, dark indulgence of cocoa crafted into fabled, fudgy perfection."
-    },
-    {
-      angle: 180,
-      img: orbitSicle,
-      desc: "Boutique elegance captured in a whimsical, chocolate-dipped handheld treasure."
-    },
-    {
-      angle: 225,
-      img: orbitBreakableHeart,
-      desc: "A shimmering shell of Belgian cocoa waiting to reveal your sweetest secrets."
-    },
-    {
-      angle: 270,
-      img: orbitHeartCake,
-      desc: "A poetic masterpiece of romantic piping and heart-shaped confectionery art."
-    },
-    {
-      angle: 315,
-      img: orbitBento,
-      desc: "Charming, minimalist dreams perfectly sized for your most intimate celebrations."
-    },
-  ];
-  const [activeOrbitItem, setActiveOrbitItem] = useState(orbitItems[0]);
-
-  const handleOrbitClick = (item) => {
-    // Calculate the shortest path for rotation to make it feel infinite
-    const currentRot = orbitRotation;
-    // Normalized current angle in the 0-360 range
-    const normalizedCurrent = ((-currentRot % 360) + 360) % 360;
-
-    const diff = (() => {
-      let d = item.angle - normalizedCurrent;
-      if (d > 180) d -= 360;
-      if (d < -180) d += 360;
-      return d;
-    })();
-
-    setOrbitRotation(currentRot - diff);
-    setActiveOrbitItem(item);
-  };
   const [customizingProduct, setCustomizingProduct] = useState(null);
   // Preload critical Home Page assets with prioritization
   useEffect(() => {
     const priorityImages = [...backgrounds, logo];
     const secondaryImages = [
-      ...orbitItems.map(item => item.img),
       ...featuredItems.map(item => item.img)
     ];
 
@@ -750,64 +653,6 @@ function App() {
                 <span className="hero-serif-accent">celebration</span>
               </p>
             </div>
-            <div
-              className="hero-orbit-container"
-              style={{
-                '--orbit-rotation': `${orbitRotation}deg`,
-                transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
-              }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {orbitItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="orbit-item"
-                  style={{
-                    '--angle': `${item.angle}deg`,
-                    backgroundImage: `url("${item.img}")`,
-                    '--orbit-rotation': `${orbitRotation}deg`,
-                    transition: touchStart !== null ? 'none' : 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)'
-                  }}
-                  onClick={() => handleOrbitClick(item)}
-                ></div>
-              ))}
-            </div>
-            <div className="hero-info-box">
-              <img src={style4} className="dome-style-img style-left" alt="" />
-              <img src={style5} className="dome-style-img style-top" alt="" />
-              <img src={style6} className="dome-style-img style-right" alt="" />
-              <div className="info-box-content">
-                <p className="info-box-desc" key={activeOrbitItem.desc}>
-                  {activeOrbitItem.desc.split(' ').map((word, i) => (
-                    <span key={i} className="reveal-word" style={{ animationDelay: `${i * 0.08}s` }}>
-                      {word}{' '}
-                    </span>
-                  ))}
-                </p>
-                <div className="info-box-divider">
-                  <div className="divider-line-left">
-                    <span className="dot"></span>
-                    <span className="line"></span>
-                  </div>
-                  <div className="divider-heart">
-                    <Heart size={16} fill="#fff" strokeWidth={0} />
-                  </div>
-                  <div className="divider-line-right">
-                    <span className="line"></span>
-                    <span className="dot"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="hero-right-circle"
-              style={{ backgroundImage: `url("${activeOrbitItem.img}")` }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            ></div>
           </section>
 
           {/* Featured Dessert Section */}
