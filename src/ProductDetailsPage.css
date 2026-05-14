@@ -16,7 +16,7 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #2e8b57;
+  background: var(--secondary);
   color: white;
   padding: 0.8rem 1.5rem;
   border-radius: 50px;
@@ -26,7 +26,7 @@
   align-items: center;
   gap: 0.5rem;
   z-index: 9999;
-  box-shadow: 0 10px 30px rgba(46, 139, 87, 0.3);
+  box-shadow: 0 10px 30px rgba(92, 13, 27, 0.3);
   animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
@@ -42,7 +42,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     <div className="product-details-page">
       {showNotification && (
         <div className="added-notification">
-          <span className="notification-icon">✨</span>
+          <CheckCircle2 size={18} className="notification-icon" />
           Successfully added to your order!
         </div>
       )}
