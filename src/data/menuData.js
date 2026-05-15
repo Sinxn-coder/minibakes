@@ -2,6 +2,9 @@ import loveCake from '../assets/lovecake1.png';
 
 
 import brownies from '../assets/brownies_box.png';
+import brownie_2 from '../assets/brownies/brownie (2).png';
+import brownie_3 from '../assets/brownies/brownie (3).png';
+import brownie_4 from '../assets/brownies/brownie (4).png';
 import cakepops from '../assets/cakepops.png';
 import pops_1 from '../assets/cake pops/pops (1).png';
 import pops_2 from '../assets/cake pops/pops (2).png';
@@ -58,6 +61,18 @@ const cupcakeImages = [
   cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6
 ];
 
+const brownieImages = [
+  brownies, brownie_2, brownie_3, brownie_4
+];
+
+const popsImages = [
+  pops_1, pops_2, pops_3
+];
+
+const siclesImages = [
+  sicles1, sicles2, sicles3, sicles4, sicles5
+];
+
 export const menuData = [
   {
     category: "Cakes",
@@ -95,9 +110,9 @@ export const menuData = [
   {
     category: "Cake Pops",
     items: [
-      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pops_1, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pops_2, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
-      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pops_3, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pops_1, images: popsImages, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pops_2, images: popsImages, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
+      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pops_3, images: popsImages, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
@@ -108,6 +123,7 @@ export const menuData = [
         name: 'Signature Brownies Box',
         price: '€32',
         img: brownies,
+        images: brownieImages,
         description: 'Rich chocolate brownies with your choice of up to 3 signature spreads. Select your preferred piece count below.',
         options: [
           { label: 'Box of 6', value: '6' },
@@ -135,13 +151,14 @@ export const menuData = [
   {
     category: "Cakesicles",
     items: [
-      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, images: siclesImages, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, images: siclesImages, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       {
         id: 'cakesicles-bulk',
         name: 'Additional Cakesicles',
         price: '€2.60',
         img: sicles4,
+        images: siclesImages,
         img2: sicles2,
         description: 'Add extra cakesicles to your order. Tiered pricing: €2.60 each for up to 19 pieces, or €2.40 each for bulk orders of 20 or more.'
       },

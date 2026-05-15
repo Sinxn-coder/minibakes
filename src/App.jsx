@@ -55,7 +55,11 @@ import SafeImage from './components/SafeImage';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg3.png';
 import brownieImg from './assets/brownies_box.png';
+import brownie2 from './assets/brownies/brownie (2).png';
+import brownie3 from './assets/brownies/brownie (3).png';
 import cupcakeImg from './assets/cupcake4.png';
+import cupcake1 from './assets/cupcakes/butter1.png';
+import cupcake2 from './assets/cupcakes/butter2.jpeg';
 import cakeImg from './assets/roundcake1.png';
 import founderImg from './assets/founder.jpeg';
 import style1 from './assets/style1.png';
@@ -226,6 +230,34 @@ const InstaPost = ({ post, index }) => {
   );
 };
 
+const FeaturedCard = ({ item, onClick, className = "" }) => {
+  const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    if (item.images && item.images.length > 1) {
+      const interval = setInterval(() => {
+        setImgIndex(prev => (prev + 1) % item.images.length);
+      }, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [item.images]);
+
+  const displayImg = item.images ? item.images[imgIndex] : item.img;
+
+  return (
+    <div className={`featured-card ${className}`}>
+      <div className="card-image-wrapper">
+        <SafeImage src={displayImg} alt={item.name} key={displayImg} />
+      </div>
+      <div className="card-info">
+        <h3>{item.name}</h3>
+        <p>{item.price}</p>
+        <button className="view-details-btn" onClick={onClick}>View Details</button>
+      </div>
+    </div>
+  );
+};
+
 /* ── Mobile-only Horizontal Scroll Carousel ── */
 function FeaturedCarousel({ items, onViewDetails }) {
   const [active, setActive] = useState(0);
@@ -248,16 +280,12 @@ function FeaturedCarousel({ items, onViewDetails }) {
         onScroll={handleScroll}
       >
         {items.map((item, i) => (
-          <div key={i} className="featured-card mobile-scroll-card">
-            <div className="card-image-wrapper">
-              <SafeImage src={item.img} alt={item.name} />
-            </div>
-            <div className="card-info">
-              <h3>{item.name}</h3>
-              <p>{item.price}</p>
-              <button className="view-details-btn" onClick={() => onViewDetails(i)}>View Details</button>
-            </div>
-          </div>
+          <FeaturedCard 
+            key={i} 
+            item={item} 
+            className="mobile-scroll-card" 
+            onClick={() => onViewDetails(i)} 
+          />
         ))}
       </div>
       <div className="carousel-dots">
@@ -410,8 +438,8 @@ function App() {
   };
 
   const featuredItems = [
-    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
-    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
+    { id: 't-featured', img: brownieImg, images: [brownieImg, brownie2, brownie3], name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
+    { id: 'cu-featured', img: cupcakeImg, images: [cupcakeImg, cupcake1, cupcake2], name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
     { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ];
 
@@ -688,16 +716,11 @@ function App() {
               ) : (
                 <div className="featured-grid">
                   {featuredItems.map((item, idx) => (
-                    <div className="featured-card" key={idx}>
-                      <div className="card-image-wrapper">
-                        <SafeImage src={item.img} alt={item.name} />
-                      </div>
-                      <div className="card-info">
-                        <h3>{item.name}</h3>
-                        <p>{item.price}</p>
-                        <button className="view-details-btn" onClick={() => setExpandedDesktopCard(idx)}>View Details</button>
-                      </div>
-                    </div>
+                    <FeaturedCard 
+                      key={idx} 
+                      item={item} 
+                      onClick={() => setExpandedDesktopCard(idx)} 
+                    />
                   ))}
                 </div>
               )}

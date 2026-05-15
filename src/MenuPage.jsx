@@ -21,209 +21,224 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
   </svg>
 );
 
-const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => (
-  <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
-    <div className="menu-card-image">
-      {item.isFullWidth ? (
-        <Cake3D layers={cakeLayers} />
-      ) : (
-        <SafeImage src={item.img} alt={item.name} />
-      )}
-    </div>
-    <div className="menu-card-content">
-      {item.isFullWidth ? (
-        <div className="designer-wrapper">
-          {toastMessage && (
-            <div className="toast-notification">
-              {toastMessage}
-            </div>
-          )}
-          <div className="designer-ui">
-            <div className="designer-column">
-              <h4>Layers</h4>
-              <div className="designer-options">
-                <button className="designer-card" onClick={() => addLayer('6round')}>
-                  <Circle size={16} />
-                  <span className="designer-card-label">6" Round</span>
-                </button>
-                <button className="designer-card" onClick={() => addLayer('8round')}>
-                  <Circle size={22} />
-                  <span className="designer-card-label">8" Round</span>
-                </button>
-                <button className="designer-card" onClick={() => addLayer('6heart')}>
-                  <Heart size={16} />
-                  <span className="designer-card-label">6" Heart</span>
-                </button>
-                <button className="designer-card" onClick={() => addLayer('8heart')}>
-                  <Heart size={22} />
-                  <span className="designer-card-label">8" Heart</span>
-                </button>
-              </div>
-            </div>
-            <div className="designer-column">
-              <h4>Colors</h4>
-              <div className="designer-options">
-                {['#F9C6C9', '#C9B1D9', '#B5EAD7', '#FFEAAA', '#AEC6F7', '#FFCBA4', '#E8A598', '#F5E6C8', '#8B4513', '#C4919E', '#9B2D30', '#FFF3B0', '#A3B18A', '#88A0C0', '#D4A373', '#B2C9AB', '#F28482', '#5E548E', '#CCD5AE', '#E3D5CA'].map(color => (
-                  <button key={color} className="designer-card" onClick={() => applyColor(color)}>
-                    <span className="color-swatch" style={{ background: color }}></span>
-                    <span className="designer-card-label">{
-                      color === '#F9C6C9' ? 'Blush Pink' :
-                      color === '#C9B1D9' ? 'Lavender' :
-                      color === '#B5EAD7' ? 'Mint' :
-                      color === '#FFEAAA' ? 'Buttercream' :
-                      color === '#AEC6F7' ? 'Sky Blue' :
-                      color === '#FFCBA4' ? 'Peach' :
-                      color === '#E8A598' ? 'Rose Gold' :
-                      color === '#F5E6C8' ? 'Ivory' :
-                      color === '#8B4513' ? 'Chocolate' :
-                      color === '#C4919E' ? 'Dusty Mauve' :
-                      color === '#9B2D30' ? 'Red Velvet' :
-                      color === '#FFF3B0' ? 'Lemon' :
-                      color === '#A3B18A' ? 'Matcha' :
-                      color === '#88A0C0' ? 'Blueberry' :
-                      color === '#D4A373' ? 'Caramel' :
-                      color === '#B2C9AB' ? 'Pistachio' :
-                      color === '#F28482' ? 'Coral Pink' :
-                      color === '#5E548E' ? 'Deep Purple' :
-                      color === '#CCD5AE' ? 'Sage' :
-                      'Champagne'
-                    }</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="designer-column">
-              <h4>Spreads</h4>
-              <div className="designer-options">
-                {[
-                  { name: 'Nutella', color: '#3d1e16' },
-                  { name: 'Biscoff', color: '#b07d4b' },
-                  { name: 'Pistachio', color: '#a2d187' },
-                  { name: 'Kinder', color: '#e8d8c8' }
-                ].map(spread => (
-                  <button 
-                    key={spread.name}
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === spread.name ? 'active-design' : ''}`}
-                    onClick={() => toggleSpread(spread.name)}
-                  >
-                    <Droplet size={20} color={spread.color} />
-                    <span className="designer-card-label">{spread.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="designer-column">
-              <h4>Designs</h4>
-              <div className="designer-options">
-                <button 
-                  className={`designer-card ${cakeLayers[selectedLayerIndex]?.topBorder ? 'active-design' : ''}`}
-                  onClick={() => toggleDesign('topBorder')}
-                >
-                  <ChevronUp size={20} />
-                  <span className="designer-card-label">Top Shell</span>
-                </button>
-                <button 
-                  className={`designer-card ${cakeLayers[selectedLayerIndex]?.bottomBorder ? 'active-design' : ''}`}
-                  onClick={() => toggleDesign('bottomBorder')}
-                >
-                  <ChevronDown size={20} />
-                  <span className="designer-card-label">Bottom Shell</span>
-                </button>
-                <button 
-                  className={`designer-card ${cakeLayers[selectedLayerIndex]?.flowerCluster ? 'active-design' : ''}`}
-                  onClick={() => toggleDesign('flowerCluster')}
-                >
-                  <Flower size={20} />
-                  <span className="designer-card-label">Flower Cluster</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="designer-summary">
-            <div className="summary-header-row">
-              <p className="summary-title">Your Selection:</p>
-              {selectedLayerIndex !== null && cakeLayers.length > 0 && (
-                <div className="designer-text-input-wrapper">
-                  <input 
-                    type="text" 
-                    placeholder="Add text to cake (e.g. Love)" 
-                    maxLength={15}
-                    className="designer-text-input"
-                    value={cakeLayers[selectedLayerIndex]?.customText || ''}
-                    onChange={(e) => {
-                      const text = e.target.value;
-                      setCakeLayers(prev => prev.map((layer, i) => 
-                        i === selectedLayerIndex ? { ...layer, customText: text } : layer
-                      ));
-                    }}
-                  />
-                  <span className="text-char-limit">
-                    {(cakeLayers[selectedLayerIndex]?.customText || '').length}/15
-                  </span>
-                </div>
-              )}
-            </div>
-            <div className="summary-cards">
-              {cakeLayers.length === 0 ? (
-                <p className="summary-empty">No layers added yet. Click a layer above to start!</p>
-              ) : (
-                cakeLayers.map((layer, i) => (
-                  <div 
-                    key={i} 
-                    className={`summary-item ${selectedLayerIndex === i ? 'selected' : ''}`}
-                    onClick={() => setSelectedLayerIndex(i)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {layerIcon(layer.type)}
-                    <span>{layerLabel[layer.type] || layer.type}</span>
-                    <button className="summary-remove" onClick={(e) => removeLayer(e, i)}><X size={12} /></button>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <h3>{item.name}</h3>
-          <p className="menu-card-desc">{item.description}</p>
-          
-          <div className="menu-card-footer">
-            <span className="menu-card-price">
-              {item.price === 'WA' ? (
-                <span className="price-wa-tag">
-                  <WhatsAppIcon size={14} />
-                  <span>WA</span>
-                </span>
-              ) : item.price}
-            </span>
-            <button 
-              className="menu-add-btn" 
-              onClick={() => onSelectProduct(item)}
-            >
-              <span className="hide-on-mobile">Add to </span>Order
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-    {item.isFullWidth && (
-      <div className="designer-order-wrapper">
-        <button 
-          className="designer-order-btn" 
-          onClick={() => onSelectProduct({ ...item, layers: cakeLayers })}
-          disabled={cakeLayers.length === 0}
-        >
-          <div className="designer-price-label">
-            <WhatsAppIcon size={12} />
-            <span>WA</span>
-          </div>
-          <span>ORDER</span>
-        </button>
+const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => {
+  const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    if (item.images && item.images.length > 1) {
+      const interval = setInterval(() => {
+        setImgIndex((prev) => (prev + 1) % item.images.length);
+      }, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [item.images]);
+
+  const displayImg = item.images && item.images.length > 0 ? item.images[imgIndex] : item.img;
+
+  return (
+    <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
+      <div className="menu-card-image">
+        {item.isFullWidth ? (
+          <Cake3D layers={cakeLayers} />
+        ) : (
+          <SafeImage src={displayImg} alt={item.name} key={displayImg} />
+        )}
       </div>
-    )}
-  </div>
-);
+      <div className="menu-card-content">
+        {item.isFullWidth ? (
+          <div className="designer-wrapper">
+            {toastMessage && (
+              <div className="toast-notification">
+                {toastMessage}
+              </div>
+            )}
+            <div className="designer-ui">
+              <div className="designer-column">
+                <h4>Layers</h4>
+                <div className="designer-options">
+                  <button className="designer-card" onClick={() => addLayer('6round')}>
+                    <Circle size={16} />
+                    <span className="designer-card-label">6" Round</span>
+                  </button>
+                  <button className="designer-card" onClick={() => addLayer('8round')}>
+                    <Circle size={22} />
+                    <span className="designer-card-label">8" Round</span>
+                  </button>
+                  <button className="designer-card" onClick={() => addLayer('6heart')}>
+                    <Heart size={16} />
+                    <span className="designer-card-label">6" Heart</span>
+                  </button>
+                  <button className="designer-card" onClick={() => addLayer('8heart')}>
+                    <Heart size={22} />
+                    <span className="designer-card-label">8" Heart</span>
+                  </button>
+                </div>
+              </div>
+              <div className="designer-column">
+                <h4>Colors</h4>
+                <div className="designer-options">
+                  {['#F9C6C9', '#C9B1D9', '#B5EAD7', '#FFEAAA', '#AEC6F7', '#FFCBA4', '#E8A598', '#F5E6C8', '#8B4513', '#C4919E', '#9B2D30', '#FFF3B0', '#A3B18A', '#88A0C0', '#D4A373', '#B2C9AB', '#F28482', '#5E548E', '#CCD5AE', '#E3D5CA'].map(color => (
+                    <button key={color} className="designer-card" onClick={() => applyColor(color)}>
+                      <span className="color-swatch" style={{ background: color }}></span>
+                      <span className="designer-card-label">{
+                        color === '#F9C6C9' ? 'Blush Pink' :
+                        color === '#C9B1D9' ? 'Lavender' :
+                        color === '#B5EAD7' ? 'Mint' :
+                        color === '#FFEAAA' ? 'Buttercream' :
+                        color === '#AEC6F7' ? 'Sky Blue' :
+                        color === '#FFCBA4' ? 'Peach' :
+                        color === '#E8A598' ? 'Rose Gold' :
+                        color === '#F5E6C8' ? 'Ivory' :
+                        color === '#8B4513' ? 'Chocolate' :
+                        color === '#C4919E' ? 'Dusty Mauve' :
+                        color === '#9B2D30' ? 'Red Velvet' :
+                        color === '#FFF3B0' ? 'Lemon' :
+                        color === '#A3B18A' ? 'Matcha' :
+                        color === '#88A0C0' ? 'Blueberry' :
+                        color === '#D4A373' ? 'Caramel' :
+                        color === '#B2C9AB' ? 'Pistachio' :
+                        color === '#F28482' ? 'Coral Pink' :
+                        color === '#5E548E' ? 'Deep Purple' :
+                        color === '#CCD5AE' ? 'Sage' :
+                        'Champagne'
+                      }</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="designer-column">
+                <h4>Spreads</h4>
+                <div className="designer-options">
+                  {[
+                    { name: 'Nutella', color: '#3d1e16' },
+                    { name: 'Biscoff', color: '#b07d4b' },
+                    { name: 'Pistachio', color: '#a2d187' },
+                    { name: 'Kinder', color: '#e8d8c8' }
+                  ].map(spread => (
+                    <button 
+                      key={spread.name}
+                      className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === spread.name ? 'active-design' : ''}`}
+                      onClick={() => toggleSpread(spread.name)}
+                    >
+                      <Droplet size={20} color={spread.color} />
+                      <span className="designer-card-label">{spread.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="designer-column">
+                <h4>Designs</h4>
+                <div className="designer-options">
+                  <button 
+                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.topBorder ? 'active-design' : ''}`}
+                    onClick={() => toggleDesign('topBorder')}
+                  >
+                    <ChevronUp size={20} />
+                    <span className="designer-card-label">Top Shell</span>
+                  </button>
+                  <button 
+                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.bottomBorder ? 'active-design' : ''}`}
+                    onClick={() => toggleDesign('bottomBorder')}
+                  >
+                    <ChevronDown size={20} />
+                    <span className="designer-card-label">Bottom Shell</span>
+                  </button>
+                  <button 
+                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.flowerCluster ? 'active-design' : ''}`}
+                    onClick={() => toggleDesign('flowerCluster')}
+                  >
+                    <Flower size={20} />
+                    <span className="designer-card-label">Flower Cluster</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="designer-summary">
+              <div className="summary-header-row">
+                <p className="summary-title">Your Selection:</p>
+                {selectedLayerIndex !== null && cakeLayers.length > 0 && (
+                  <div className="designer-text-input-wrapper">
+                    <input 
+                      type="text" 
+                      placeholder="Add text to cake (e.g. Love)" 
+                      maxLength={15}
+                      className="designer-text-input"
+                      value={cakeLayers[selectedLayerIndex]?.customText || ''}
+                      onChange={(e) => {
+                        const text = e.target.value;
+                        setCakeLayers(prev => prev.map((layer, i) => 
+                          i === selectedLayerIndex ? { ...layer, customText: text } : layer
+                        ));
+                      }}
+                    />
+                    <span className="text-char-limit">
+                      {(cakeLayers[selectedLayerIndex]?.customText || '').length}/15
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="summary-cards">
+                {cakeLayers.length === 0 ? (
+                  <p className="summary-empty">No layers added yet. Click a layer above to start!</p>
+                ) : (
+                  cakeLayers.map((layer, i) => (
+                    <div 
+                      key={i} 
+                      className={`summary-item ${selectedLayerIndex === i ? 'selected' : ''}`}
+                      onClick={() => setSelectedLayerIndex(i)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {layerIcon(layer.type)}
+                      <span>{layerLabel[layer.type] || layer.type}</span>
+                      <button className="summary-remove" onClick={(e) => removeLayer(e, i)}><X size={12} /></button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h3>{item.name}</h3>
+            <p className="menu-card-desc">{item.description}</p>
+            
+            <div className="menu-card-footer">
+              <span className="menu-card-price">
+                {item.price === 'WA' ? (
+                  <span className="price-wa-tag">
+                    <WhatsAppIcon size={14} />
+                    <span>WA</span>
+                  </span>
+                ) : item.price}
+              </span>
+              <button 
+                className="menu-add-btn" 
+                onClick={() => onSelectProduct(item)}
+              >
+                <span className="hide-on-mobile">Add to </span>Order
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+      {item.isFullWidth && (
+        <div className="designer-order-wrapper">
+          <button 
+            className="designer-order-btn" 
+            onClick={() => onSelectProduct({ ...item, layers: cakeLayers })}
+            disabled={cakeLayers.length === 0}
+          >
+            <div className="designer-price-label">
+              <WhatsAppIcon size={12} />
+              <span>WA</span>
+            </div>
+            <span>ORDER</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const layerLabel = { '6round': '6" Round', '8round': '8" Round', '6heart': '6" Heart', '8heart': '8" Heart' };
 const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circle size={16} />;
