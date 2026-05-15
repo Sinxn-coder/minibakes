@@ -39,23 +39,24 @@ body {
   }
 }
 
-/* Page Transitions */
-.view-transition-wrapper {
-  animation: pageSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 @keyframes pageSlideDown {
   0% {
-    transform: translateY(-30px);
+    transform: translateY(-100%);
     opacity: 0;
   }
   100% {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.view-transition-wrapper {
+  animation: pageSlideDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1; /* Stay behind the header (z-index 1000) */
 }
 
 /* Header Styles */
