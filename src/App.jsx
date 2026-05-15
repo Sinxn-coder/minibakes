@@ -439,7 +439,7 @@ function App() {
 
   const featuredItems = [
     { id: 't-featured', img: brownieImg, images: [brownieImg, brownie2, brownie3], name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
-    { id: 'cu-featured', img: cupcakeImg, images: [cupcakeImg, cupcake1, cupcake2], name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
+    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
     { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ];
 
