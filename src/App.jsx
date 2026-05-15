@@ -725,21 +725,7 @@ function App() {
         </div>
       </div>
 
-      {/* Page Content with Transition */}
-      <div key={currentView} className="view-transition-wrapper">
-        {/* Cinematic Title Reveal Overlay */}
-        <div className="transition-title-overlay">
-          <h1 className="transition-big-text">
-            {currentView === 'home' && 'Welcome'}
-            {currentView === 'menu' && 'Our Menu'}
-            {currentView === 'studio' && 'Masterclasses'}
-            {currentView === 'care' && 'Cake Care'}
-            {currentView === 'order' && 'Order Summary'}
-            {currentView === 'contact' && 'Get In Touch'}
-            {currentView === 'product-details' && (customizingProduct?.name || 'Perfecting Details')}
-          </h1>
-        </div>
-
+      <div key={currentView} className="page-transition-wrapper">
         {currentView === 'home' && (
         <>
           {/* Hero Section */}
@@ -1068,9 +1054,9 @@ function App() {
       {currentView === 'care' && (
         <CakeCarePage onBack={() => setCurrentView('home')} />
       )}
-      {currentView === 'contact' && (
-        <ContactPage onBack={() => setCurrentView('home')} />
-      )}
+        {currentView === 'contact' && (
+          <ContactPage onBack={() => setCurrentView('home')} />
+        )}
       </div>
 
       {/* Desktop Cart Drawer */}
