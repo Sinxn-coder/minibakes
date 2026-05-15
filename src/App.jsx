@@ -1,19 +1,28 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Heart, Cake } from 'lucide-react';
 
-const InstagramIcon = ({ size = 24, ...props }) => (
+const InstagramIcon = ({ size = 24, color, ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
     height={size}
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
+    stroke={color || "url(#instaGradient)"}
+    strokeWidth="1.8"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
+    <defs>
+      <linearGradient id="instaGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" style={{ stopColor: '#f09433' }} />
+        <stop offset="25%" style={{ stopColor: '#e6683c' }} />
+        <stop offset="50%" style={{ stopColor: '#dc2743' }} />
+        <stop offset="75%" style={{ stopColor: '#cc2366' }} />
+        <stop offset="100%" style={{ stopColor: '#bc1888' }} />
+      </linearGradient>
+    </defs>
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
