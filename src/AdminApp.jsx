@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
@@ -161,12 +161,22 @@ export default function AdminApp() {
           .select('*')
           .order('slot');
         
-        if (error) throw error;
+        if (error) {
+          // If network error (likely missing backend), fail silently and use defaults
+          if (error.message?.includes('fetch')) {
+             console.log('Using local featured items (Supabase not connected)');
+             return;
+          }
+          throw error;
+        }
         if (data && data.length === 3) {
           setFeaturedDesserts(data);
         }
       } catch (err) {
-        console.error('Error fetching featured items:', err);
+        // Only log serious errors, not network resolution issues
+        if (!err.message?.includes('fetch')) {
+          console.error('Error fetching featured items:', err);
+        }
       }
     };
 

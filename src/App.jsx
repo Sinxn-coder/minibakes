@@ -464,7 +464,13 @@ function App() {
           .select('*')
           .order('slot');
         
-        if (error) throw error;
+        if (error) {
+           if (error.message?.includes('fetch')) {
+             console.log('Supabase connection skipped (Demo Mode)');
+             return;
+           }
+           throw error;
+        }
         if (data && data.length > 0) {
           // Merge with static images and filter empty
           const activeFeatured = data
@@ -481,7 +487,9 @@ function App() {
           }
         }
       } catch (err) {
-        console.error('Error fetching featured items:', err);
+        if (!err.message?.includes('fetch')) {
+          console.error('Error fetching featured items:', err);
+        }
       }
     };
 
