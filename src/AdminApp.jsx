@@ -142,13 +142,15 @@ export default function AdminApp() {
   };
 
   const [featuredDesserts, setFeaturedDesserts] = useState([
-    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg, highlights: [] },
-    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg, highlights: [] },
-    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg, highlights: [] },
+    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg, highlights: [], isEmpty: false },
+    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg, highlights: [], isEmpty: false },
+    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg, highlights: [], isEmpty: false },
   ]);
   const [editingFeatured, setEditingFeatured] = useState(null);
   const [highlightModal, setHighlightModal] = useState(null); // { slot: 1 } or null
+  const [imageModal, setImageModal] = useState(null); // { slot: 1 } or null
   const [newHighlight, setNewHighlight] = useState({ title: '', text: '' });
+  const [newImageUrl, setNewImageUrl] = useState('');
 
   // Fetch featured items from Supabase
   useEffect(() => {
@@ -477,26 +479,64 @@ export default function AdminApp() {
                       ) : (
                         <>
                           <div style={{ width: '100%', aspectRatio: '1.2', borderRadius: '8px', background: '#f8f9fa', marginBottom: '12px', overflow: 'hidden', position: 'relative' }}>
-                            <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            {item.isEmpty ? (
+                              <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ccc', gap: '8px' }}>
+                                <Package size={40} opacity={0.3} />
+                                <span style={{ fontSize: '12px', fontWeight: 'bold' }}>EMPTY SLOT</span>
+                              </div>
+                            ) : (
+                              <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            )}
                             <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#800000', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>SLOT {item.slot}</div>
+                            
+                            {!item.isEmpty && (
+                              <button 
+                                onClick={() => setImageModal({ slot: item.slot, currentImg: item.img })}
+                                style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                                title="Change Image"
+                              >
+                                <ImageIcon size={14} color="#666" />
+                              </button>
+                            )}
                           </div>
-                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px' }}>{item.name}</h3>
-                          <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px' }}>{item.price}</p>
-                          <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em' }}>{item.description}</p>
+                          
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
+                            {!item.isEmpty && (
+                              <button 
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to clear this featured slot?')) {
+                                    handleUpdateFeatured(item.slot, { ...item, isEmpty: true });
+                                  }
+                                }}
+                                style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer', padding: '4px' }}
+                                title="Delete from featured"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
+                          
+                          <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'Price Label' : item.price}</p>
+                          <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em', opacity: item.isEmpty ? 0.3 : 1 }}>
+                            {item.isEmpty ? 'Add a description for your new featured highlight...' : item.description}
+                          </p>
                           
                           {/* Highlights List */}
-                          <div style={{ marginBottom: '16px' }}>
+                          <div style={{ marginBottom: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
-                               <button 
-                                 onClick={() => setHighlightModal({ slot: item.slot })}
-                                 style={{ background: '#FFF0F4', border: 'none', color: '#800000', borderRadius: '4px', padding: '2px 6px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                               >
-                                 <Plus size={10} /> Add
-                               </button>
+                               {!item.isEmpty && (
+                                 <button 
+                                   onClick={() => setHighlightModal({ slot: item.slot })}
+                                   style={{ background: '#FFF0F4', border: 'none', color: '#800000', borderRadius: '4px', padding: '2px 6px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                 >
+                                   <Plus size={10} /> Add
+                                 </button>
+                               )}
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                               {item.highlights && item.highlights.map((h, i) => (
+                               {!item.isEmpty && item.highlights && item.highlights.map((h, i) => (
                                  <div key={i} style={{ padding: '8px', background: '#fcfcfc', border: '1px solid #eee', borderRadius: '6px', position: 'relative' }}>
                                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', marginBottom: '2px' }}>{h.title}</div>
                                    <div style={{ fontSize: '10px', color: '#666' }}>{h.text}</div>
@@ -511,17 +551,22 @@ export default function AdminApp() {
                                    </button>
                                  </div>
                                ))}
-                               {(!item.highlights || item.highlights.length === 0) && (
-                                 <p style={{ fontSize: '11px', color: '#aaa', fontStyle: 'italic', margin: 0 }}>No highlights added yet.</p>
+                               {(item.isEmpty || !item.highlights || item.highlights.length === 0) && (
+                                 <p style={{ fontSize: '11px', color: '#aaa', fontStyle: 'italic', margin: 0 }}>No highlights added.</p>
                                )}
                             </div>
                           </div>
 
                           <button 
-                            onClick={() => setEditingFeatured(item.slot)}
-                            style={{ width: '100%', marginTop: 'auto', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px' }}
+                            onClick={() => {
+                              if (item.isEmpty) {
+                                handleUpdateFeatured(item.slot, { ...item, isEmpty: false });
+                              }
+                              setEditingFeatured(item.slot);
+                            }}
+                            style={{ width: '100%', marginTop: 'auto', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: item.isEmpty ? '#800000' : '#fff', color: item.isEmpty ? '#fff' : '#333', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', fontWeight: item.isEmpty ? 'bold' : '500' }}
                           >
-                            <Edit3 size={14} /> Edit Basics
+                            {item.isEmpty ? <Plus size={14} /> : <Edit3 size={14} />} {item.isEmpty ? 'Add Product to Slot' : 'Edit Basics'}
                           </button>
                         </>
                       )}
@@ -1071,6 +1116,51 @@ export default function AdminApp() {
                 style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
                 <Plus size={18} /> Add to Dessert
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Image Modal */}
+      {imageModal && (
+        <div className="admin-modal-overlay" onClick={() => setImageModal(null)} style={{ zIndex: 3000 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px', padding: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, color: '#800000' }}>Change Product Image</h3>
+              <button onClick={() => setImageModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', aspectRatio: '1.5', borderRadius: '12px', background: '#f8f9fa', overflow: 'hidden', border: '1px solid #eee' }}>
+                <img src={newImageUrl || imageModal.currentImg} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+
+              <div className="form-group">
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>IMAGE URL / PATH</label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. ./assets/cupcakes/new.png" 
+                    value={newImageUrl || imageModal.currentImg}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
+                </div>
+                <p style={{ fontSize: '11px', color: '#888', marginTop: '6px' }}>Enter the path from the assets folder or a direct image link.</p>
+              </div>
+
+              <button 
+                onClick={() => {
+                  const slot = imageModal.slot;
+                  const item = featuredDesserts.find(d => d.slot === slot);
+                  handleUpdateFeatured(slot, { ...item, img: newImageUrl || imageModal.currentImg });
+                  setNewImageUrl('');
+                  setImageModal(null);
+                }}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <Save size={18} /> Update Image
               </button>
             </div>
           </div>

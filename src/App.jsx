@@ -465,15 +465,20 @@ function App() {
           .order('slot');
         
         if (error) throw error;
-        if (data && data.length === 3) {
-          // Merge with static images for now if paths match or use data.img
-          const merged = data.map((item, idx) => ({
-            ...item,
-            id: ['t-featured', 'cu-featured', 'c-featured'][idx],
-            img: item.img || [brownieImg, cupcakeImg, cakeImg][idx],
-            images: idx === 0 ? [brownieImg, brownie2, brownie3] : undefined
-          }));
-          setFeaturedItems(merged);
+        if (data && data.length > 0) {
+          // Merge with static images and filter empty
+          const activeFeatured = data
+            .filter(item => !item.isEmpty)
+            .map((item, idx) => ({
+              ...item,
+              id: item.id || `featured-${item.slot}`,
+              img: item.img || [brownieImg, cupcakeImg, cakeImg][item.slot - 1],
+              images: item.slot === 1 ? [brownieImg, brownie2, brownie3] : undefined
+            }));
+          
+          if (activeFeatured.length > 0) {
+            setFeaturedItems(activeFeatured);
+          }
         }
       } catch (err) {
         console.error('Error fetching featured items:', err);
