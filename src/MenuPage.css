@@ -69,6 +69,21 @@
   gap: 3rem;
 }
 
+.menu-section-title {
+  grid-column: 1 / -1;
+  padding: 2rem 0 1rem;
+  border-bottom: 2px solid var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.menu-section-title h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--secondary);
+  font-size: 2.2rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
 .menu-card {
   background: white;
   border-radius: 30px;
