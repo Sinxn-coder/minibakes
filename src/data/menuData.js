@@ -46,7 +46,7 @@ import round_11 from '../assets/cakes/round/round (11).png';
 import round_12 from '../assets/cakes/round/round (12).png';
 
 const roundImages = [
-  round_1, round_2, round_3, round_4, round_5, round_6, 
+  round_1, round_2, round_3, round_4, round_5, round_6,
   round_7, round_8, round_9, round_10, round_11, round_12
 ];
 
@@ -108,11 +108,20 @@ export const menuData = [
   {
     category: "Brownies",
     items: [
-      { id: 't1-6', name: 'Brownies (Box of 6)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 6 large pieces. Choice of up to 3 spreads.' },
-      { id: 't1-9', name: 'Brownies (Box of 9)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 9 pieces. Choice of up to 3 spreads.' },
-      { id: 't1-12', name: 'Brownies (Box of 12)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 12 pieces. Choice of up to 3 spreads.' },
-      { id: 't1-16', name: 'Brownies (Box of 16)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 16 snack-sized pieces. Choice of up to 3 spreads.' },
-      { id: 't1-20', name: 'Brownies (Box of 20)', price: '€32', img: brownies, description: 'Rich chocolate brownies cut into 20 bite-sized pieces. Choice of up to 3 spreads.' },
+      { 
+        id: 'brownies-box', 
+        name: 'Signature Brownies Box', 
+        price: '€32', 
+        img: brownies, 
+        description: 'Rich chocolate brownies with your choice of up to 3 signature spreads. Select your preferred piece count below.',
+        options: [
+          { label: 'Box of 6', value: '6' },
+          { label: 'Box of 9', value: '9' },
+          { label: 'Box of 12', value: '12' },
+          { label: 'Box of 16', value: '16' },
+          { label: 'Box of 20', value: '20' }
+        ]
+      }
     ]
   },
   {
@@ -124,8 +133,8 @@ export const menuData = [
   {
     category: "Mini Cakes",
     items: [
-      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: mini1, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
-      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: mini2, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
+      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: mini2, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
+      { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: mini1, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
     ]
   },
   {

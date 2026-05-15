@@ -8,7 +8,10 @@ import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
 
-const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => (
+const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => {
+  const [selectedOption, setSelectedOption] = useState(item.options ? item.options[0].value : null);
+
+  return (
   <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
     <div className="menu-card-image">
       {item.isFullWidth ? (
@@ -174,11 +177,26 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
         <>
           <h3>{item.name}</h3>
           <p className="menu-card-desc">{item.description}</p>
+          
+          {item.options && (
+            <div className="item-options-selector">
+              {item.options.map(opt => (
+                <button 
+                  key={opt.value}
+                  className={`option-chip ${selectedOption === opt.value ? 'active' : ''}`}
+                  onClick={() => setSelectedOption(opt.value)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="menu-card-footer">
             <span className="menu-card-price">{item.price}</span>
             <button 
               className="menu-add-btn" 
-              onClick={() => onSelectProduct(item)}
+              onClick={() => onSelectProduct({ ...item, selectedSize: selectedOption })}
             >
               <span className="hide-on-mobile">Add to </span>Order
             </button>
@@ -198,7 +216,8 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
       </div>
     )}
   </div>
-);
+  );
+};
 
 const layerLabel = { '6round': '6" Round', '8round': '8" Round', '6heart': '6" Heart', '8heart': '8" Heart' };
 const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circle size={16} />;

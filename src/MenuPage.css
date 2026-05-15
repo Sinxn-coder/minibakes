@@ -339,9 +339,44 @@
 }
 
 .menu-card-content h3 {
+  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   color: var(--secondary);
   margin-bottom: 0.8rem;
+}
+
+.item-options-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.5rem 0 1.2rem 0;
+}
+
+.option-chip {
+  background: #fdf7f8;
+  border: 1px solid rgba(92, 13, 27, 0.1);
+  padding: 0.4rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #666;
+  font-weight: 500;
+}
+
+.option-chip:hover {
+  background: white;
+  border-color: var(--secondary);
+  color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.option-chip.active {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(92, 13, 27, 0.2);
 }
 
 .menu-card-desc {
