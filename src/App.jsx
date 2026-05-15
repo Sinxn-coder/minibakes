@@ -61,6 +61,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 import './App.css';
 import { menuData } from './data/menuData';
 import SafeImage from './components/SafeImage';
+import { supabase } from './supabase';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg3.png';
 import brownieImg from './assets/brownies_box.png';
@@ -449,11 +450,38 @@ function App() {
     }, 0);
   };
 
-  const featuredItems = [
+  const [featuredItems, setFeaturedItems] = useState([
     { id: 't-featured', img: brownieImg, images: [brownieImg, brownie2, brownie3], name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
     { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
     { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('featured_items')
+          .select('*')
+          .order('slot');
+        
+        if (error) throw error;
+        if (data && data.length === 3) {
+          // Merge with static images for now if paths match or use data.img
+          const merged = data.map((item, idx) => ({
+            ...item,
+            id: ['t-featured', 'cu-featured', 'c-featured'][idx],
+            img: item.img || [brownieImg, cupcakeImg, cakeImg][idx],
+            images: idx === 0 ? [brownieImg, brownie2, brownie3] : undefined
+          }));
+          setFeaturedItems(merged);
+        }
+      } catch (err) {
+        console.error('Error fetching featured items:', err);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
 
   const featuredRef = useRef(null);
   const [featuredInView, setFeaturedInView] = useState(false);

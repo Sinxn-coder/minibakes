@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
+
+// Default featured images
+import brownieImg from './assets/brownies_box.png';
+import cupcakeImg from './assets/cupcake4.png';
+import cakeImg from './assets/roundcake1.png';
 
 export default function AdminApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -133,6 +137,57 @@ export default function AdminApp() {
       // Local fallback for demo
       if (isBooked) setBookedDates(prev => prev.filter(d => d !== dateStr));
       else setBookedDates(prev => [...prev, dateStr]);
+    }
+  };
+
+  const [featuredDesserts, setFeaturedDesserts] = useState([
+    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg },
+    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg },
+    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg },
+  ]);
+  const [editingFeatured, setEditingFeatured] = useState(null);
+
+  // Fetch featured items from Supabase
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('featured_items')
+          .select('*')
+          .order('slot');
+        
+        if (error) throw error;
+        if (data && data.length === 3) {
+          setFeaturedDesserts(data);
+        }
+      } catch (err) {
+        console.error('Error fetching featured items:', err);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
+  const handleUpdateFeatured = async (slot, updatedItem) => {
+    try {
+      const { error } = await supabase
+        .from('featured_items')
+        .upsert({ ...updatedItem, slot });
+      
+      if (error) throw error;
+      
+      setFeaturedDesserts(prev => prev.map(item => 
+        item.slot === slot ? updatedItem : item
+      ));
+      setEditingFeatured(null);
+      alert('Featured item updated successfully!');
+    } catch (err) {
+      console.error('Error saving featured item:', err);
+      // Fallback update local state for demo
+      setFeaturedDesserts(prev => prev.map(item => 
+        item.slot === slot ? updatedItem : item
+      ));
+      setEditingFeatured(null);
     }
   };
 
@@ -351,8 +406,95 @@ export default function AdminApp() {
 
           {activeTab === 'products' && (
             <div className="admin-panel" style={{ minHeight: '600px' }}>
+              {/* Featured Section */}
+              <div style={{ marginBottom: '40px', background: '#fff9fa', padding: '24px', borderRadius: '16px', border: '1px solid #ffebee' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <div>
+                    <h2 style={{ margin: 0, fontSize: '20px', color: '#800000', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Sparkles size={20} /> Home Page Featured Desserts
+                    </h2>
+                    <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Manage the three main highlight cards on your home page.</p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+                  {featuredDesserts.map((item) => (
+                    <div key={item.slot} className="premium-card" style={{ padding: '16px', border: editingFeatured === item.slot ? '2px solid #800000' : '1px solid #eee' }}>
+                      {editingFeatured === item.slot ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          <div className="form-group">
+                            <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>NAME</label>
+                            <input 
+                              type="text" 
+                              defaultValue={item.name} 
+                              id={`name-${item.slot}`}
+                              style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>PRICE TEXT</label>
+                            <input 
+                              type="text" 
+                              defaultValue={item.price} 
+                              id={`price-${item.slot}`}
+                              style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>DESCRIPTION</label>
+                            <textarea 
+                              defaultValue={item.description} 
+                              id={`desc-${item.slot}`}
+                              style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', minHeight: '60px' }}
+                            />
+                          </div>
+                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                            <button 
+                              onClick={() => {
+                                const updated = {
+                                  ...item,
+                                  name: document.getElementById(`name-${item.slot}`).value,
+                                  price: document.getElementById(`price-${item.slot}`).value,
+                                  description: document.getElementById(`desc-${item.slot}`).value,
+                                };
+                                handleUpdateFeatured(item.slot, updated);
+                              }}
+                              style={{ flex: 1, padding: '8px', borderRadius: '6px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontWeight: '600' }}
+                            >
+                              <Save size={14} /> Save
+                            </button>
+                            <button 
+                              onClick={() => setEditingFeatured(null)}
+                              style={{ padding: '8px 12px', borderRadius: '6px', background: '#f5f5f5', border: '1px solid #ddd', cursor: 'pointer' }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ width: '100%', aspectRatio: '1.2', borderRadius: '8px', background: '#f8f9fa', marginBottom: '12px', overflow: 'hidden', position: 'relative' }}>
+                            <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#800000', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>SLOT {item.slot}</div>
+                          </div>
+                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px' }}>{item.name}</h3>
+                          <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px' }}>{item.price}</p>
+                          <p style={{ margin: 0, fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em' }}>{item.description}</p>
+                          <button 
+                            onClick={() => setEditingFeatured(item.slot)}
+                            style={{ width: '100%', marginTop: '16px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px' }}
+                          >
+                            <Edit3 size={14} /> Edit Featured
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
-                <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Products Catalog</h2>
+                <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>All Products</h2>
                 <button style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', background: 'var(--color-main)', color: '#fff', cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
                    + Add Product
                 </button>
