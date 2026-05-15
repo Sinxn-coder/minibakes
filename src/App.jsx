@@ -211,21 +211,24 @@ const InstaPost = ({ post, index }) => {
   
   return (
     <div className="insta-card-placeholder">
-      {(!loaded || !post) && (
-        <div className="insta-img-shimmer">
-          <InstagramIcon size={32} opacity={0.2} />
+      <a href={post?.link} target="_blank" rel="noopener noreferrer" className="insta-card-link-wrapper">
+        <div className="insta-card-icon-container">
+          <InstagramIcon size={20} className="insta-card-icon" />
         </div>
-      )}
-      {post && (
-        <img 
-          src={post.img} 
-          alt={`Instagram Reel ${index + 1}`} 
-          className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
-          style={{ cursor: 'pointer' }}
-          onLoad={() => setLoaded(true)}
-          onDoubleClick={() => window.open(post.link, '_blank')}
-        />
-      )}
+        {(!loaded || !post) && (
+          <div className="insta-img-shimmer">
+            <InstagramIcon size={32} opacity={0.2} />
+          </div>
+        )}
+        {post && (
+          <img 
+            src={post.img} 
+            alt={`Instagram Reel ${index + 1}`} 
+            className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
+            onLoad={() => setLoaded(true)}
+          />
+        )}
+      </a>
     </div>
   );
 };

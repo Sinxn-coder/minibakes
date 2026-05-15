@@ -949,6 +949,46 @@ body {
   object-fit: cover;
   position: relative;
   z-index: 2;
+  transition: transform 0.5s ease;
+}
+
+.insta-card-placeholder:hover .insta-real-img {
+  transform: scale(1.05);
+}
+
+.insta-card-link-wrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-decoration: none;
+}
+
+.insta-card-icon-container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  color: white;
+  background: rgba(0, 0, 0, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.insta-card-placeholder:hover .insta-card-icon-container {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.insta-card-icon {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .insta-img-shimmer {
