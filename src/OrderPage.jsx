@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles } from 'lucide-react';
+import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles, Cake } from 'lucide-react';
 import './OrderPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
 
@@ -129,7 +129,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                     <img src={item.img} alt={item.name} className="order-item-img" />
                   ) : (
                     <div className="order-item-icon-fallback">
-                      <Sparkles size={32} color="var(--secondary)" />
+                      <Cake size={32} color="var(--secondary)" />
                     </div>
                   )}
                   <div className="order-item-details">
