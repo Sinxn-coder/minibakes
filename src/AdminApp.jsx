@@ -434,9 +434,122 @@ export default function AdminApp() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
                   {featuredDesserts.map((item) => (
-                    <div key={item.slot} className="premium-card" style={{ padding: '16px', border: editingFeatured === item.slot ? '2px solid #800000' : '1px solid #eee' }}>
-                      {editingFeatured === item.slot ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div key={item.slot} className="premium-card" style={{ padding: 0, border: editingFeatured === item.slot ? '2px solid #800000' : '1px solid #eee', position: 'relative', overflow: 'hidden', minHeight: '520px', display: 'flex', flexDirection: 'column' }}>
+                      
+                      {/* View Mode Layer */}
+                      <div style={{ 
+                        padding: '16px',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        height: '100%',
+                        width: '100%',
+                        transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease',
+                        transform: editingFeatured === item.slot ? 'translateY(-100%)' : 'translateY(0)',
+                        opacity: editingFeatured === item.slot ? 0 : 1,
+                        position: editingFeatured === item.slot ? 'absolute' : 'relative',
+                        zIndex: editingFeatured === item.slot ? 0 : 1,
+                        pointerEvents: editingFeatured === item.slot ? 'none' : 'auto'
+                      }}>
+                        <div style={{ width: '100%', aspectRatio: '1.2', borderRadius: '8px', background: '#f8f9fa', marginBottom: '12px', overflow: 'hidden', position: 'relative' }}>
+                          {item.isEmpty ? (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ccc', gap: '8px' }}>
+                              <Package size={40} opacity={0.3} />
+                              <span style={{ fontSize: '12px', fontWeight: 'bold' }}>EMPTY SLOT</span>
+                            </div>
+                          ) : (
+                            <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          )}
+                          <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#800000', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>SLOT {item.slot}</div>
+                          
+                          {!item.isEmpty && (
+                            <button 
+                              onClick={() => setImageModal({ slot: item.slot, currentImg: item.img })}
+                              style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                              title="Change Image"
+                            >
+                              <ImageIcon size={14} color="#666" />
+                            </button>
+                          )}
+                        </div>
+                        
+                        <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
+                        
+                        <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'Price Label' : item.price}</p>
+                        <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em', opacity: item.isEmpty ? 0.3 : 1 }}>
+                          {item.isEmpty ? 'Add a description for your new featured highlight...' : item.description}
+                        </p>
+                        
+                        <div style={{ marginBottom: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                             <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
+                          </div>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                             {!item.isEmpty && item.highlights && item.highlights.map((h, i) => (
+                               <div key={i} style={{ padding: '8px', background: '#fcfcfc', border: '1px solid #eee', borderRadius: '6px', position: 'relative' }}>
+                                 <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', marginBottom: '2px' }}>{h.title}</div>
+                                 <div style={{ fontSize: '10px', color: '#666' }}>{h.text}</div>
+                                 <button 
+                                   onClick={() => {
+                                     const updated = { ...item, highlights: item.highlights.filter((_, idx) => idx !== i) };
+                                     handleUpdateFeatured(item.slot, updated);
+                                   }}
+                                   style={{ position: 'absolute', top: '4px', right: '4px', background: 'none', border: 'none', color: '#ccc', cursor: 'pointer' }}
+                                 >
+                                   <X size={10} />
+                                 </button>
+                               </div>
+                             ))}
+                             {(item.isEmpty || !item.highlights || item.highlights.length === 0) && (
+                               <p style={{ fontSize: '11px', color: '#aaa', fontStyle: 'italic', margin: 0 }}>No highlights added.</p>
+                             )}
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+                          <button 
+                            onClick={() => {
+                              if (item.isEmpty) {
+                                handleUpdateFeatured(item.slot, { ...item, isEmpty: false });
+                              }
+                              setEditingFeatured(item.slot);
+                            }}
+                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: item.isEmpty ? '#800000' : '#fff', color: item.isEmpty ? '#fff' : '#333', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', fontWeight: item.isEmpty ? 'bold' : '500' }}
+                          >
+                            {item.isEmpty ? <Plus size={14} /> : <Edit3 size={14} />} {item.isEmpty ? 'Add Product' : 'Edit Basics'}
+                          </button>
+                          
+                          {!item.isEmpty && (
+                            <button 
+                              onClick={() => {
+                                if (confirm('Are you sure you want to clear this featured slot?')) {
+                                  handleUpdateFeatured(item.slot, { ...item, isEmpty: true });
+                                }
+                              }}
+                              style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffebee', background: '#fffcfc', color: '#ff4d4d', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                              title="Remove from featured"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Edit Mode Layer */}
+                      <div style={{ 
+                        padding: '16px',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        height: '100%',
+                        width: '100%',
+                        transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease',
+                        transform: editingFeatured === item.slot ? 'translateY(0)' : 'translateY(100%)',
+                        opacity: editingFeatured === item.slot ? 1 : 0,
+                        position: editingFeatured === item.slot ? 'relative' : 'absolute',
+                        top: 0, left: 0,
+                        zIndex: editingFeatured === item.slot ? 1 : 0,
+                        pointerEvents: editingFeatured === item.slot ? 'auto' : 'none'
+                      }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%' }}>
                           <div className="form-group">
                             <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>NAME</label>
                             <input 
@@ -464,7 +577,6 @@ export default function AdminApp() {
                             />
                           </div>
 
-                          {/* Highlights section inside edit mode */}
                           <div style={{ marginBottom: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
@@ -478,7 +590,7 @@ export default function AdminApp() {
                                  <Plus size={10} /> Add
                                </button>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '100px', overflowY: 'auto' }}>
                                {item.highlights && item.highlights.map((h, i) => (
                                  <div key={i} style={{ fontSize: '10px', color: '#666', background: '#f9f9f9', padding: '4px 8px', borderRadius: '4px', border: '1px solid #eee', display: 'flex', justifyContent: 'space-between' }}>
                                    <span>{h.title}</span>
@@ -495,7 +607,8 @@ export default function AdminApp() {
                                ))}
                             </div>
                           </div>
-                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                          
+                          <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
                             <button 
                               onClick={() => {
                                 const updated = {
@@ -518,93 +631,7 @@ export default function AdminApp() {
                             </button>
                           </div>
                         </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '100%', aspectRatio: '1.2', borderRadius: '8px', background: '#f8f9fa', marginBottom: '12px', overflow: 'hidden', position: 'relative' }}>
-                            {item.isEmpty ? (
-                              <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ccc', gap: '8px' }}>
-                                <Package size={40} opacity={0.3} />
-                                <span style={{ fontSize: '12px', fontWeight: 'bold' }}>EMPTY SLOT</span>
-                              </div>
-                            ) : (
-                              <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            )}
-                            <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#800000', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>SLOT {item.slot}</div>
-                            
-                            {!item.isEmpty && (
-                              <button 
-                                onClick={() => setImageModal({ slot: item.slot, currentImg: item.img })}
-                                style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                                title="Change Image"
-                              >
-                                <ImageIcon size={14} color="#666" />
-                              </button>
-                            )}
-                          </div>
-                          
-                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
-                          
-                          <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'Price Label' : item.price}</p>
-                          <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em', opacity: item.isEmpty ? 0.3 : 1 }}>
-                            {item.isEmpty ? 'Add a description for your new featured highlight...' : item.description}
-                          </p>
-                          
-                          {/* Highlights List */}
-                          <div style={{ marginBottom: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                               <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                               {!item.isEmpty && item.highlights && item.highlights.map((h, i) => (
-                                 <div key={i} style={{ padding: '8px', background: '#fcfcfc', border: '1px solid #eee', borderRadius: '6px', position: 'relative' }}>
-                                   <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', marginBottom: '2px' }}>{h.title}</div>
-                                   <div style={{ fontSize: '10px', color: '#666' }}>{h.text}</div>
-                                   <button 
-                                     onClick={() => {
-                                       const updated = { ...item, highlights: item.highlights.filter((_, idx) => idx !== i) };
-                                       handleUpdateFeatured(item.slot, updated);
-                                     }}
-                                     style={{ position: 'absolute', top: '4px', right: '4px', background: 'none', border: 'none', color: '#ccc', cursor: 'pointer' }}
-                                   >
-                                     <X size={10} />
-                                   </button>
-                                 </div>
-                               ))}
-                               {(item.isEmpty || !item.highlights || item.highlights.length === 0) && (
-                                 <p style={{ fontSize: '11px', color: '#aaa', fontStyle: 'italic', margin: 0 }}>No highlights added.</p>
-                               )}
-                            </div>
-                          </div>
-
-                          <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
-                            <button 
-                              onClick={() => {
-                                if (item.isEmpty) {
-                                  handleUpdateFeatured(item.slot, { ...item, isEmpty: false });
-                                }
-                                setEditingFeatured(item.slot);
-                              }}
-                              style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: item.isEmpty ? '#800000' : '#fff', color: item.isEmpty ? '#fff' : '#333', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', fontWeight: item.isEmpty ? 'bold' : '500' }}
-                            >
-                              {item.isEmpty ? <Plus size={14} /> : <Edit3 size={14} />} {item.isEmpty ? 'Add Product' : 'Edit Basics'}
-                            </button>
-                            
-                            {!item.isEmpty && (
-                              <button 
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to clear this featured slot?')) {
-                                    handleUpdateFeatured(item.slot, { ...item, isEmpty: true });
-                                  }
-                                }}
-                                style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffebee', background: '#fffcfc', color: '#ff4d4d', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                title="Remove from featured"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            )}
-                          </div>
-                        </>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>
