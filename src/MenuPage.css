@@ -69,19 +69,58 @@
   gap: 3rem;
 }
 
-.menu-section-title {
-  grid-column: 1 / -1;
-  padding: 2rem 0 1rem;
-  border-bottom: 2px solid var(--secondary);
-  margin-bottom: 1rem;
+.menu-subcategory-selector {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding: 0 1.2rem;
 }
 
-.menu-section-title h2 {
+.subcategory-btn {
+  background: none;
+  border: none;
   font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.subcategory-btn.active {
   color: var(--secondary);
-  font-size: 2.2rem;
-  margin: 0;
-  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.subcategory-indicator {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--secondary);
+  transition: width 0.3s ease;
+}
+
+.subcategory-btn.active .subcategory-indicator {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .menu-subcategory-selector {
+    gap: 1.5rem;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+  }
+  .menu-subcategory-selector::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .menu-card {

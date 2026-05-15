@@ -205,9 +205,19 @@ const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circ
 
 export default function MenuPage({ onSelectProduct }) {
   const [activeCategory, setActiveCategory] = useState("Cakes");
+  const [activeSubcategory, setActiveSubcategory] = useState(null);
   const [cakeLayers, setCakeLayers] = useState([]);
   const [toastMessage, setToastMessage] = useState(null);
   const [selectedLayerIndex, setSelectedLayerIndex] = useState(null);
+
+  useEffect(() => {
+    const data = menuData.find(c => c.category === activeCategory);
+    if (data?.sections) {
+      setActiveSubcategory(data.sections[0].title);
+    } else {
+      setActiveSubcategory(null);
+    }
+  }, [activeCategory]);
 
   const [galleryImages, setGalleryImages] = useState(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -308,33 +318,47 @@ export default function MenuPage({ onSelectProduct }) {
         ))}
       </div>
 
+      {activeData.sections && (
+        <div className="menu-subcategory-selector">
+          {activeData.sections.map(section => (
+            <button 
+              key={section.title}
+              className={`subcategory-btn ${activeSubcategory === section.title ? 'active' : ''}`}
+              onClick={() => setActiveSubcategory(section.title)}
+            >
+              {section.title}
+              <div className="subcategory-indicator" />
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="menu-grid">
         {activeData.sections ? (
-          activeData.sections.map(section => (
-            <React.Fragment key={section.title}>
-              <div className="menu-section-title">
-                <h2>{section.title}</h2>
-              </div>
-              {section.items.map(item => (
-                <MenuCard 
-                  key={item.id}
-                  item={item}
-                  cakeLayers={cakeLayers}
-                  setCakeLayers={setCakeLayers}
-                  selectedLayerIndex={selectedLayerIndex}
-                  setSelectedLayerIndex={setSelectedLayerIndex}
-                  addLayer={addLayer}
-                  removeLayer={removeLayer}
-                  applyColor={applyColor}
-                  toggleSpread={toggleSpread}
-                  toggleDesign={toggleDesign}
-                  toastMessage={toastMessage}
-                  onSelectProduct={onSelectProduct}
-                  openGallery={openGallery}
-                />
-              ))}
-            </React.Fragment>
-          ))
+          activeData.sections
+            .filter(section => section.title === activeSubcategory)
+            .map(section => (
+              <React.Fragment key={section.title}>
+                {section.items.map(item => (
+                  <MenuCard 
+                    key={item.id}
+                    item={item}
+                    cakeLayers={cakeLayers}
+                    setCakeLayers={setCakeLayers}
+                    selectedLayerIndex={selectedLayerIndex}
+                    setSelectedLayerIndex={setSelectedLayerIndex}
+                    addLayer={addLayer}
+                    removeLayer={removeLayer}
+                    applyColor={applyColor}
+                    toggleSpread={toggleSpread}
+                    toggleDesign={toggleDesign}
+                    toastMessage={toastMessage}
+                    onSelectProduct={onSelectProduct}
+                    openGallery={openGallery}
+                  />
+                ))}
+              </React.Fragment>
+            ))
         ) : (
           activeData.items.map(item => (
             <MenuCard 
