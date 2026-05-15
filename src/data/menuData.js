@@ -82,7 +82,7 @@ export const menuData = [
     category: "Cupcakes",
     sections: [
       {
-        title: "Buttercream Cupcakes",
+        title: "Buttercream",
         items: [
           { id: 'cu1', name: 'Buttercream (Box of 6)', price: '€15', img: cupcake_1, images: cupcakeImages, description: 'A half-dozen of our fluffiest buttercream cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
           { id: 'cu2', name: 'Buttercream (Box of 12)', price: '€28.80', img: cupcake_2, images: cupcakeImages, description: 'A full dozen premium buttercream cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
@@ -90,7 +90,7 @@ export const menuData = [
         ]
       },
       {
-        title: "White Chocolate Cupcakes",
+        title: "White Chocolate",
         items: [
           { id: 'cu4', name: 'White Chocolate (Box of 6)', price: '€17', img: cupcake_4, images: cupcakeImages, description: 'A half-dozen decadent white chocolate cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
           { id: 'cu5', name: 'White Chocolate (Box of 12)', price: '€32.50', img: cupcake_5, images: cupcakeImages, description: 'A full dozen premium white chocolate cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
