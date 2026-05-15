@@ -673,9 +673,100 @@ export default function AdminApp() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                 {allProducts.map(product => (
-                  <div key={product.id} className="premium-card" style={{ padding: '20px', border: editingProduct === product.id ? '2px solid #800000' : '1px solid #e9ecef', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-                    {editingProduct === product.id ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div key={product.id} style={{ height: '240px', position: 'relative' }}>
+                    <div className="premium-card" style={{ 
+                      position: 'absolute',
+                      top: 0, left: 0, right: 0,
+                      height: editingProduct === product.id ? '450px' : '100%',
+                      zIndex: editingProduct === product.id ? 50 : 1,
+                      padding: '20px', 
+                      border: editingProduct === product.id ? '2px solid #800000' : '1px solid #e9ecef', 
+                      borderRadius: '12px', 
+                      boxShadow: editingProduct === product.id ? '0 12px 30px rgba(0,0,0,0.15)' : '0 2px 8px rgba(0,0,0,0.02)',
+                      background: '#fff',
+                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}>
+                      {/* VIEW STATE LAYER */}
+                      <div style={{
+                        transition: 'all 0.5s ease-in-out',
+                        transform: editingProduct === product.id ? 'translateY(-100%)' : 'translateY(0)',
+                        opacity: editingProduct === product.id ? 0 : 1,
+                        height: editingProduct === product.id ? 0 : '100%',
+                        pointerEvents: editingProduct === product.id ? 'none' : 'auto',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                           <h3 style={{ margin: 0, fontSize: '16px', color: '#111', fontWeight: '700' }}>{product.name}</h3>
+                           <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '12px' }}>{product.status}</span>
+                        </div>
+                        
+                        <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
+                        
+                        {product.flavours && product.flavours.length > 0 && (
+                          <div style={{ marginBottom: '8px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {product.flavours.slice(0, 3).map((f, idx) => (
+                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
+                              ))}
+                              {product.flavours.length > 3 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.flavours.length - 3} more</span>}
+                            </div>
+                          </div>
+                        )}
+
+                        {product.spreads && product.spreads.length > 0 && (
+                          <div style={{ marginBottom: '16px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {product.spreads.slice(0, 2).map((s, idx) => (
+                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
+                              ))}
+                              {product.spreads.length > 2 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.spreads.length - 2} more</span>}
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+                          <button 
+                            onClick={() => setEditingProduct(product.id)}
+                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
+                          >
+                            Edit Item
+                          </button>
+                          <button 
+                            onClick={() => {
+                              if (confirm('Delete this product?')) {
+                                setAllProducts(prev => prev.filter(p => p.id !== product.id));
+                              }
+                            }}
+                            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+                            title="Delete Product"
+                          >
+                             <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* EDIT STATE LAYER */}
+                      <div style={{
+                        transition: 'all 0.5s ease-in-out',
+                        transform: editingProduct === product.id ? 'translateY(0)' : 'translateY(100px)',
+                        opacity: editingProduct === product.id ? 1 : 0,
+                        height: editingProduct === product.id ? '100%' : 0,
+                        pointerEvents: editingProduct === product.id ? 'auto' : 'none',
+                        display: editingProduct === product.id ? 'flex' : 'none',
+                        flexDirection: 'column',
+                        gap: '12px'
+                      }}>
+                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#800000', marginBottom: '4px' }}>
+                            <Edit3 size={16} />
+                            <span style={{ fontWeight: '700', fontSize: '14px' }}>Edit Product Details</span>
+                         </div>
+                         
                          <div>
                             <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>NAME</label>
                             <input 
@@ -685,6 +776,7 @@ export default function AdminApp() {
                               style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
                             />
                          </div>
+                         
                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                            <div>
                               <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>PRICE</label>
@@ -710,27 +802,25 @@ export default function AdminApp() {
                          
                          <div>
                             <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>FLAVOURS (Comma separated)</label>
-                            <input 
-                              type="text" 
+                            <textarea 
                               defaultValue={product.flavours?.join(', ')} 
                               id={`edit-p-flavours-${product.id}`}
                               placeholder="e.g. Chocolate, Vanilla"
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
+                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '50px', resize: 'none' }}
                             />
                          </div>
 
                          <div>
                             <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>SPREADS (Comma separated)</label>
-                            <input 
-                              type="text" 
+                            <textarea 
                               defaultValue={product.spreads?.join(', ')} 
                               id={`edit-p-spreads-${product.id}`}
                               placeholder="e.g. Nutella, Biscoff"
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
+                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '50px', resize: 'none' }}
                             />
                          </div>
 
-                         <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                         <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
                             <button 
                               onClick={() => {
                                 handleUpdateProduct(product.id, {
@@ -741,70 +831,19 @@ export default function AdminApp() {
                                   spreads: document.getElementById(`edit-p-spreads-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
                                 });
                               }}
-                              style={{ flex: 1, padding: '8px', borderRadius: '6px', background: '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+                              style={{ flex: 1, padding: '10px', borderRadius: '6px', background: '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                             >
-                              Save
+                              <Save size={16} /> Save Changes
                             </button>
                             <button 
                               onClick={() => setEditingProduct(null)}
-                              style={{ flex: 1, padding: '8px', borderRadius: '6px', background: '#f5f5f5', border: '1px solid #ddd', cursor: 'pointer' }}
+                              style={{ padding: '10px 16px', borderRadius: '6px', background: '#f5f5f5', border: '1px solid #ddd', cursor: 'pointer', fontWeight: '500' }}
                             >
                               Cancel
                             </button>
                          </div>
                       </div>
-                    ) : (
-                      <>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                           <h3 style={{ margin: 0, fontSize: '16px', color: '#111', fontWeight: '700' }}>{product.name}</h3>
-                           <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '12px' }}>{product.status}</span>
-                        </div>
-                        
-                        <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
-                        
-                        {product.flavours && product.flavours.length > 0 && (
-                          <div style={{ marginBottom: '8px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                              {product.flavours.map((f, idx) => (
-                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {product.spreads && product.spreads.length > 0 && (
-                          <div style={{ marginBottom: '16px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                              {product.spreads.map((s, idx) => (
-                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
-                          <button 
-                            onClick={() => setEditingProduct(product.id)}
-                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
-                          >
-                            Edit Item
-                          </button>
-                          <button 
-                            onClick={() => {
-                              if (confirm('Delete this product?')) {
-                                setAllProducts(prev => prev.filter(p => p.id !== product.id));
-                              }
-                            }}
-                            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
-                            title="Delete Product"
-                          >
-                             <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
