@@ -656,5 +656,34 @@
 .action-icon-link.tel { background: #4a5568; }
 .action-icon-link.tel:hover { background: #2d3748; transform: translateY(-2px); }
 
-.action-icon-link.wa { background: #25D366; }
-.action-icon-link.wa:hover { background: #128C7E; transform: translateY(-2px); }
+.action-icon-link.wa.active { background: #128C7E; transform: translateY(-2px); }
+
+/* Base Modal Styles for standard popups */
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  backdrop-filter: blur(4px);
+  padding: 20px;
+}
+
+.admin-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: modal-appear 0.3s ease-out;
+}
+
+@keyframes modal-appear {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
