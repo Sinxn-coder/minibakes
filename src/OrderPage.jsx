@@ -15,10 +15,23 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
 
   const [orderId, setOrderId] = useState('');
 
-  const totalPrice = cart.reduce((acc, item) => {
-    const priceNum = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-    return acc + (priceNum * item.quantity);
-  }, 0);
+  const getItemTotal = (item) => {
+    let unitPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+    
+    // Tiered pricing for cakesicles-bulk
+    if (item.id === 'cakesicles-bulk') {
+      unitPrice = item.quantity >= 20 ? 2.40 : 2.60;
+    }
+    
+    // Addons
+    if (item.options?.bows) {
+      unitPrice += 5;
+    }
+    
+    return unitPrice * item.quantity;
+  };
+
+  const totalPrice = cart.reduce((acc, item) => acc + getItemTotal(item), 0);
   
   const hasCake = cart.some(item => item.id.startsWith('c') && !item.id.startsWith('cu'));
 
@@ -143,7 +156,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       </div>
                     )}
                     <div className="order-item-price-qty">
-                      <span className="order-item-price">{item.price}</span>
+                      <span className="order-item-price">€{getItemTotal(item).toFixed(2)}</span>
                       <div className="order-qty-selector">
                         <button onClick={() => onUpdateQuantity(item.cartId, item.quantity - 1)}><Minus size={14} /></button>
                         <span>{item.quantity}</span>
