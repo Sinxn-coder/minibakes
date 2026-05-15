@@ -7,11 +7,9 @@ import cupcake6 from '../assets/cupcake6.png';
 
 import brownies from '../assets/brownies_box.png';
 import cakepops from '../assets/cakepops.png';
-import pops1 from '../assets/cake pops/pops1.png';
-import pops2 from '../assets/cake pops/pops2.png';
-import pops3 from '../assets/cake pops/pops3.png';
-import pops4 from '../assets/cake pops/pops4.png';
-import pops5 from '../assets/cake pops/pops5.png';
+import pops_1 from '../assets/cake pops/pops (1).png';
+import pops_2 from '../assets/cake pops/pops (2).png';
+import pops_3 from '../assets/cake pops/pops (3).png';
 import heart1 from '../assets/heartbrake/1.png';
 import sicles1 from '../assets/cake sicles/cakesicles (1).png';
 import sicles2 from '../assets/cake sicles/cakesicles (2).png';
@@ -102,9 +100,9 @@ export const menuData = [
   {
     category: "Cake Pops",
     items: [
-      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pops1, img2: pops5, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pops2, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
-      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pops3, img2: pops4, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
+      { id: 'cp1', name: 'Cake Pops (Each)', price: '€1.70', img: pops_1, description: 'Delicious cake pops (minimum order 15). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 'cp2', name: 'Cake Pops (Pack of 15)', price: '€25.50', img: pops_2, description: 'A standard pack of 15 cake pops. Perfect for small gatherings. Choice of flavors.' },
+      { id: 'cp3', name: 'Cake Pops (Pack of 30)', price: '€51.00', img: pops_3, description: 'A large pack of 30 cake pops for parties. Choice of Chocolate, Vanilla, or Red Velvet.' },
     ]
   },
   {
