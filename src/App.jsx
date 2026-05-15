@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Heart } from 'lucide-react';
+import { Search, Menu, X, Star, MapPin, Phone, ShoppingBag, Mail, Heart, Cake } from 'lucide-react';
 
 const InstagramIcon = ({ size = 24, ...props }) => (
   <svg
@@ -34,6 +34,19 @@ const FacebookIcon = ({ size = 24, ...props }) => (
     {...props}
   >
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const WhatsAppIcon = ({ size = 16, ...props }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    width={size} 
+    height={size} 
+    fill="currentColor" 
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.353-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.446 4.432-9.877 9.881-9.877 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.448-4.435 9.878-9.883 9.878m0-21.867C6.435.056.1.493.1 12.226c0 2.124.549 4.198 1.595 6.037L0 24l5.893-1.547a12.19 12.19 0 005.77 1.468h.005c6.12 0 12.1-5.437 12.1-12.226 0-3.27-1.272-6.342-3.582-8.652A12.134 12.134 0 0012.051.055z"/>
   </svg>
 );
 import './App.css';
@@ -954,7 +967,13 @@ function App() {
               <div className="cart-items-list">
                 {cart.map((item, i) => (
                   <div key={item.cartId || i} className="cart-item-row">
-                    <img src={item.img} alt={item.name} />
+                    {item.img ? (
+                      <img src={item.img} alt={item.name} />
+                    ) : (
+                      <div className="cart-item-icon-fallback">
+                        <Cake size={24} color="var(--secondary)" />
+                      </div>
+                    )}
                     <div className="cart-item-info">
                       <div className="cart-item-header">
                         <h4>{item.name}</h4>
@@ -965,7 +984,14 @@ function App() {
                         {item.options.spread && <span> • {item.options.spread}</span>}
                       </p>
                       <div className="cart-item-price-qty">
-                        <span>{item.price}</span>
+                        <span>
+                          {item.price === 'WA' ? (
+                            <span className="price-wa-tag">
+                              <WhatsAppIcon size={14} />
+                              <span>WA</span>
+                            </span>
+                          ) : item.price}
+                        </span>
                         <span className="cart-qty">x{item.quantity}</span>
                       </div>
                     </div>
