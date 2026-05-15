@@ -1,9 +1,5 @@
 import loveCake from '../assets/lovecake1.png';
 
-import cupcake1 from '../assets/cupcake1.png';
-import cupcake2 from '../assets/cupcake2.png';
-import cupcake3 from '../assets/cupcake3.png';
-import cupcake6 from '../assets/cupcake6.png';
 
 import brownies from '../assets/brownies_box.png';
 import cakepops from '../assets/cakepops.png';
@@ -51,16 +47,15 @@ const roundImages = [
 ];
 
 // Cupcake Gallery
-import cupcake_1 from '../assets/cupcakes/cupcake (1).png';
-import cupcake_2 from '../assets/cupcakes/cupcake (2).png';
-import cupcake_3 from '../assets/cupcakes/cupcake (3).png';
-import cupcake_4 from '../assets/cupcakes/cupcake (4).png';
-import cupcake_5 from '../assets/cupcakes/cupcake (5).png';
-import cupcake_6 from '../assets/cupcakes/cupcake (6).png';
-import cupcake_7 from '../assets/cupcakes/cupcake (7).png';
+import cupcake_1 from '../assets/cupcakes/butter1.png';
+import cupcake_2 from '../assets/cupcakes/butter2.jpeg';
+import cupcake_3 from '../assets/cupcakes/butter3.jpeg';
+import cupcake_4 from '../assets/cupcakes/whitechoclate1.jpeg';
+import cupcake_5 from '../assets/cupcakes/whitechoclate2.png';
+import cupcake_6 from '../assets/cupcakes/whitechoclate3.png';
 
 const cupcakeImages = [
-  cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6, cupcake_7
+  cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6
 ];
 
 export const menuData = [

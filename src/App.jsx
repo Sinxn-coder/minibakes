@@ -66,7 +66,7 @@ import style5 from './assets/style5.png';
 import style6 from './assets/style6.png';
 import style7 from './assets/style7.png';
 import style8 from './assets/style8.png';
-import orbitCupcake from './assets/cupcakes/cupcake (1).png';
+import orbitCupcake from './assets/cupcakes/butter1.png';
 import orbitRoundCake from './assets/cakes/round/round (1).png';
 import orbitPop from './assets/cakepops.png';
 import orbitBrownie from './assets/brownies/brownie (1).png';
