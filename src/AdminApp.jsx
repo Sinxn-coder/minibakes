@@ -1161,17 +1161,40 @@ export default function AdminApp() {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>IMAGE URL / PATH</label>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>UPLOAD NEW IMAGE</label>
+                <div style={{ position: 'relative' }}>
                   <input 
-                    type="text" 
-                    placeholder="e.g. ./assets/cupcakes/new.png" 
-                    value={newImageUrl || imageModal.currentImg}
-                    onChange={(e) => setNewImageUrl(e.target.value)}
-                    style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                    type="file" 
+                    id="featured-upload" 
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => setNewImageUrl(e.target.result);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ display: 'none' }}
                   />
+                  <label 
+                    htmlFor="featured-upload"
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', borderRadius: '8px', background: '#f5f5f5', border: '1px dashed #ccc', cursor: 'pointer', color: '#666', fontSize: '14px', fontWeight: '500' }}
+                  >
+                    <Upload size={18} /> Choose Image File
+                  </label>
                 </div>
-                <p style={{ fontSize: '11px', color: '#888', marginTop: '6px' }}>Enter the path from the assets folder or a direct image link.</p>
+              </div>
+
+              <div className="form-group">
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>OR USE URL / PATH</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. ./assets/cupcakes/new.png" 
+                  value={newImageUrl.startsWith('data:') ? '' : newImageUrl}
+                  onChange={(e) => setNewImageUrl(e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                />
               </div>
 
               <button 
@@ -1184,7 +1207,7 @@ export default function AdminApp() {
                 }}
                 style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
-                <Save size={18} /> Update Image
+                <Save size={18} /> Save Changes
               </button>
             </div>
           </div>
