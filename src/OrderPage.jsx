@@ -106,8 +106,9 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       <button className="remove-item-btn" onClick={() => onRemoveItem(item.cartId)}><X size={16} /></button>
                     </div>
                     <p className="order-item-options">
+                      {item.options.boxSize && <span>Box of {item.options.boxSize} • </span>}
                       {item.options.flavor && <span>{item.options.flavor}</span>}
-                      {item.options.spread && <span> • {item.options.spread}</span>}
+                      {item.options.spreads && item.options.spreads.length > 0 && <span> • {item.options.spreads.join(', ')}</span>}
                     </p>
                     {item.options.notes && (
                       <p className="order-item-notes">" {item.options.notes} "</p>

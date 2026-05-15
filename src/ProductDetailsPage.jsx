@@ -13,7 +13,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     spreads: [], // Changed to array for multi-select support
     message: '',
     notes: '',
-    bows: false
+    bows: false,
+    boxSize: product.options ? product.options[0].value : ''
   });
 
   const BOW_ADDON_PRICE = 5;
@@ -24,7 +25,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCake = productId.startsWith('c') && !productId.startsWith('cu');
   const isCupcake = productId.startsWith('cu') && !['cu5', 'cu6'].includes(productId);
   const isMiniCake = ['cu5', 'cu6'].includes(productId);
-  const isBrownie = productId.startsWith('t1');
+  const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
   const hasSpreads = isCake || isMiniCake || isBrownie;
 
   const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') 
@@ -77,6 +78,24 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             <p className="details-description">{product.description}</p>
 
             <div className="customization-section">
+
+              {/* Product Options (e.g. Box Size) */}
+              {product.options && (
+                <div className="option-group">
+                  <label>Select Box Size</label>
+                  <div className="option-grid">
+                    {product.options.map(opt => (
+                      <button 
+                        key={opt.value}
+                        className={`option-btn ${options.boxSize === opt.value ? 'active' : ''}`}
+                        onClick={() => setOptions({...options, boxSize: opt.value})}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Flavor */}
               <div className="option-group">
