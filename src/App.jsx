@@ -537,18 +537,26 @@ function App() {
               <div className="search-results-dropdown">
                 {(() => {
                   const q = searchQuery.toLowerCase();
+                  
+                  // Helper to get all items from any category structure
+                  const getCategoryItems = (cat) => {
+                    if (cat.items) return cat.items;
+                    if (cat.sections) return cat.sections.flatMap(s => s.items || []);
+                    return [];
+                  };
+
                   const categoryMatches = menuData
                     .filter(cat => cat.category.toLowerCase().includes(q))
-                    .flatMap(cat => cat.items);
+                    .flatMap(getCategoryItems);
 
                   const nameMatches = menuData
-                    .flatMap(cat => cat.items)
+                    .flatMap(getCategoryItems)
                     .filter(item =>
-                      item.name.toLowerCase().includes(q) &&
-                      !categoryMatches.some(cm => cm.id === item.id)
+                      item && item.name && item.name.toLowerCase().includes(q) &&
+                      !categoryMatches.some(cm => cm && cm.id === item.id)
                     );
 
-                  const allResults = [...categoryMatches, ...nameMatches];
+                  const allResults = [...categoryMatches, ...nameMatches].filter(Boolean);
 
                   if (allResults.length === 0) {
                     return (
