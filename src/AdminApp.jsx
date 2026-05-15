@@ -142,11 +142,13 @@ export default function AdminApp() {
   };
 
   const [featuredDesserts, setFeaturedDesserts] = useState([
-    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg },
-    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg },
-    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg },
+    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg, highlights: [] },
+    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg, highlights: [] },
+    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg, highlights: [] },
   ]);
   const [editingFeatured, setEditingFeatured] = useState(null);
+  const [highlightModal, setHighlightModal] = useState(null); // { slot: 1 } or null
+  const [newHighlight, setNewHighlight] = useState({ title: '', text: '' });
 
   // Fetch featured items from Supabase
   useEffect(() => {
@@ -480,12 +482,46 @@ export default function AdminApp() {
                           </div>
                           <h3 style={{ margin: '0 0 4px 0', fontSize: '16px' }}>{item.name}</h3>
                           <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px' }}>{item.price}</p>
-                          <p style={{ margin: 0, fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em' }}>{item.description}</p>
+                          <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em' }}>{item.description}</p>
+                          
+                          {/* Highlights List */}
+                          <div style={{ marginBottom: '16px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                               <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
+                               <button 
+                                 onClick={() => setHighlightModal({ slot: item.slot })}
+                                 style={{ background: '#FFF0F4', border: 'none', color: '#800000', borderRadius: '4px', padding: '2px 6px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                               >
+                                 <Plus size={10} /> Add
+                               </button>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                               {item.highlights && item.highlights.map((h, i) => (
+                                 <div key={i} style={{ padding: '8px', background: '#fcfcfc', border: '1px solid #eee', borderRadius: '6px', position: 'relative' }}>
+                                   <div style={{ fontSize: '11px', fontWeight: '700', color: '#333', marginBottom: '2px' }}>{h.title}</div>
+                                   <div style={{ fontSize: '10px', color: '#666' }}>{h.text}</div>
+                                   <button 
+                                     onClick={() => {
+                                       const updated = { ...item, highlights: item.highlights.filter((_, idx) => idx !== i) };
+                                       handleUpdateFeatured(item.slot, updated);
+                                     }}
+                                     style={{ position: 'absolute', top: '4px', right: '4px', background: 'none', border: 'none', color: '#ccc', cursor: 'pointer' }}
+                                   >
+                                     <X size={10} />
+                                   </button>
+                                 </div>
+                               ))}
+                               {(!item.highlights || item.highlights.length === 0) && (
+                                 <p style={{ fontSize: '11px', color: '#aaa', fontStyle: 'italic', margin: 0 }}>No highlights added yet.</p>
+                               )}
+                            </div>
+                          </div>
+
                           <button 
                             onClick={() => setEditingFeatured(item.slot)}
-                            style={{ width: '100%', marginTop: '16px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px' }}
+                            style={{ width: '100%', marginTop: 'auto', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px' }}
                           >
-                            <Edit3 size={14} /> Edit Featured
+                            <Edit3 size={14} /> Edit Basics
                           </button>
                         </>
                       )}
@@ -988,6 +1024,56 @@ export default function AdminApp() {
             <X size={32} />
           </button>
           <img src={fullscreenImage} alt="Fullscreen Reference" className="lightbox-image" onClick={e => e.stopPropagation()} />
+        </div>
+      )}
+
+      {/* Add Highlight Modal */}
+      {highlightModal && (
+        <div className="admin-modal-overlay" onClick={() => setHighlightModal(null)} style={{ zIndex: 3000 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px', padding: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, color: '#800000' }}>Add Highlight Item</h3>
+              <button onClick={() => setHighlightModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>HIGHLIGHT TITLE (TAG)</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Flavor" 
+                  value={newHighlight.title}
+                  onChange={(e) => setNewHighlight({ ...newHighlight, title: e.target.value })}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>HIGHLIGHT TEXT</label>
+                <textarea 
+                  placeholder="e.g. Rich Belgian chocolate Ganache" 
+                  value={newHighlight.text}
+                  onChange={(e) => setNewHighlight({ ...newHighlight, text: e.target.value })}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', minHeight: '80px' }}
+                />
+              </div>
+              <button 
+                onClick={() => {
+                  if (!newHighlight.title || !newHighlight.text) return;
+                  const slot = highlightModal.slot;
+                  const item = featuredDesserts.find(d => d.slot === slot);
+                  const updated = {
+                    ...item,
+                    highlights: [...(item.highlights || []), newHighlight]
+                  };
+                  handleUpdateFeatured(slot, updated);
+                  setNewHighlight({ title: '', text: '' });
+                  setHighlightModal(null);
+                }}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <Plus size={18} /> Add to Dessert
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

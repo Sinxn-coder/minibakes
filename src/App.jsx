@@ -751,8 +751,19 @@ function App() {
                       <h3>{featuredItems[expandedDesktopCard].name}</h3>
                       <p className="expanded-price">{featuredItems[expandedDesktopCard].price}</p>
                       <p className="expanded-description">
-                        Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love.
+                        {featuredItems[expandedDesktopCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                       </p>
+                      
+                      {featuredItems[expandedDesktopCard].highlights && featuredItems[expandedDesktopCard].highlights.length > 0 && (
+                        <div className="featured-highlights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }}>
+                          {featuredItems[expandedDesktopCard].highlights.map((h, i) => (
+                            <div key={i} className="featured-highlight-item" style={{ background: '#f8f9fa', padding: '10px', borderRadius: '8px', border: '1px solid #eee' }}>
+                              <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#800000', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>{h.title}</div>
+                              <div style={{ fontSize: '12px', color: '#444', lineHeight: '1.4' }}>{h.text}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       <button className="add-to-cart-btn" onClick={() => {
                         setCustomizingProduct(featuredItems[expandedDesktopCard]);
                         setExpandedDesktopCard(null);
@@ -939,8 +950,21 @@ function App() {
                   <h3>{featuredItems[expandedMobileCard].name}</h3>
                   <p className="popup-price">{featuredItems[expandedMobileCard].price}</p>
                   <p className="popup-description">
-                    Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love.
+                    {featuredItems[expandedMobileCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                   </p>
+
+                  {featuredItems[expandedMobileCard].highlights && featuredItems[expandedMobileCard].highlights.length > 0 && (
+                    <div className="featured-highlights-mobile" style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                      {featuredItems[expandedMobileCard].highlights.map((h, i) => (
+                        <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', background: '#fcfcfc', padding: '10px', borderRadius: '8px', border: '1px solid #eee' }}>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#800000', textTransform: 'uppercase', marginBottom: '2px' }}>{h.title}</div>
+                            <div style={{ fontSize: '12px', color: '#555', lineHeight: '1.4' }}>{h.text}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   <button className="add-to-cart-btn" onClick={() => {
                     setCustomizingProduct(featuredItems[expandedMobileCard]);
                     setExpandedMobileCard(null);
