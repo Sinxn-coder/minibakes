@@ -558,14 +558,6 @@ export default function AdminApp() {
                           <div style={{ marginBottom: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
-                               {!item.isEmpty && (
-                                 <button 
-                                   onClick={() => setHighlightModal({ slot: item.slot })}
-                                   style={{ background: '#FFF0F4', border: 'none', color: '#800000', borderRadius: '4px', padding: '2px 6px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                                 >
-                                   <Plus size={10} /> Add
-                                 </button>
-                               )}
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                {!item.isEmpty && item.highlights && item.highlights.map((h, i) => (
