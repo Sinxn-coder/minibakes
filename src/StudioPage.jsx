@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './StudioPage.css';
 import SafeImage from './components/SafeImage';
+import { supabase } from './supabase';
 
 const studio1 = `${import.meta.env.BASE_URL}studio1.png`;
 const studio2 = `${import.meta.env.BASE_URL}studio2.png`;
@@ -15,18 +16,36 @@ const studio8 = `${import.meta.env.BASE_URL}studio8.png`;
 // 8 unique studio images from public folder
 const studioImages = [studio1, studio2, studio3, studio4, studio5, studio6, studio7, studio8];
 
-// Example booked dates for the calendar
-const BOOKED_DATES = [
+// Booked dates are now managed via Admin Panel and stored in Supabase
+const DEFAULT_BOOKED_DATES = [
   '2026-05-15',
   '2026-05-22',
-  '2026-05-28',
-  '2026-06-05',
-  '2026-06-12',
-  '2026-06-25'
+  '2026-05-28'
 ];
 
 const StudioCalendar = ({ onDateSelect, selectedDate }) => {
   const [viewDate, setViewDate] = useState(new Date(2026, 4, 1)); // Start at May 2026
+  const [bookedDates, setBookedDates] = useState(DEFAULT_BOOKED_DATES);
+
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('booked_dates')
+          .select('date');
+        
+        if (error) throw error;
+        if (data) {
+          setBookedDates(data.map(d => d.date));
+        }
+      } catch (err) {
+        console.error('Error fetching booked dates:', err);
+        // Fallback to defaults if table missing
+      }
+    };
+
+    fetchBookedDates();
+  }, []);
   
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
@@ -44,7 +63,7 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
   // Fill actual days
   for (let d = 1; d <= daysInMonth(year, month); d++) {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    const isBooked = BOOKED_DATES.includes(dateStr);
+    const isBooked = bookedDates.includes(dateStr);
     const isSelected = selectedDate === dateStr;
     const isToday = new Date().toISOString().split('T')[0] === dateStr;
     

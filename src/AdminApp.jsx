@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
 
@@ -23,6 +23,7 @@ export default function AdminApp() {
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'customers', label: 'Customers', icon: Users },
+    { id: 'classes', label: 'Classes', icon: Calendar },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
@@ -78,6 +79,61 @@ export default function AdminApp() {
     { id: 'ORD-1039', customer: 'Lucas Ali', date: '2026-04-17', total: '€24.50', status: 'completed', details: { whatsapp: '+1 555-9892', pickupDate: '2026-04-17', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Cupcakes', quantity: 3, flavor: 'Strawberry Shortcake', referenceImages: null } },
     { id: 'ORD-1038', customer: 'Isabella King', date: '2026-04-16', total: '€85.00', status: 'completed', details: { whatsapp: '+1 555-7788', pickupDate: '2026-04-16', pickupPeriod: 'Afternoon', pickupNotes: 'Handle with care!', itemType: 'Custom Cake', quantity: 1, occasion: 'Wedding Shower', theme: 'Modern Vintage', guests: '30', flavor: 'Matcha Green Tea', referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
   ]);
+
+  const [bookedDates, setBookedDates] = useState([]);
+  const [viewDate, setViewDate] = useState(new Date());
+
+  // Fetch booked dates from Supabase
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('booked_dates')
+          .select('date');
+        
+        if (error) throw error;
+        if (data) {
+          setBookedDates(data.map(d => d.date));
+        }
+      } catch (err) {
+        console.error('Error fetching booked dates:', err);
+        // Fallback for demo if table doesn't exist yet
+        setBookedDates(['2026-05-15', '2026-05-22', '2026-05-28']);
+      }
+    };
+
+    fetchBookedDates();
+  }, []);
+
+  const toggleDate = async (dateStr) => {
+    const isBooked = bookedDates.includes(dateStr);
+    
+    try {
+      if (isBooked) {
+        // Remove from DB
+        const { error } = await supabase
+          .from('booked_dates')
+          .delete()
+          .match({ date: dateStr });
+        
+        if (error) throw error;
+        setBookedDates(prev => prev.filter(d => d !== dateStr));
+      } else {
+        // Add to DB
+        const { error } = await supabase
+          .from('booked_dates')
+          .insert([{ date: dateStr }]);
+        
+        if (error) throw error;
+        setBookedDates(prev => [...prev, dateStr]);
+      }
+    } catch (err) {
+      console.error('Error updating date:', err);
+      // Local fallback for demo
+      if (isBooked) setBookedDates(prev => prev.filter(d => d !== dateStr));
+      else setBookedDates(prev => [...prev, dateStr]);
+    }
+  };
 
   const handleUpdateStatus = (orderId, newStatus) => {
     setAllOrders(prev => prev.map(order => 
@@ -445,7 +501,139 @@ export default function AdminApp() {
             </div>
           )}
 
-          {activeTab !== 'dashboard' && activeTab !== 'orders' && activeTab !== 'products' && activeTab !== 'customers' && (
+          {activeTab === 'classes' && (
+            <div className="admin-panel" style={{ minHeight: '600px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
+                <div>
+                  <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Cupcake Class Calendar</h2>
+                  <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Manage available dates for decorating experiences.</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div className="legend-item" style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffccd5' }}></span> Available
+                  </div>
+                  <div className="legend-item" style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#800000' }}></span> Fully Booked
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px' }}>
+                {/* Admin Calendar View */}
+                <div className="admin-calendar-card" style={{ background: '#fff', borderRadius: '16px', border: '1px solid #eee', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+                      {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                    </h3>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
+                        style={{ padding: '8px', borderRadius: '8px', border: '1px solid #eee', background: '#fff', cursor: 'pointer' }}
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <button 
+                        onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
+                        style={{ padding: '8px', borderRadius: '8px', border: '1px solid #eee', background: '#fff', cursor: 'pointer' }}
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', textAlign: 'center', marginBottom: '12px' }}>
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                      <div key={d} style={{ fontSize: '12px', fontWeight: '700', color: '#999', textTransform: 'uppercase' }}>{d}</div>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+                    {(() => {
+                      const year = viewDate.getFullYear();
+                      const month = viewDate.getMonth();
+                      const daysInMonth = new Date(year, month + 1, 0).getDate();
+                      const firstDay = new Date(year, month, 1).getDay();
+                      const grid = [];
+
+                      for (let i = 0; i < firstDay; i++) grid.push(<div key={`empty-${i}`}></div>);
+
+                      for (let d = 1; d <= daysInMonth; d++) {
+                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                        const isBooked = bookedDates.includes(dateStr);
+                        const isToday = new Date().toISOString().split('T')[0] === dateStr;
+
+                        grid.push(
+                          <button
+                            key={d}
+                            onClick={() => toggleDate(dateStr)}
+                            style={{
+                              aspectRatio: '1',
+                              borderRadius: '12px',
+                              border: 'none',
+                              background: isBooked ? '#800000' : (isToday ? '#f0f0f0' : '#fff9fa'),
+                              color: isBooked ? '#fff' : '#333',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              position: 'relative',
+                              transition: 'all 0.2s ease',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              boxShadow: isBooked ? '0 4px 10px rgba(128,0,0,0.2)' : 'none',
+                              border: isToday ? '2px solid #800000' : '1px solid transparent'
+                            }}
+                          >
+                            {d}
+                            {isBooked && (
+                              <span style={{ position: 'absolute', bottom: '6px', fontSize: '8px', fontWeight: 'bold' }}>BOOKED</span>
+                            )}
+                          </button>
+                        );
+                      }
+                      return grid;
+                    })()}
+                  </div>
+                </div>
+
+                {/* Side Panel: Quick List */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div className="premium-card" style={{ padding: '20px', flex: 1, overflowY: 'auto', maxHeight: '400px' }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Clock size={18} color="#800000" /> Booked Dates List
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {bookedDates.sort().map(date => (
+                        <div key={date} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f9fa', borderRadius: '10px', border: '1px solid #eee' }}>
+                          <span style={{ fontWeight: '500', fontSize: '14px' }}>
+                            {new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                          <button 
+                            onClick={() => toggleDate(date)}
+                            style={{ background: 'none', border: 'none', color: '#c62828', cursor: 'pointer', padding: '4px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      ))}
+                      {bookedDates.length === 0 && (
+                        <p style={{ textAlign: 'center', color: '#999', fontSize: '13px', padding: '20px' }}>No dates are currently booked.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="premium-card" style={{ padding: '20px', background: '#fff8f9', border: '1px solid #ffebee' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#800000', marginBottom: '8px' }}>Pro Tip</h3>
+                    <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.5', margin: 0 }}>
+                      Simply click any date on the calendar to toggle its availability. Maroon dates will be shown as "FULLY BOOKED" on the public studio page.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab !== 'dashboard' && activeTab !== 'orders' && activeTab !== 'products' && activeTab !== 'customers' && activeTab !== 'classes' && (
             <div className="admin-panel" style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <p style={{ color: '#666', fontSize: '18px' }}>
                 {navItems.find(i => i.id === activeTab)?.label} Module - Under Construction
