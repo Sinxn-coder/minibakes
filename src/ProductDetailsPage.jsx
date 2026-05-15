@@ -81,7 +81,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
           <div className="details-info-side">
             <h1 className="details-title">{product.name}</h1>
-            <p className="details-price">{product.price}</p>
+            <p className={`details-price ${product.price && product.price.includes('WhatsApp') ? 'price-small' : ''}`}>{product.price}</p>
             <p className="details-description">{product.description}</p>
 
             <div className="customization-section">
