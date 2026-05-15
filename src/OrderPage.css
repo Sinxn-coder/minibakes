@@ -198,18 +198,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
-}
-
-.order-item-price {
   font-weight: 600;
   color: var(--secondary);
-}
-
-.order-item-price.price-small {
-  font-size: 0.85rem;
-  font-weight: 500;
-  opacity: 0.8;
+  margin-top: 0.5rem;
 }
 
 .order-qty-selector {

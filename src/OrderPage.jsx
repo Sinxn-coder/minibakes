@@ -162,7 +162,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       </div>
                     )}
                     <div className="order-item-price-qty">
-                      <span className={`order-item-price ${getItemTotal(item) === 0 ? 'price-small' : ''}`}>{getItemTotal(item) === 0 ? 'Price via WhatsApp' : `€${getItemTotal(item).toFixed(2)}`}</span>
+                      <span className="order-item-price">{getItemTotal(item) === 0 ? 'Ask on WA' : `€${getItemTotal(item).toFixed(2)}`}</span>
                       <div className="order-qty-selector">
                         <button onClick={() => onUpdateQuantity(item.cartId, item.quantity - 1)}><Minus size={14} /></button>
                         <span>{item.quantity}</span>
