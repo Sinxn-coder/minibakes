@@ -11,10 +11,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const [options, setOptions] = useState({
     flavor: '',
     spreads: [], // Changed to array for multi-select support
+    message: '',
     notes: '',
     bows: false,
-    boxSize: product.options ? product.options[0].value : '',
-    extraPieces: 0
+    boxSize: product.options ? product.options[0].value : ''
   });
 
   const BOW_ADDON_PRICE = 5;
@@ -26,27 +26,24 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCupcake = productId.startsWith('cu') && !['cu5', 'cu6'].includes(productId);
   const isMiniCake = ['cu5', 'cu6'].includes(productId);
   const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
-  const isCakesicle = productId === 'cakesicles-main';
+  const isCakesicleBulk = productId === 'cakesicles-bulk';
   const hasSpreads = isCake || isMiniCake || isBrownie;
 
-  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') 
+  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
                   ['Classic Chocolate'];
 
   const spreads = ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
 
-  const currentOption = product.options?.find(o => o.value === options.boxSize);
-  const basePrice = currentOption ? (currentOption.basePrice || currentOption.price || 0) : (parseFloat(product.price.replace(/[^\d.]/g, '')) || 0);
+  const basePrice = parseFloat(product.price.replace(/[^\d.]/g, '')) || 0;
   
-  let extraTotal = 0;
-  if (isCakesicle && options.extraPieces > 0) {
-    const totalCount = (parseInt(options.boxSize) || 0) + (parseInt(options.extraPieces) || 0);
-    const extraUnitPrice = totalCount < 20 ? 2.60 : 2.40;
-    extraTotal = options.extraPieces * extraUnitPrice;
+  let currentUnitPrice = basePrice;
+  if (isCakesicleBulk) {
+    currentUnitPrice = quantity >= 20 ? 2.40 : 2.60;
   }
 
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
-  const unitTotal = basePrice + bowsTotal + extraTotal;
+  const unitTotal = currentUnitPrice + bowsTotal;
   const grandTotal = unitTotal * quantity;
 
   return (
@@ -157,31 +154,6 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
               )}
 
-              {/* Additional Cakesicles */}
-              {isCakesicle && (
-                <div className="option-group">
-                  <label>
-                    Additional Cakesicles
-                    <span className="option-label-hint"> — €{( ( (parseInt(options.boxSize) || 0) + (parseInt(options.extraPieces) || 0) ) < 20 ? 2.60 : 2.40).toFixed(2)} each</span>
-                  </label>
-                  <div className="extra-pieces-counter">
-                    <button 
-                      className="extra-piece-btn"
-                      onClick={() => setOptions({...options, extraPieces: Math.max(0, options.extraPieces - 1)})}
-                    >
-                      <Minus size={18} />
-                    </button>
-                    <span className="extra-piece-value">{options.extraPieces} extra</span>
-                    <button 
-                      className="extra-piece-btn"
-                      onClick={() => setOptions({...options, extraPieces: options.extraPieces + 1})}
-                    >
-                      <Plus size={18} />
-                    </button>
-                  </div>
-                </div>
-              )}
-
               {/* Bows Add-On */}
               <div className="option-group">
                 <label>
@@ -253,12 +225,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 <div className="price-breakdown-rows">
                   <div className="price-row">
                     <span className="price-row-label">{product.name}</span>
-                    <span className="price-row-value">€{basePrice.toFixed(2)}</span>
+                    <span className="price-row-value">€{currentUnitPrice.toFixed(2)}</span>
                   </div>
 
-                  {options.spread && (
+                  {options.spreads && options.spreads.length > 0 && (
                     <div className="price-row price-row-addon">
-                      <span className="price-row-label">↳ Spread: {options.spread}</span>
+                      <span className="price-row-label">↳ Spreads: {options.spreads.join(', ')}</span>
                       <span className="price-row-value price-row-free">Included</span>
                     </div>
                   )}

@@ -140,16 +140,15 @@ export const menuData = [
   {
     category: "Cakesicles",
     items: [
+      { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
+      { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { 
-        id: 'cakesicles-main', 
-        name: 'Signature Cakesicles', 
-        price: 'Starting €17', 
-        img: sicles1, 
-        description: 'Cake truffles on a stick. Choice of Chocolate, Vanilla, or Red Velvet flavors. Select a base box and add more pieces below.',
-        options: [
-          { label: 'Box of 5', value: '5', basePrice: 17 },
-          { label: 'Box of 10', value: '10', basePrice: 29 }
-        ]
+        id: 'cakesicles-bulk', 
+        name: 'Additional Cakesicles', 
+        price: '€2.60', 
+        img: sicles4, 
+        img2: sicles2,
+        description: 'Add extra cakesicles to your order. Tiered pricing: €2.60 each for up to 19 pieces, or €2.40 each for bulk orders of 20 or more.' 
       },
     ]
   }
