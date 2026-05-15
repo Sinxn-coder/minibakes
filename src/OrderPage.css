@@ -107,6 +107,14 @@
   border: 1px dashed rgba(128, 0, 0, 0.2);
 }
 
+.price-wa-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #25D366;
+  font-weight: 700;
+}
+
 .order-item-details {
   flex: 1;
 }

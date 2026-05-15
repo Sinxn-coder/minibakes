@@ -698,6 +698,14 @@
   font-family: 'Inter', sans-serif;
 }
 
+.price-wa-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #25D366; /* WhatsApp Green */
+  font-weight: 700;
+}
+
 .designer-order-btn:hover:not(:disabled) {
   background: #b22d30;
   transform: translateY(-2px);

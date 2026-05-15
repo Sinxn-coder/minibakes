@@ -8,6 +8,19 @@ import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
 
+const WhatsAppIcon = ({ size = 16, ...props }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    width={size} 
+    height={size} 
+    fill="currentColor" 
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.353-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.446 4.432-9.877 9.881-9.877 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.448-4.435 9.878-9.883 9.878m0-21.867C6.435.056.1.493.1 12.226c0 2.124.549 4.198 1.595 6.037L0 24l5.893-1.547a12.19 12.19 0 005.77 1.468h.005c6.12 0 12.1-5.437 12.1-12.226 0-3.27-1.272-6.342-3.582-8.652A12.134 12.134 0 0012.051.055z"/>
+  </svg>
+);
+
 const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => (
   <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
     <div className="menu-card-image">
@@ -176,7 +189,14 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
           <p className="menu-card-desc">{item.description}</p>
           
           <div className="menu-card-footer">
-            <span className="menu-card-price">{item.price}</span>
+            <span className="menu-card-price">
+              {item.price === 'WA' ? (
+                <span className="price-wa-tag">
+                  <WhatsAppIcon size={14} />
+                  <span>WA</span>
+                </span>
+              ) : item.price}
+            </span>
             <button 
               className="menu-add-btn" 
               onClick={() => onSelectProduct(item)}
@@ -194,7 +214,10 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
           onClick={() => onSelectProduct({ ...item, layers: cakeLayers })}
           disabled={cakeLayers.length === 0}
         >
-          <div className="designer-price-label">{item.price}</div>
+          <div className="designer-price-label">
+            <WhatsAppIcon size={12} />
+            <span>WA</span>
+          </div>
           <span>ORDER</span>
         </button>
       </div>

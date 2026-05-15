@@ -73,7 +73,7 @@ export const menuData = [
       { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: heart_2, images: heartImages, description: 'Serves ~20 - 25. Show extra love with a large heart shape. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: round_11, images: roundImages, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: heart_3, images: heartImages, description: 'Serves ~40 - 45. Tall and impressive heart-shaped cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'c-3d', name: '3D Custom Cake Designer', price: 'Ask on WA', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
+      { id: 'c-3d', name: '3D Custom Cake Designer', price: 'WA', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
     ]
   },
   {

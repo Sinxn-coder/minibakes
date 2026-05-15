@@ -444,6 +444,14 @@
   color: var(--secondary);
 }
 
+.price-wa-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #25D366;
+  font-weight: 700;
+}
+
 .quantity-checkout-row {
   display: flex;
   align-items: center;
