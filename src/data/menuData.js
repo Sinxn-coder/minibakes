@@ -9,7 +9,7 @@ import cakepops from '../assets/cakepops.png';
 import pops_1 from '../assets/cake pops/pops (1).png';
 import pops_2 from '../assets/cake pops/pops (2).png';
 import pops_3 from '../assets/cake pops/pops (3).png';
-import heart1 from '../assets/heartbrake/1.png';
+import heart1 from '../assets/1.png';
 import sicles1 from '../assets/cake sicles/cakesicles (1).png';
 import sicles2 from '../assets/cake sicles/cakesicles (2).png';
 import sicles3 from '../assets/cake sicles/cakesicles (3).png';
@@ -18,7 +18,7 @@ import sicles5 from '../assets/cake sicles/cakesicles (5).png';
 import mini1 from '../assets/minicakes/1.png';
 import mini2 from '../assets/minicakes/2.png';
 import cakesicles5 from '../assets/cakesicles5.png';
-import breakableHeart from '../assets/breakable_heart.png';
+import breakableHeart from '../assets/breakable_heart.jpg';
 
 // Heart Cake Gallery
 import heart_1 from '../assets/cakes/heart/heart (1).png';
