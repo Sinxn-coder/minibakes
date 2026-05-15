@@ -15,6 +15,7 @@ export default function AdminApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [activeOrderItemIndex, setActiveOrderItemIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreenImage, setFullscreenImage] = useState(null);
 
@@ -93,8 +94,23 @@ export default function AdminApp() {
         pickupPeriod: 'Morning', 
         pickupNotes: 'Multi-item order test.',
         items: [
-          { itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate', price: '€45.00' },
-          { itemType: 'Box of 6 Cupcakes', quantity: 2, flavor: 'Vanilla & Oreo', price: '€10.20' }
+          { 
+            itemType: 'Standard Cake', 
+            quantity: 1, 
+            flavor: 'Chocolate', 
+            price: '€45.00',
+            occasion: 'Birthday',
+            productImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80',
+            referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80']
+          },
+          { 
+            itemType: 'Box of 6 Cupcakes', 
+            quantity: 2, 
+            flavor: 'Vanilla & Oreo', 
+            price: '€10.20',
+            productImage: 'https://images.unsplash.com/photo-1614707267537-b85af00c4b81?w=500&q=80',
+            referenceImages: []
+          }
         ]
       } 
     },
@@ -451,7 +467,7 @@ export default function AdminApp() {
                         </span>
                       </td>
                       <td>
-                        <button onClick={() => setSelectedOrder(order)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontSize: '12px' }}>View</button>
+                        <button onClick={() => { setSelectedOrder(order); setActiveOrderItemIndex(0); }} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontSize: '12px' }}>View</button>
                       </td>
                     </tr>
                   )) : (
@@ -1150,32 +1166,98 @@ export default function AdminApp() {
                 {/* Left Column: Specifications */}
                 <div className="premium-modal-col">
                   {selectedOrder.details?.items ? (
-                    <div className="premium-card" style={{ padding: '20px' }}>
-                      <h3 className="premium-card-title">Order Items ({selectedOrder.details.items.length})</h3>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        {selectedOrder.details.items.map((item, idx) => (
-                          <div key={idx} style={{ padding: '12px', border: '1px solid #eee', borderRadius: '8px', background: '#fcfcfc' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                              <span style={{ fontWeight: '700', color: '#111' }}>{item.itemType}</span>
-                              <span style={{ fontWeight: '600', color: 'var(--color-main)' }}>{item.price}</span>
+                    <>
+                      {/* Item Navigation Tabs */}
+                      {selectedOrder.details.items.length >= 2 && (
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', overflowX: 'auto', paddingBottom: '4px' }}>
+                          {selectedOrder.details.items.map((_, idx) => (
+                            <button 
+                              key={idx}
+                              onClick={() => setActiveOrderItemIndex(idx)}
+                              style={{ 
+                                padding: '8px 16px', 
+                                borderRadius: '8px', 
+                                border: activeOrderItemIndex === idx ? 'none' : '1px solid #eee', 
+                                background: activeOrderItemIndex === idx ? '#800000' : '#fff',
+                                color: activeOrderItemIndex === idx ? '#fff' : '#666',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap',
+                                transition: '0.2s'
+                              }}
+                            >
+                              Product {idx + 1}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Active Item View */}
+                      {(() => {
+                        const item = selectedOrder.details.items[activeOrderItemIndex];
+                        return (
+                          <div className="premium-card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                              <h3 className="premium-card-title" style={{ margin: 0 }}>Product Specifications</h3>
+                              <span style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px' }}>{item.price}</span>
                             </div>
-                            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#666' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <ShoppingCart size={14} /> Qty: {item.quantity}
+                            <div className="premium-info-list">
+                              <div className="premium-info-row">
+                                <div className="premium-info-label"><Package size={16}/> Item Name</div>
+                                <div className="premium-info-value">{item.itemType}</div>
+                              </div>
+                              <div className="premium-info-row">
+                                <div className="premium-info-label"><ShoppingCart size={16}/> Quantity</div>
+                                <div className="premium-info-value">{item.quantity}</div>
                               </div>
                               {item.flavor && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                  <Palette size={14} /> {item.flavor}
+                                <div className="premium-info-row">
+                                  <div className="premium-info-label"><Palette size={16}/> Flavor</div>
+                                  <div className="premium-info-value">{item.flavor}</div>
+                                </div>
+                              )}
+                              {item.occasion && (
+                                <div className="premium-info-row">
+                                  <div className="premium-info-label"><Calendar size={16}/> Occasion</div>
+                                  <div className="premium-info-value">{item.occasion}</div>
                                 </div>
                               )}
                             </div>
+
+                            {/* Images for this specific item */}
+                            {(item.referenceImages?.length > 0 || item.productImage) && (
+                              <div style={{ marginTop: '24px' }}>
+                                {item.referenceImages?.length > 0 && (
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#888', marginBottom: '8px', textTransform: 'uppercase' }}>Inspiration Images</div>
+                                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                      {item.referenceImages.map((img, i) => (
+                                        <div key={i} className="premium-image-container clickable" style={{ width: '80px', height: '80px' }} onClick={() => setFullscreenImage(img)}>
+                                          <img src={img} alt="Ref" />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {item.productImage && (
+                                  <div>
+                                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#888', marginBottom: '8px', textTransform: 'uppercase' }}>Ordered Product</div>
+                                    <div className="premium-image-container clickable" style={{ width: '100%', height: '180px' }} onClick={() => setFullscreenImage(item.productImage)}>
+                                      <img src={item.productImage} alt="Product" style={{ objectFit: 'cover' }} />
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                        );
+                      })()}
+                    </>
                   ) : (
                     selectedOrder.details && (
-                      <div className="premium-card">
+                      <>
+                        <div className="premium-card">
                         <h3 className="premium-card-title">Order Specifications</h3>
                         <div className="premium-info-list">
                           <div className="premium-info-row">
@@ -1236,12 +1318,12 @@ export default function AdminApp() {
                           </div>
                         )}
                       </div>
-                    )
-                  )}
+                    
 
-                  {(selectedOrder.details?.referenceImg || (selectedOrder.details?.referenceImages && selectedOrder.details.referenceImages.length > 0)) && (
-                    <div className="premium-card">
-                      <h3 className="premium-card-title">Reference Images</h3>
+                        {/* Images for single item */}
+                        {(selectedOrder.details?.referenceImg || (selectedOrder.details?.referenceImages && selectedOrder.details.referenceImages.length > 0)) && (
+                          <div className="premium-card">
+                            <h3 className="premium-card-title">Inspiration Images</h3>
                       <div className="premium-image-grid">
                         {selectedOrder.details.referenceImages && selectedOrder.details.referenceImages.length > 0 ? (
                           selectedOrder.details.referenceImages.map((imgUrl, idx) => (
@@ -1255,7 +1337,10 @@ export default function AdminApp() {
                           </div>
                         ) : null}
                       </div>
-                    </div>
+                          </div>
+                        )}
+                      </>
+                    )
                   )}
                 </div>
 
