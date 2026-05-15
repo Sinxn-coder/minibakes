@@ -35,7 +35,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   const spreads = ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
 
-  const basePrice = parseFloat(product.price.replace(/[^\d.]/g, '')) || 0;
+  const basePrice = parseFloat((product?.price || '0').replace(/[^\d.]/g, '')) || 0;
   
   let currentUnitPrice = basePrice;
   if (isCakesicleBulk) {

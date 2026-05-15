@@ -73,7 +73,7 @@ export const menuData = [
       { id: 'c4', name: '8 inch, 2 Layer (Heart)', price: '€72', img: heart_2, images: heartImages, description: 'Serves ~20 - 25. Show extra love with a large heart shape. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c5', name: '8 inch, 3 Layer (Round)', price: '€85', img: round_11, images: roundImages, description: 'Serves ~40 - 45. Grand 3-layer masterpiece. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 'c7', name: '8 inch, 3 Layer (Heart)', price: '€95', img: heart_3, images: heartImages, description: 'Serves ~40 - 45. Tall and impressive heart-shaped cake. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { id: 'c-3d', name: '3D Custom Cake Designer', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
+      { id: 'c-3d', name: '3D Custom Cake Designer', price: '€0', isFullWidth: true, description: 'Design your own cake in 3D! Choose layers, shapes, and decorations to see your masterpiece come to life.' },
     ]
   },
   {
@@ -108,11 +108,11 @@ export const menuData = [
   {
     category: "Brownies",
     items: [
-      { 
-        id: 'brownies-box', 
-        name: 'Signature Brownies Box', 
-        price: '€32', 
-        img: brownies, 
+      {
+        id: 'brownies-box',
+        name: 'Signature Brownies Box',
+        price: '€32',
+        img: brownies,
         description: 'Rich chocolate brownies with your choice of up to 3 signature spreads. Select your preferred piece count below.',
         options: [
           { label: 'Box of 6', value: '6' },
@@ -133,7 +133,7 @@ export const menuData = [
   {
     category: "Mini Cakes",
     items: [
-      { id: 'cu5', name: 'Mini Cake (Single)', price: '€5.50', img: mini2, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
+      { id: 'cu5', name: 'Mini Cake (Small)', price: '€5.50', img: mini2, description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
       { id: 'cu6', name: 'Mini Cake (Large)', price: '€3.50', img: mini1, description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
     ]
   },
@@ -142,13 +142,13 @@ export const menuData = [
     items: [
       { id: 't3', name: 'Cakesicles (Box of 5)', price: '€17', img: sicles1, description: 'Cake truffles on a stick (Minimum order). Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
       { id: 't4', name: 'Cakesicles (Box of 10)', price: '€29', img: sicles3, description: 'A premium box of 10 cakesicles. Choice of Chocolate, Vanilla, or Red Velvet flavors.' },
-      { 
-        id: 'cakesicles-bulk', 
-        name: 'Additional Cakesicles', 
-        price: '€2.60', 
-        img: sicles4, 
+      {
+        id: 'cakesicles-bulk',
+        name: 'Additional Cakesicles',
+        price: '€2.60',
+        img: sicles4,
         img2: sicles2,
-        description: 'Add extra cakesicles to your order. Tiered pricing: €2.60 each for up to 19 pieces, or €2.40 each for bulk orders of 20 or more.' 
+        description: 'Add extra cakesicles to your order. Tiered pricing: €2.60 each for up to 19 pieces, or €2.40 each for bulk orders of 20 or more.'
       },
     ]
   }

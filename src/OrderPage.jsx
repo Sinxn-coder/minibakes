@@ -16,7 +16,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   const [orderId, setOrderId] = useState('');
 
   const getItemTotal = (item) => {
-    let unitPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+    let unitPrice = parseFloat((item.price || '0').replace(/[^\d.]/g, '')) || 0;
     
     // Tiered pricing for cakesicles-bulk
     if (item.id === 'cakesicles-bulk') {
