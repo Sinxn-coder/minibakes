@@ -458,6 +458,9 @@ function App() {
 
   useEffect(() => {
     const fetchFeatured = async () => {
+      const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
+      if (!isSupabaseLive) return;
+      
       try {
         const { data, error } = await supabase
           .from('featured_items')

@@ -9,6 +9,8 @@ import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
 
+const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
+
 export default function AdminApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
@@ -92,18 +94,29 @@ export default function AdminApp() {
   // Fetch booked dates from Supabase
   useEffect(() => {
     const fetchBookedDates = async () => {
+      if (!isSupabaseLive) {
+        console.log('Booked dates: Offline Mode');
+        setBookedDates(['2026-05-15', '2026-05-22', '2026-05-28']);
+        return;
+      }
       try {
         const { data, error } = await supabase
           .from('booked_dates')
           .select('date');
         
-        if (error) throw error;
+        if (error) {
+           if (error.message?.includes('fetch') || error.code === 'PGRST301') return;
+           throw error;
+        }
         if (data) {
           setBookedDates(data.map(d => d.date));
         }
       } catch (err) {
-        console.error('Error fetching booked dates:', err);
-        // Fallback for demo if table doesn't exist yet
+        // Silent fail for network issues
+        if (!err.message?.includes('fetch')) {
+          console.error('Error fetching booked dates:', err);
+        }
+        // Fallback for demo
         setBookedDates(['2026-05-15', '2026-05-22', '2026-05-28']);
       }
     };
@@ -122,7 +135,7 @@ export default function AdminApp() {
           .delete()
           .match({ date: dateStr });
         
-        if (error) throw error;
+        if (error && !error.message?.includes('fetch')) throw error;
         setBookedDates(prev => prev.filter(d => d !== dateStr));
       } else {
         // Add to DB
@@ -130,11 +143,13 @@ export default function AdminApp() {
           .from('booked_dates')
           .insert([{ date: dateStr }]);
         
-        if (error) throw error;
+        if (error && !error.message?.includes('fetch')) throw error;
         setBookedDates(prev => [...prev, dateStr]);
       }
     } catch (err) {
-      console.error('Error updating date:', err);
+      if (!err.message?.includes('fetch')) {
+        console.error('Error updating date:', err);
+      }
       // Local fallback for demo
       if (isBooked) setBookedDates(prev => prev.filter(d => d !== dateStr));
       else setBookedDates(prev => [...prev, dateStr]);
@@ -155,6 +170,10 @@ export default function AdminApp() {
   // Fetch featured items from Supabase
   useEffect(() => {
     const fetchFeatured = async () => {
+      if (!isSupabaseLive) {
+        console.log('Featured items: Offline Mode');
+        return;
+      }
       try {
         const { data, error } = await supabase
           .from('featured_items')
@@ -189,15 +208,17 @@ export default function AdminApp() {
         .from('featured_items')
         .upsert({ ...updatedItem, slot });
       
-      if (error) throw error;
+      if (error && !error.message?.includes('fetch')) throw error;
       
       setFeaturedDesserts(prev => prev.map(item => 
         item.slot === slot ? updatedItem : item
       ));
       setEditingFeatured(null);
-      alert('Featured item updated successfully!');
+      if (!error) alert('Featured item updated successfully!');
     } catch (err) {
-      console.error('Error saving featured item:', err);
+      if (!err.message?.includes('fetch')) {
+        console.error('Error saving featured item:', err);
+      }
       // Fallback update local state for demo
       setFeaturedDesserts(prev => prev.map(item => 
         item.slot === slot ? updatedItem : item
