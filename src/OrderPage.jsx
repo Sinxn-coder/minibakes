@@ -177,7 +177,10 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                     <div className="order-item-price-qty">
                       <span className="order-item-price">
                         {getItemTotal(item) === 0 ? (
-                          <span className="price-wa-tag">
+                          <span 
+                            className="price-wa-tag tooltip-trigger" 
+                            data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
+                          >
                             <WhatsAppIcon size={14} />
                             <span>WA</span>
                           </span>
@@ -265,7 +268,11 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             €{totalPrice.toFixed(2)}
             {cart.some(item => getItemTotal(item) === 0) && (
-              <span className="price-wa-tag" style={{ fontSize: '0.9rem' }}>
+              <span 
+                className="price-wa-tag tooltip-trigger" 
+                style={{ fontSize: '0.9rem' }}
+                data-tooltip="Total includes items that will be quoted via WhatsApp."
+              >
                 + <WhatsAppIcon size={14} />
                 <span>WA</span>
               </span>

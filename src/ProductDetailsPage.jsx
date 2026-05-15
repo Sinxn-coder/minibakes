@@ -240,7 +240,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     <span className="price-row-label">{product.name}</span>
                     <span className="price-row-value">
                       {currentUnitPrice === 0 ? (
-                        <span className="price-wa-tag">
+                        <span 
+                          className="price-wa-tag tooltip-trigger" 
+                          data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
+                        >
                           <WhatsAppIcon size={14} />
                           <span>WA</span>
                         </span>
@@ -273,7 +276,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     <span className="price-row-label">Total</span>
                     <span className="price-row-value">
                       {grandTotal === 0 ? (
-                        <span className="price-wa-tag">
+                        <span 
+                          className="price-wa-tag tooltip-trigger" 
+                          data-tooltip="Total includes items that will be quoted via WhatsApp."
+                        >
                           <WhatsAppIcon size={14} />
                           <span>WA</span>
                         </span>
@@ -299,7 +305,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   }}
                 >
                   Add to Order • {grandTotal === 0 ? (
-                    <span className="price-wa-tag" style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}>
+                    <span 
+                      className="price-wa-tag tooltip-trigger" 
+                      style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
+                      data-tooltip="Final price will be provided via WhatsApp."
+                    >
                       <WhatsAppIcon size={14} />
                       <span style={{ marginLeft: '4px' }}>WA</span>
                     </span>

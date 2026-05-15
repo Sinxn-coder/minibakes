@@ -986,7 +986,10 @@ function App() {
                       <div className="cart-item-price-qty">
                         <span>
                           {item.price === 'WA' ? (
-                            <span className="price-wa-tag">
+                            <span 
+                              className="price-wa-tag tooltip-trigger" 
+                              data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
+                            >
                               <WhatsAppIcon size={14} />
                               <span>WA</span>
                             </span>
