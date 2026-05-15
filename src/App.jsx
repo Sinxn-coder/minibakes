@@ -725,7 +725,9 @@ function App() {
         </div>
       </div>
 
-      {currentView === 'home' && (
+      {/* Page Content with Transition */}
+      <div key={currentView} className="view-transition-wrapper">
+        {currentView === 'home' && (
         <>
           {/* Hero Section */}
           <section className="hero-section">
@@ -1056,6 +1058,7 @@ function App() {
       {currentView === 'contact' && (
         <ContactPage onBack={() => setCurrentView('home')} />
       )}
+      </div>
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
