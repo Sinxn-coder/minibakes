@@ -43,17 +43,17 @@ export default function AdminApp() {
   ];
 
   const [allProducts, setAllProducts] = useState([
-    { id: 101, type: 'cakes', name: '2 Layer 6 inch', price: '€45.00', status: 'In Stock', variants: 3 },
-    { id: 102, type: 'cakes', name: '2 Layer 8 inch', price: '€65.00', status: 'In Stock', variants: 3 },
-    { id: 103, type: 'cakes', name: '3 Layer', price: '€85.00', status: 'In Stock', variants: 3 },
-    { id: 201, type: 'cupcakes', name: 'Box of 6 Cupcakes', price: '€18.00', status: 'In Stock', variants: 3 },
-    { id: 202, type: 'cupcakes', name: 'Box of 12 Cupcakes', price: '€31.20', status: 'In Stock', variants: 3 },
-    { id: 3, type: 'cakepops', name: 'Cake Pops', price: '€1.70', status: 'In Stock', variants: 3 },
-    { id: 401, type: 'cakesicles', name: 'Box of 5 Cakesicles', price: '€17.00', status: 'In Stock', variants: 3 },
-    { id: 402, type: 'cakesicles', name: 'Box of 10 Cakesicles', price: '€29.00', status: 'In Stock', variants: 3 },
-    { id: 5, type: 'breakable_heart', name: 'Breakable Heart', price: '€37.00', status: 'In Stock', variants: 1 },
-    { id: 6, type: 'brownies', name: 'Brownies', price: '€32.00', status: 'In Stock', variants: 1 },
-    { id: 999, type: 'custom', name: 'Custom Creation', price: 'Quote', status: 'Active', variants: 0 }
+    { id: 101, name: '2 Layer 6 inch', price: '€45.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
+    { id: 102, name: '2 Layer 8 inch', price: '€65.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
+    { id: 103, name: '3 Layer', price: '€85.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
+    { id: 201, name: 'Box of 6 Cupcakes', price: '€18.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
+    { id: 202, name: 'Box of 12 Cupcakes', price: '€31.20', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
+    { id: 3, name: 'Cake Pops', price: '€1.70', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
+    { id: 401, name: 'Box of 5 Cakesicles', price: '€17.00', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
+    { id: 402, name: 'Box of 10 Cakesicles', price: '€29.00', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
+    { id: 5, name: 'Breakable Heart', price: '€37.00', status: 'In Stock', flavours: [], spreads: [] },
+    { id: 6, name: 'Brownies', price: '€32.00', status: 'In Stock', flavours: ['Double Choc'], spreads: [] },
+    { id: 999, name: 'Custom Creation', price: 'Quote', status: 'In Stock', flavours: [], spreads: [] }
   ]);
 
   const [editingProduct, setEditingProduct] = useState(null);
@@ -696,24 +696,6 @@ export default function AdminApp() {
                               />
                            </div>
                            <div>
-                              <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>TYPE</label>
-                              <select 
-                                defaultValue={product.type} 
-                                id={`edit-p-type-${product.id}`}
-                                style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
-                              >
-                                <option value="cakes">Cakes</option>
-                                <option value="cupcakes">Cupcakes</option>
-                                <option value="cakepops">Cakepops</option>
-                                <option value="cakesicles">Cakesicles</option>
-                                <option value="brownies">Brownies</option>
-                                <option value="breakable_heart">Breakable Heart</option>
-                                <option value="custom">Custom</option>
-                              </select>
-                           </div>
-                         </div>
-                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                            <div>
                               <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>STATUS</label>
                               <select 
                                 defaultValue={product.status} 
@@ -722,29 +704,41 @@ export default function AdminApp() {
                               >
                                 <option value="In Stock">In Stock</option>
                                 <option value="Out of Stock">Out of Stock</option>
-                                <option value="Active">Active</option>
-                                <option value="Hidden">Hidden</option>
                               </select>
-                            </div>
-                            <div>
-                              <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>VARIANTS</label>
-                              <input 
-                                type="number" 
-                                defaultValue={product.variants} 
-                                id={`edit-p-variants-${product.id}`}
-                                style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
-                              />
-                            </div>
+                           </div>
                          </div>
+                         
+                         <div>
+                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>FLAVOURS (Comma separated)</label>
+                            <input 
+                              type="text" 
+                              defaultValue={product.flavours?.join(', ')} 
+                              id={`edit-p-flavours-${product.id}`}
+                              placeholder="e.g. Chocolate, Vanilla"
+                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
+                            />
+                         </div>
+
+                         <div>
+                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>SPREADS (Comma separated)</label>
+                            <input 
+                              type="text" 
+                              defaultValue={product.spreads?.join(', ')} 
+                              id={`edit-p-spreads-${product.id}`}
+                              placeholder="e.g. Nutella, Biscoff"
+                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
+                            />
+                         </div>
+
                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                             <button 
                               onClick={() => {
                                 handleUpdateProduct(product.id, {
                                   name: document.getElementById(`edit-p-name-${product.id}`).value,
                                   price: document.getElementById(`edit-p-price-${product.id}`).value,
-                                  type: document.getElementById(`edit-p-type-${product.id}`).value,
                                   status: document.getElementById(`edit-p-status-${product.id}`).value,
-                                  variants: parseInt(document.getElementById(`edit-p-variants-${product.id}`).value),
+                                  flavours: document.getElementById(`edit-p-flavours-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
+                                  spreads: document.getElementById(`edit-p-spreads-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
                                 });
                               }}
                               style={{ flex: 1, padding: '8px', borderRadius: '6px', background: '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
@@ -761,16 +755,36 @@ export default function AdminApp() {
                       </div>
                     ) : (
                       <>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                           <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#888', textTransform: 'uppercase' }}>{product.type.replace('_', ' ')}</span>
-                           <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : product.status === 'Active' ? 'processing' : 'cancelled'}`} style={{ fontSize: '11px', padding: '4px 8px', borderRadius: '12px' }}>{product.status}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                           <h3 style={{ margin: 0, fontSize: '16px', color: '#111', fontWeight: '700' }}>{product.name}</h3>
+                           <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '12px' }}>{product.status}</span>
                         </div>
-                        <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#111' }}>{product.name}</h3>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
-                           <span style={{ fontWeight: '700', fontSize: '16px', color: 'var(--color-main)' }}>{product.price}</span>
-                           <span style={{ fontSize: '13px', color: '#666' }}>{product.variants} Variants</span>
-                        </div>
-                        <div style={{ marginTop: '20px', display: 'flex', gap: '8px' }}>
+                        
+                        <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
+                        
+                        {product.flavours && product.flavours.length > 0 && (
+                          <div style={{ marginBottom: '8px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {product.flavours.map((f, idx) => (
+                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {product.spreads && product.spreads.length > 0 && (
+                          <div style={{ marginBottom: '16px' }}>
+                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                              {product.spreads.map((s, idx) => (
+                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
                           <button 
                             onClick={() => setEditingProduct(product.id)}
                             style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
