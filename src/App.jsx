@@ -75,7 +75,7 @@ import orbitRoundCake from './assets/cakes/round/round (1).png';
 import orbitPop from './assets/cake pops/pops (1).png';
 import orbitBrownie from './assets/brownies/brownie (1).png';
 import orbitSicle from './assets/cake sicles/cakesicles (1).png';
-import orbitBreakableHeart from './assets/1.png';
+import orbitBreakableHeart from './assets/1.jpg';
 import orbitHeartCake from './assets/cakes/heart/heart (1).png';
 import orbitBento from './assets/minicakes/1.png';
 import MenuPage from './MenuPage';

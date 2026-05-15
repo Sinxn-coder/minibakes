@@ -9,7 +9,7 @@ import brownie_4 from '../assets/brownies/brownie (4).png';
 import pops_1 from '../assets/cake pops/pops (1).png';
 import pops_2 from '../assets/cake pops/pops (2).png';
 import pops_3 from '../assets/cake pops/pops (3).png';
-import heart1 from '../assets/1.png';
+import heart1 from '../assets/1.jpg';
 import sicles1 from '../assets/cake sicles/cakesicles (1).png';
 import sicles2 from '../assets/cake sicles/cakesicles (2).png';
 import sicles3 from '../assets/cake sicles/cakesicles (3).png';
@@ -54,7 +54,7 @@ import cupcake_2 from '../assets/cupcakes/butter2.jpeg';
 import cupcake_3 from '../assets/cupcakes/butter3.jpeg';
 import cupcake_4 from '../assets/cupcakes/whitechoclate1.jpeg';
 import cupcake_5 from '../assets/cupcakes/whitechoclate2.png';
-import cupcake_6 from '../assets/cupcakes/whitechoclate3.png';
+import cupcake_6 from '../assets/cupcakes/whitechoclate3.jpg';
 
 const cupcakeImages = [
   cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6
