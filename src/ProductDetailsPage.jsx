@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
