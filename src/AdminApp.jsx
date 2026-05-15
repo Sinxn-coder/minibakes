@@ -542,22 +542,7 @@ export default function AdminApp() {
                             )}
                           </div>
                           
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
-                            {!item.isEmpty && (
-                              <button 
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to clear this featured slot?')) {
-                                    handleUpdateFeatured(item.slot, { ...item, isEmpty: true });
-                                  }
-                                }}
-                                style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer', padding: '4px' }}
-                                title="Delete from featured"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            )}
-                          </div>
+                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
                           
                           <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'Price Label' : item.price}</p>
                           <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em', opacity: item.isEmpty ? 0.3 : 1 }}>
@@ -591,17 +576,33 @@ export default function AdminApp() {
                             </div>
                           </div>
 
-                          <button 
-                            onClick={() => {
-                              if (item.isEmpty) {
-                                handleUpdateFeatured(item.slot, { ...item, isEmpty: false });
-                              }
-                              setEditingFeatured(item.slot);
-                            }}
-                            style={{ width: '100%', marginTop: 'auto', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: item.isEmpty ? '#800000' : '#fff', color: item.isEmpty ? '#fff' : '#333', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', fontWeight: item.isEmpty ? 'bold' : '500' }}
-                          >
-                            {item.isEmpty ? <Plus size={14} /> : <Edit3 size={14} />} {item.isEmpty ? 'Add Product to Slot' : 'Edit Basics'}
-                          </button>
+                          <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+                            <button 
+                              onClick={() => {
+                                if (item.isEmpty) {
+                                  handleUpdateFeatured(item.slot, { ...item, isEmpty: false });
+                                }
+                                setEditingFeatured(item.slot);
+                              }}
+                              style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: item.isEmpty ? '#800000' : '#fff', color: item.isEmpty ? '#fff' : '#333', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', fontWeight: item.isEmpty ? 'bold' : '500' }}
+                            >
+                              {item.isEmpty ? <Plus size={14} /> : <Edit3 size={14} />} {item.isEmpty ? 'Add Product' : 'Edit Basics'}
+                            </button>
+                            
+                            {!item.isEmpty && (
+                              <button 
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to clear this featured slot?')) {
+                                    handleUpdateFeatured(item.slot, { ...item, isEmpty: true });
+                                  }
+                                }}
+                                style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffebee', background: '#fffcfc', color: '#ff4d4d', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                title="Remove from featured"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
                         </>
                       )}
                     </div>
