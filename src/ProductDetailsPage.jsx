@@ -225,7 +225,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 <div className="price-breakdown-rows">
                   <div className="price-row">
                     <span className="price-row-label">{product.name}</span>
-                    <span className="price-row-value">€{currentUnitPrice.toFixed(2)}</span>
+                    <span className="price-row-value">{currentUnitPrice === 0 ? 'Price via WhatsApp' : `€${currentUnitPrice.toFixed(2)}`}</span>
                   </div>
 
                   {options.spreads && options.spreads.length > 0 && (
@@ -251,7 +251,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
                   <div className="price-row price-row-total">
                     <span className="price-row-label">Total</span>
-                    <span className="price-row-value">€{grandTotal.toFixed(2)}</span>
+                    <span className="price-row-value">{grandTotal === 0 ? 'Price via WhatsApp' : `€${grandTotal.toFixed(2)}`}</span>
                   </div>
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     setTimeout(() => setShowNotification(false), 3000);
                   }}
                 >
-                  Add to Order • €{grandTotal.toFixed(2)}
+                  Add to Order • {grandTotal === 0 ? 'Price via WhatsApp' : `€${grandTotal.toFixed(2)}`}
                 </button>
               </div>
 

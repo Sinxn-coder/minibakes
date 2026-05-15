@@ -194,6 +194,7 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
           onClick={() => onSelectProduct({ ...item, layers: cakeLayers })}
           disabled={cakeLayers.length === 0}
         >
+          <div className="designer-price-label">{item.price}</div>
           <span>ORDER</span>
         </button>
       </div>
