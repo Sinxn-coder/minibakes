@@ -667,9 +667,6 @@ export default function AdminApp() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
                 <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>All Products</h2>
-                <button style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', background: 'var(--color-main)', color: '#fff', cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                   + Add Product
-                </button>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                 {allProducts.map(product => (
