@@ -690,3 +690,45 @@
       flex: 1;
     }
   }
+
+.extra-pieces-counter {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #fdf7f8;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  width: fit-content;
+  border: 1px solid rgba(92, 13, 27, 0.05);
+  margin-top: 0.5rem;
+}
+
+.extra-piece-btn {
+  background: white;
+  border: 1px solid rgba(92, 13, 27, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--secondary);
+  transition: all 0.25s ease;
+  padding: 0;
+}
+
+.extra-piece-btn:hover {
+  background: var(--secondary);
+  color: white;
+  border-color: var(--secondary);
+  transform: scale(1.1);
+}
+
+.extra-piece-value {
+  font-weight: 700;
+  color: var(--secondary);
+  min-width: 70px;
+  text-align: center;
+  font-size: 1rem;
+}
