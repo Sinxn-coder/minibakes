@@ -81,6 +81,23 @@ export default function AdminApp() {
 
   const [allOrders, setAllOrders] = useState([
     { id: 'ORD-1045', customer: 'Olivia Smith', date: '2026-04-18', total: '€112.50', status: 'pending', details: { whatsapp: '+1 555-0198', pickupDate: '2026-04-25', pickupPeriod: 'Morning', pickupNotes: 'Will be sending my husband.', itemType: 'Custom Cake', quantity: 1, occasion: 'Birthday', theme: 'Pastel Pink & Gold', guests: '20', flavor: 'Vanilla Bean & Raspberry', referenceImages: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80'] } },
+    { 
+      id: 'ORD-1046', 
+      customer: 'Sxn Coder', 
+      date: '2026-04-19', 
+      total: '€55.20', 
+      status: 'pending', 
+      details: { 
+        whatsapp: '+1 555-9999', 
+        pickupDate: '2026-04-30', 
+        pickupPeriod: 'Morning', 
+        pickupNotes: 'Multi-item order test.',
+        items: [
+          { itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate', price: '€45.00' },
+          { itemType: 'Box of 6 Cupcakes', quantity: 2, flavor: 'Vanilla & Oreo', price: '€10.20' }
+        ]
+      } 
+    },
     { id: 'ORD-1044', customer: 'Noah Johnson', date: '2026-04-18', total: '€35.00', status: 'pending', details: { whatsapp: '+1 555-0200', pickupDate: '2026-04-20', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate Fudge', referenceImages: null } },
     { id: 'ORD-1043', customer: 'William Brown', date: '2026-04-18', total: '€48.00', status: 'processing', details: { whatsapp: '+44 7700 900077', pickupDate: '2026-04-21', pickupPeriod: 'Afternoon', pickupNotes: 'Please text when ready.', itemType: 'Standard Cake', quantity: 1, flavor: 'Red Velvet', referenceImages: ['https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
     { id: 'ORD-1042', customer: 'Emma Thompson', date: '2026-04-18', total: '€45.00', status: 'processing', details: { whatsapp: '+1 555-0322', pickupDate: '2026-04-19', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Lemon Blueberry', referenceImages: null } },
@@ -1132,44 +1149,69 @@ export default function AdminApp() {
                 
                 {/* Left Column: Specifications */}
                 <div className="premium-modal-col">
-                  {selectedOrder.details && (
-                    <div className="premium-card">
-                      <h3 className="premium-card-title">Order Specifications</h3>
-                      <div className="premium-info-list">
-                        <div className="premium-info-row">
-                          <div className="premium-info-label"><Package size={16}/> Item Type</div>
-                          <div className="premium-info-value">{selectedOrder.details.itemType}</div>
-                        </div>
-                        {selectedOrder.details.quantity && (
-                          <div className="premium-info-row">
-                            <div className="premium-info-label"><ShoppingCart size={16}/> Quantity</div>
-                            <div className="premium-info-value">{selectedOrder.details.quantity}</div>
+                  {selectedOrder.details?.items ? (
+                    <div className="premium-card" style={{ padding: '20px' }}>
+                      <h3 className="premium-card-title">Order Items ({selectedOrder.details.items.length})</h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {selectedOrder.details.items.map((item, idx) => (
+                          <div key={idx} style={{ padding: '12px', border: '1px solid #eee', borderRadius: '8px', background: '#fcfcfc' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                              <span style={{ fontWeight: '700', color: '#111' }}>{item.itemType}</span>
+                              <span style={{ fontWeight: '600', color: 'var(--color-main)' }}>{item.price}</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#666' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <ShoppingCart size={14} /> Qty: {item.quantity}
+                              </div>
+                              {item.flavor && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <Palette size={14} /> {item.flavor}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        )}
-                        {selectedOrder.details.flavor && (
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    selectedOrder.details && (
+                      <div className="premium-card">
+                        <h3 className="premium-card-title">Order Specifications</h3>
+                        <div className="premium-info-list">
                           <div className="premium-info-row">
-                            <div className="premium-info-label"><Cake size={16}/> Flavour</div>
-                            <div className="premium-info-value">{selectedOrder.details.flavor}</div>
+                            <div className="premium-info-label"><Package size={16}/> Item Type</div>
+                            <div className="premium-info-value">{selectedOrder.details.itemType}</div>
                           </div>
-                        )}
-                        {selectedOrder.details.occasion && (
-                          <div className="premium-info-row">
-                            <div className="premium-info-label"><Calendar size={16}/> Occasion</div>
-                            <div className="premium-info-value">{selectedOrder.details.occasion}</div>
-                          </div>
-                        )}
-                        {selectedOrder.details.theme && (
-                          <div className="premium-info-row">
-                            <div className="premium-info-label"><Palette size={16}/> Theme</div>
-                            <div className="premium-info-value">{selectedOrder.details.theme}</div>
-                          </div>
-                        )}
-                        {selectedOrder.details.guests && (
-                          <div className="premium-info-row">
-                            <div className="premium-info-label"><Users size={16}/> Guest Count</div>
-                            <div className="premium-info-value">{selectedOrder.details.guests}</div>
-                          </div>
-                        )}
+                          {selectedOrder.details.quantity && (
+                            <div className="premium-info-row">
+                              <div className="premium-info-label"><ShoppingCart size={16}/> Quantity</div>
+                              <div className="premium-info-value">{selectedOrder.details.quantity}</div>
+                            </div>
+                          )}
+                          {selectedOrder.details.flavor && (
+                            <div className="premium-info-row">
+                              <div className="premium-info-label"><Palette size={16}/> Flavor</div>
+                              <div className="premium-info-value">{selectedOrder.details.flavor}</div>
+                            </div>
+                          )}
+                          {selectedOrder.details.occasion && (
+                            <div className="premium-info-row">
+                              <div className="premium-info-label"><Calendar size={16}/> Occasion</div>
+                              <div className="premium-info-value">{selectedOrder.details.occasion}</div>
+                            </div>
+                          )}
+                          {selectedOrder.details.theme && (
+                            <div className="premium-info-row">
+                              <div className="premium-info-label"><Palette size={16}/> Theme</div>
+                              <div className="premium-info-value">{selectedOrder.details.theme}</div>
+                            </div>
+                          )}
+                          {selectedOrder.details.guests && (
+                            <div className="premium-info-row">
+                              <div className="premium-info-label"><Users size={16}/> Guest Count</div>
+                              <div className="premium-info-value">{selectedOrder.details.guests}</div>
+                            </div>
+                          )}
                         
                         {selectedOrder.details.layers && selectedOrder.details.layers.length > 0 && (
                           <div className="premium-custom-layers-box">
