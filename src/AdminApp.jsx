@@ -453,6 +453,38 @@ export default function AdminApp() {
                               style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd', minHeight: '60px' }}
                             />
                           </div>
+
+                          {/* Highlights section inside edit mode */}
+                          <div style={{ marginBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                               <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>HIGHLIGHTS</span>
+                               <button 
+                                 onClick={(e) => {
+                                   e.stopPropagation();
+                                   setHighlightModal({ slot: item.slot });
+                                 }}
+                                 style={{ background: '#FFF0F4', border: 'none', color: '#800000', borderRadius: '4px', padding: '2px 6px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                               >
+                                 <Plus size={10} /> Add
+                               </button>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                               {item.highlights && item.highlights.map((h, i) => (
+                                 <div key={i} style={{ fontSize: '10px', color: '#666', background: '#f9f9f9', padding: '4px 8px', borderRadius: '4px', border: '1px solid #eee', display: 'flex', justifyContent: 'space-between' }}>
+                                   <span>{h.title}</span>
+                                   <button 
+                                     onClick={() => {
+                                       const updated = { ...item, highlights: item.highlights.filter((_, idx) => idx !== i) };
+                                       handleUpdateFeatured(item.slot, updated);
+                                     }}
+                                     style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', padding: 0 }}
+                                   >
+                                     <X size={10} />
+                                   </button>
+                                 </div>
+                               ))}
+                            </div>
+                          </div>
                           <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                             <button 
                               onClick={() => {
