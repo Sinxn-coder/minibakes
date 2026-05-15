@@ -1211,7 +1211,7 @@ export default function AdminApp() {
                               <div className="premium-info-label"><Users size={16}/> Guest Count</div>
                               <div className="premium-info-value">{selectedOrder.details.guests}</div>
                             </div>
-                          )}
+                        </div>
                         
                         {selectedOrder.details.layers && selectedOrder.details.layers.length > 0 && (
                           <div className="premium-custom-layers-box">
@@ -1235,8 +1235,9 @@ export default function AdminApp() {
                           </div>
                         )}
                       </div>
-                    </div>
+                    )
                   )}
+                </div>
 
                   {(selectedOrder.details?.referenceImg || (selectedOrder.details?.referenceImages && selectedOrder.details.referenceImages.length > 0)) && (
                     <div className="premium-card">
