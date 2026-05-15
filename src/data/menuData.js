@@ -61,8 +61,12 @@ import cupcake_5 from '../assets/cupcakes/cupcake (5).png';
 import cupcake_6 from '../assets/cupcakes/cupcake (6).png';
 import cupcake_7 from '../assets/cupcakes/cupcake (7).png';
 
-const cupcakeImages = [
-  cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6, cupcake_7
+const cupcakeButtercreamImages = [
+  cupcake_1, cupcake_2, cupcake_3, cupcake_4
+];
+
+const cupcakeWhiteChocolateImages = [
+  cupcake_5, cupcake_6, cupcake_7
 ];
 
 export const menuData = [
@@ -79,11 +83,19 @@ export const menuData = [
     ]
   },
   {
-    category: "Cupcakes",
+    category: "Cupcakes (Buttercream)",
     items: [
-      { id: 'cu1', name: 'Cupcakes (Box of 6)', price: '€15', img: cupcake_1, images: cupcakeImages, description: 'A half-dozen of our fluffiest cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
-      { id: 'cu2', name: 'Cupcakes (Box of 12)', price: '€28.80', img: cupcake_2, images: cupcakeImages, description: 'A full dozen premium cupcakes. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
-      { id: 'cu3', name: 'Cupcake (Additional)', price: '€2.20', img: cupcake_3, images: cupcakeImages, description: 'Add an individual cupcake to your order. Choice of flavors. Individual packaging available for +€0.15 per cupcake.' },
+      { id: 'cub1', name: 'Buttercream Cupcakes (Box of 6)', price: '€15', img: cupcake_1, images: cupcakeButtercreamImages, description: 'A half-dozen of our fluffiest cupcakes topped with smooth, creamy buttercream. Choice of flavors.' },
+      { id: 'cub2', name: 'Buttercream Cupcakes (Box of 12)', price: '€28.80', img: cupcake_2, images: cupcakeButtercreamImages, description: 'A full dozen premium buttercream cupcakes. Choice of flavors.' },
+      { id: 'cub3', name: 'Buttercream Cupcake (Additional)', price: '€2.20', img: cupcake_3, images: cupcakeButtercreamImages, description: 'Add an individual buttercream cupcake to your order.' },
+    ]
+  },
+  {
+    category: "Cupcakes (White Chocolate)",
+    items: [
+      { id: 'cuw1', name: 'White Chocolate Cupcakes (Box of 6)', price: '€18', img: cupcake_5, images: cupcakeWhiteChocolateImages, description: 'A half-dozen cupcakes topped with rich, decadent white chocolate ganache. Choice of flavors.' },
+      { id: 'cuw2', name: 'White Chocolate Cupcakes (Box of 12)', price: '€34', img: cupcake_6, images: cupcakeWhiteChocolateImages, description: 'A full dozen premium white chocolate cupcakes. Choice of flavors.' },
+      { id: 'cuw3', name: 'White Chocolate Cupcake (Additional)', price: '€3', img: cupcake_7, images: cupcakeWhiteChocolateImages, description: 'Add an individual white chocolate cupcake to your order.' },
     ]
   },
   {
