@@ -726,7 +726,7 @@ export default function AdminApp() {
                      <h3 style={{ margin: 0, fontSize: '16px', color: '#333', fontWeight: '600' }}>Weekly Engagement Trends</h3>
                   </div>
                   
-                  <div style={{ flex: 1, width: '100%', minHeight: '220px', marginTop: '16px' }}>
+                  <div style={{ width: '100%', height: '240px', marginTop: '16px', minWidth: 0 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={engagementData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
