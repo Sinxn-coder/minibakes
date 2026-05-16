@@ -474,7 +474,7 @@ body {
 
 .hero-top-left-content {
   position: absolute;
-  top: 6rem;
+  top: 9rem;
   left: 4rem;
   z-index: 20;
   text-align: left;
@@ -1438,7 +1438,7 @@ body {
   }
 
   .hero-top-left-content {
-    top: 3rem;
+    top: 7rem;
     left: 1.5rem;
     max-width: 90%;
   }
