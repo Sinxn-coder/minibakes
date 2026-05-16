@@ -317,10 +317,12 @@ export default function AdminApp() {
             {navItems.find(i => i.id === activeTab)?.label}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', backgroundColor: '#f1f3f5', borderRadius: '8px', padding: '8px 12px' }}>
-                <Search size={16} color="#888" style={{ marginRight: '8px' }} />
-                <input type="text" placeholder="Search orders..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px' }} />
-            </div>
+            {activeTab === 'orders' && (
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', backgroundColor: '#f1f3f5', borderRadius: '8px', padding: '8px 12px' }}>
+                  <Search size={16} color="#888" style={{ marginRight: '8px' }} />
+                  <input type="text" placeholder="Search orders..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px' }} />
+              </div>
+            )}
             <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
                 <Bell size={20} />
             </button>
