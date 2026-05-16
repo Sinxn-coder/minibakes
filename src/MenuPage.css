@@ -791,7 +791,7 @@
 
 @media (max-width: 768px) {
   .menu-page {
-    padding: 6rem 1.2rem 3rem;
+    padding: 120px 1.2rem 3rem;
     overflow-x: hidden;
     width: 100%;
     box-sizing: border-box;

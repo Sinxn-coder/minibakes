@@ -1403,7 +1403,7 @@ body {
 
   .hero-section {
     height: 100dvh;
-    padding-top: 0; /* Let flex centering work for true full screen look */
+    padding-top: 100px; /* Offset for mobile header */
     display: flex;
     flex-direction: column;
     justify-content: center;

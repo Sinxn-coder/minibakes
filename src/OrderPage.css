@@ -588,7 +588,7 @@
 
 @media (max-width: 768px) {
   .order-page {
-    padding: 2rem 1.5rem 120px;
+    padding: 120px 1.5rem 120px;
   }
   
   .order-header h1 {

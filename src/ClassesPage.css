@@ -683,10 +683,11 @@
 
 @media (max-width: 768px) {
   .classes-page { 
-    padding-top: 0; 
+    padding-top: 120px; 
     width: 100vw;
     margin: 0;
-    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
     overflow-x: hidden;
   }
   
