@@ -576,7 +576,7 @@ function App() {
         <div className="hero-overlay"></div>
       </div>
 
-      <header className={`header ${isScrolled || currentView !== 'home' ? 'scrolled' : ''} ${isSearchOpen ? 'search-open' : ''}`}>
+      <header className={`header ${isScrolled ? 'scrolled' : ''} ${isSearchOpen ? 'search-open' : ''}`}>
         <div className="logo-container">
           <img src={logo} alt="Mini Bakes Logo" />
         </div>
