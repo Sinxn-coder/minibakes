@@ -4,6 +4,19 @@ import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
 
+const WhatsAppIcon = ({ size = 16, ...props }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    width={size} 
+    height={size} 
+    fill="currentColor" 
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.353-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.446 4.432-9.877 9.881-9.877 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.448-4.435 9.878-9.883 9.878m0-21.867C6.435.056.1.493.1 12.226c0 2.124.549 4.198 1.595 6.037L0 24l5.893-1.547a12.19 12.19 0 005.77 1.468h.005c6.12 0 12.1-5.437 12.1-12.226 0-3.27-1.272-6.342-3.582-8.652A12.134 12.134 0 0012.051.055z"/>
+  </svg>
+);
+
 // Default featured images
 import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
@@ -20,9 +33,9 @@ export default function AdminApp() {
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [classBookings, setClassBookings] = useState([
-    { id: 'CB-001', name: 'Olivia Smith', email: 'olivia.smith@example.com', date: '2026-05-15', guests: 4, status: 'confirmed' },
-    { id: 'CB-002', name: 'James Wilson', email: 'j.wilson@gmail.com', date: '2026-05-22', guests: 2, status: 'pending' },
-    { id: 'CB-003', name: 'Sarah Parker', email: 'sparker@outlook.com', date: '2026-05-28', guests: 12, status: 'pending' },
+    { id: 'CB-001', name: 'Olivia Smith', email: 'olivia.smith@example.com', phone: '+356 7912 3456', date: '2026-05-15', guests: 4, status: 'confirmed' },
+    { id: 'CB-002', name: 'James Wilson', email: 'j.wilson@gmail.com', phone: '+356 9988 7766', date: '2026-05-22', guests: 2, status: 'pending' },
+    { id: 'CB-003', name: 'Sarah Parker', email: 'sparker@outlook.com', phone: '+356 7700 1122', date: '2026-05-28', guests: 12, status: 'pending' },
   ]);
   const [mailModal, setMailModal] = useState(null);
 
@@ -1144,7 +1157,7 @@ export default function AdminApp() {
                   <thead>
                     <tr>
                       <th>Customer Name</th>
-                      <th>Email Address</th>
+                      <th>Contact Info</th>
                       <th>Requested Date</th>
                       <th>Guest Count</th>
                       <th>Status</th>
@@ -1158,7 +1171,13 @@ export default function AdminApp() {
                           <div style={{ fontWeight: '600' }}>{booking.name}</div>
                           <div style={{ fontSize: '11px', color: '#999' }}>{booking.id}</div>
                         </td>
-                        <td>{booking.email}</td>
+                        <td>
+                          <div style={{ fontSize: '13px' }}>{booking.email}</div>
+                          <div style={{ fontSize: '12px', color: '#666', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <WhatsAppIcon size={12} color="#2e7d32" />
+                            {booking.phone}
+                          </div>
+                        </td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
                             <Calendar size={14} color="#800000" />
@@ -1188,6 +1207,17 @@ export default function AdminApp() {
                               onClick={() => setMailModal(booking)}
                             >
                               <Mail size={16} />
+                            </button>
+                            <button 
+                              className="action-btn-sm" 
+                              title="WhatsApp Customer" 
+                              style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => {
+                                const cleanPhone = (mailModal?.phone || booking.phone).replace(/\s+/g, '');
+                                window.open(`https://wa.me/${cleanPhone}`, '_blank');
+                              }}
+                            >
+                              <WhatsAppIcon size={16} />
                             </button>
                             <button 
                               className="action-btn-sm" 

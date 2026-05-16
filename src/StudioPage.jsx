@@ -119,6 +119,7 @@ export default function ClassesPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     date: '',
     guests: '1'
   });
@@ -177,7 +178,7 @@ export default function ClassesPage() {
     // Simulate booking
     setTimeout(() => {
       setBookingStatus('success');
-      setFormData({ name: '', email: '', date: '', guests: '1' });
+      setFormData({ name: '', email: '', phone: '', date: '', guests: '1' });
     }, 1500);
   };
 
@@ -326,6 +327,16 @@ export default function ClassesPage() {
                     placeholder="jane@example.com"
                     value={formData.email}
                     onChange={e => setFormData({...formData, email: e.target.value})}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input 
+                    type="tel" 
+                    placeholder="e.g. +356 1234 5678" 
+                    required 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   />
                 </div>
                 <div className="form-row">
