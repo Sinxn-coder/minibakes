@@ -1033,8 +1033,107 @@ export default function AdminApp() {
             <div className="admin-panel" style={{ minHeight: '600px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
                 <div>
-                  <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Cupcake Class Calendar</h2>
-                  <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Manage available dates for decorating experiences.</p>
+                  <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Class Booking Management</h2>
+                  <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Review student requests and manage your availability calendar.</p>
+                </div>
+              </div>
+
+              {/* New Booking Requests Table */}
+              <div className="admin-panel" style={{ marginBottom: '40px' }}>
+                <h3 className="admin-panel-title" style={{ fontSize: '18px', border: 'none', padding: 0, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Users size={20} /> New Booking Requests
+                </h3>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Customer Name</th>
+                      <th>Contact Info</th>
+                      <th>Requested Date</th>
+                      <th>Guest Count</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {classBookings.map(booking => (
+                      <tr key={booking.id}>
+                        <td>
+                          <div style={{ fontWeight: '600' }}>{booking.name}</div>
+                          <div style={{ fontSize: '11px', color: '#999' }}>{booking.id}</div>
+                        </td>
+                        <td>
+                          <div style={{ fontSize: '13px' }}>{booking.email}</div>
+                          <div style={{ fontSize: '12px', color: '#666', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <WhatsAppIcon size={12} color="#2e7d32" />
+                            {booking.phone}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
+                            <Calendar size={14} color="#800000" />
+                            {new Date(booking.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Users size={14} color="#666" />
+                            {booking.guests} Guests
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${booking.status}`}>
+                            {booking.status}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
+                              <CheckCircle2 size={16} />
+                            </button>
+                            <button 
+                              className="action-btn-sm" 
+                              title="Contact Customer" 
+                              style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => setMailModal(booking)}
+                            >
+                              <Mail size={16} />
+                            </button>
+                            <button 
+                              className="action-btn-sm" 
+                              title="WhatsApp Customer" 
+                              style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => setWhatsappModal(booking)}
+                            >
+                              <WhatsAppIcon size={16} />
+                            </button>
+                            <button 
+                              className="action-btn-sm" 
+                              title="Delete Request" 
+                              style={{ background: '#fff5f5', color: '#c62828', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => setClassBookings(prev => prev.filter(b => b.id !== booking.id))}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {classBookings.length === 0 && (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
+                          No new booking requests at this time.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Calendar Section Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderTop: '1px solid #e9ecef', paddingTop: '32px' }}>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#333' }}>Availability Calendar</h3>
+                  <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Manage fully booked dates to update the live website.</p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <div className="legend-item" style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -1150,96 +1249,7 @@ export default function AdminApp() {
                 </div>
               </div>
 
-              {/* New Booking Requests Table */}
-              <div className="admin-panel">
-                <h3 className="admin-panel-title" style={{ fontSize: '18px', border: 'none', padding: 0, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Users size={20} /> New Booking Requests
-                </h3>
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Customer Name</th>
-                      <th>Contact Info</th>
-                      <th>Requested Date</th>
-                      <th>Guest Count</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {classBookings.map(booking => (
-                      <tr key={booking.id}>
-                        <td>
-                          <div style={{ fontWeight: '600' }}>{booking.name}</div>
-                          <div style={{ fontSize: '11px', color: '#999' }}>{booking.id}</div>
-                        </td>
-                        <td>
-                          <div style={{ fontSize: '13px' }}>{booking.email}</div>
-                          <div style={{ fontSize: '12px', color: '#666', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <WhatsAppIcon size={12} color="#2e7d32" />
-                            {booking.phone}
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
-                            <Calendar size={14} color="#800000" />
-                            {new Date(booking.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Users size={14} color="#666" />
-                            {booking.guests} Guests
-                          </div>
-                        </td>
-                        <td>
-                          <span className={`status-badge ${booking.status}`}>
-                            {booking.status}
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '8px' }}>
-                            <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
-                              <CheckCircle2 size={16} />
-                            </button>
-                            <button 
-                              className="action-btn-sm" 
-                              title="Contact Customer" 
-                              style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
-                              onClick={() => setMailModal(booking)}
-                            >
-                              <Mail size={16} />
-                            </button>
-                            <button 
-                              className="action-btn-sm" 
-                              title="WhatsApp Customer" 
-                              style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
-                              onClick={() => setWhatsappModal(booking)}
-                            >
-                              <WhatsAppIcon size={16} />
-                            </button>
-                            <button 
-                              className="action-btn-sm" 
-                              title="Delete Request" 
-                              style={{ background: '#fff5f5', color: '#c62828', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
-                              onClick={() => setClassBookings(prev => prev.filter(b => b.id !== booking.id))}
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                    {classBookings.length === 0 && (
-                      <tr>
-                        <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
-                          No new booking requests at this time.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+
             </div>
           )}
 
