@@ -24,6 +24,7 @@ export default function AdminApp() {
     { id: 'CB-002', name: 'James Wilson', email: 'j.wilson@gmail.com', date: '2026-05-22', guests: 2, status: 'pending' },
     { id: 'CB-003', name: 'Sarah Parker', email: 'sparker@outlook.com', date: '2026-05-28', guests: 12, status: 'pending' },
   ]);
+  const [mailModal, setMailModal] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -1180,7 +1181,12 @@ export default function AdminApp() {
                             <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
                               <CheckCircle2 size={16} />
                             </button>
-                            <button className="action-btn-sm" title="Contact Customer" style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
+                            <button 
+                              className="action-btn-sm" 
+                              title="Contact Customer" 
+                              style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => setMailModal(booking)}
+                            >
                               <Mail size={16} />
                             </button>
                             <button 
@@ -1682,6 +1688,79 @@ export default function AdminApp() {
                   <div className="notification-time"><Clock size={12} /> 1 day ago</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Email Template Modal */}
+      {mailModal && (
+        <div className="admin-modal-overlay" onClick={() => setMailModal(null)} style={{ zIndex: 4000 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px', padding: '32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#800000', fontSize: '20px' }}>Email Templates</h3>
+                <p style={{ margin: '4px 0 0 0', color: '#666', fontSize: '13px' }}>Choose a response for <strong>{mailModal.name}</strong></p>
+              </div>
+              <button onClick={() => setMailModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}><X size={24} /></button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const subject = `Booking Confirmation - Mini Bakes Classes`;
+                  const body = `Hi ${mailModal.name},\n\nWe are delighted to confirm your cupcake decorating experience for ${new Date(mailModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} with ${mailModal.guests} guests.\n\nWe look forward to seeing you soon!\n\nBest regards,\nMegan Briffa\nMini Bakes`;
+                  window.location.href = `mailto:${mailModal.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  setMailModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #e8f5e9', background: '#f1fbf3', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#2e7d32', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CheckCircle2 size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#2e7d32', marginBottom: '2px' }}>Accept Booking</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Send confirmation and guest details</div>
+                </div>
+              </button>
+
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const subject = `Update regarding your Mini Bakes Booking`;
+                  const body = `Hi ${mailModal.name},\n\nThank you for your interest in our cupcake decorating experience! Unfortunately, ${new Date(mailModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} is no longer available due to a scheduling conflict.\n\nWould you like to explore other available dates from our calendar?\n\nBest regards,\nMegan Briffa\nMini Bakes`;
+                  window.location.href = `mailto:${mailModal.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  setMailModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #fff3e0', background: '#fffaf0', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#ef6c00', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Calendar size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#ef6c00', marginBottom: '2px' }}>Change Date</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Request customer to pick another slot</div>
+                </div>
+              </button>
+
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const subject = `Booking Request Update - Mini Bakes`;
+                  const body = `Hi ${mailModal.name},\n\nThank you for reaching out to Mini Bakes. We appreciate your interest in our decorating experiences.\n\nUnfortunately, we are unable to fulfill your booking request for ${new Date(mailModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} at this time. We apologize for any disappointment caused.\n\nBest regards,\nMegan Briffa\nMini Bakes`;
+                  window.location.href = `mailto:${mailModal.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  setMailModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #ffebee', background: '#fff5f5', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#c62828', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#c62828', marginBottom: '2px' }}>Reject Request</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Politely decline the booking request</div>
+                </div>
+              </button>
             </div>
           </div>
         </div>
