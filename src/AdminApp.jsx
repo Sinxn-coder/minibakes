@@ -38,6 +38,7 @@ export default function AdminApp() {
     { id: 'CB-003', name: 'Sarah Parker', email: 'sparker@outlook.com', phone: '+356 7700 1122', date: '2026-05-28', guests: 12, status: 'pending' },
   ]);
   const [mailModal, setMailModal] = useState(null);
+  const [whatsappModal, setWhatsappModal] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -1212,10 +1213,7 @@ export default function AdminApp() {
                               className="action-btn-sm" 
                               title="WhatsApp Customer" 
                               style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
-                              onClick={() => {
-                                const cleanPhone = (mailModal?.phone || booking.phone).replace(/\s+/g, '');
-                                window.open(`https://wa.me/${cleanPhone}`, '_blank');
-                              }}
+                              onClick={() => setWhatsappModal(booking)}
                             >
                               <WhatsAppIcon size={16} />
                             </button>
@@ -1789,6 +1787,79 @@ export default function AdminApp() {
                 <div>
                   <div style={{ fontWeight: '700', color: '#c62828', marginBottom: '2px' }}>Reject Request</div>
                   <div style={{ fontSize: '12px', color: '#666' }}>Politely decline the booking request</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* WhatsApp Template Modal */}
+      {whatsappModal && (
+        <div className="admin-modal-overlay" onClick={() => setWhatsappModal(null)} style={{ zIndex: 4000 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px', padding: '32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#2e7d32', fontSize: '20px' }}>WhatsApp Templates</h3>
+                <p style={{ margin: '4px 0 0 0', color: '#666', fontSize: '13px' }}>Quick message for <strong>{whatsappModal.name}</strong></p>
+              </div>
+              <button onClick={() => setWhatsappModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}><X size={24} /></button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const text = `Hi ${whatsappModal.name}! This is Megan from Mini Bakes. 🧁 I'm happy to confirm your cupcake decorating class for ${new Date(whatsappModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} with ${whatsappModal.guests} guests. Can't wait!`;
+                  const cleanPhone = whatsappModal.phone.replace(/\s+/g, '').replace(/^\+/, '');
+                  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, '_blank');
+                  setWhatsappModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #e8f5e9', background: '#f1fbf3', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#2e7d32', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CheckCircle2 size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#2e7d32', marginBottom: '2px' }}>Accept & Confirm</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Friendly confirmation with class details</div>
+                </div>
+              </button>
+
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const text = `Hi ${whatsappModal.name}! Megan from Mini Bakes here. 🧁 Thank you for your request! Unfortunately, ${new Date(whatsappModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} is no longer available. Would you like to check our other available slots?`;
+                  const cleanPhone = whatsappModal.phone.replace(/\s+/g, '').replace(/^\+/, '');
+                  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, '_blank');
+                  setWhatsappModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #fff3e0', background: '#fffaf0', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#ef6c00', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Calendar size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#ef6c00', marginBottom: '2px' }}>Reschedule Request</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Ask customer to choose a different date</div>
+                </div>
+              </button>
+
+              <button 
+                className="template-btn"
+                onClick={() => {
+                  const text = `Hi ${whatsappModal.name}, Megan from Mini Bakes. 🧁 Thank you for reaching out! Unfortunately, we can't accommodate your request for ${new Date(whatsappModal.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} at this time. Apologies for the inconvenience!`;
+                  const cleanPhone = whatsappModal.phone.replace(/\s+/g, '').replace(/^\+/, '');
+                  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, '_blank');
+                  setWhatsappModal(null);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '20px', borderRadius: '12px', border: '1px solid #ffebee', background: '#fff5f5', cursor: 'pointer', textAlign: 'left', transition: '0.2s' }}
+              >
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#c62828', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={20} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '700', color: '#c62828', marginBottom: '2px' }}>Decline Request</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>Politely decline via WhatsApp</div>
                 </div>
               </button>
             </div>
