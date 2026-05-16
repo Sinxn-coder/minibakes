@@ -1111,9 +1111,20 @@ export default function AdminApp() {
                         </td>
                         <td>
                           <div style={{ display: 'flex', gap: '8px' }}>
-                            <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
-                              <CheckCircle2 size={16} />
-                            </button>
+                            {booking.status !== 'confirmed' && (
+                              <button 
+                                className="action-btn-sm" 
+                                title="Confirm Booking" 
+                                style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                                onClick={() => {
+                                  setClassBookings(prev => prev.map(b => 
+                                    b.id === booking.id ? { ...b, status: 'confirmed' } : b
+                                  ));
+                                }}
+                              >
+                                <CheckCircle2 size={16} />
+                              </button>
+                            )}
                             <button 
                               className="action-btn-sm" 
                               title="Contact Customer" 
