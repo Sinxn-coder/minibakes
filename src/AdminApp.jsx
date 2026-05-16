@@ -18,6 +18,7 @@ export default function AdminApp() {
   const [activeOrderItemIndex, setActiveOrderItemIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -323,8 +324,12 @@ export default function AdminApp() {
                   <input type="text" placeholder="Search orders..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px' }} />
               </div>
             )}
-            <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+            <button 
+              onClick={() => setShowNotifications(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666', position: 'relative' }}
+            >
                 <Bell size={20} />
+                <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '8px', height: '8px', background: '#ff4d4d', borderRadius: '50%', border: '2px solid #fff' }}></span>
             </button>
             <div className="admin-user-profile">
               <div className="admin-avatar">A</div>
@@ -1557,6 +1562,58 @@ export default function AdminApp() {
               >
                 <Save size={18} /> Save Changes
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Notification Full Screen */}
+      {showNotifications && (
+        <div className="notifications-fullscreen-overlay">
+          <header className="notifications-header">
+            <h2><Bell size={28} /> Notifications</h2>
+            <button className="close-notifications-btn" onClick={() => setShowNotifications(false)}>
+              <X size={24} />
+            </button>
+          </header>
+          
+          <div className="notifications-content">
+            <div className="notification-group">
+              <div className="notification-group-title">Today</div>
+              {recentActivities.map(activity => (
+                <div key={activity.id} className="notification-card-item">
+                  <div className="notification-icon-box" style={{ 
+                    backgroundColor: activity.status === 'pending' ? '#fff3e0' : activity.status === 'completed' ? '#e8f5e9' : '#e3f2fd',
+                    color: activity.status === 'pending' ? '#ef6c00' : activity.status === 'completed' ? '#2e7d32' : '#1565c0'
+                  }}>
+                    {activity.action.includes('Order') ? <ShoppingCart size={24} /> : 
+                     activity.action.includes('Product') ? <Package size={24} /> : <User size={24} />}
+                  </div>
+                  <div className="notification-info">
+                    <div className="notification-action">
+                      {activity.action}: <span className="notification-target">{activity.target}</span>
+                    </div>
+                    <div className="notification-time">
+                      <Clock size={12} /> {activity.time}
+                      <span style={{ margin: '0 8px', opacity: 0.3 }}>•</span>
+                      <span className={`notification-status-dot ${activity.status}`}></span>
+                      <span style={{ fontSize: '12px', textTransform: 'capitalize' }}>{activity.status}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="notification-group">
+              <div className="notification-group-title">Yesterday</div>
+              <div className="notification-card-item">
+                <div className="notification-icon-box" style={{ backgroundColor: '#f3e5f5', color: '#7b1fa2' }}>
+                  <MessageCircle size={24} />
+                </div>
+                <div className="notification-info">
+                  <div className="notification-action">New Message: <span className="notification-target">Alice Cooper</span></div>
+                  <div className="notification-time"><Clock size={12} /> 1 day ago</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
