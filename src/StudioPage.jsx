@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import './StudioPage.css';
+import './ClassesPage.css';
 import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 
-const studio1 = `${import.meta.env.BASE_URL}studio1.png`;
-const studio2 = `${import.meta.env.BASE_URL}studio2.png`;
-const studio3 = `${import.meta.env.BASE_URL}studio3.png`;
-const studio4 = `${import.meta.env.BASE_URL}studio4.png`;
-const studio5 = `${import.meta.env.BASE_URL}studio5.png`;
-const studio6 = `${import.meta.env.BASE_URL}studio6.png`;
-const studio7 = `${import.meta.env.BASE_URL}studio7.png`;
-const studio8 = `${import.meta.env.BASE_URL}studio8.png`;
+const classImg1 = `${import.meta.env.BASE_URL}studio1.png`;
+const classImg2 = `${import.meta.env.BASE_URL}studio2.png`;
+const classImg3 = `${import.meta.env.BASE_URL}studio3.png`;
+const classImg4 = `${import.meta.env.BASE_URL}studio4.png`;
+const classImg5 = `${import.meta.env.BASE_URL}studio5.png`;
+const classImg6 = `${import.meta.env.BASE_URL}studio6.png`;
+const classImg7 = `${import.meta.env.BASE_URL}studio7.png`;
+const classImg8 = `${import.meta.env.BASE_URL}studio8.png`;
 
-// 8 unique studio images from public folder
-const studioImages = [studio1, studio2, studio3, studio4, studio5, studio6, studio7, studio8];
+// 8 unique class images from public folder
+const classImages = [classImg1, classImg2, classImg3, classImg4, classImg5, classImg6, classImg7, classImg8];
 
 // Booked dates are now managed via Admin Panel and stored in Supabase
 const DEFAULT_BOOKED_DATES = [
@@ -113,7 +113,7 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
   );
 };
 
-export default function StudioPage() {
+export default function ClassesPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [formData, setFormData] = useState({
@@ -166,7 +166,7 @@ export default function StudioPage() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImgIndex((prev) => (prev + 1) % studioImages.length);
+      setCurrentImgIndex((prev) => (prev + 1) % classImages.length);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
@@ -182,11 +182,11 @@ export default function StudioPage() {
   };
 
   return (
-    <div className="studio-page">
+    <div className="classes-page">
       {/* Hero Section */}
-      <section className="studio-hero">
+      <section className="classes-hero">
         <div className="studio-hero-content">
-          <span className="studio-badge">Cupcake Decorating Experiences</span>
+          <span className="classes-badge">Cupcake Decorating Experiences</span>
           <h1>A Sweet Experience, <br/><span>Brought to You</span></h1>
           <p>Megan Briffa comes to <em>you</em> — your home, venue, or event space — for a fun, hands-on cupcake decorating experience. Perfect for birthdays, hen parties, team events, and more.</p>
           <button 
@@ -196,16 +196,16 @@ export default function StudioPage() {
             Request a Booking <ArrowRight size={18} />
           </button>
         </div>
-        <div className="studio-hero-image">
-          {studioImages.map((img, idx) => (
+        <div className="classes-hero-image">
+          {classImages.map((img, idx) => (
             <div 
               key={idx} 
               className={`hero-slide ${idx === currentImgIndex ? 'active' : ''}`}
             >
-              <SafeImage src={img} alt={`Studio Moment ${idx + 1}`} />
+              <SafeImage src={img} alt={`Class Moment ${idx + 1}`} />
             </div>
           ))}
-          <div className="studio-floating-card">
+          <div className="classes-floating-card">
             <Star className="star-icon" fill="#800000" color="#800000" />
             <div>
               <strong>4.9/5 Rating</strong>
@@ -258,10 +258,10 @@ export default function StudioPage() {
       </section>
 
       {/* Gallery Section */}
-      <section className="studio-gallery">
+      <section className="classes-gallery">
         <h2 className="section-title-alt">CLASS MOMENTS</h2>
         <div className="expanding-gallery">
-          {studioImages.map((img, idx) => (
+          {classImages.map((img, idx) => (
             <div 
               key={idx}
               data-index={idx}
@@ -378,15 +378,15 @@ export default function StudioPage() {
             className="lightbox-nav prev" 
             onClick={(e) => {
               e.stopPropagation();
-              setLightboxIndex(prev => (prev > 0 ? prev - 1 : studioImages.length - 1));
+              setLightboxIndex(prev => (prev > 0 ? prev - 1 : classImages.length - 1));
             }}
           >
             <ChevronLeft size={36} />
           </button>
 
           <img 
-            src={studioImages[lightboxIndex]} 
-            alt="Studio Moment" 
+            src={classImages[lightboxIndex]} 
+            alt="Class Moment" 
             className="lightbox-img" 
           />
 
@@ -394,7 +394,7 @@ export default function StudioPage() {
             className="lightbox-nav next" 
             onClick={(e) => {
               e.stopPropagation();
-              setLightboxIndex(prev => (prev < studioImages.length - 1 ? prev + 1 : 0));
+              setLightboxIndex(prev => (prev < classImages.length - 1 ? prev + 1 : 0));
             }}
           >
             <ChevronRight size={36} />

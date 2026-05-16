@@ -657,7 +657,7 @@ function App() {
             <span className="nav-divider">|</span>
             <a href="#menu" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>Menu</a>
             <span className="nav-divider">|</span>
-            <a href="#studio" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('studio'); }}>Classes</a>
+            <a href="#classes" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('classes'); }}>Classes</a>
             <span className="nav-divider">|</span>
             <a href="#order" className="nav-link" onClick={(e) => {
               e.preventDefault();
@@ -710,7 +710,7 @@ function App() {
               <a href="#menu" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>Menu</a>
             </div>
             <div className="nav-item-wrapper">
-              <a href="#studio" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('studio'); }}>Classes</a>
+              <a href="#classes" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('classes'); }}>Classes</a>
             </div>
             <div className="nav-item-wrapper">
               <a href="#care" className="mobile-nav-link" onClick={(e) => { e.preventDefault(); navigateTo('care'); }}>Cake Care</a>
@@ -1025,7 +1025,7 @@ function App() {
         setCustomizingProduct(item);
         setCurrentView('product-details');
       }} />}
-      {currentView === 'studio' && <StudioPage />}
+      {currentView === 'classes' && <StudioPage />}
       {currentView === 'order' && <OrderPage
         cart={cart}
         onBack={() => setCurrentView('home')}

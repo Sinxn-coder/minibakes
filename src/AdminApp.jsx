@@ -1128,7 +1128,7 @@ export default function AdminApp() {
                   <div className="premium-card" style={{ padding: '20px', background: '#fff8f9', border: '1px solid #ffebee' }}>
                     <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#800000', marginBottom: '8px' }}>Management Tip</h3>
                     <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.5', margin: 0 }}>
-                      Marking a date as "Booked" on the calendar will automatically inform customers on the Studio page that you are unavailable for that day.
+                      Marking a date as "Booked" on the calendar will automatically inform customers on the Classes page that you are unavailable for that day.
                     </p>
                   </div>
                 </div>
@@ -1177,7 +1177,9 @@ export default function AdminApp() {
                         </td>
                         <td>
                           <div style={{ display: 'flex', gap: '8px' }}>
-
+                            <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
+                              <CheckCircle2 size={16} />
+                            </button>
                             <button className="action-btn-sm" title="Contact Customer" style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
                               <Mail size={16} />
                             </button>

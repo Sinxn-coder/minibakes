@@ -1,10 +1,10 @@
-.studio-page {
+.classes-page {
   padding-top: 80px;
   animation: fadeIn 0.8s ease-out;
 }
 
 /* Hero Section */
-.studio-hero {
+.classes-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -13,7 +13,7 @@
   background: linear-gradient(to right, #fff, #fdf2f2);
 }
 
-.studio-badge {
+.classes-badge {
   display: inline-block;
   padding: 0.5rem 1.2rem;
   background: rgba(128, 0, 0, 0.08);
@@ -70,7 +70,7 @@
   box-shadow: 0 15px 40px rgba(128, 0, 0, 0.3);
 }
 
-.studio-hero-image {
+.classes-hero-image {
   position: relative;
   border-radius: 40px;
   overflow: hidden;
@@ -105,7 +105,7 @@
   display: block;
 }
 
-.studio-floating-card {
+.classes-floating-card {
   position: absolute;
   bottom: 2rem;
   left: 2rem;
@@ -126,7 +126,7 @@
 }
 
 /* Perks Section */
-.studio-perks {
+.classes-perks {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
@@ -173,7 +173,7 @@
 }
 
 /* Schedule Section */
-.studio-schedule {
+.classes-schedule {
   padding: 4rem;
   background: #fdfdfd;
 }
@@ -416,7 +416,7 @@
 .legend-box.selected { background: #800000; }
 
 /* Gallery Section */
-.studio-gallery {
+.classes-gallery {
   padding: 6rem 4rem;
 }
 
@@ -590,7 +590,7 @@
   box-shadow: 0 40px 100px rgba(128, 0, 0, 0.1);
 }
 
-.studio-form {
+.classes-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -675,14 +675,14 @@
     gap: 3rem;
     padding: 4rem 2rem;
   }
-  .studio-hero-content { text-align: center; }
+  .classes-hero-content { text-align: center; }
   .studio-hero-content p { margin: 0 auto 2.5rem; }
   .booking-info { text-align: center; }
   .contact-details { display: flex; flex-direction: column; align-items: center; }
 }
 
 @media (max-width: 768px) {
-  .studio-page { 
+  .classes-page { 
     padding-top: 0; 
     width: 100vw;
     margin: 0;
@@ -690,7 +690,7 @@
     overflow-x: hidden;
   }
   
-  .studio-hero, .studio-schedule, .studio-gallery, .booking-section, .studio-perks {
+  .studio-hero, .studio-schedule, .studio-gallery, .booking-section, .classes-perks {
     width: 100%;
     margin-left: 0;
     margin-right: 0;
@@ -699,7 +699,7 @@
     box-sizing: border-box;
   }
 
-  .studio-hero { 
+  .classes-hero { 
     padding-top: 2rem;
     padding-bottom: 3rem;
     background: #fdf2f2;
@@ -709,7 +709,7 @@
     text-align: center;
   }
 
-  .studio-hero-content {
+  .classes-hero-content {
     width: 100%;
     max-width: 100%;
     display: flex;
@@ -731,19 +731,19 @@
     margin-bottom: 2rem;
   }
 
-  .studio-hero-image {
+  .classes-hero-image {
     order: -1; 
     border-radius: 20px;
     margin-bottom: 0.5rem;
   }
 
-  .studio-floating-card {
+  .classes-floating-card {
     padding: 1rem;
     bottom: 1rem;
     left: 1rem;
   }
 
-  .studio-perks { 
+  .classes-perks { 
     grid-template-columns: 1fr; 
     padding: 2rem 1.5rem;
     gap: 1.5rem;
@@ -753,7 +753,7 @@
 
   /* Horizontal Snap Carousel for Classes on Mobile */
   /* Calendar Mobile Refinements */
-  .studio-schedule { padding: 2rem 0; }
+  .classes-schedule { padding: 2rem 0; }
   .section-title-alt { padding: 0 1.5rem; margin-bottom: 1.2rem; font-size: 1.6rem; }
   
   .calendar-wrapper {
