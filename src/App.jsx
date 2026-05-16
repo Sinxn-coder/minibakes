@@ -567,6 +567,15 @@ function App() {
 
   return (
     <div className="main-layout">
+      {/* Fixed Background Layer */}
+      <div className={`global-fixed-bg ${currentView === 'home' ? 'visible' : ''}`}>
+        <div 
+          className="hero-bg-image active" 
+          style={{ backgroundImage: `url("${bg1}")` }} 
+        />
+        <div className="hero-overlay"></div>
+      </div>
+
       <header className={`header ${isScrolled ? 'scrolled' : ''} ${isSearchOpen ? 'search-open' : ''}`}>
         <div className="logo-container">
           <img src={logo} alt="Mini Bakes Logo" />
@@ -730,14 +739,6 @@ function App() {
         <>
           {/* Hero Section */}
           <section className="hero-section">
-            <div className="hero-bg-container">
-              <div
-                className="hero-bg-image active"
-                style={{ backgroundImage: `url("${bg1}")` }}
-              />
-              <div className="hero-overlay"></div>
-            </div>
-
             <div className="hero-top-left-content">
               <p className="hero-celebration-text">
                 <span className="hero-sans">Freshly baked for every</span><br />
