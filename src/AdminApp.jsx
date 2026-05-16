@@ -39,6 +39,7 @@ export default function AdminApp() {
   ]);
   const [mailModal, setMailModal] = useState(null);
   const [whatsappModal, setWhatsappModal] = useState(null);
+  const [confirmBookingModal, setConfirmBookingModal] = useState(null); // stores dateStr
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -1092,7 +1093,7 @@ export default function AdminApp() {
                         grid.push(
                           <button
                             key={d}
-                            onClick={() => toggleDate(dateStr)}
+                            onClick={() => setConfirmBookingModal(dateStr)}
                             style={{
                               aspectRatio: '1',
                               borderRadius: '12px',
@@ -1861,6 +1862,42 @@ export default function AdminApp() {
                   <div style={{ fontWeight: '700', color: '#c62828', marginBottom: '2px' }}>Decline Request</div>
                   <div style={{ fontSize: '12px', color: '#666' }}>Politely decline via WhatsApp</div>
                 </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Date Booking Confirmation Modal */}
+      {confirmBookingModal && (
+        <div className="admin-modal-overlay" onClick={() => setConfirmBookingModal(null)} style={{ zIndex: 4500 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px', padding: '32px', textAlign: 'center' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: bookedDates.includes(confirmBookingModal) ? '#fff5f5' : '#f1fbf3', color: bookedDates.includes(confirmBookingModal) ? '#c62828' : '#2e7d32', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <Calendar size={32} />
+            </div>
+            
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '20px', color: '#333' }}>
+              {bookedDates.includes(confirmBookingModal) ? 'Remove Booking?' : 'Mark as Booked?'}
+            </h3>
+            
+            <p style={{ margin: '0 0 24px 0', color: '#666', fontSize: '15px', lineHeight: '1.5' }}>
+              Are you sure you want to {bookedDates.includes(confirmBookingModal) ? 'make' : 'mark'} <strong>{new Date(confirmBookingModal).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> {bookedDates.includes(confirmBookingModal) ? 'available again' : 'as fully booked'}?
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button 
+                onClick={() => setConfirmBookingModal(null)}
+                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid #eee', background: '#fff', color: '#666', fontWeight: '600', cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  toggleDate(confirmBookingModal);
+                  setConfirmBookingModal(null);
+                }}
+                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: 'none', background: bookedDates.includes(confirmBookingModal) ? '#c62828' : '#800000', color: '#fff', fontWeight: '600', cursor: 'pointer', boxShadow: '0 4px 12px rgba(128,0,0,0.2)' }}
+              >
+                {bookedDates.includes(confirmBookingModal) ? 'Yes, Remove' : 'Yes, Mark Booked'}
               </button>
             </div>
           </div>
