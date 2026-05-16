@@ -1040,9 +1040,33 @@ export default function AdminApp() {
 
               {/* New Booking Requests Table */}
               <div className="admin-panel" style={{ marginBottom: '40px' }}>
-                <h3 className="admin-panel-title" style={{ fontSize: '18px', border: 'none', padding: 0, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Users size={20} /> New Booking Requests
-                </h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <h3 className="admin-panel-title" style={{ fontSize: '18px', border: 'none', padding: 0, margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Users size={20} /> New Booking Requests
+                  </h3>
+                  <button 
+                    onClick={() => document.getElementById('admin-calendar-section')?.scrollIntoView({ behavior: 'smooth' })}
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '8px', 
+                      padding: '8px 16px', 
+                      borderRadius: '10px', 
+                      border: '1px solid #800000', 
+                      background: 'rgba(128, 0, 0, 0.05)', 
+                      color: '#800000', 
+                      fontSize: '13px', 
+                      fontWeight: '600', 
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(128, 0, 0, 0.1)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(128, 0, 0, 0.05)'; }}
+                  >
+                    <Calendar size={16} />
+                    Check Availability
+                  </button>
+                </div>
                 <table className="admin-table">
                   <thead>
                     <tr>
@@ -1130,7 +1154,7 @@ export default function AdminApp() {
               </div>
 
               {/* Calendar Section Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderTop: '1px solid #e9ecef', paddingTop: '32px' }}>
+              <div id="admin-calendar-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderTop: '1px solid #e9ecef', paddingTop: '32px' }}>
                 <div>
                   <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#333' }}>Availability Calendar</h3>
                   <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Manage fully booked dates to update the live website.</p>
