@@ -1064,7 +1064,7 @@ export default function AdminApp() {
                     onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(128, 0, 0, 0.05)'; }}
                   >
                     <Calendar size={16} />
-                    Check Availability
+                    Update Availability
                   </button>
                 </div>
                 <table className="admin-table">
