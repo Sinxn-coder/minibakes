@@ -19,6 +19,11 @@ export default function AdminApp() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [classBookings, setClassBookings] = useState([
+    { id: 'CB-001', name: 'Olivia Smith', email: 'olivia.smith@example.com', date: '2026-05-15', guests: 4, status: 'confirmed' },
+    { id: 'CB-002', name: 'James Wilson', email: 'j.wilson@gmail.com', date: '2026-05-22', guests: 2, status: 'pending' },
+    { id: 'CB-003', name: 'Sarah Parker', email: 'sparker@outlook.com', date: '2026-05-28', guests: 12, status: 'pending' },
+  ]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -1025,7 +1030,7 @@ export default function AdminApp() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px', marginBottom: '32px' }}>
                 {/* Admin Calendar View */}
                 <div className="admin-calendar-card" style={{ background: '#fff', borderRadius: '16px', border: '1px solid #eee', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -1076,7 +1081,7 @@ export default function AdminApp() {
                             style={{
                               aspectRatio: '1',
                               borderRadius: '12px',
-                              border: 'none',
+                              border: isToday ? '2px solid #800000' : '1px solid transparent',
                               background: isBooked ? '#800000' : (isToday ? '#f0f0f0' : '#fff9fa'),
                               color: isBooked ? '#fff' : '#333',
                               fontSize: '14px',
@@ -1087,8 +1092,7 @@ export default function AdminApp() {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              boxShadow: isBooked ? '0 4px 10px rgba(128,0,0,0.2)' : 'none',
-                              border: isToday ? '2px solid #800000' : '1px solid transparent'
+                              boxShadow: isBooked ? '0 4px 10px rgba(128,0,0,0.2)' : 'none'
                             }}
                           >
                             {d}
@@ -1103,39 +1107,103 @@ export default function AdminApp() {
                   </div>
                 </div>
 
-                {/* Side Panel: Quick List */}
+                {/* Side Panel: Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <div className="premium-card" style={{ padding: '20px', flex: 1, overflowY: 'auto', maxHeight: '400px' }}>
+                  <div className="premium-card" style={{ padding: '20px', background: '#fff', border: '1px solid #eee' }}>
                     <h3 style={{ fontSize: '15px', fontWeight: '600', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Clock size={18} color="#800000" /> Booked Dates List
+                      <Sparkles size={18} color="#800000" /> Class Statistics
                     </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {bookedDates.sort().map(date => (
-                        <div key={date} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f9fa', borderRadius: '10px', border: '1px solid #eee' }}>
-                          <span style={{ fontWeight: '500', fontSize: '14px' }}>
-                            {new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                          </span>
-                          <button 
-                            onClick={() => toggleDate(date)}
-                            style={{ background: 'none', border: 'none', color: '#c62828', cursor: 'pointer', padding: '4px' }}
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      ))}
-                      {bookedDates.length === 0 && (
-                        <p style={{ textAlign: 'center', color: '#999', fontSize: '13px', padding: '20px' }}>No dates are currently booked.</p>
-                      )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                        <span style={{ color: '#666' }}>Active Requests</span>
+                        <span style={{ fontWeight: '700' }}>{classBookings.filter(b => b.status === 'pending').length}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+                        <span style={{ color: '#666' }}>Fully Booked Dates</span>
+                        <span style={{ fontWeight: '700' }}>{bookedDates.length}</span>
+                      </div>
                     </div>
                   </div>
 
                   <div className="premium-card" style={{ padding: '20px', background: '#fff8f9', border: '1px solid #ffebee' }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#800000', marginBottom: '8px' }}>Pro Tip</h3>
+                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#800000', marginBottom: '8px' }}>Management Tip</h3>
                     <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.5', margin: 0 }}>
-                      Simply click any date on the calendar to toggle its availability. Maroon dates will be shown as "FULLY BOOKED" on the public studio page.
+                      Marking a date as "Booked" on the calendar will automatically inform customers on the Studio page that you are unavailable for that day.
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* New Booking Requests Table */}
+              <div className="admin-panel">
+                <h3 className="admin-panel-title" style={{ fontSize: '18px', border: 'none', padding: 0, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Users size={20} /> New Booking Requests
+                </h3>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Customer Name</th>
+                      <th>Email Address</th>
+                      <th>Requested Date</th>
+                      <th>Guest Count</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {classBookings.map(booking => (
+                      <tr key={booking.id}>
+                        <td>
+                          <div style={{ fontWeight: '600' }}>{booking.name}</div>
+                          <div style={{ fontSize: '11px', color: '#999' }}>{booking.id}</div>
+                        </td>
+                        <td>{booking.email}</td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
+                            <Calendar size={14} color="#800000" />
+                            {new Date(booking.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Users size={14} color="#666" />
+                            {booking.guests} Guests
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${booking.status}`}>
+                            {booking.status}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button className="action-btn-sm" title="Confirm Booking" style={{ background: '#e8f5e9', color: '#2e7d32', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
+                              <CheckCircle2 size={16} />
+                            </button>
+                            <button className="action-btn-sm" title="Contact Customer" style={{ background: '#e3f2fd', color: '#1565c0', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}>
+                              <Mail size={16} />
+                            </button>
+                            <button 
+                              className="action-btn-sm" 
+                              title="Delete Request" 
+                              style={{ background: '#fff5f5', color: '#c62828', border: 'none', padding: '6px', borderRadius: '6px', cursor: 'pointer' }}
+                              onClick={() => setClassBookings(prev => prev.filter(b => b.id !== booking.id))}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {classBookings.length === 0 && (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
+                          No new booking requests at this time.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
