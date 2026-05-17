@@ -21,6 +21,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 import brownieImg from './assets/brownies_box.png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
+import founderImg from './assets/founder.jpg';
 
 const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
 
@@ -494,8 +495,10 @@ export default function AdminApp() {
                 <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '8px', height: '8px', background: '#ff4d4d', borderRadius: '50%', border: '2px solid #fff' }}></span>
             </button>
             <div className="admin-user-profile">
-              <div className="admin-avatar">A</div>
-              <span style={{ fontSize: '14px', fontWeight: '500' }}>Admin User</span>
+              <div className="admin-avatar" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={founderImg} alt="Megan Briffa" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: '500' }}>Megan Briffa</span>
             </div>
           </div>
         </header>
