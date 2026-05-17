@@ -684,7 +684,6 @@ function App() {
               else navigateTo('order');
             }}>
               Order
-              {cart.length > 0 && <span className="nav-cart-badge">{cart.length}</span>}
             </a>
             <span className="nav-divider">|</span>
             <a href="#contact" className="nav-link" onClick={(e) => {
