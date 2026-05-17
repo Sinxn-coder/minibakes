@@ -340,6 +340,7 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationFrameId;
+    let completeTimerStarted = false;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -348,63 +349,54 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const emojis = ['🧁', '🍰', '🎂', '🍪', '🍩', '🍫', '🍬', '🍭'];
+    const emojis = ['🍰', '🎂', '🧁'];
     const particles = [];
-    const sparkles = [];
-    const maxParticles = 120;
-    const spawnRate = 20; 
+    const maxParticles = 10;
+    const spawnRate = 200; 
     let lastSpawnTime = 0;
     let particleCount = 0;
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2 + 50; 
-    const pileWidth = Math.min(180, canvas.width * 0.4);
-    const pileHeight = pileWidth * 0.7;
+    const pileWidth = Math.min(120, canvas.width * 0.3);
 
-    class Sparkle {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.vx = (Math.random() - 0.5) * 4;
-        this.vy = (Math.random() - 0.5) * 4 - 2;
-        this.alpha = 1;
-        this.color = ['#ffccd5', '#800000', '#ffd700', '#ffb3c1'][Math.floor(Math.random() * 4)];
-        this.size = Math.random() * 3 + 2;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.vy += 0.1; 
-        this.alpha -= 0.025;
-      }
-      draw() {
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, this.alpha);
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
+    // Dynamic, beautifully layered pile for exactly 10 cakes
     const getRestPosition = (index) => {
-      const totalLayers = 8;
+      // 10 cakes can form 4 layers:
+      // Layer 0 (bottom): 4 cakes
+      // Layer 1: 3 cakes
+      // Layer 2: 2 cakes
+      // Layer 3 (top): 1 cake
+      const layers = [4, 3, 2, 1];
       let layer = 0;
       let count = 0;
-      for (let l = 0; l < totalLayers; l++) {
-        const layerCapacity = (totalLayers - l) * 3;
-        if (index < count + layerCapacity) {
+      for (let l = 0; l < layers.length; l++) {
+        if (index < count + layers[l]) {
           layer = l;
           break;
         }
-        count += layerCapacity;
+        count += layers[l];
         layer = l;
       }
 
-      const ly = centerY - (layer * 18) + (Math.random() * 6 - 3);
-      const lWidth = pileWidth * (1 - (layer / totalLayers) * 0.85);
-      const lx = centerX + (Math.random() - 0.5) * lWidth;
+      // Index inside this specific layer
+      const indexInLayer = index - count;
+      const layerCapacity = layers[layer];
+
+      // Y position: stack vertically
+      const ly = centerY - (layer * 22) + (Math.random() * 4 - 2);
+
+      // X position: distribute horizontally across the layer's width
+      const layerWidth = pileWidth * (1 - (layer / layers.length) * 0.7);
+      
+      // Calculate distributed X
+      let lx;
+      if (layerCapacity === 1) {
+        lx = centerX;
+      } else {
+        const step = layerWidth / (layerCapacity - 1);
+        lx = (centerX - layerWidth / 2) + (indexInLayer * step) + (Math.random() * 6 - 3);
+      }
 
       return { x: lx, y: ly };
     };
@@ -412,7 +404,7 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
     class Particle {
       constructor(index) {
         this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
-        this.size = Math.random() * 8 + 24; 
+        this.size = Math.random() * 6 + 32; // larger visible size (32px to 38px)
         this.x = Math.random() * canvas.width;
         this.y = -50;
         
@@ -420,11 +412,11 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
         this.targetX = rest.x;
         this.targetY = rest.y;
 
-        this.vy = Math.random() * 2 + 4; 
+        this.vy = Math.random() * 2 + 5; 
         this.vx = (this.targetX - this.x) / (this.targetY / this.vy); 
         
         this.angle = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.08;
         this.landed = false;
       }
 
@@ -441,10 +433,6 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
             this.vy = 0;
             this.vx = 0;
             this.angle = (Math.random() - 0.5) * 0.25; 
-            
-            for (let i = 0; i < 4; i++) {
-              sparkles.push(new Sparkle(this.x, this.y));
-            }
           }
         }
       }
@@ -475,29 +463,14 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
         p.draw();
       });
 
-      for (let i = sparkles.length - 1; i >= 0; i--) {
-        sparkles[i].update();
-        if (sparkles[i].alpha <= 0) {
-          sparkles.splice(i, 1);
-        } else {
-          sparkles[i].draw();
+      // Automatically complete once all 10 cakes settle
+      if (particles.length === maxParticles && particles.every(p => p.landed)) {
+        if (!completeTimerStarted) {
+          completeTimerStarted = true;
+          setTimeout(() => {
+            onComplete();
+          }, 600);
         }
-      }
-
-      if (particleCount > 40) {
-        ctx.save();
-        ctx.font = "bold 32px 'Outfit', sans-serif";
-        ctx.fillStyle = "#800000";
-        ctx.textAlign = "center";
-        
-        const progress = Math.min(1, (particleCount - 40) / 60);
-        ctx.globalAlpha = progress;
-        ctx.fillText("minibakes", centerX, centerY - pileHeight - 70);
-        
-        ctx.font = "500 14px 'Inter', sans-serif";
-        ctx.fillStyle = "#666";
-        ctx.fillText("Crafting Sweetness...", centerX, centerY - pileHeight - 45);
-        ctx.restore();
       }
 
       animationFrameId = requestAnimationFrame(tick);
@@ -505,14 +478,9 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
 
     animationFrameId = requestAnimationFrame(tick);
 
-    const timeout = setTimeout(() => {
-      onComplete();
-    }, 4500);
-
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationFrameId);
-      clearTimeout(timeout);
     };
   }, [onComplete]);
 
@@ -529,39 +497,11 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+      transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
       opacity: isFadingOut ? 0 : 1,
       pointerEvents: isFadingOut ? 'none' : 'auto'
     }}>
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
-      <button 
-        onClick={onComplete}
-        style={{
-          position: 'absolute',
-          bottom: '40px',
-          padding: '10px 24px',
-          borderRadius: '24px',
-          border: '1px solid #ffccd5',
-          background: '#fff',
-          color: '#800000',
-          fontSize: '13px',
-          fontWeight: '600',
-          cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(128,0,0,0.06)',
-          zIndex: 100000,
-          transition: 'all 0.2s'
-        }}
-        onMouseOver={e => {
-          e.currentTarget.style.transform = 'scale(1.05)';
-          e.currentTarget.style.backgroundColor = '#fff0f2';
-        }}
-        onMouseOut={e => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.backgroundColor = '#fff';
-        }}
-      >
-        Skip intro
-      </button>
     </div>
   );
 };
