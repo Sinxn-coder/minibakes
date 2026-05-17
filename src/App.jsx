@@ -773,11 +773,6 @@ function App() {
           {/* Hero Section */}
           <section className="hero-section">
             <div className="hero-top-left-content">
-              <div className="hero-rating-badge">
-                <span className="star-icon">★</span>
-                <span>4.9/5 Rated by 500+ Customers</span>
-              </div>
-              
               <h1 className="hero-celebration-text">
                 <span className="hero-sans">Freshly baked for every</span><br />
                 <span className="hero-serif-accent">celebration</span>
@@ -795,14 +790,6 @@ function App() {
                   Book a Class
                 </button>
               </div>
-            </div>
-
-            {/* Elegant Floating Sparkles for Interactive WOW Effect */}
-            <div className="hero-decorative-elements">
-              <span className="floating-sparkle pos-1">✨</span>
-              <span className="floating-sparkle pos-2">✨</span>
-              <span className="floating-sparkle pos-3">🌸</span>
-              <span className="floating-sparkle pos-4">🧁</span>
             </div>
 
             {/* Scroll Indicator */}
