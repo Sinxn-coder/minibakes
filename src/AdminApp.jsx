@@ -24,8 +24,91 @@ import cakeImg from './assets/roundcake1.png';
 
 const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
 
+const analyticsData = {
+  'this-week': {
+    metrics: [
+      { label: 'Total Revenue', value: '€2,840.00', change: '+14.2%', positive: true, icon: ShoppingCart, bg: '#E3F2FD', color: '#1565C0' },
+      { label: 'Total Orders', value: '78', change: '+5.4%', positive: true, icon: ShoppingCart, bg: '#F3E5F5', color: '#7B1FA2' },
+      { label: 'Average Order Value', value: '€36.41', change: '+8.3%', positive: true, icon: Package, bg: '#FFF8E1', color: '#F57F17' },
+      { label: 'Custom Cakes Share', value: '51.3%', change: '+3.2%', positive: true, icon: Cake, bg: '#E8F5E9', color: '#2E7D32' },
+    ],
+    chartData: [
+      { name: 'Mon', revenue: 320 },
+      { name: 'Tue', revenue: 410 },
+      { name: 'Wed', revenue: 380 },
+      { name: 'Thu', revenue: 540 },
+      { name: 'Fri', revenue: 620 },
+      { name: 'Sat', revenue: 480 },
+      { name: 'Sun', revenue: 90 },
+    ],
+    categories: [
+      { name: 'Custom Cakes', value: '€1,456.92', percentage: '51.3%', fill: 'var(--secondary)' },
+      { name: 'Standard Cakes', value: '€886.08', percentage: '31.2%', fill: '#d48a97' },
+      { name: 'Cupcakes & Treats', value: '€497.00', percentage: '17.5%', fill: '#f8d2d9' },
+    ],
+    sellers: [
+      { name: 'Custom Birthday Cake', category: 'Custom Cakes', orders: 28, revenue: '€1,260.00', trend: '+12.4%' },
+      { name: 'Box of 12 Cupcakes', category: 'Cupcakes', orders: 18, revenue: '€561.60', trend: '+8.2%' },
+      { name: '2 Layer 6 inch Standard', category: 'Standard Cakes', orders: 12, revenue: '€540.00', trend: '-2.1%' },
+      { name: 'Cake Pops Assorted', category: 'Treats', orders: 20, revenue: '€478.40', trend: '+15.6%' },
+    ]
+  },
+  'this-month': {
+    metrics: [
+      { label: 'Total Revenue', value: '€14,520.00', change: '+12.4%', positive: true, icon: ShoppingCart, bg: '#E3F2FD', color: '#1565C0' },
+      { label: 'Total Orders', value: '1,284', change: '+8.2%', positive: true, icon: ShoppingCart, bg: '#F3E5F5', color: '#7B1FA2' },
+      { label: 'Average Order Value', value: '€38.50', change: '+4.1%', positive: true, icon: Package, bg: '#FFF8E1', color: '#F57F17' },
+      { label: 'Custom Cakes Share', value: '48.2%', change: '+6.8%', positive: true, icon: Cake, bg: '#E8F5E9', color: '#2E7D32' },
+    ],
+    chartData: [
+      { name: 'Week 1', revenue: 3120 },
+      { name: 'Week 2', revenue: 3480 },
+      { name: 'Week 3', revenue: 3950 },
+      { name: 'Week 4', revenue: 3970 },
+    ],
+    categories: [
+      { name: 'Custom Cakes', value: '€6,998.64', percentage: '48.2%', fill: 'var(--secondary)' },
+      { name: 'Standard Cakes', value: '€5,139.60', percentage: '35.4%', fill: '#d48a97' },
+      { name: 'Cupcakes & Treats', value: '€2,381.76', percentage: '16.4%', fill: '#f8d2d9' },
+    ],
+    sellers: [
+      { name: 'Custom Wedding Shower Cake', category: 'Custom Cakes', orders: 142, revenue: '€6,390.00', trend: '+18.4%' },
+      { name: '2 Layer 8 inch Standard', category: 'Standard Cakes', orders: 98, revenue: '€6,370.00', trend: '+11.2%' },
+      { name: 'Box of 6 Cupcakes', category: 'Cupcakes', orders: 120, revenue: '€2,160.00', trend: '+4.5%' },
+      { name: 'Breakable Heart Surprise', category: 'Treats', orders: 48, revenue: '€1,776.00', trend: '+9.8%' },
+    ]
+  },
+  'all-time': {
+    metrics: [
+      { label: 'Total Revenue', value: '€78,340.00', change: '+28.4%', positive: true, icon: ShoppingCart, bg: '#E3F2FD', color: '#1565C0' },
+      { label: 'Total Orders', value: '6,120', change: '+18.7%', positive: true, icon: ShoppingCart, bg: '#F3E5F5', color: '#7B1FA2' },
+      { label: 'Average Order Value', value: '€42.15', change: '+10.2%', positive: true, icon: Package, bg: '#FFF8E1', color: '#F57F17' },
+      { label: 'Custom Cakes Share', value: '45.8%', change: '+12.5%', positive: true, icon: Cake, bg: '#E8F5E9', color: '#2E7D32' },
+    ],
+    chartData: [
+      { name: 'Jan', revenue: 11200 },
+      { name: 'Feb', revenue: 14500 },
+      { name: 'Mar', revenue: 18200 },
+      { name: 'Apr', revenue: 21300 },
+      { name: 'May', revenue: 13140 },
+    ],
+    categories: [
+      { name: 'Custom Cakes', value: '€35,879.72', percentage: '45.8%', fill: 'var(--secondary)' },
+      { name: 'Standard Cakes', value: '€29,142.48', percentage: '37.2%', fill: '#d48a97' },
+      { name: 'Cupcakes & Treats', value: '€13,317.80', percentage: '17.0%', fill: '#f8d2d9' },
+    ],
+    sellers: [
+      { name: 'Custom Celebration Cake (Avg)', category: 'Custom Cakes', orders: 742, revenue: '€33,390.00', trend: '+24.5%' },
+      { name: '2 Layer 6 inch Standard', category: 'Standard Cakes', orders: 580, revenue: '€26,100.00', trend: '+15.2%' },
+      { name: 'Box of 12 Cupcakes', category: 'Cupcakes', orders: 610, revenue: '€19,032.00', trend: '+12.4%' },
+      { name: 'Cake Pops Classic', category: 'Treats', orders: 1840, revenue: '€3,128.00', trend: '+8.9%' },
+    ]
+  }
+};
+
 export default function AdminApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState('this-month');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [activeOrderItemIndex, setActiveOrderItemIndex] = useState(0);
@@ -53,6 +136,7 @@ export default function AdminApp() {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'customers', label: 'Customers', icon: Users },
@@ -442,6 +526,199 @@ export default function AdminApp() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'analytics' && (
+            <>
+              {/* Header section with Timeframe Selector */}
+              <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e9ecef', paddingBottom: '20px' }}>
+                <div>
+                  <h1 style={{ fontSize: '24px', fontWeight: '600', color: '#1a1a1a', margin: '0 0 6px 0' }}>
+                    Store Insights & Analytics
+                  </h1>
+                  <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>
+                    Track your sales trend, top performing products, and booking metrics.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', backgroundColor: '#f1f3f5', padding: '4px', borderRadius: '8px' }}>
+                  {[
+                    { id: 'this-week', label: 'This Week' },
+                    { id: 'this-month', label: 'This Month' },
+                    { id: 'all-time', label: 'All Time' }
+                  ].map(tf => (
+                    <button
+                      key={tf.id}
+                      onClick={() => setAnalyticsTimeframe(tf.id)}
+                      style={{
+                        padding: '8px 16px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        backgroundColor: analyticsTimeframe === tf.id ? '#fff' : 'transparent',
+                        color: analyticsTimeframe === tf.id ? 'var(--secondary)' : '#666',
+                        fontWeight: analyticsTimeframe === tf.id ? '600' : '500',
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        boxShadow: analyticsTimeframe === tf.id ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {tf.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Analytics Metric Cards Grid */}
+              <div className="metrics-grid" style={{ marginBottom: '32px' }}>
+                {analyticsData[analyticsTimeframe].metrics.map((metric, idx) => {
+                  const Icon = metric.icon;
+                  return (
+                    <div key={idx} className="metric-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div className="metric-icon-box" style={{ backgroundColor: metric.bg, color: metric.color }}>
+                          <Icon size={24} />
+                        </div>
+                        <div className="metric-info">
+                          <h3 style={{ fontSize: '14px', color: '#666', fontWeight: '500', margin: '0 0 4px 0' }}>{metric.label}</h3>
+                          <p style={{ fontSize: '22px', fontWeight: '700', color: '#1a1a1a', margin: '0' }}>{metric.value}</p>
+                        </div>
+                      </div>
+                      <span style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        padding: '4px 8px',
+                        borderRadius: '12px',
+                        backgroundColor: metric.positive ? '#E8F5E9' : '#FFEBEE',
+                        color: metric.positive ? '#2E7D32' : '#C62828',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px'
+                      }}>
+                        <TrendingUp size={12} />
+                        {metric.change}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Two Column Graphs/Insights Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '32px' }}>
+                {/* Revenue Trend Chart */}
+                <div className="admin-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
+                  <h2 className="admin-panel-title">Sales Revenue Trend</h2>
+                  <div style={{ width: '100%', height: '300px', marginTop: '16px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={analyticsData[analyticsTimeframe].chartData}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f5" />
+                        <XAxis dataKey="name" stroke="#888" fontSize={12} tickLine={false} />
+                        <YAxis stroke="#888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `€${val}`} />
+                        <Tooltip
+                          formatter={(value) => [`€${value}`, 'Revenue']}
+                          contentStyle={{ backgroundColor: '#fff', border: '1px solid #e9ecef', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+                        />
+                        <Bar dataKey="revenue" fill="var(--secondary)" radius={[6, 6, 0, 0]}>
+                          {analyticsData[analyticsTimeframe].chartData.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={index === analyticsData[analyticsTimeframe].chartData.length - 1 ? 'var(--secondary)' : '#d48a97'} 
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Categories Share breakdown */}
+                <div className="admin-panel" style={{ margin: 0 }}>
+                  <h2 className="admin-panel-title">Category Share</h2>
+                  <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    {analyticsData[analyticsTimeframe].categories.map((cat, idx) => (
+                      <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
+                          <span style={{ fontWeight: '500', color: '#333', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ display: 'inline-block', width: '10px', height: '10px', backgroundColor: cat.fill, borderRadius: '50%' }}></span>
+                            {cat.name}
+                          </span>
+                          <span style={{ fontWeight: '600', color: '#1a1a1a' }}>{cat.percentage}</span>
+                        </div>
+                        {/* Custom Progress Bar */}
+                        <div style={{ width: '100%', height: '8px', backgroundColor: '#f1f3f5', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ width: cat.percentage, height: '100%', backgroundColor: cat.fill, borderRadius: '4px' }}></div>
+                        </div>
+                        <span style={{ fontSize: '12px', color: '#666', textAlign: 'right' }}>Total: {cat.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Best Performing Items & Bookings Insight */}
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+                {/* Popular Sellers Table */}
+                <div className="admin-panel" style={{ margin: 0 }}>
+                  <h2 className="admin-panel-title">Best Sellers</h2>
+                  <table className="admin-table" style={{ marginTop: '16px' }}>
+                    <thead>
+                      <tr>
+                        <th>Product / Item</th>
+                        <th>Category</th>
+                        <th style={{ textAlign: 'center' }}>Orders</th>
+                        <th style={{ textAlign: 'right' }}>Revenue</th>
+                        <th style={{ textAlign: 'right' }}>Growth</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analyticsData[analyticsTimeframe].sellers.map((seller, idx) => (
+                        <tr key={idx}>
+                          <td style={{ fontWeight: '600', color: '#333' }}>{seller.name}</td>
+                          <td style={{ color: '#666' }}>{seller.category}</td>
+                          <td style={{ textAlign: 'center', fontWeight: '500' }}>{seller.orders}</td>
+                          <td style={{ textAlign: 'right', fontWeight: '600', color: 'var(--secondary)' }}>{seller.revenue}</td>
+                          <td style={{ textAlign: 'right', color: seller.trend.startsWith('+') ? '#2E7D32' : '#C62828', fontWeight: '600' }}>
+                            {seller.trend}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Additional conversion rate / booking insight card */}
+                <div className="admin-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: 'linear-gradient(to bottom right, #fff, #FFF0F4)', border: '1px solid #FFD1DC' }}>
+                  <div>
+                    <h2 className="admin-panel-title" style={{ color: 'var(--secondary)' }}>Booking Capacity</h2>
+                    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '48px', fontWeight: '800', color: 'var(--secondary)', lineHeight: '1', marginBottom: '8px' }}>78%</div>
+                      <p style={{ fontSize: '14px', color: '#666', fontWeight: '500', margin: '0' }}>May Slots Fully Booked</p>
+                    </div>
+
+                    <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '8px' }}>
+                        <span style={{ color: '#666' }}>Total Capacity Slots:</span>
+                        <span style={{ fontWeight: '600', color: '#333' }}>24 Slots</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '8px' }}>
+                        <span style={{ color: '#666' }}>Active Booked Dates:</span>
+                        <span style={{ fontWeight: '600', color: '#333' }}>{bookedDates.length} Dates</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', paddingBottom: '8px' }}>
+                        <span style={{ color: '#666' }}>Avg. Decorating Guests:</span>
+                        <span style={{ fontWeight: '600', color: '#333' }}>6.2 Guests/Class</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ backgroundColor: 'rgba(92, 13, 27, 0.05)', borderRadius: '12px', padding: '16px', marginTop: '24px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <Sparkles size={20} color="var(--secondary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <p style={{ fontSize: '12px', color: 'var(--secondary)', margin: '0', lineHeight: '1.5', fontWeight: '500' }}>
+                      <strong>Pro tip:</strong> Custom Cake orders have increased by <strong>6.8%</strong>. Consider creating a new standard size to streamline requests!
+                    </p>
+                  </div>
+                </div>
               </div>
             </>
           )}
