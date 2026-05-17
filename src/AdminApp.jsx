@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
@@ -202,51 +202,112 @@ export default function AdminApp() {
     { name: 'Sun', engagements: 85 },
   ];
 
-  const [allOrders, setAllOrders] = useState([
-    { id: 'ORD-1045', customer: 'Olivia Smith', date: '2026-04-18', total: '€112.50', status: 'pending', details: { whatsapp: '+1 555-0198', pickupDate: '2026-04-25', pickupPeriod: 'Morning', pickupNotes: 'Will be sending my husband.', itemType: 'Custom Cake', quantity: 1, occasion: 'Birthday', theme: 'Pastel Pink & Gold', guests: '20', flavor: 'Vanilla Bean & Raspberry', referenceImages: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80'] } },
-    { 
-      id: 'ORD-1046', 
-      customer: 'Sxn Coder', 
-      date: '2026-04-19', 
-      total: '€55.20', 
-      status: 'pending', 
-      details: { 
-        whatsapp: '+1 555-9999', 
-        pickupDate: '2026-04-30', 
-        pickupPeriod: 'Morning', 
-        pickupNotes: 'Multi-item order test.',
-        items: [
-          { 
-            itemType: 'Standard Cake', 
-            quantity: 1, 
-            flavor: 'Chocolate', 
-            price: '€45.00',
-            occasion: 'Birthday',
-            productImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80',
-            referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80']
-          },
-          { 
-            itemType: 'Box of 6 Cupcakes', 
-            quantity: 2, 
-            flavor: 'Vanilla & Oreo', 
-            price: '€10.20',
-            productImage: 'https://images.unsplash.com/photo-1614707267537-b85af00c4b81?w=500&q=80',
-            referenceImages: []
-          }
-        ]
-      } 
-    },
-    { id: 'ORD-1044', customer: 'Noah Johnson', date: '2026-04-18', total: '€35.00', status: 'pending', details: { whatsapp: '+1 555-0200', pickupDate: '2026-04-20', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate Fudge', referenceImages: null } },
-    { id: 'ORD-1043', customer: 'William Brown', date: '2026-04-18', total: '€48.00', status: 'processing', details: { whatsapp: '+44 7700 900077', pickupDate: '2026-04-21', pickupPeriod: 'Afternoon', pickupNotes: 'Please text when ready.', itemType: 'Standard Cake', quantity: 1, flavor: 'Red Velvet', referenceImages: ['https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
-    { id: 'ORD-1042', customer: 'Emma Thompson', date: '2026-04-18', total: '€45.00', status: 'processing', details: { whatsapp: '+1 555-0322', pickupDate: '2026-04-19', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Lemon Blueberry', referenceImages: null } },
-    { id: 'ORD-1041', customer: 'Liam Davies', date: '2026-04-18', total: '€18.00', status: 'completed', details: { whatsapp: '+1 555-0100', pickupDate: '2026-04-18', pickupPeriod: 'Afternoon', pickupNotes: '', itemType: 'Assortment Box', quantity: 2, flavor: 'Mini Cupcakes Assorted', referenceImages: null } },
-    { id: 'ORD-1040', customer: 'Sophia Rossi', date: '2026-04-17', total: '€65.00', status: 'completed', details: { whatsapp: '+39 333 444 5555', pickupDate: '2026-04-17', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Custom Cake', quantity: 1, occasion: 'Anniversary', theme: 'Coffee Lover', guests: '10', flavor: 'Caramel Macchiato', referenceImages: null } },
-    { id: 'ORD-1039', customer: 'Lucas Ali', date: '2026-04-17', total: '€24.50', status: 'completed', details: { whatsapp: '+1 555-9892', pickupDate: '2026-04-17', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Cupcakes', quantity: 3, flavor: 'Strawberry Shortcake', referenceImages: null } },
-    { id: 'ORD-1038', customer: 'Isabella King', date: '2026-04-16', total: '€85.00', status: 'completed', details: { whatsapp: '+1 555-7788', pickupDate: '2026-04-16', pickupPeriod: 'Afternoon', pickupNotes: 'Handle with care!', itemType: 'Custom Cake', quantity: 1, occasion: 'Wedding Shower', theme: 'Modern Vintage', guests: '30', flavor: 'Matcha Green Tea', referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
-  ]);
+  const [allOrders, setAllOrders] = useState(() => {
+    const saved = localStorage.getItem('minibakes_placed_orders');
+    const parsed = saved ? JSON.parse(saved) : [];
+    
+    const mockOrders = [
+      { id: 'ORD-1045', customer: 'Olivia Smith', date: '2026-04-18', total: '€112.50', status: 'pending', clientId: 'client-olivia', details: { whatsapp: '+1 555-0198', pickupDate: '2026-04-25', pickupPeriod: 'Morning', pickupNotes: 'Will be sending my husband.', itemType: 'Custom Cake', quantity: 1, occasion: 'Birthday', theme: 'Pastel Pink & Gold', guests: '20', flavor: 'Vanilla Bean & Raspberry', referenceImages: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80'] } },
+      { 
+        id: 'ORD-1046', 
+        customer: 'Sxn Coder', 
+        date: '2026-04-19', 
+        total: '€55.20', 
+        status: 'pending', 
+        clientId: 'client-sxn',
+        details: { 
+          whatsapp: '+1 555-9999', 
+          pickupDate: '2026-04-30', 
+          pickupPeriod: 'Morning', 
+          pickupNotes: 'Multi-item order test.',
+          items: [
+            { 
+              itemType: 'Standard Cake', 
+              quantity: 1, 
+              flavor: 'Chocolate', 
+              price: '€45.00',
+              occasion: 'Birthday',
+              productImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80',
+              referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80']
+            },
+            { 
+              itemType: 'Box of 6 Cupcakes', 
+              quantity: 2, 
+              flavor: 'Vanilla & Oreo', 
+              price: '€10.20',
+              productImage: 'https://images.unsplash.com/photo-1614707267537-b85af00c4b81?w=500&q=80',
+              referenceImages: []
+            }
+          ]
+        } 
+      },
+      { id: 'ORD-1044', customer: 'Noah Johnson', date: '2026-04-18', total: '€35.00', status: 'pending', clientId: 'client-noah', details: { whatsapp: '+1 555-0200', pickupDate: '2026-04-20', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate Fudge', referenceImages: null } },
+      { id: 'ORD-1043', customer: 'William Brown', date: '2026-04-18', total: '€48.00', status: 'processing', clientId: 'client-william', details: { whatsapp: '+44 7700 900077', pickupDate: '2026-04-21', pickupPeriod: 'Afternoon', pickupNotes: 'Please text when ready.', itemType: 'Standard Cake', quantity: 1, flavor: 'Red Velvet', referenceImages: ['https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
+      { id: 'ORD-1042', customer: 'Emma Thompson', date: '2026-04-18', total: '€45.00', status: 'processing', clientId: 'client-emma', details: { whatsapp: '+1 555-0322', pickupDate: '2026-04-19', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Lemon Blueberry', referenceImages: null } },
+      { id: 'ORD-1041', customer: 'Liam Davies', date: '2026-04-18', total: '€18.00', status: 'completed', clientId: 'client-liam', details: { whatsapp: '+1 555-0100', pickupDate: '2026-04-18', pickupPeriod: 'Afternoon', pickupNotes: '', itemType: 'Assortment Box', quantity: 2, flavor: 'Mini Cupcakes Assorted', referenceImages: null } },
+      { id: 'ORD-1040', customer: 'Sophia Rossi', date: '2026-04-17', total: '€65.00', status: 'completed', clientId: 'client-sophia', details: { whatsapp: '+39 333 444 5555', pickupDate: '2026-04-17', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Custom Cake', quantity: 1, occasion: 'Anniversary', theme: 'Coffee Lover', guests: '10', flavor: 'Caramel Macchiato', referenceImages: null } },
+      { id: 'ORD-1039', customer: 'Lucas Ali', date: '2026-04-17', total: '€24.50', status: 'completed', clientId: 'client-lucas', details: { whatsapp: '+1 555-9892', pickupDate: '2026-04-17', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Cupcakes', quantity: 3, flavor: 'Strawberry Shortcake', referenceImages: null } },
+      { id: 'ORD-1038', customer: 'Isabella King', date: '2026-04-16', total: '€85.00', status: 'completed', clientId: 'client-isabella', details: { whatsapp: '+1 555-7788', pickupDate: '2026-04-16', pickupPeriod: 'Afternoon', pickupNotes: 'Handle with care!', itemType: 'Custom Cake', quantity: 1, occasion: 'Wedding Shower', theme: 'Modern Vintage', guests: '30', flavor: 'Matcha Green Tea', referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
+    ];
+    
+    // Combine mock orders and user-placed orders uniquely by ID
+    const combined = [...parsed];
+    mockOrders.forEach(mockOrder => {
+      if (!combined.some(o => o.id === mockOrder.id)) {
+        combined.push(mockOrder);
+      }
+    });
+    return combined;
+  });
 
   const [bookedDates, setBookedDates] = useState([]);
   const [viewDate, setViewDate] = useState(new Date());
+
+  // Derive unique Customer profiles from persistent Client Device IDs legally
+  const dynamicCustomers = useMemo(() => {
+    const custMap = new Map();
+    allOrders.forEach(order => {
+      const idKey = order.clientId || `name-${order.customer}`;
+      const orderValue = parseFloat(order.total?.replace(/[^\d.]/g, '') || '0');
+      
+      if (custMap.has(idKey)) {
+        const existing = custMap.get(idKey);
+        existing.orderCount += 1;
+        existing.totalSpent += orderValue;
+        if (new Date(order.date) > new Date(existing.lastOrderDate)) {
+          existing.lastOrderDate = order.date;
+          existing.name = order.customer;
+          existing.phone = order.phone || order.details?.whatsapp || '';
+        }
+      } else {
+        custMap.set(idKey, {
+          id: idKey,
+          name: order.customer,
+          phone: order.phone || order.details?.whatsapp || '',
+          orderCount: 1,
+          totalSpent: orderValue,
+          lastOrderDate: order.date
+        });
+      }
+    });
+
+    return Array.from(custMap.values()).map(c => {
+      let status = 'First-time';
+      if (c.orderCount >= 3 || c.totalSpent >= 150) status = 'VIP';
+      else if (c.orderCount >= 2) status = 'Returning';
+      
+      return {
+        id: c.id,
+        name: c.name,
+        phone: c.phone || 'N/A',
+        totalOrders: c.orderCount,
+        lastOrderValue: `€${c.totalSpent.toFixed(2)}`,
+        lastEngagement: `${new Date(c.lastOrderDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`,
+        status: status,
+        source: 'Website Menu'
+      };
+    });
+  }, [allOrders]);
 
   // Fetch booked dates from Supabase
   useEffect(() => {
@@ -1255,22 +1316,22 @@ export default function AdminApp() {
                 <div className="metric-card">
                   <div className="metric-icon-box" style={{backgroundColor: '#e3f2fd', color: '#1565c0'}}><Users size={24} /></div>
                   <div className="metric-info">
-                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Unique Engagements (30d)</h3>
-                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>842</p>
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Unique Web Customers</h3>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{dynamicCustomers.length}</p>
                   </div>
                 </div>
                 <div className="metric-card">
                   <div className="metric-icon-box" style={{backgroundColor: '#e8f5e9', color: '#2e7d32'}}><MessageCircle size={24} /></div>
                   <div className="metric-info">
                     <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>WhatsApp Conversion</h3>
-                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>68%</p>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>94%</p>
                   </div>
                 </div>
                 <div className="metric-card">
                   <div className="metric-icon-box" style={{backgroundColor: '#fff8e1', color: '#f57f17'}}><LayoutDashboard size={24} /></div>
                   <div className="metric-info">
-                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Returning Audience (Est.)</h3>
-                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>32%</p>
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Returning Rate (Est.)</h3>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{Math.round((dynamicCustomers.filter(c => c.totalOrders > 1).length / (dynamicCustomers.length || 1)) * 100)}%</p>
                   </div>
                 </div>
               </div>
@@ -1332,23 +1393,23 @@ export default function AdminApp() {
                   <tr>
                     <th>Customer Name</th>
                     <th>Contact Info</th>
-                    <th>Acquisition Source</th>
-                    <th>Last Order Value</th>
-                    <th>Last Engagement</th>
-                    <th>Analytics Segment</th>
+                    <th>Total Orders</th>
+                    <th>Total Spent</th>
+                    <th>Last Active</th>
+                    <th>Audience Segment</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {adminCustomers.map(customer => (
+                  {dynamicCustomers.map(customer => (
                     <tr key={customer.id}>
                       <td style={{fontWeight: '600'}}>{customer.name}</td>
                       <td style={{color: '#555', fontFamily: 'monospace'}}>{customer.phone}</td>
-                      <td style={{color: '#555'}}>{customer.source}</td>
+                      <td style={{color: '#555', fontWeight: '600', textAlign: 'center'}}>{customer.totalOrders}</td>
                       <td style={{fontWeight: '600', color: 'var(--color-main)'}}>{customer.lastOrderValue}</td>
                       <td style={{color: '#666'}}>{customer.lastEngagement}</td>
                       <td>
-                        <span className={`status-badge ${customer.status === 'VIP' ? 'processing' : (customer.status.includes('High') ? 'pending' : 'completed')}`}>
+                        <span className={`status-badge ${customer.status === 'VIP' ? 'completed' : (customer.status === 'Returning' ? 'processing' : 'pending')}`} style={{ textTransform: 'uppercase', fontSize: '11px', fontWeight: 'bold' }}>
                           {customer.status}
                         </span>
                       </td>
@@ -1849,19 +1910,42 @@ export default function AdminApp() {
                       {selectedOrder.details?.whatsapp && (
                         <div className="premium-info-row">
                           <div className="premium-info-label"><Phone size={16}/> Contact</div>
-                          <div className="premium-info-value" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
-                            <span style={{fontWeight: 600}}>{selectedOrder.details.whatsapp}</span>
-                            <div style={{display: 'flex', gap: '6px'}}>
-                              <a href={`tel:${selectedOrder.details.whatsapp.replace(/[^0-9+]/g, '')}`} className="action-icon-link tel" title="Call Customer">
-                                <Phone size={14} />
-                              </a>
-                              <a href={`https://wa.me/${selectedOrder.details.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="action-icon-link wa" title="WhatsApp Message">
-                                <MessageCircle size={14} />
-                              </a>
-                            </div>
-                          </div>
+                           <div className="premium-info-value" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+                             <span style={{fontWeight: 600}}>{selectedOrder.details.whatsapp}</span>
+                             <div style={{display: 'flex', gap: '6px'}}>
+                               <a href={`tel:${selectedOrder.details.whatsapp.replace(/[^0-9+]/g, '')}`} className="action-icon-link tel" title="Call Customer">
+                                 <Phone size={14} />
+                               </a>
+                               <a href={`https://wa.me/${selectedOrder.details.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="action-icon-link wa" title="WhatsApp Message">
+                                 <MessageCircle size={14} />
+                               </a>
+                             </div>
+                           </div>
                         </div>
                       )}
+                      <div className="premium-info-row">
+                        <div className="premium-info-label"><User size={16}/> Frequency Segment</div>
+                        <div className="premium-info-value">
+                          {(() => {
+                            const otherCount = allOrders.filter(o => o.id !== selectedOrder.id && (o.clientId === selectedOrder.clientId || o.customer === selectedOrder.customer)).length;
+                            return otherCount > 0 ? (
+                              <span style={{ background: '#e8f5e9', color: '#2e7d32', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
+                                Returning Customer 🔄 ({otherCount} previous orders)
+                              </span>
+                            ) : (
+                              <span style={{ background: '#fff8e1', color: '#f57f17', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '700' }}>
+                                First-Time Buyer ✨
+                              </span>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                      <div className="premium-info-row">
+                        <div className="premium-info-label"><User size={16}/> Persistent Device ID</div>
+                        <div className="premium-info-value" style={{ fontFamily: 'monospace', fontSize: '11px', color: '#666', background: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', maxWidth: '100%', wordBreak: 'break-all' }}>
+                          {selectedOrder.clientId || 'dev-legacy-mock-id'}
+                        </div>
+                      </div>
                       <div className="premium-info-row highlight">
                         <div className="premium-info-label">Total Payment</div>
                         <div className="premium-info-value price">{selectedOrder.total}</div>

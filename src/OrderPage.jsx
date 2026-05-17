@@ -57,8 +57,54 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
 
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
-    const newId = `MB-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(newId);
+
+    // 1. Generate or fetch unique persistent Client Device ID legally (strictly local and non-cookie)
+    let clientId = localStorage.getItem('minibakes_client_id');
+    if (!clientId) {
+      clientId = `dev-${Math.random().toString(36).substring(2, 10)}-${Date.now().toString(36)}`;
+      localStorage.setItem('minibakes_client_id', clientId);
+    }
+
+    // 2. Build the order payload matching Admin Panel's model
+    const newOrder = {
+      id: newId,
+      customer: formData.name,
+      phone: formData.phone,
+      whatsapp: formData.whatsapp,
+      date: new Date().toISOString().split('T')[0],
+      total: `€${totalPrice.toFixed(2)}`,
+      status: 'pending',
+      clientId: clientId, // Persistent device identification
+      details: {
+        whatsapp: formData.whatsapp,
+        pickupDate: formData.date,
+        pickupPeriod: 'Morning',
+        pickupNotes: formData.note,
+        itemType: cart[0]?.name || 'Sweet Assortment',
+        quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
+        flavor: cart[0]?.options?.flavor || 'Assorted',
+        items: cart.map(item => ({
+          itemType: item.name,
+          quantity: item.quantity,
+          flavor: item.options?.flavor || 'Assorted',
+          price: `€${getItemTotal(item).toFixed(2)}`
+        }))
+      }
+    };
+
+    // 3. Save order to localStorage so the Admin panel can access it
+    const existingOrders = JSON.parse(localStorage.getItem('minibakes_placed_orders') || '[]');
+    existingOrders.unshift(newOrder);
+    localStorage.setItem('minibakes_placed_orders', JSON.stringify(existingOrders));
+
+    // 4. Dispatch a global event to let App.jsx clear the cart state
+    if (typeof window !== 'undefined' && window.dispatchEvent) {
+      const event = new CustomEvent('minibakes_order_completed');
+      window.dispatchEvent(event);
+    }
+
     setStep('success');
   };
 

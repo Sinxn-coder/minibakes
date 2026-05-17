@@ -378,6 +378,14 @@ function App() {
   useEffect(() => {
     localStorage.setItem('minibakes_cart', JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    const handleOrderCompleted = () => {
+      setCart([]);
+    };
+    window.addEventListener('minibakes_order_completed', handleOrderCompleted);
+    return () => window.removeEventListener('minibakes_order_completed', handleOrderCompleted);
+  }, []);
   const [isScrolled, setIsScrolled] = useState(false);
   const [expandedDesktopCard, setExpandedDesktopCard] = useState(null);
   const [expandedMobileCard, setExpandedMobileCard] = useState(null);
