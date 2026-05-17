@@ -109,6 +109,7 @@ const analyticsData = {
 export default function AdminApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState('this-month');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [activeOrderItemIndex, setActiveOrderItemIndex] = useState(0);
@@ -382,9 +383,28 @@ export default function AdminApp() {
     setSelectedOrder(prev => ({ ...prev, status: newStatus }));
   };
 
-  const filteredOrders = orderStatusFilter === 'all' 
-    ? allOrders 
-    : allOrders.filter(o => o.status === orderStatusFilter);
+  const filteredOrders = allOrders.filter(order => {
+    // 1. Status Filter
+    const matchesStatus = orderStatusFilter === 'all' || order.status === orderStatusFilter;
+    if (!matchesStatus) return false;
+    
+    // 2. Search Query Filter (case-insensitive query matching id, name, item type, or flavor)
+    if (!orderSearchQuery.trim()) return true;
+    const query = orderSearchQuery.toLowerCase();
+    
+    const matchesId = (order.id || '').toLowerCase().includes(query);
+    const matchesCustomer = (order.customer || '').toLowerCase().includes(query);
+    
+    const matchesMainItem = (order.details?.itemType || '').toLowerCase().includes(query);
+    const matchesFlavor = (order.details?.flavor || '').toLowerCase().includes(query);
+    
+    const matchesSubItems = (order.details?.items || []).some(item => 
+      (item.itemType || '').toLowerCase().includes(query) || 
+      (item.flavor || '').toLowerCase().includes(query)
+    );
+    
+    return matchesId || matchesCustomer || matchesMainItem || matchesFlavor || matchesSubItems;
+  });
 
 
   return (
@@ -428,7 +448,21 @@ export default function AdminApp() {
             {activeTab === 'orders' && (
               <div style={{ position: 'relative', display: 'flex', alignItems: 'center', backgroundColor: '#f1f3f5', borderRadius: '8px', padding: '8px 12px' }}>
                   <Search size={16} color="#888" style={{ marginRight: '8px' }} />
-                  <input type="text" placeholder="Search orders..." style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px' }} />
+                  <input 
+                    type="text" 
+                    placeholder="Search orders..." 
+                    value={orderSearchQuery}
+                    onChange={(e) => setOrderSearchQuery(e.target.value)}
+                    style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '14px', width: '180px' }} 
+                  />
+                  {orderSearchQuery && (
+                    <button 
+                      onClick={() => setOrderSearchQuery('')}
+                      style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0 4px', marginLeft: '4px' }}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
               </div>
             )}
             <button 
