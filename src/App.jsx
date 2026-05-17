@@ -735,7 +735,7 @@ function App() {
             </div>
             <div className="nav-item-wrapper">
               <a href="#order" className="mobile-nav-link" onClick={() => { navigateTo('order'); }}>
-                Order {cart.length > 0 && `(${cart.length})`}
+                Order
               </a>
             </div>
             <div className="nav-item-wrapper">
