@@ -1,34 +1,29 @@
 .cake-care-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  padding: 8rem 2rem 4rem;
+  min-height: 100vh;
   background: #fff;
-  z-index: 3000;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  animation: slideUpCare 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease-out;
 }
 
-@keyframes slideUpCare {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+.care-page-container {
+  max-width: 1100px;
+  width: 100%;
+  position: relative;
 }
 
 .care-page-header {
-  padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #f0f0f0;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  padding-bottom: 1.5rem;
+  margin-bottom: 3rem;
+  width: 100%;
 }
 
 .back-btn-care {
@@ -41,19 +36,23 @@
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+.back-btn-care:hover {
+  opacity: 0.7;
 }
 
 .care-page-header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: var(--secondary);
   margin: 0;
+  font-weight: 700;
 }
 
 .care-page-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
   width: 100%;
 }
 
@@ -95,12 +94,16 @@
 }
 
 @media (max-width: 768px) {
+  .cake-care-page {
+    padding: 7rem 1.5rem 3rem;
+  }
+
   .care-page-header h1 {
-    display: none; /* Hide title on small mobile to make room for back btn */
+    font-size: 1.5rem;
   }
   
   .care-page-content {
-    padding: 2rem 1.5rem;
+    padding: 0;
   }
   
   .care-intro p {
