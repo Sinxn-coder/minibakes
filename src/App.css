@@ -588,13 +588,13 @@ body {
 
 .hero-celebration-text {
   color: var(--secondary);
-  line-height: 1.1;
+  line-height: 1.25;
   text-shadow: 0 2px 15px rgba(255, 255, 255, 0.6);
 }
 
 .hero-sans {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 3.2rem;
+  font-size: 3.6rem;
   font-weight: 800;
   font-style: normal;
   letter-spacing: -1px;
@@ -602,7 +602,7 @@ body {
 
 .hero-serif-accent {
   font-family: var(--font-serif);
-  font-size: 4.5rem;
+  font-size: 5.2rem;
   font-weight: 700;
   font-style: italic;
   letter-spacing: -0.5px;
@@ -1549,11 +1549,11 @@ body {
   }
 
   .hero-sans {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
   }
 
   .hero-serif-accent {
-    font-size: 2.5rem;
+    font-size: 3.0rem;
   }
 
 
