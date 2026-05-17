@@ -40,6 +40,8 @@ export default function AdminApp() {
   const [mailModal, setMailModal] = useState(null);
   const [whatsappModal, setWhatsappModal] = useState(null);
   const [confirmBookingModal, setConfirmBookingModal] = useState(null); // stores dateStr
+  const [orderProgressModal, setOrderProgressModal] = useState(null);
+  const [progressMessageText, setProgressMessageText] = useState('');
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -1569,7 +1571,15 @@ export default function AdminApp() {
                       {selectedOrder.status === 'pending' && <CheckCircle2 size={16}/>} Pending
                     </button>
                     <button 
-                      onClick={() => handleUpdateStatus(selectedOrder.id, 'processing')}
+                      onClick={() => {
+                        if (selectedOrder.details?.whatsapp) {
+                          const defaultMsg = `Hi ${selectedOrder.customer}! 🧁 Your Mini Bakes order (${selectedOrder.id}) is now in progress! We are busy baking and decorating it to perfection.\n\n📅 Pickup Date: ${selectedOrder.details.pickupDate || ''}\n🕒 Period: ${selectedOrder.details.pickupPeriod || ''}\n\nFeel free to reach out if you have any questions. See you soon! ✨`;
+                          setProgressMessageText(defaultMsg);
+                          setOrderProgressModal(selectedOrder);
+                        } else {
+                          handleUpdateStatus(selectedOrder.id, 'processing');
+                        }
+                      }}
                       className={`status-action-btn processing ${selectedOrder.status === 'processing' ? 'active' : ''}`}
                     >
                       {selectedOrder.status === 'processing' && <CheckCircle2 size={16}/>} Processing
@@ -1944,6 +1954,144 @@ export default function AdminApp() {
               >
                 {bookedDates.includes(confirmBookingModal) ? 'Yes, Remove' : 'Yes, Mark Booked'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Order Progress WhatsApp Modal */}
+      {orderProgressModal && (
+        <div className="admin-modal-overlay" onClick={() => setOrderProgressModal(null)} style={{ zIndex: 4500 }}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px', width: '100%', padding: '28px', borderRadius: '16px', background: '#fff', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#e3f2fd', color: '#1565c0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TrendingUp size={20} />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '18px', color: '#333', fontWeight: '700' }}>Update Order Progress</h3>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#666' }}>Notify the customer about their order state.</p>
+                </div>
+              </div>
+              <button onClick={() => setOrderProgressModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}><X size={20} /></button>
+            </div>
+
+            <div style={{ marginBottom: '20px', background: '#f8f9fa', padding: '16px', borderRadius: '12px', border: '1px solid #eee' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: '#888', fontWeight: '700', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>Customer</span>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>{orderProgressModal.customer}</span>
+                </div>
+                <div>
+                  <span style={{ fontSize: '11px', color: '#888', fontWeight: '700', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>WhatsApp Number</span>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#333', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <WhatsAppIcon size={14} color="#2e7d32" />
+                    {orderProgressModal.details?.whatsapp}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ fontSize: '11px', color: '#888', fontWeight: '700', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>Customize Message Template</label>
+              <textarea
+                value={progressMessageText}
+                onChange={e => setProgressMessageText(e.target.value)}
+                style={{
+                  width: '100%',
+                  height: '150px',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: '1px solid #ddd',
+                  fontSize: '14px',
+                  color: '#333',
+                  lineHeight: '1.5',
+                  fontFamily: 'inherit',
+                  resize: 'vertical',
+                  outline: 'none',
+                  transition: 'border-color 0.2s',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={e => e.target.style.borderColor = '#800000'}
+                onBlur={e => e.target.style.borderColor = '#ddd'}
+              />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                onClick={() => {
+                  const cleanPhone = orderProgressModal.details?.whatsapp?.replace(/\s+/g, '').replace(/^\+/, '') || '';
+                  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(progressMessageText)}`, '_blank');
+                  handleUpdateStatus(orderProgressModal.id, 'processing');
+                  setOrderProgressModal(null);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background: '#2e7d32',
+                  color: '#fff',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 12px rgba(46,125,50,0.2)',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseOver={e => e.currentTarget.style.backgroundColor = '#1b5e20'}
+                onMouseOut={e => e.currentTarget.style.backgroundColor = '#2e7d32'}
+              >
+                <WhatsAppIcon size={16} color="#fff" />
+                Send Message & Start Processing
+              </button>
+              
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  onClick={() => {
+                    handleUpdateStatus(orderProgressModal.id, 'processing');
+                    setOrderProgressModal(null);
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    background: '#fff',
+                    color: '#333',
+                    fontWeight: '600',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={e => e.currentTarget.style.backgroundColor = '#f8f9fa'}
+                  onMouseOut={e => e.currentTarget.style.backgroundColor = '#fff'}
+                >
+                  Start Processing Only
+                </button>
+                <button
+                  onClick={() => setOrderProgressModal(null)}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '1px solid #ffebee',
+                    background: '#fffcfc',
+                    color: '#c62828',
+                    fontWeight: '600',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={e => e.currentTarget.style.backgroundColor = '#ffebee'}
+                  onMouseOut={e => e.currentTarget.style.backgroundColor = '#fffcfc'}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>
