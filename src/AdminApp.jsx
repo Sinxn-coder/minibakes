@@ -1911,7 +1911,7 @@ export default function AdminApp() {
                         if (selectedOrder.details?.whatsapp) {
                           const defaultMsg = `Hi ${selectedOrder.customer}! 🧁 Your Mini Bakes order (${selectedOrder.id}) is now in progress! We are busy baking and decorating it to perfection.\n\n📅 Pickup Date: ${selectedOrder.details.pickupDate || ''}\n🕒 Period: ${selectedOrder.details.pickupPeriod || ''}\n\nFeel free to reach out if you have any questions. See you soon! ✨`;
                           setProgressMessageText(defaultMsg);
-                          setOrderProgressModal(selectedOrder);
+                          setOrderProgressModal({ order: selectedOrder, targetStatus: 'processing' });
                         } else {
                           handleUpdateStatus(selectedOrder.id, 'processing');
                         }
