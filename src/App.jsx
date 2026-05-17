@@ -349,7 +349,6 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const emojis = ['🍰', '🎂', '🧁'];
     const particles = [];
     const maxParticles = 10;
     const spawnRate = 200; 
@@ -360,13 +359,73 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
     const centerY = canvas.height / 2 + 50; 
     const pileWidth = Math.min(120, canvas.width * 0.3);
 
+    // Custom vector cake drawing matching the user's image outline perfectly
+    const drawCakeIcon = (c, px, py, size, angle) => {
+      c.save();
+      c.translate(px, py);
+      c.rotate(angle);
+      
+      const scale = size / 24;
+      c.scale(scale, scale);
+      c.translate(-12, -12); // Center drawing
+      
+      c.strokeStyle = '#59000a'; // Deep warm maroon
+      c.lineWidth = 1.8;
+      c.lineCap = 'round';
+      c.lineJoin = 'round';
+      
+      // 1. Base Plate horizontal line
+      c.beginPath();
+      c.moveTo(2, 21);
+      c.lineTo(22, 21);
+      c.stroke();
+
+      // 2. Cake Body outline
+      c.beginPath();
+      c.moveTo(4, 21);
+      c.lineTo(4, 13);
+      c.quadraticCurveTo(4, 11, 6, 11);
+      c.lineTo(18, 11);
+      c.quadraticCurveTo(20, 11, 20, 13);
+      c.lineTo(20, 21);
+      c.stroke();
+      
+      // 3. Middle frosting wavy line
+      c.beginPath();
+      c.moveTo(4, 16.5);
+      c.quadraticCurveTo(8, 14.5, 12, 16.5);
+      c.quadraticCurveTo(16, 18.5, 20, 16.5);
+      c.stroke();
+      
+      // 4. Three candles
+      c.beginPath();
+      c.moveTo(8, 7);
+      c.lineTo(8, 11);
+      c.moveTo(12, 7);
+      c.lineTo(12, 11);
+      c.moveTo(16, 7);
+      c.lineTo(16, 11);
+      c.stroke();
+      
+      // 5. Candle Flame dots
+      c.fillStyle = '#59000a';
+      c.beginPath();
+      c.arc(8, 4.5, 0.8, 0, Math.PI * 2);
+      c.fill();
+      
+      c.beginPath();
+      c.arc(12, 4.5, 0.8, 0, Math.PI * 2);
+      c.fill();
+      
+      c.beginPath();
+      c.arc(16, 4.5, 0.8, 0, Math.PI * 2);
+      c.fill();
+      
+      c.restore();
+    };
+
     // Dynamic, beautifully layered pile for exactly 10 cakes
     const getRestPosition = (index) => {
-      // 10 cakes can form 4 layers:
-      // Layer 0 (bottom): 4 cakes
-      // Layer 1: 3 cakes
-      // Layer 2: 2 cakes
-      // Layer 3 (top): 1 cake
       const layers = [4, 3, 2, 1];
       let layer = 0;
       let count = 0;
@@ -379,17 +438,12 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
         layer = l;
       }
 
-      // Index inside this specific layer
       const indexInLayer = index - count;
       const layerCapacity = layers[layer];
 
-      // Y position: stack vertically
       const ly = centerY - (layer * 22) + (Math.random() * 4 - 2);
-
-      // X position: distribute horizontally across the layer's width
       const layerWidth = pileWidth * (1 - (layer / layers.length) * 0.7);
       
-      // Calculate distributed X
       let lx;
       if (layerCapacity === 1) {
         lx = centerX;
@@ -403,8 +457,7 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
 
     class Particle {
       constructor(index) {
-        this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
-        this.size = Math.random() * 6 + 32; // larger visible size (32px to 38px)
+        this.size = Math.random() * 6 + 32; // size in px
         this.x = Math.random() * canvas.width;
         this.y = -50;
         
@@ -432,20 +485,13 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
             this.landed = true;
             this.vy = 0;
             this.vx = 0;
-            this.angle = (Math.random() - 0.5) * 0.25; 
+            this.angle = (Math.random() - 0.5) * 0.2; 
           }
         }
       }
 
       draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.font = `${this.size}px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(this.emoji, 0, 0);
-        ctx.restore();
+        drawCakeIcon(ctx, this.x, this.y, this.size, this.angle);
       }
     }
 
@@ -491,7 +537,7 @@ const IntroLoader = ({ isFadingOut, onComplete }) => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      background: '#fff9fa', 
+      background: '#fff2f4', 
       zIndex: 99999,
       display: 'flex',
       alignItems: 'center',
