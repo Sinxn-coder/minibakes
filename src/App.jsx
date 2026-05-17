@@ -244,23 +244,10 @@ const InstaPost = ({ post, index }) => {
 };
 
 const FeaturedCard = ({ item, onClick, className = "" }) => {
-  const [imgIndex, setImgIndex] = useState(0);
-
-  useEffect(() => {
-    if (item.images && item.images.length > 1) {
-      const interval = setInterval(() => {
-        setImgIndex(prev => (prev + 1) % item.images.length);
-      }, 10000);
-      return () => clearInterval(interval);
-    }
-  }, [item.images]);
-
-  const displayImg = item.images ? item.images[imgIndex] : item.img;
-
   return (
     <div className={`featured-card ${className}`}>
       <div className="card-image-wrapper">
-        <SafeImage src={displayImg} alt={item.name} key={displayImg} />
+        <SafeImage src={item.img} alt={item.name} />
       </div>
       <div className="card-info">
         <h3>{item.name}</h3>
@@ -471,7 +458,7 @@ function App() {
   };
 
   const [featuredItems, setFeaturedItems] = useState([
-    { id: 't-featured', img: brownieImg, images: [brownieImg, brownie2, brownie3], name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
+    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
     { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
     { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ]);
@@ -501,8 +488,7 @@ function App() {
             .map((item, idx) => ({
               ...item,
               id: item.id || `featured-${item.slot}`,
-              img: item.img || [brownieImg, cupcakeImg, cakeImg][item.slot - 1],
-              images: item.slot === 1 ? [brownieImg, brownie2, brownie3] : undefined
+              img: item.img || [brownieImg, cupcakeImg, cakeImg][item.slot - 1]
             }));
           
           if (activeFeatured.length > 0) {
