@@ -115,6 +115,18 @@ export default function AdminApp() {
   const [activeOrderItemIndex, setActiveOrderItemIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  const triggerToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [classBookings, setClassBookings] = useState([
     { id: 'CB-001', name: 'Olivia Smith', email: 'olivia.smith@example.com', phone: '+356 7912 3456', date: '2026-05-15', guests: 4, status: 'confirmed' },
@@ -281,6 +293,7 @@ export default function AdminApp() {
         
         if (error && !error.message?.includes('fetch')) throw error;
         setBookedDates(prev => prev.filter(d => d !== dateStr));
+        triggerToast('Date removed from booked calendar! 📅', 'success');
       } else {
         // Add to DB
         const { error } = await supabase
@@ -289,14 +302,20 @@ export default function AdminApp() {
         
         if (error && !error.message?.includes('fetch')) throw error;
         setBookedDates(prev => [...prev, dateStr]);
+        triggerToast('Date marked as fully booked! 🔒', 'success');
       }
     } catch (err) {
       if (!err.message?.includes('fetch')) {
         console.error('Error updating date:', err);
       }
       // Local fallback for demo
-      if (isBooked) setBookedDates(prev => prev.filter(d => d !== dateStr));
-      else setBookedDates(prev => [...prev, dateStr]);
+      if (isBooked) {
+        setBookedDates(prev => prev.filter(d => d !== dateStr));
+        triggerToast('Date removed from booked calendar (Offline)! 📅', 'info');
+      } else {
+        setBookedDates(prev => [...prev, dateStr]);
+        triggerToast('Date marked as fully booked (Offline)! 🔒', 'info');
+      }
     }
   };
 
@@ -358,7 +377,7 @@ export default function AdminApp() {
         item.slot === slot ? updatedItem : item
       ));
       setEditingFeatured(null);
-      if (!error) alert('Featured item updated successfully!');
+      if (!error) triggerToast('Featured card updated successfully! ✨', 'success');
     } catch (err) {
       if (!err.message?.includes('fetch')) {
         console.error('Error saving featured item:', err);
@@ -368,12 +387,14 @@ export default function AdminApp() {
         item.slot === slot ? updatedItem : item
       ));
       setEditingFeatured(null);
+      triggerToast('Local featured details updated! (Supabase Offline)', 'info');
     }
   };
 
   const handleUpdateProduct = (id, updatedData) => {
     setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
     setEditingProduct(null);
+    triggerToast('Product details updated successfully! ✨', 'success');
   };
 
   const handleUpdateStatus = (orderId, newStatus) => {
@@ -1433,6 +1454,7 @@ export default function AdminApp() {
                                   setClassBookings(prev => prev.map(b => 
                                     b.id === booking.id ? { ...b, status: 'confirmed' } : b
                                   ));
+                                  triggerToast('Class booking request accepted! 🎉', 'success');
                                 }}
                               >
                                 <CheckCircle2 size={16} />
@@ -2417,6 +2439,37 @@ export default function AdminApp() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast Notification Overlay */}
+      {toast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 9999,
+          background: toast.type === 'error' ? '#FFF5F5' : (toast.type === 'info' ? '#E3F2FD' : '#E8F5E9'),
+          color: toast.type === 'error' ? '#C62828' : (toast.type === 'info' ? '#1565C0' : '#2E7D32'),
+          border: `1px solid ${toast.type === 'error' ? '#FFCDD2' : (toast.type === 'info' ? '#B3E5FC' : '#C8E6C9')}`,
+          borderRadius: '12px',
+          padding: '16px 20px',
+          boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          minWidth: '280px',
+          maxWidth: '400px'
+        }}>
+          {toast.type === 'error' ? <X size={20} /> : <CheckCircle2 size={20} />}
+          <div style={{ flex: 1, fontSize: '14px', fontWeight: '600' }}>{toast.message}</div>
+          <button 
+            onClick={() => setToast(null)} 
+            style={{ background: 'none', border: 'none', color: toast.type === 'error' ? '#EF9A9A' : (toast.type === 'info' ? '#90CAF9' : '#A5D6A7'), cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+          >
+            <X size={16} />
+          </button>
         </div>
       )}
     </div>
