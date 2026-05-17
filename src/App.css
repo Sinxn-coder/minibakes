@@ -3097,8 +3097,7 @@ body {
 /* Floating Cart Button */
 .floating-cart-btn {
   position: fixed;
-  top: 130px;
-  /* Safe distance below header */
+  top: 100px;
   right: 2.5rem;
   background: var(--secondary);
   color: white !important;
@@ -3110,8 +3109,12 @@ body {
   justify-content: center;
   cursor: pointer;
   z-index: 999;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(128, 0, 0, 0.3);
+}
+
+.header.scrolled + .floating-cart-btn {
+  top: 90px;
 }
 
 .floating-cart-btn:hover {
@@ -3147,11 +3150,13 @@ body {
 
 @media (max-width: 768px) {
   .floating-cart-btn {
-    top: 120px;
-    /* Safe distance below mobile header */
+    top: 80px;
     right: 1.5rem;
     z-index: 1001;
-    /* Above mobile menu if needed */
+  }
+
+  .header.scrolled + .floating-cart-btn {
+    top: 70px;
   }
 
   .hero-bg-image {
