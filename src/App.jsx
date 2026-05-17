@@ -331,236 +331,33 @@ const PageLoader = () => (
   </div>
 );
 
-// INITIAL MOUNTAIN OF CAKES INTRO LOADER
-const IntroLoader = ({ isFadingOut, onComplete }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
-    let completeTimerStarted = false;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const particles = [];
-    const maxParticles = 10;
-    const spawnRate = 200; 
-    let lastSpawnTime = 0;
-    let particleCount = 0;
-
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2 + 50; 
-    const pileWidth = Math.min(120, canvas.width * 0.3);
-
-    // Custom vector cake drawing matching the user's image outline perfectly
-    const drawCakeIcon = (c, px, py, size, angle) => {
-      c.save();
-      c.translate(px, py);
-      c.rotate(angle);
-      
-      const scale = size / 24;
-      c.scale(scale, scale);
-      c.translate(-12, -12); // Center drawing
-      
-      c.strokeStyle = '#59000a'; // Deep warm maroon
-      c.lineWidth = 1.8;
-      c.lineCap = 'round';
-      c.lineJoin = 'round';
-      
-      // 1. Base Plate horizontal line
-      c.beginPath();
-      c.moveTo(2, 21);
-      c.lineTo(22, 21);
-      c.stroke();
-
-      // 2. Cake Body outline
-      c.beginPath();
-      c.moveTo(4, 21);
-      c.lineTo(4, 13);
-      c.quadraticCurveTo(4, 11, 6, 11);
-      c.lineTo(18, 11);
-      c.quadraticCurveTo(20, 11, 20, 13);
-      c.lineTo(20, 21);
-      c.stroke();
-      
-      // 3. Middle frosting wavy line
-      c.beginPath();
-      c.moveTo(4, 16.5);
-      c.quadraticCurveTo(8, 14.5, 12, 16.5);
-      c.quadraticCurveTo(16, 18.5, 20, 16.5);
-      c.stroke();
-      
-      // 4. Three candles
-      c.beginPath();
-      c.moveTo(8, 7);
-      c.lineTo(8, 11);
-      c.moveTo(12, 7);
-      c.lineTo(12, 11);
-      c.moveTo(16, 7);
-      c.lineTo(16, 11);
-      c.stroke();
-      
-      // 5. Candle Flame dots
-      c.fillStyle = '#59000a';
-      c.beginPath();
-      c.arc(8, 4.5, 0.8, 0, Math.PI * 2);
-      c.fill();
-      
-      c.beginPath();
-      c.arc(12, 4.5, 0.8, 0, Math.PI * 2);
-      c.fill();
-      
-      c.beginPath();
-      c.arc(16, 4.5, 0.8, 0, Math.PI * 2);
-      c.fill();
-      
-      c.restore();
-    };
-
-    // Dynamic, beautifully layered pile for exactly 10 cakes
-    const getRestPosition = (index) => {
-      const layers = [4, 3, 2, 1];
-      let layer = 0;
-      let count = 0;
-      for (let l = 0; l < layers.length; l++) {
-        if (index < count + layers[l]) {
-          layer = l;
-          break;
-        }
-        count += layers[l];
-        layer = l;
-      }
-
-      const indexInLayer = index - count;
-      const layerCapacity = layers[layer];
-
-      const ly = centerY - (layer * 22) + (Math.random() * 4 - 2);
-      const layerWidth = pileWidth * (1 - (layer / layers.length) * 0.7);
-      
-      let lx;
-      if (layerCapacity === 1) {
-        lx = centerX;
-      } else {
-        const step = layerWidth / (layerCapacity - 1);
-        lx = (centerX - layerWidth / 2) + (indexInLayer * step) + (Math.random() * 6 - 3);
-      }
-
-      return { x: lx, y: ly };
-    };
-
-    class Particle {
-      constructor(index) {
-        this.size = Math.random() * 6 + 32; // size in px
-        this.x = Math.random() * canvas.width;
-        this.y = -50;
-        
-        const rest = getRestPosition(index);
-        this.targetX = rest.x;
-        this.targetY = rest.y;
-
-        this.vy = Math.random() * 2 + 5; 
-        this.vx = (this.targetX - this.x) / (this.targetY / this.vy); 
-        
-        this.angle = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.08;
-        this.landed = false;
-      }
-
-      update() {
-        if (!this.landed) {
-          this.y += this.vy;
-          this.x += this.vx;
-          this.angle += this.rotationSpeed;
-
-          if (this.y >= this.targetY) {
-            this.y = this.targetY;
-            this.x = this.targetX;
-            this.landed = true;
-            this.vy = 0;
-            this.vx = 0;
-            this.angle = (Math.random() - 0.5) * 0.2; 
-          }
-        }
-      }
-
-      draw() {
-        drawCakeIcon(ctx, this.x, this.y, this.size, this.angle);
-      }
-    }
-
-    const tick = (time) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (particleCount < maxParticles && time - lastSpawnTime > spawnRate) {
-        particles.push(new Particle(particleCount));
-        particleCount++;
-        lastSpawnTime = time;
-      }
-
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      // Automatically complete once all 10 cakes settle
-      if (particles.length === maxParticles && particles.every(p => p.landed)) {
-        if (!completeTimerStarted) {
-          completeTimerStarted = true;
-          setTimeout(() => {
-            onComplete();
-          }, 600);
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(tick);
-    };
-
-    animationFrameId = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [onComplete]);
-
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: '#fff2f4', 
-      zIndex: 99999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      overflow: 'hidden',
-      transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-      opacity: isFadingOut ? 0 : 1,
-      pointerEvents: isFadingOut ? 'none' : 'auto'
-    }}>
-      <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
-    </div>
-  );
-};
-
 function App() {
-  const [showIntroLoader, setShowIntroLoader] = useState(true);
-  const [isIntroFadingOut, setIsIntroFadingOut] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [customizingProduct, setCustomizingProduct] = useState(null);
+  const [showSplash, setShowSplash] = useState(true);
+  const [isSplashFading, setIsSplashFading] = useState(false);
+
+  useEffect(() => {
+    // Start fading out after 2.6 seconds (leaving 0.4s for the fade transition)
+    const fadeTimer = setTimeout(() => {
+      setIsSplashFading(true);
+    }, 2600);
+
+    // Completely remove from DOM after 3.0 seconds
+    const removeTimer = setTimeout(() => {
+      setShowSplash(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
+  }, []);
+
   // Preload critical Home Page assets with prioritization
   useEffect(() => {
     const priorityImages = [bg1, logo];
@@ -790,6 +587,19 @@ function App() {
 
   return (
     <div className="main-layout">
+      {/* Premium Elegant Splash Screen */}
+      {showSplash && (
+        <div className={`splash-screen-overlay ${isSplashFading ? 'fade-out' : ''}`}>
+          <div className="splash-content">
+            <img src={logo} alt="Mini Bakes Logo" className="splash-logo" />
+            <div className="splash-loader-bar">
+              <div className="splash-loader-progress"></div>
+            </div>
+            <p className="splash-tagline">Crafting Sweetness for Every Celebration</p>
+          </div>
+        </div>
+      )}
+
       {/* Fixed Background Layer */}
       <div className={`global-fixed-bg ${currentView === 'home' ? 'visible' : ''}`}>
         <div 
@@ -1360,17 +1170,6 @@ function App() {
         </div>
       </div>
 
-      {showIntroLoader && (
-        <IntroLoader 
-          isFadingOut={isIntroFadingOut} 
-          onComplete={() => {
-            setIsIntroFadingOut(true);
-            setTimeout(() => {
-              setShowIntroLoader(false);
-            }, 600);
-          }} 
-        />
-      )}
     </div>
   );
 }

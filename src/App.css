@@ -100,7 +100,112 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* Splash Screen Styles */
+.splash-screen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+  opacity: 1;
+  visibility: visible;
+}
 
+.splash-screen-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 90%;
+  animation: splashScaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.splash-logo {
+  max-width: 180px;
+  height: auto;
+  margin-bottom: 24px;
+  animation: splashLogoFloat 3s ease-in-out infinite;
+}
+
+.splash-loader-bar {
+  width: 140px;
+  height: 3px;
+  background: #FFEbee;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.splash-loader-progress {
+  width: 100%;
+  height: 100%;
+  background: var(--secondary);
+  position: absolute;
+  left: -100%;
+  animation: splashProgress 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.splash-tagline {
+  color: var(--secondary);
+  font-family: var(--font-serif, serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: splashTextFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+@keyframes splashScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes splashLogoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes splashProgress {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: -30%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+
+@keyframes splashTextFadeIn {
+  to {
+    opacity: 0.95;
+    transform: translateY(0);
+  }
+}
 
 /* Header Styles */
 .header {
