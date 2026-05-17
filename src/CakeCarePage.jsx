@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { Home } from 'lucide-react';
 import CakeCareGuide from './components/CakeCareGuide';
 import './CakeCarePage.css';
 
@@ -9,7 +9,7 @@ const CakeCarePage = ({ onBack }) => {
       <div className="care-page-container">
         <div className="care-page-header">
           <button className="back-btn-care" onClick={onBack}>
-            <ArrowLeft size={24} /> <span>Back to Home</span>
+            <Home size={20} strokeWidth={1.8} /> <span>Back to Home</span>
           </button>
           <h1>Cake Care & Handling</h1>
         </div>
