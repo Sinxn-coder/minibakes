@@ -773,10 +773,44 @@ function App() {
           {/* Hero Section */}
           <section className="hero-section">
             <div className="hero-top-left-content">
-              <p className="hero-celebration-text">
+              <div className="hero-rating-badge">
+                <span className="star-icon">★</span>
+                <span>4.9/5 Rated by 500+ Customers</span>
+              </div>
+              
+              <h1 className="hero-celebration-text">
                 <span className="hero-sans">Freshly baked for every</span><br />
                 <span className="hero-serif-accent">celebration</span>
+              </h1>
+
+              <p className="hero-subtext">
+                Bespoke buttercream cakes, decadent sweet treats, and hands-on cake decorating masterclasses handcrafted with love.
               </p>
+
+              <div className="hero-cta-buttons">
+                <button className="hero-cta-btn primary" onClick={() => navigateTo('menu')}>
+                  Browse Menu
+                </button>
+                <button className="hero-cta-btn secondary" onClick={() => navigateTo('classes')}>
+                  Book a Class
+                </button>
+              </div>
+            </div>
+
+            {/* Elegant Floating Sparkles for Interactive WOW Effect */}
+            <div className="hero-decorative-elements">
+              <span className="floating-sparkle pos-1">✨</span>
+              <span className="floating-sparkle pos-2">✨</span>
+              <span className="floating-sparkle pos-3">🌸</span>
+              <span className="floating-sparkle pos-4">🧁</span>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="hero-scroll-indicator" onClick={() => featuredRef.current?.scrollIntoView({ behavior: 'smooth' })}>
+              <span className="scroll-mouse">
+                <span className="scroll-wheel"></span>
+              </span>
+              <span className="scroll-text">Explore Desserts</span>
             </div>
           </section>
 
