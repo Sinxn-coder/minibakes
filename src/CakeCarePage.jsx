@@ -8,8 +8,8 @@ const CakeCarePage = ({ onBack }) => {
     <div className="cake-care-page">
       <div className="care-page-container">
         <div className="care-page-header">
-          <button className="back-btn-care" onClick={onBack}>
-            <Home size={20} strokeWidth={1.8} /> <span>Back to Home</span>
+          <button className="back-btn-care" onClick={onBack} aria-label="Back to Home">
+            <Home size={22} strokeWidth={1.8} />
           </button>
           <h1>Cake Care & Handling</h1>
         </div>
