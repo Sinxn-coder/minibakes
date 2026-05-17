@@ -1585,7 +1585,15 @@ export default function AdminApp() {
                       {selectedOrder.status === 'processing' && <CheckCircle2 size={16}/>} Processing
                     </button>
                     <button 
-                      onClick={() => handleUpdateStatus(selectedOrder.id, 'completed')}
+                      onClick={() => {
+                        if (selectedOrder.details?.whatsapp) {
+                          const defaultMsg = `Hi ${selectedOrder.customer}! 🧁 Your Mini Bakes order (${selectedOrder.id}) is now ready for pickup! 🎉\n\n📅 Pickup Date: ${selectedOrder.details.pickupDate || ''}\n🕒 Period: ${selectedOrder.details.pickupPeriod || ''}\n\nWe hope you enjoy your delicious treats! See you soon! ✨`;
+                          setProgressMessageText(defaultMsg);
+                          setOrderProgressModal({ order: selectedOrder, targetStatus: 'completed' });
+                        } else {
+                          handleUpdateStatus(selectedOrder.id, 'completed');
+                        }
+                      }}
                       className={`status-action-btn completed ${selectedOrder.status === 'completed' ? 'active' : ''}`}
                     >
                       {selectedOrder.status === 'completed' && <CheckCircle2 size={16}/>} Completed
@@ -1965,12 +1973,16 @@ export default function AdminApp() {
           <div className="admin-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px', width: '100%', padding: '28px', borderRadius: '16px', background: '#fff', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#e3f2fd', color: '#1565c0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <TrendingUp size={20} />
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: orderProgressModal.targetStatus === 'completed' ? '#e8f5e9' : '#e3f2fd', color: orderProgressModal.targetStatus === 'completed' ? '#2e7d32' : '#1565c0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {orderProgressModal.targetStatus === 'completed' ? <CheckCircle2 size={20} /> : <TrendingUp size={20} />}
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '18px', color: '#333', fontWeight: '700' }}>Update Order Progress</h3>
-                  <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#666' }}>Notify the customer about their order state.</p>
+                  <h3 style={{ margin: 0, fontSize: '18px', color: '#333', fontWeight: '700' }}>
+                    {orderProgressModal.targetStatus === 'completed' ? 'Complete Order & Notify' : 'Update Order Progress'}
+                  </h3>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#666' }}>
+                    {orderProgressModal.targetStatus === 'completed' ? 'Mark order as complete and send pickup ready message.' : 'Notify the customer about their order state.'}
+                  </p>
                 </div>
               </div>
               <button onClick={() => setOrderProgressModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}><X size={20} /></button>
@@ -1980,13 +1992,13 @@ export default function AdminApp() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <span style={{ fontSize: '11px', color: '#888', fontWeight: '700', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>Customer</span>
-                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>{orderProgressModal.customer}</span>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>{orderProgressModal.order.customer}</span>
                 </div>
                 <div>
                   <span style={{ fontSize: '11px', color: '#888', fontWeight: '700', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>WhatsApp Number</span>
                   <span style={{ fontSize: '14px', fontWeight: '600', color: '#333', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <WhatsAppIcon size={14} color="#2e7d32" />
-                    {orderProgressModal.details?.whatsapp}
+                    {orderProgressModal.order.details?.whatsapp}
                   </span>
                 </div>
               </div>
@@ -2020,9 +2032,9 @@ export default function AdminApp() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <button
                 onClick={() => {
-                  const cleanPhone = orderProgressModal.details?.whatsapp?.replace(/\s+/g, '').replace(/^\+/, '') || '';
+                  const cleanPhone = orderProgressModal.order.details?.whatsapp?.replace(/\s+/g, '').replace(/^\+/, '') || '';
                   window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(progressMessageText)}`, '_blank');
-                  handleUpdateStatus(orderProgressModal.id, 'processing');
+                  handleUpdateStatus(orderProgressModal.order.id, orderProgressModal.targetStatus);
                   setOrderProgressModal(null);
                 }}
                 style={{
@@ -2046,13 +2058,13 @@ export default function AdminApp() {
                 onMouseOut={e => e.currentTarget.style.backgroundColor = '#2e7d32'}
               >
                 <WhatsAppIcon size={16} color="#fff" />
-                Send Message & Start Processing
+                {orderProgressModal.targetStatus === 'completed' ? 'Send Message & Complete Order' : 'Send Message & Start Processing'}
               </button>
               
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button
                   onClick={() => {
-                    handleUpdateStatus(orderProgressModal.id, 'processing');
+                    handleUpdateStatus(orderProgressModal.order.id, orderProgressModal.targetStatus);
                     setOrderProgressModal(null);
                   }}
                   style={{
@@ -2070,7 +2082,7 @@ export default function AdminApp() {
                   onMouseOver={e => e.currentTarget.style.backgroundColor = '#f8f9fa'}
                   onMouseOut={e => e.currentTarget.style.backgroundColor = '#fff'}
                 >
-                  Start Processing Only
+                  {orderProgressModal.targetStatus === 'completed' ? 'Complete Order Only' : 'Start Processing Only'}
                 </button>
                 <button
                   onClick={() => setOrderProgressModal(null)}
