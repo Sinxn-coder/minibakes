@@ -215,10 +215,7 @@ export default function ClassesPage() {
         </div>
       </section>
 
-      {/* Mobile Floating Button */}
-      <a href="#booking-form" className="mobile-sticky-book mobile-only">
-        Book an Experience <ArrowRight size={18} />
-      </a>
+
 
       {/* Why Join Us */}
       <section className="studio-perks">
