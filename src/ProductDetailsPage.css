@@ -789,39 +789,44 @@
 .abstract-shape {
   position: absolute;
   pointer-events: none;
-  filter: blur(12px);
+  filter: blur(4px); /* Much lower blur to make shapes crisp & clear */
   z-index: 1;
   animation: floatAbstract 9s ease-in-out infinite alternate;
+  opacity: 0.9; /* Highly visible */
+  box-shadow: 0 8px 24px rgba(128, 0, 0, 0.08); /* Soft brand shadow for depth */
 }
 
 .shape-1 {
-  width: 340px;
-  height: 340px;
-  background: linear-gradient(135deg, rgba(234, 191, 159, 0.45) 0%, rgba(243, 222, 203, 0.25) 100%);
+  width: 380px;
+  height: 380px;
+  background: linear-gradient(135deg, #eabf9f 0%, #f3decb 100%); /* Solid warm premium gold! */
   border-radius: 43% 57% 39% 61% / 47% 38% 62% 53%; /* Beautiful organic circle (not correct circle) */
-  right: -60px;
-  bottom: -40px;
+  right: -80px;
+  bottom: -60px;
   animation-duration: 10s;
+  border: 4px solid rgba(255, 255, 255, 0.7); /* Premium border highlight */
 }
 
 .shape-2 {
-  width: 260px;
-  height: 260px;
-  background: linear-gradient(135deg, rgba(128, 0, 0, 0.05) 0%, rgba(245, 200, 200, 0.15) 100%);
+  width: 290px;
+  height: 290px;
+  background: linear-gradient(135deg, #eecaca 0%, #fae6e9 100%); /* Prominent sweet rose blush! */
   border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; /* Another organic rounded shape */
-  left: -40px;
-  top: -30px;
+  left: -50px;
+  top: -40px;
   animation-duration: 8s;
+  border: 4px solid rgba(255, 255, 255, 0.7);
 }
 
 .shape-3 {
-  width: 180px;
-  height: 180px;
-  background: linear-gradient(135deg, rgba(214, 137, 152, 0.12) 0%, rgba(253, 242, 244, 0.25) 100%);
+  width: 210px;
+  height: 210px;
+  background: linear-gradient(135deg, #d48998 0%, #fdf2f4 100%); /* Prominent rich soft cherry! */
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  left: 30%;
-  bottom: 5%;
+  left: 32%;
+  bottom: 3%;
   animation-duration: 12s;
+  border: 3px solid rgba(255, 255, 255, 0.7);
 }
 
 @keyframes floatAbstract {
