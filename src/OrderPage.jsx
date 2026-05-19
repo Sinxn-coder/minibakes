@@ -36,6 +36,30 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
       unitPrice = item.quantity >= 20 ? 2.40 : 2.60;
     }
 
+    // Spreads fee for cupcakes (extra €0.45 per cupcake)
+    const isCupcake = item.id && item.id.startsWith('cu');
+    if (isCupcake && item.options?.spreads && item.options.spreads.length > 0) {
+      let cupcakesPerBox = 1;
+      if (item.id === 'cu1' || item.id === 'cu4') {
+        cupcakesPerBox = 6;
+      } else if (item.id === 'cu2' || item.id === 'cu5') {
+        cupcakesPerBox = 12;
+      }
+      unitPrice += 0.45 * cupcakesPerBox;
+    }
+
+    // Packaging fee for White Chocolate cupcakes (extra €0.15 per cupcake)
+    const isWhiteChocolateCupcake = ['cu4', 'cu5', 'cu6'].includes(item.id);
+    if (isWhiteChocolateCupcake && item.options?.individualPackaging) {
+      let cupcakesPerBox = 1;
+      if (item.id === 'cu1' || item.id === 'cu4') {
+        cupcakesPerBox = 6;
+      } else if (item.id === 'cu2' || item.id === 'cu5') {
+        cupcakesPerBox = 12;
+      }
+      unitPrice += 0.15 * cupcakesPerBox;
+    }
+
     // Addons
     if (item.options?.bows) {
       unitPrice += 5;
@@ -86,9 +110,9 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
         quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
         flavor: cart[0]?.options?.flavor || 'Assorted',
         items: cart.map(item => ({
-          itemType: item.name,
+          itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
           quantity: item.quantity,
-          flavor: item.options?.flavor || 'Assorted',
+          flavor: (item.options?.flavor || 'Assorted') + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : ''),
           price: `€${getItemTotal(item).toFixed(2)}`
         }))
       }
@@ -187,6 +211,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       {item.options.boxSize && <span>Box of {item.options.boxSize} • </span>}
                       {item.options.flavor && <span>{item.options.flavor}</span>}
                       {item.options.spreads && item.options.spreads.length > 0 && <span> • {item.options.spreads.join(', ')}</span>}
+                      {item.options.individualPackaging && <span> • Individual Packaging 📦</span>}
                     </p>
                     {item.options.notes && (
                       <p className="order-item-notes">" {item.options.notes} "</p>

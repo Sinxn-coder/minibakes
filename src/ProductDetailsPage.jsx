@@ -28,6 +28,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     message: '',
     notes: '',
     bows: false,
+    individualPackaging: false,
     boxSize: product?.options ? product.options[0].value : ''
   });
 
@@ -66,10 +67,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     cupcakesPerBox = 12;
   }
 
+  const isWhiteChocolateCupcake = ['cu4', 'cu5', 'cu6'].includes(productId);
   const spreadsPrice = (isCupcake && options.spreads.length > 0) ? (0.45 * cupcakesPerBox) : 0;
+  const packagingPrice = (isWhiteChocolateCupcake && options.individualPackaging) ? (0.15 * cupcakesPerBox) : 0;
 
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
-  const unitTotal = currentUnitPrice + bowsTotal + spreadsPrice;
+  const unitTotal = currentUnitPrice + bowsTotal + spreadsPrice + packagingPrice;
   const grandTotal = unitTotal * quantity;
 
   return (
@@ -182,22 +185,35 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
               )}
 
-              {/* Bows Add-On */}
-              {!isCupcake && (
+              {/* Add-Ons */}
+              {(!isCupcake || isWhiteChocolateCupcake) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    <button
-                      className={`addon-btn ${options.bows ? 'active' : ''}`}
-                      onClick={() => setOptions({...options, bows: !options.bows})}
-                    >
-                      <span className="addon-icon">🎀</span>
-                      <span className="addon-label">Bows</span>
-                      <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
-                    </button>
+                    {!isCupcake && (
+                      <button
+                        className={`addon-btn ${options.bows ? 'active' : ''}`}
+                        onClick={() => setOptions({...options, bows: !options.bows})}
+                      >
+                        <span className="addon-icon">🎀</span>
+                        <span className="addon-label">Bows</span>
+                        <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
+                      </button>
+                    )}
+
+                    {isWhiteChocolateCupcake && (
+                      <button
+                        className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
+                        onClick={() => setOptions({...options, individualPackaging: !options.individualPackaging})}
+                      >
+                        <span className="addon-icon">📦</span>
+                        <span className="addon-label">Individual Packaging</span>
+                        <span className="addon-price">+€{(0.15 * cupcakesPerBox).toFixed(2)}</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -273,7 +289,16 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   {options.spreads && options.spreads.length > 0 && (
                     <div className="price-row price-row-addon">
                       <span className="price-row-label">↳ Spreads: {options.spreads.join(', ')}</span>
-                      <span className="price-row-value price-row-free">Included</span>
+                      <span className="price-row-value">
+                        {isCupcake ? `+€${spreadsPrice.toFixed(2)}` : 'Included'}
+                      </span>
+                    </div>
+                  )}
+
+                  {isWhiteChocolateCupcake && options.individualPackaging && (
+                    <div className="price-row price-row-addon">
+                      <span className="price-row-label">↳ Individual Packaging 📦</span>
+                      <span className="price-row-value">+€{packagingPrice.toFixed(2)}</span>
                     </div>
                   )}
 
