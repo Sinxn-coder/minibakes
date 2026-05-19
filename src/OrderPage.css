@@ -570,6 +570,35 @@
   box-shadow: 0 20px 45px rgba(128, 0, 0, 0.4);
 }
 
+.whatsapp-urgent-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1.3rem 2rem;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 15px 35px rgba(37, 211, 102, 0.25);
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+  box-sizing: border-box;
+}
+
+.whatsapp-urgent-btn:hover {
+  background: #20ba5a;
+  transform: translateY(-3px);
+  box-shadow: 0 20px 45px rgba(37, 211, 102, 0.35);
+  color: white;
+}
+
 @keyframes bounceIn {
   0% { transform: scale(0); opacity: 0; }
   60% { transform: scale(1.1); opacity: 1; }
