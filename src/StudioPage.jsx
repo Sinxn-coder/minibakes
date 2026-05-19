@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin, Star } from 'lucide-react';
 import './ClassesPage.css';
 import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
@@ -126,7 +126,6 @@ export default function ClassesPage() {
   const [showGuestLimit, setShowGuestLimit] = useState(false);
 
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(null);
-  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
@@ -267,11 +266,6 @@ export default function ClassesPage() {
               key={idx}
               data-index={idx}
               className={`gallery-card ${activeGalleryIndex === idx ? 'expanded' : ''}`}
-              onClick={() => {
-                if (window.innerWidth <= 768) {
-                  setLightboxIndex(idx);
-                }
-              }}
             >
               <SafeImage src={img} alt={`Class moment ${idx + 1}`} />
               <div className="gallery-card-overlay">
@@ -377,41 +371,6 @@ export default function ClassesPage() {
         </div>
       </section>
 
-      {/* Mobile Lightbox */}
-      {lightboxIndex !== null && (
-        <div className="mobile-lightbox">
-          <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}></div>
-          <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>
-            <X size={32} />
-          </button>
-          
-          <button 
-            className="lightbox-nav prev" 
-            onClick={(e) => {
-              e.stopPropagation();
-              setLightboxIndex(prev => (prev > 0 ? prev - 1 : classImages.length - 1));
-            }}
-          >
-            <ChevronLeft size={36} />
-          </button>
-
-          <img 
-            src={classImages[lightboxIndex]} 
-            alt="Class Moment" 
-            className="lightbox-img" 
-          />
-
-          <button 
-            className="lightbox-nav next" 
-            onClick={(e) => {
-              e.stopPropagation();
-              setLightboxIndex(prev => (prev < classImages.length - 1 ? prev + 1 : 0));
-            }}
-          >
-            <ChevronRight size={36} />
-          </button>
-        </div>
-      )}
     </div>
   );
 }
