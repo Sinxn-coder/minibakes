@@ -781,32 +781,54 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: auto;
+      flex: 1;
     }
   }
 
-/* ── Pink Dripping Frosting Effect under Image Card ── */
-.details-image-wrapper {
-  position: relative;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.image-drip-container {
+/* ── Abstract shape designs under the image card ── */
+.abstract-shape {
   position: absolute;
-  bottom: -15px; /* Sits beautifully below the image card's bottom edge */
-  left: 25px; /* Offset to align perfectly with bottom rounded curve */
-  right: 25px;
-  height: 25px;
-  z-index: 10;
   pointer-events: none;
-  overflow: visible;
+  filter: blur(12px);
+  z-index: 1;
+  animation: floatAbstract 9s ease-in-out infinite alternate;
 }
 
-.image-drip-container svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0px 4px 5px rgba(128, 0, 0, 0.14));
+.shape-1 {
+  width: 340px;
+  height: 340px;
+  background: linear-gradient(135deg, rgba(234, 191, 159, 0.45) 0%, rgba(243, 222, 203, 0.25) 100%);
+  border-radius: 43% 57% 39% 61% / 47% 38% 62% 53%; /* Beautiful organic circle (not correct circle) */
+  right: -60px;
+  bottom: -40px;
+  animation-duration: 10s;
+}
+
+.shape-2 {
+  width: 260px;
+  height: 260px;
+  background: linear-gradient(135deg, rgba(128, 0, 0, 0.05) 0%, rgba(245, 200, 200, 0.15) 100%);
+  border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; /* Another organic rounded shape */
+  left: -40px;
+  top: -30px;
+  animation-duration: 8s;
+}
+
+.shape-3 {
+  width: 180px;
+  height: 180px;
+  background: linear-gradient(135deg, rgba(214, 137, 152, 0.12) 0%, rgba(253, 242, 244, 0.25) 100%);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  left: 30%;
+  bottom: 5%;
+  animation-duration: 12s;
+}
+
+@keyframes floatAbstract {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    transform: translateY(-12px) rotate(10deg) scale(1.03);
+  }
 }
