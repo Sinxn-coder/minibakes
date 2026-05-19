@@ -250,10 +250,28 @@ export default function MenuPage({ onSelectProduct }) {
 
   const [galleryImages, setGalleryImages] = useState(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  // Synchronous background image preloading for smooth gallery navigation
+  useEffect(() => {
+    if (!galleryImages || galleryImages.length === 0) return;
+    
+    // Trigger loading spinner for the next image
+    setImageLoading(true);
+
+    const nextIndex = (galleryIndex + 1) % galleryImages.length;
+    const prevIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+    
+    [nextIndex, prevIndex].forEach(idx => {
+      const img = new Image();
+      img.src = galleryImages[idx];
+    });
+  }, [galleryIndex, galleryImages]);
 
   const openGallery = (images) => {
     setGalleryImages(images);
     setGalleryIndex(0);
+    setImageLoading(true);
   };
 
   const addLayer = (type) => {
@@ -476,11 +494,19 @@ export default function MenuPage({ onSelectProduct }) {
           <div className="polaroid-wrapper" onClick={(e) => e.stopPropagation()}>
             <div className="polaroid-tape"></div>
             <div className="polaroid-frame">
-              <img 
-                src={galleryImages[galleryIndex]} 
-                alt="Gallery Masterpiece" 
-                className="lightbox-img" 
-              />
+              <div className="polaroid-image-container">
+                {imageLoading && (
+                  <div className="polaroid-loader-wrapper">
+                    <div className="polaroid-spinner"></div>
+                  </div>
+                )}
+                <img 
+                  src={galleryImages[galleryIndex]} 
+                  alt="Gallery Masterpiece" 
+                  className={`lightbox-img ${imageLoading ? 'loading' : 'loaded'}`}
+                  onLoad={() => setImageLoading(false)}
+                />
+              </div>
               <div className="polaroid-caption">
                 🍰 Mini Bakes {activeCategory === "Cakes" ? "Cake" : activeCategory} Design
               </div>

@@ -1047,14 +1047,59 @@
   box-sizing: border-box;
 }
 
+.polaroid-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Keep perfect square proportions like a classic polaroid photo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.polaroid-loader-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.polaroid-spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(128, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--secondary);
+  animation: spinLoader 0.9s cubic-bezier(0.55, 0.055, 0.675, 0.19) infinite;
+}
+
+@keyframes spinLoader {
+  to { transform: rotate(360deg); }
+}
+
 .lightbox-img {
   width: 100%;
-  height: auto;
-  max-height: 52vh;
+  height: 100%;
   object-fit: cover;
-  border-radius: 2px;
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lightbox-img.loading {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.lightbox-img.loaded {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .polaroid-caption {
@@ -1181,7 +1226,7 @@
     font-size: 1rem;
     margin-top: 0.8rem;
   }
-  .lightbox-img {
-    max-height: 48vh;
+  .polaroid-image-container {
+    max-height: 40vh;
   }
 }
