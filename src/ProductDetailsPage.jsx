@@ -21,20 +21,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 export default function ProductDetailsPage({ product, onBack, onConfirm, cartCount, onOpenCart }) {
   const [quantity, setQuantity] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
-  const [imgIndex, setImgIndex] = useState(0);
-
-  useEffect(() => {
-    if (product?.images && product.images.length > 1) {
-      const interval = setInterval(() => {
-        setImgIndex((prev) => (prev + 1) % product.images.length);
-      }, 10000);
-      return () => clearInterval(interval);
-    } else {
-      setImgIndex(0);
-    }
-  }, [product?.images]);
-
-  const displayImg = product?.images && product.images.length > 0 ? product.images[imgIndex] : product?.img;
+  const displayImg = product?.img;
   const [options, setOptions] = useState({
     flavor: '',
     spreads: [], // Changed to array for multi-select support
