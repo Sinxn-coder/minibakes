@@ -37,11 +37,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   const productId = product?.id || '';
   const isCake = productId.startsWith('c') && !productId.startsWith('cu');
-  const isCupcake = productId.startsWith('cu') && !['cu5', 'cu6'].includes(productId);
-  const isMiniCake = ['cu5', 'cu6'].includes(productId);
+  const isCupcake = productId.startsWith('cu');
+  const isMiniCake = productId.startsWith('mc');
   const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
   const isCakesicleBulk = productId === 'cakesicles-bulk';
-  const hasSpreads = isCake || isMiniCake || isBrownie;
+  const hasSpreads = isCake || isMiniCake || isBrownie || isCupcake;
 
   const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
@@ -58,8 +58,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     currentUnitPrice = quantity >= 20 ? 2.40 : 2.60;
   }
 
+  // Calculate cupcakes count per box to apply correct spread addon pricing
+  let cupcakesPerBox = 1;
+  if (productId === 'cu1' || productId === 'cu4') {
+    cupcakesPerBox = 6;
+  } else if (productId === 'cu2' || productId === 'cu5') {
+    cupcakesPerBox = 12;
+  }
+
+  const spreadsPrice = (isCupcake && options.spreads.length > 0) ? (0.45 * cupcakesPerBox) : 0;
+
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
-  const unitTotal = currentUnitPrice + bowsTotal;
+  const unitTotal = currentUnitPrice + bowsTotal + spreadsPrice;
   const grandTotal = unitTotal * quantity;
 
   return (
@@ -136,12 +146,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
               </div>
 
-              {/* Spread — cakes only, toggle-able */}
+              {/* Spread — cakes and cupcakes, toggle-able */}
               {hasSpreads && (
                 <div className="option-group">
                   <label>
-                    {isBrownie ? 'Select Spreads (Up to 3)' : 'Inner Spread'}
-                    <span className="option-label-hint"> — Included</span>
+                    {isCupcake ? 'Select Inner Spread' : (isBrownie ? 'Select Spreads (Up to 3)' : 'Inner Spread')}
+                    <span className="option-label-hint">
+                      {isCupcake ? ' — +€0.45 per cupcake' : (isBrownie ? ' — Choose up to 3' : ' — Included')}
+                    </span>
                   </label>
                   <div className="option-grid">
                     {spreads.map(s => {
