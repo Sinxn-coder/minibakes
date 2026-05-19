@@ -419,6 +419,7 @@ function App() {
   };
 
   const contactFooterRef = useRef(null);
+  const reviewsGridRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -433,6 +434,43 @@ function App() {
   // Scroll to top when switching views
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, [currentView]);
+
+  // Auto-scroll reviews carousel
+  useEffect(() => {
+    const grid = reviewsGridRef.current;
+    if (!grid) return;
+
+    let isHovered = false;
+    const handleMouseEnter = () => { isHovered = true; };
+    const handleMouseLeave = () => { isHovered = false; };
+
+    grid.addEventListener('mouseenter', handleMouseEnter);
+    grid.addEventListener('mouseleave', handleMouseLeave);
+    grid.addEventListener('touchstart', handleMouseEnter, { passive: true });
+    grid.addEventListener('touchend', handleMouseLeave, { passive: true });
+
+    const interval = setInterval(() => {
+      if (isHovered) return;
+      
+      const cardWidth = window.innerWidth > 768 ? 490 : 320; // card width + gap
+      const maxScroll = grid.scrollWidth - grid.clientWidth;
+      
+      if (grid.scrollLeft >= maxScroll - 10) {
+        // Smoothly loop back to start
+        grid.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+      }
+    }, 4000); // Auto-scroll every 4 seconds
+
+    return () => {
+      clearInterval(interval);
+      grid.removeEventListener('mouseenter', handleMouseEnter);
+      grid.removeEventListener('mouseleave', handleMouseLeave);
+      grid.removeEventListener('touchstart', handleMouseEnter);
+      grid.removeEventListener('touchend', handleMouseLeave);
+    };
   }, [currentView]);
 
   const handleContactClick = (id, link) => {
@@ -937,7 +975,7 @@ function App() {
             ref={reviewsRef}
           >
             <h2 className="reviews-title">CLIENT REVIEWS</h2>
-            <div className="reviews-grid">
+            <div className="reviews-grid" ref={reviewsGridRef}>
               {clientReviews.map((review, idx) => (
                 <div key={idx} className="review-card">
                   {review.fbLink ? (
