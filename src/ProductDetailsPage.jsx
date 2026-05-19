@@ -15,14 +15,33 @@ import style7 from './assets/style7.png';
 import style8 from './assets/style8.png';
 
 const detailsBackgroundPatterns = [
-  { img: style1, top: '6%', left: '8%', rot: 15, size: 30 },
-  { img: style2, top: '10%', right: '8%', rot: -25, size: 32 },
-  { img: style3, bottom: '12%', left: '10%', rot: 35, size: 28 },
-  { img: style4, bottom: '8%', right: '12%', rot: -10, size: 35 },
-  { img: style5, top: '42%', left: '4%', rot: 45, size: 28 },
-  { img: style6, top: '46%', right: '4%', rot: -15, size: 30 },
-  { img: style7, top: '22%', left: '38%', rot: 10, size: 32 },
-  { img: style8, bottom: '26%', right: '32%', rot: -20, size: 34 }
+  // Top Area
+  { img: style1, top: '5%', left: '6%', rot: 15, size: 30 },
+  { img: style2, top: '8%', right: '8%', rot: -25, size: 32 },
+  { img: style3, top: '4%', left: '32%', rot: 10, size: 28 },
+  { img: style4, top: '6%', right: '35%', rot: -15, size: 34 },
+  
+  // Upper-Middle Area
+  { img: style5, top: '24%', left: '12%', rot: 45, size: 28 },
+  { img: style6, top: '22%', right: '15%', rot: -30, size: 32 },
+  { img: style7, top: '20%', left: '50%', rot: 15, size: 30 },
+  
+  // Middle Area
+  { img: style8, top: '45%', left: '4%', rot: -20, size: 34 },
+  { img: style1, top: '48%', right: '6%', rot: 25, size: 28 },
+  { img: style2, top: '42%', left: '42%', rot: -10, size: 32 },
+  { img: style3, top: '52%', right: '40%', rot: 35, size: 30 },
+  
+  // Lower-Middle Area
+  { img: style4, bottom: '28%', left: '15%', rot: -15, size: 35 },
+  { img: style5, bottom: '24%', right: '18%', rot: 20, size: 28 },
+  { img: style6, bottom: '22%', left: '48%', rot: -40, size: 32 },
+  
+  // Bottom Area
+  { img: style7, bottom: '6%', left: '8%', rot: 10, size: 30 },
+  { img: style8, bottom: '8%', right: '10%', rot: -25, size: 34 },
+  { img: style1, bottom: '5%', left: '35%', rot: 15, size: 28 },
+  { img: style2, bottom: '4%', right: '32%', rot: -10, size: 32 }
 ];
 
 const WhatsAppIcon = ({ size = 16, ...props }) => (
