@@ -187,14 +187,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop) && (
+              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {!isCupcake && !isCakePop && (
+                    {!isCupcake && !isCakePop && !isBrownie && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
