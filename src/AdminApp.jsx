@@ -18,7 +18,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 );
 
 // Default featured images
-import brownieImg from './assets/brownies_box.png';
+import brownieImg from './assets/brownies/brownie (1).png';
 import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
 import founderImg from './assets/founder.jpg';
