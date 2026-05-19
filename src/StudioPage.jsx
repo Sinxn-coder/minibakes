@@ -355,7 +355,19 @@ export default function ClassesPage() {
                       placeholder="Select from calendar above"
                       value={formData.date}
                       required
-                      className="readonly-input"
+                      className="readonly-input clickable-date-input"
+                      onClick={() => {
+                        const calendarEl = document.getElementById('schedule');
+                        if (calendarEl) {
+                          const headerOffset = 120;
+                          const elementPosition = calendarEl.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                          });
+                        }
+                      }}
                     />
                   </div>
                   <div className="form-group">

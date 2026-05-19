@@ -1008,6 +1008,10 @@
   border-color: #eee !important;
 }
 
+.clickable-date-input {
+  cursor: pointer !important;
+}
+
 .guest-limit-note {
   font-size: 0.75rem;
   color: #800000;
