@@ -21,7 +21,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
   </svg>
 );
 
-const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => {
+const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct }) => {
   const displayImg = item.img;
 
   return (
@@ -248,31 +248,7 @@ export default function MenuPage({ onSelectProduct }) {
     }
   }, [activeCategory]);
 
-  const [galleryImages, setGalleryImages] = useState(null);
-  const [galleryIndex, setGalleryIndex] = useState(0);
-  const [imageLoading, setImageLoading] = useState(true);
 
-  // Synchronous background image preloading for smooth gallery navigation
-  useEffect(() => {
-    if (!galleryImages || galleryImages.length === 0) return;
-    
-    // Trigger loading spinner for the next image
-    setImageLoading(true);
-
-    const nextIndex = (galleryIndex + 1) % galleryImages.length;
-    const prevIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
-    
-    [nextIndex, prevIndex].forEach(idx => {
-      const img = new Image();
-      img.src = galleryImages[idx];
-    });
-  }, [galleryIndex, galleryImages]);
-
-  const openGallery = (images) => {
-    setGalleryImages(images);
-    setGalleryIndex(0);
-    setImageLoading(true);
-  };
 
   const addLayer = (type) => {
     if (cakeLayers.length >= MAX_LAYERS) {
@@ -401,7 +377,6 @@ export default function MenuPage({ onSelectProduct }) {
                     toggleDesign={toggleDesign}
                     toastMessage={toastMessage}
                     onSelectProduct={onSelectProduct}
-                    openGallery={openGallery}
                   />
                 ))}
               </React.Fragment>
@@ -422,38 +397,10 @@ export default function MenuPage({ onSelectProduct }) {
               toggleDesign={toggleDesign}
               toastMessage={toastMessage}
               onSelectProduct={onSelectProduct}
-              openGallery={openGallery}
             />
           ))
         )}
       </div>
-
-      {/* Dynamic Fixed Gallery Button */}
-      {(() => {
-        const catData = menuData.find(c => c.category === activeCategory);
-        if (!catData) return null;
-        const items = catData.items || (catData.sections ? catData.sections.flatMap(s => s.items) : []);
-        const allImages = Array.from(new Set(
-          items.flatMap(item => item.images || [])
-        ));
-        if (allImages.length === 0) return null;
-
-        return (
-          <button 
-            className="menu-fixed-gallery-btn"
-            onClick={() => openGallery(allImages)}
-            aria-label={`Open ${activeCategory} Gallery`}
-          >
-            <div className="whatsapp-icon-circle gallery-circle">
-              <ImageIcon size={24} />
-            </div>
-            <div className="whatsapp-content">
-              <span className="whatsapp-title">{activeCategory} Gallery</span>
-              <span className="whatsapp-subtitle">View all our designs</span>
-            </div>
-          </button>
-        );
-      })()}
 
       {/* Fixed WhatsApp Button */}
       <a 
@@ -471,63 +418,6 @@ export default function MenuPage({ onSelectProduct }) {
           <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
         </div>
       </a>
-
-      {/* Lightbox Gallery */}
-      {galleryImages && (
-        <div className="menu-lightbox">
-          <div className="lightbox-overlay" onClick={() => setGalleryImages(null)}></div>
-          <button className="lightbox-close" onClick={() => setGalleryImages(null)} aria-label="Close gallery">
-            <X size={32} />
-          </button>
-          
-          <button 
-            className="lightbox-nav prev" 
-            onClick={(e) => {
-              e.stopPropagation();
-              setGalleryIndex(prev => (prev > 0 ? prev - 1 : galleryImages.length - 1));
-            }}
-            aria-label="Previous image"
-          >
-            <ChevronLeft size={36} />
-          </button>
-
-          <div className="polaroid-wrapper" onClick={(e) => e.stopPropagation()}>
-            <div className="polaroid-tape"></div>
-            <div className="polaroid-frame">
-              <div className="polaroid-image-container">
-                {imageLoading && (
-                  <div className="polaroid-loader-wrapper">
-                    <div className="polaroid-spinner"></div>
-                  </div>
-                )}
-                <img 
-                  src={galleryImages[galleryIndex]} 
-                  alt="Gallery Masterpiece" 
-                  className={`lightbox-img ${imageLoading ? 'loading' : 'loaded'}`}
-                  onLoad={() => setImageLoading(false)}
-                />
-              </div>
-              <div className="polaroid-caption">
-                🍰 Mini Bakes {activeCategory === "Cakes" ? "Cake" : activeCategory} Design
-              </div>
-            </div>
-          </div>
-
-          <button 
-            className="lightbox-nav next" 
-            onClick={(e) => {
-              e.stopPropagation();
-              setGalleryIndex(prev => (prev < galleryImages.length - 1 ? prev + 1 : 0));
-            }}
-            aria-label="Next image"
-          >
-            <ChevronRight size={36} />
-          </button>
-          <div className="lightbox-counter">
-            {galleryIndex + 1} / {galleryImages.length}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
