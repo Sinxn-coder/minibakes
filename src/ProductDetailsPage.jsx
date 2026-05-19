@@ -41,7 +41,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     message: '',
     notes: '',
     bows: false,
-    boxSize: product.options ? product.options[0].value : ''
+    boxSize: product?.options ? product.options[0].value : ''
   });
 
   const BOW_ADDON_PRICE = 5;

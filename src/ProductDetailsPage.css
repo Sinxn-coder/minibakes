@@ -674,9 +674,13 @@
   @media (max-width: 768px) {
     .product-details-page {
       position: fixed;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 99999 !important;
       flex-direction: column;
       overflow-y: auto;
-      height: 100%;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
     }
