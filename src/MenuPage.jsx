@@ -469,7 +469,7 @@ export default function MenuPage({ onSelectProduct }) {
       {galleryImages && (
         <div className="menu-lightbox">
           <div className="lightbox-overlay" onClick={() => setGalleryImages(null)}></div>
-          <button className="lightbox-close" onClick={() => setGalleryImages(null)}>
+          <button className="lightbox-close" onClick={() => setGalleryImages(null)} aria-label="Close gallery">
             <X size={32} />
           </button>
           
@@ -479,15 +479,24 @@ export default function MenuPage({ onSelectProduct }) {
               e.stopPropagation();
               setGalleryIndex(prev => (prev > 0 ? prev - 1 : galleryImages.length - 1));
             }}
+            aria-label="Previous image"
           >
             <ChevronLeft size={36} />
           </button>
 
-          <img 
-            src={galleryImages[galleryIndex]} 
-            alt="Gallery" 
-            className="lightbox-img" 
-          />
+          <div className="polaroid-wrapper" onClick={(e) => e.stopPropagation()}>
+            <div className="polaroid-tape"></div>
+            <div className="polaroid-frame">
+              <img 
+                src={galleryImages[galleryIndex]} 
+                alt="Gallery Masterpiece" 
+                className="lightbox-img" 
+              />
+              <div className="polaroid-caption">
+                🍰 Mini Bakes {activeCategory === "Cakes" ? "Cake" : activeCategory} Design
+              </div>
+            </div>
+          </div>
 
           <button 
             className="lightbox-nav next" 
@@ -495,6 +504,7 @@ export default function MenuPage({ onSelectProduct }) {
               e.stopPropagation();
               setGalleryIndex(prev => (prev < galleryImages.length - 1 ? prev + 1 : 0));
             }}
+            aria-label="Next image"
           >
             <ChevronRight size={36} />
           </button>
