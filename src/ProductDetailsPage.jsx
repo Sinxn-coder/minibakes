@@ -42,6 +42,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCakePop = productId.startsWith('cp');
   const isMiniCake = productId.startsWith('mc');
   const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
+  const isBreakableHeart = productId.startsWith('t2');
   const isCakesicleBulk = productId === 'cakesicles-bulk';
   const hasSpreads = isCake || isMiniCake || isBrownie || isCupcake;
 
@@ -211,14 +212,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie) && (
+              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie && !isBreakableHeart) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {!isCupcake && !isCakePop && !isBrownie && (
+                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
