@@ -777,14 +777,41 @@
     font-size: 1.2rem;
   }
 
+  .calendar-weekdays {
+    gap: 4px;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+  }
+
   .calendar-grid {
     gap: 4px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .calendar-day {
     aspect-ratio: 1;
     font-size: 0.85rem;
     border-radius: 8px;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .booked-label {
+    position: absolute;
+    bottom: 3px;
+    left: 0;
+    right: 0;
+    font-size: 0.45rem;
+    letter-spacing: -0.2px;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 0;
+    font-weight: 800;
   }
 
   .calendar-legend {
