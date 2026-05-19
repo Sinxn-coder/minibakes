@@ -717,7 +717,7 @@
       max-height: 45vh;
       flex: none;
       width: 100%;
-      padding: 1.5rem; /* Boxed padding for mobile */
+      padding: 0;
       box-sizing: border-box;
     }
 
