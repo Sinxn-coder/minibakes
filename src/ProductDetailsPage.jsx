@@ -131,6 +131,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       </button>
                     ))}
                   </div>
+                  {isBrownie && (
+                    <p className="brownie-batch-note" style={{ fontSize: '12px', color: 'var(--text-muted, #666)', marginTop: '10px', fontStyle: 'italic', lineHeight: '1.4' }}>
+                      ℹ️ Standard batch size is 22cm x 22cm. Depending on the quantity selected (6, 9, 12, etc.), each brownie piece will be adjusted in size accordingly.
+                    </p>
+                  )}
                 </div>
               )}
 
