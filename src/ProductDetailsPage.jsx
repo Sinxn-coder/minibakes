@@ -310,7 +310,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake && (
+                    {/* Bows - removed for Cakesicles via condition */}
+                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake && !(productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk) && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
@@ -321,6 +322,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       </button>
                     )}
 
+                    {/* Individual Packaging for White Chocolate Cupcake */}
                     {isWhiteChocolateCupcake && (
                       <button
                         className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
@@ -329,6 +331,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                         <span className="addon-icon">📦</span>
                         <span className="addon-label">Individual Packaging</span>
                         <span className="addon-price">+€{(0.15 * cupcakesPerBox).toFixed(2)}</span>
+                      </button>
+                    )}
+
+                    {/* Individual Packaging for Cakesicles */}
+                    {(productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk) && (
+                      <button
+                        className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
+                        onClick={() => setOptions({...options, individualPackaging: !options.individualPackaging})}
+                      >
+                        <span className="addon-icon">📦</span>
+                        <span className="addon-label">Individual Packaging</span>
+                        <span className="addon-price">+€0.15 per piece</span>
                       </button>
                     )}
                   </div>
