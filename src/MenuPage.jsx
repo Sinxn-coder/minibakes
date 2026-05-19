@@ -22,18 +22,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 );
 
 const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSelectedLayerIndex, addLayer, removeLayer, applyColor, toggleSpread, toggleDesign, toastMessage, onSelectProduct, openGallery }) => {
-  const [imgIndex, setImgIndex] = useState(0);
-
-  useEffect(() => {
-    if (item.images && item.images.length > 1) {
-      const interval = setInterval(() => {
-        setImgIndex((prev) => (prev + 1) % item.images.length);
-      }, 10000);
-      return () => clearInterval(interval);
-    }
-  }, [item.images]);
-
-  const displayImg = item.images && item.images.length > 0 ? item.images[imgIndex] : item.img;
+  const displayImg = item.img;
 
   return (
     <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
