@@ -5,9 +5,9 @@ import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 
 const classImg1 = `${import.meta.env.BASE_URL}studio1.png`;
-const classImg2 = `${import.meta.env.BASE_URL}studio2.png`;
+const classImg2 = `${import.meta.env.BASE_URL}studio2.jpeg`;
 const classImg3 = `${import.meta.env.BASE_URL}studio3.png`;
-const classImg4 = `${import.meta.env.BASE_URL}studio4.png`;
+const classImg4 = `${import.meta.env.BASE_URL}studio4.jpeg`;
 const classImg5 = `${import.meta.env.BASE_URL}studio5.png`;
 const classImg6 = `${import.meta.env.BASE_URL}studio6.png`;
 const classImg7 = `${import.meta.env.BASE_URL}studio7.png`;
