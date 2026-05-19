@@ -18,6 +18,8 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 
 export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
   const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
+  const [phoneCode, setPhoneCode] = useState('+356');
+  const [whatsappCode, setWhatsappCode] = useState('+356');
   
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -116,14 +118,14 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     const newOrder = {
       id: newId,
       customer: formData.name,
-      phone: formData.phone,
-      whatsapp: formData.whatsapp,
+      phone: `${phoneCode} ${formData.phone}`,
+      whatsapp: `${whatsappCode} ${formData.whatsapp}`,
       date: new Date().toISOString().split('T')[0],
       total: `€${totalPrice.toFixed(2)}`,
       status: 'pending',
       clientId: clientId, // Persistent device identification
       details: {
-        whatsapp: formData.whatsapp,
+        whatsapp: `${whatsappCode} ${formData.whatsapp}`,
         pickupDate: formData.date,
         pickupPeriod: 'Morning',
         pickupNotes: formData.note,
@@ -191,7 +193,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
       return `%E2%80%A2 ${item.quantity}x ${item.name}${detailsStr}`;
     }).join('%0A');
 
-    const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0A*Ordered Items:*%0A${itemsText}%0A%0APlease contact me as soon as possible. Thank you!`;
+    const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${whatsappCode} ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0A*Ordered Items:*%0A${itemsText}%0A%0APlease contact me as soon as possible. Thank you!`;
     
     return `https://wa.me/35679820529?text=${messageText}`;
   };
@@ -377,6 +379,19 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
               <div className="form-row-checkout">
                 <div className="form-group-icon">
                   <Phone size={18} />
+                  <select 
+                    value={phoneCode} 
+                    onChange={(e) => setPhoneCode(e.target.value)}
+                    className="country-code-select"
+                  >
+                    <option value="+356">+356 (MT)</option>
+                    <option value="+39">+39 (IT)</option>
+                    <option value="+44">+44 (GB)</option>
+                    <option value="+1">+1 (US/CA)</option>
+                    <option value="+33">+33 (FR)</option>
+                    <option value="+49">+49 (DE)</option>
+                    <option value="+34">+34 (ES)</option>
+                  </select>
                   <input
                     type="tel"
                     placeholder="Phone Number"
@@ -387,6 +402,19 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                 </div>
                 <div className="form-group-icon">
                   <MessageSquare size={18} />
+                  <select 
+                    value={whatsappCode} 
+                    onChange={(e) => setWhatsappCode(e.target.value)}
+                    className="country-code-select"
+                  >
+                    <option value="+356">+356 (MT)</option>
+                    <option value="+39">+39 (IT)</option>
+                    <option value="+44">+44 (GB)</option>
+                    <option value="+1">+1 (US/CA)</option>
+                    <option value="+33">+33 (FR)</option>
+                    <option value="+49">+49 (DE)</option>
+                    <option value="+34">+34 (ES)</option>
+                  </select>
                   <input
                     type="tel"
                     placeholder="WhatsApp Number"

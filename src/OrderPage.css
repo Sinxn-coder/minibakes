@@ -379,6 +379,29 @@
   font-weight: 500;
 }
 
+.country-code-select {
+  background: transparent !important;
+  border: none !important;
+  color: var(--secondary) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  outline: none !important;
+  cursor: pointer !important;
+  padding: 1.2rem 0.5rem !important;
+  margin-left: 0.5rem !important;
+  border-right: 1px solid rgba(128, 0, 0, 0.15) !important;
+  margin-right: 0.2rem !important;
+  font-family: inherit !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23800000' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 2px center !important;
+  padding-right: 18px !important;
+  border-radius: 0 !important;
+}
+
 .form-row-checkout {
   display: grid;
   grid-template-columns: 1fr 1fr;

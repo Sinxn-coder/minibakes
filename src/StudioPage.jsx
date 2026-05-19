@@ -116,6 +116,7 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
 export default function ClassesPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [phoneCode, setPhoneCode] = useState('+356');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -322,13 +323,28 @@ export default function ClassesPage() {
                 </div>
                 <div className="form-group">
                   <label>Phone Number</label>
-                  <input 
-                    type="tel" 
-                    placeholder="e.g. +356 1234 5678" 
-                    required 
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  />
+                  <div className="phone-input-row">
+                    <select 
+                      value={phoneCode} 
+                      onChange={(e) => setPhoneCode(e.target.value)}
+                      className="studio-country-code"
+                    >
+                      <option value="+356">+356 (MT)</option>
+                      <option value="+39">+39 (IT)</option>
+                      <option value="+44">+44 (GB)</option>
+                      <option value="+1">+1 (US/CA)</option>
+                      <option value="+33">+33 (FR)</option>
+                      <option value="+49">+49 (DE)</option>
+                      <option value="+34">+34 (ES)</option>
+                    </select>
+                    <input 
+                      type="tel" 
+                      placeholder="e.g. 7982 0529" 
+                      required 
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    />
+                  </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group">
