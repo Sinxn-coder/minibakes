@@ -466,9 +466,9 @@ function App() {
   };
 
   const [featuredItems, setFeaturedItems] = useState([
-    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
-    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
-    { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
+    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: '€xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
+    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: '€xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
+    { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: '€xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ]);
 
   useEffect(() => {
@@ -496,6 +496,7 @@ function App() {
             .map((item, idx) => ({
               ...item,
               id: item.id || `featured-${item.slot}`,
+              price: item.price ? item.price.replace(/Starting\s*From\s*/gi, '').replace(/Starting\s*/gi, '') : '',
               img: item.img || [brownieImg, cupcakeImg, cakeImg][item.slot - 1]
             }));
           

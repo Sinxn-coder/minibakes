@@ -382,9 +382,9 @@ export default function AdminApp() {
   };
 
   const [featuredDesserts, setFeaturedDesserts] = useState([
-    { slot: 1, name: 'Brownie Selection', price: 'Starting €xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg, highlights: [], isEmpty: false },
-    { slot: 2, name: 'Signature Cupcakes', price: 'Starting €xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg, highlights: [], isEmpty: false },
-    { slot: 3, name: 'Best Seller cake', price: 'Starting €xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg, highlights: [], isEmpty: false },
+    { slot: 1, name: 'Brownie Selection', price: '€xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: brownieImg, highlights: [], isEmpty: false },
+    { slot: 2, name: 'Signature Cupcakes', price: '€xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: cupcakeImg, highlights: [], isEmpty: false },
+    { slot: 3, name: 'Best Seller cake', price: '€xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: cakeImg, highlights: [], isEmpty: false },
   ]);
   const [editingFeatured, setEditingFeatured] = useState(null);
   const [highlightModal, setHighlightModal] = useState(null); // { slot: 1 } or null
@@ -414,7 +414,11 @@ export default function AdminApp() {
           throw error;
         }
         if (data && data.length === 3) {
-          setFeaturedDesserts(data);
+          const cleaned = data.map(item => ({
+            ...item,
+            price: item.price ? item.price.replace(/Starting\s*From\s*/gi, '').replace(/Starting\s*/gi, '') : ''
+          }));
+          setFeaturedDesserts(cleaned);
         }
       } catch (err) {
         // Only log serious errors, not network resolution issues
