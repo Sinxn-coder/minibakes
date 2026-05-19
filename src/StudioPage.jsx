@@ -4,7 +4,7 @@ import './ClassesPage.css';
 import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 
-const classImg1 = `${import.meta.env.BASE_URL}studio1.png`;
+const classImg1 = `${import.meta.env.BASE_URL}studio1.jpeg`;
 const classImg2 = `${import.meta.env.BASE_URL}studio2.jpeg`;
 const classImg3 = `${import.meta.env.BASE_URL}studio3.png`;
 const classImg4 = `${import.meta.env.BASE_URL}studio4.jpeg`;
