@@ -5,6 +5,26 @@ import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
 
+import style1 from './assets/style1.png';
+import style2 from './assets/style2.png';
+import style3 from './assets/stlye3.png'; // Note: spelling matches assets folder exactly!
+import style4 from './assets/style4.png';
+import style5 from './assets/style5.png';
+import style6 from './assets/style6.png';
+import style7 from './assets/style7.png';
+import style8 from './assets/style8.png';
+
+const detailsBackgroundPatterns = [
+  { img: style1, top: '6%', left: '8%', rot: 15, size: 30 },
+  { img: style2, top: '10%', right: '8%', rot: -25, size: 32 },
+  { img: style3, bottom: '12%', left: '10%', rot: 35, size: 28 },
+  { img: style4, bottom: '8%', right: '12%', rot: -10, size: 35 },
+  { img: style5, top: '42%', left: '4%', rot: 45, size: 28 },
+  { img: style6, top: '46%', right: '4%', rot: -15, size: 30 },
+  { img: style7, top: '22%', left: '38%', rot: 10, size: 32 },
+  { img: style8, bottom: '26%', right: '32%', rot: -20, size: 34 }
+];
+
 const WhatsAppIcon = ({ size = 16, ...props }) => (
   <svg 
     viewBox="0 0 24 24" 
@@ -102,19 +122,35 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
         <div className="details-layout">
           <div className="details-image-side">
-            {/* Abstract decorative shapes under the image */}
-            <div className="abstract-shape shape-1"></div>
-            <div className="abstract-shape shape-2"></div>
-            <div className="abstract-shape shape-3"></div>
+            {/* Scattered premium brand icons in background */}
+            {detailsBackgroundPatterns.map((item, idx) => (
+              <img
+                key={idx}
+                src={item.img}
+                className="details-decor-icon"
+                style={{
+                  position: 'absolute',
+                  top: item.top || 'auto',
+                  bottom: item.bottom || 'auto',
+                  left: item.left || 'auto',
+                  right: item.right || 'auto',
+                  width: `${item.size || 30}px`,
+                  height: 'auto',
+                  opacity: 0.16, // Very subtle, elegant, premium dust texture
+                  transform: `rotate(${item.rot}deg)`,
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }}
+                alt=""
+              />
+            ))}
 
             {product.layers ? (
-              <div className="details-3d-wrapper" style={{ zIndex: 2 }}>
+              <div className="details-3d-wrapper" style={{ position: 'relative', zIndex: 2 }}>
                 <Cake3D layers={product.layers} />
               </div>
             ) : (
-              <div className="details-img-container" style={{ zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                <SafeImage src={displayImg} alt={product.name} key={displayImg} className="main-details-img" />
-              </div>
+              <SafeImage src={displayImg} alt={product.name} key={displayImg} className="main-details-img" />
             )}
           </div>
 
