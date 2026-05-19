@@ -182,18 +182,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   };
 
   const getWhatsAppUrgentLink = () => {
-    const itemsText = cart.map(item => {
-      let detailsStr = '';
-      if (item.options?.individualPackaging) {
-        detailsStr += ' (Individually Packaged)';
-      }
-      if (item.options?.flavor) {
-        detailsStr += ` [Flavor: ${item.options.flavor}]`;
-      }
-      return `%E2%80%A2 ${item.quantity}x ${item.name}${detailsStr}`;
-    }).join('%0A');
-
-    const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${whatsappCode} ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0A*Ordered Items:*%0A${itemsText}%0A%0APlease contact me as soon as possible. Thank you!`;
+    const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${whatsappCode} ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0APlease contact me as soon as possible. Thank you!`;
     
     return `https://wa.me/35679820529?text=${messageText}`;
   };
