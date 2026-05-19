@@ -102,13 +102,33 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
         <div className="details-layout">
           <div className="details-image-side">
-            {product.layers ? (
-              <div className="details-3d-wrapper">
-                <Cake3D layers={product.layers} />
-              </div>
-            ) : (
-              <SafeImage src={displayImg} alt={product.name} key={displayImg} className="main-details-img" />
-            )}
+            <div className="details-image-wrapper">
+              {product.layers ? (
+                <div className="details-3d-wrapper">
+                  <Cake3D layers={product.layers} />
+                </div>
+              ) : (
+                <SafeImage src={displayImg} alt={product.name} key={displayImg} className="main-details-img" />
+              )}
+              
+              {!product.layers && (
+                <div className="image-drip-container">
+                  <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                    <path 
+                      d="M 0 0 L 100 0 L 100 4 C 96 4, 94 14, 90 14 C 86 14, 84 4, 80 4 C 77 4, 75 22, 72.5 22 C 70 22, 68 4, 65 4 C 62 4, 60 10, 57.5 10 C 55 10, 53 4, 50 4 C 46 4, 44 26, 40 26 C 36 26, 34 4, 30 4 C 27 4, 25 16, 22.5 16 C 20 16, 18 4, 15 4 C 12 4, 10 10, 7.5 10 C 5 10, 3 4, 0 4 Z" 
+                      fill="#ff7597" 
+                    />
+                    <path 
+                      d="M 2 1.5 C 10 1.5, 90 1.5, 98 1.5" 
+                      stroke="rgba(255, 255, 255, 0.4)" 
+                      strokeWidth="1" 
+                      strokeLinecap="round"
+                      fill="none" 
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="details-info-side">

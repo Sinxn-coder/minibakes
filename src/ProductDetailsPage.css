@@ -781,6 +781,32 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: auto;
-      flex: 1;
     }
   }
+
+/* ── Pink Dripping Frosting Effect under Image Card ── */
+.details-image-wrapper {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.image-drip-container {
+  position: absolute;
+  bottom: -15px; /* Sits beautifully below the image card's bottom edge */
+  left: 25px; /* Offset to align perfectly with bottom rounded curve */
+  right: 25px;
+  height: 25px;
+  z-index: 10;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.image-drip-container svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0px 4px 5px rgba(128, 0, 0, 0.14));
+}
