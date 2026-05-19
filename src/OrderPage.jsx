@@ -306,23 +306,6 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
             className="checkout-form" 
             id="checkout-form" 
             onSubmit={handleCheckoutSubmit}
-            onInvalid={(e) => {
-              e.preventDefault();
-              const firstInvalid = e.target.form.querySelector(':invalid');
-              if (firstInvalid) {
-                const headerOffset = 100;
-                const elementPosition = firstInvalid.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
-                window.scrollTo({
-                  top: offsetPosition,
-                  behavior: "smooth"
-                });
-                
-                // Show browser tooltip after scroll
-                setTimeout(() => firstInvalid.reportValidity(), 600);
-              }
-            }}
           >
             <div className="form-section">
               <h3>Personal Details</h3>
