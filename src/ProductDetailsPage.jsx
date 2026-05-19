@@ -26,6 +26,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     flavor: '',
     spreads: [], // Changed to array for multi-select support
     message: '',
+    innerMessage: '',
     notes: '',
     bows: false,
     individualPackaging: false,
@@ -254,6 +255,20 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     className="details-input"
                     value={options.message}
                     onChange={(e) => setOptions({...options, message: e.target.value})}
+                  />
+                </div>
+              )}
+
+              {/* Message Inside the Heart (Only for Breakable Heart) */}
+              {isBreakableHeart && (
+                <div className="option-group animate-in fade-in slide-in-from-top-1">
+                  <label>Personalised Message Inside the Heart</label>
+                  <textarea 
+                    placeholder="Write a secret note to be placed inside the breakable chocolate heart box... (included)" 
+                    className="details-input"
+                    style={{ minHeight: '80px', resize: 'vertical', paddingTop: '10px', fontFamily: 'inherit' }}
+                    value={options.innerMessage || ''}
+                    onChange={(e) => setOptions({...options, innerMessage: e.target.value})}
                   />
                 </div>
               )}

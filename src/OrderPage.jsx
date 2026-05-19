@@ -112,7 +112,10 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
         items: cart.map(item => ({
           itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
           quantity: item.quantity,
-          flavor: (item.options?.flavor || 'Assorted') + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : ''),
+          flavor: (item.options?.flavor || 'Assorted') 
+            + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
+            + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
+            + (item.options?.innerMessage ? ` (Inner Note: "${item.options.innerMessage}")` : ''),
           price: `€${getItemTotal(item).toFixed(2)}`
         }))
       }
@@ -212,6 +215,8 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       {item.options.flavor && <span>{item.options.flavor}</span>}
                       {item.options.spreads && item.options.spreads.length > 0 && <span> • {item.options.spreads.join(', ')}</span>}
                       {item.options.individualPackaging && <span> • Individual Packaging 📦</span>}
+                      {item.options.message && <span> • Text: "{item.options.message}"</span>}
+                      {item.options.innerMessage && <span> • Note Inside: "{item.options.innerMessage}"</span>}
                     </p>
                     {item.options.notes && (
                       <p className="order-item-notes">" {item.options.notes} "</p>
