@@ -1,8 +1,7 @@
 
 
 
-import brownies from '../assets/brownies/brownie (1).png';
-import brownie_box from '../assets/brownies_box.png';
+import brownies from '../assets/brownies_box.png';
 import brownie_2 from '../assets/brownies/brownie (2).png';
 import brownie_3 from '../assets/brownies/brownie (3).png';
 import brownie_4 from '../assets/brownies/brownie (4).png';
@@ -62,7 +61,7 @@ const cupcakeImages = [
 ];
 
 const brownieImages = [
-  brownies, brownie_box, brownie_2, brownie_3, brownie_4
+  brownies, brownie_2, brownie_3, brownie_4
 ];
 
 const popsImages = [
@@ -122,7 +121,7 @@ export const menuData = [
         id: 'brownies-box',
         name: 'Signature Brownies Box',
         price: '€32',
-        img: brownies,
+        img: brownie_2,
         images: brownieImages,
         description: 'Rich chocolate brownies with your choice of up to 3 signature spreads. Select your preferred piece count below.',
         options: [

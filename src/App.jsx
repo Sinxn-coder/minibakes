@@ -64,7 +64,7 @@ import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 import logo from './assets/mini_logo.png';
 import bg1 from './assets/headerbg3.png';
-import brownieImg from './assets/brownies/brownie (1).png';
+import brownieImg from './assets/brownies_box.png';
 import brownie2 from './assets/brownies/brownie (2).png';
 import brownie3 from './assets/brownies/brownie (3).png';
 import cupcakeImg from './assets/cupcake4.png';
