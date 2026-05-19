@@ -234,9 +234,21 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
 const layerLabel = { '6round': '6" Round', '8round': '8" Round', '6heart': '6" Heart', '8heart': '8" Heart' };
 const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circle size={16} />;
 
-export default function MenuPage({ onSelectProduct }) {
-  const [activeCategory, setActiveCategory] = useState("Cakes");
-  const [activeSubcategory, setActiveSubcategory] = useState(null);
+export default function MenuPage({ 
+  onSelectProduct,
+  activeCategory: externalActiveCategory,
+  setActiveCategory: externalSetActiveCategory,
+  activeSubcategory: externalActiveSubcategory,
+  setActiveSubcategory: externalSetActiveSubcategory
+}) {
+  const [localActiveCategory, localSetActiveCategory] = useState("Cakes");
+  const [localActiveSubcategory, localSetActiveSubcategory] = useState(null);
+
+  const activeCategory = externalActiveCategory !== undefined ? externalActiveCategory : localActiveCategory;
+  const setActiveCategory = externalSetActiveCategory !== undefined ? externalSetActiveCategory : localSetActiveCategory;
+  const activeSubcategory = externalActiveSubcategory !== undefined ? externalActiveSubcategory : localActiveSubcategory;
+  const setActiveSubcategory = externalSetActiveSubcategory !== undefined ? externalSetActiveSubcategory : localSetActiveSubcategory;
+
   const [cakeLayers, setCakeLayers] = useState([]);
   const [toastMessage, setToastMessage] = useState(null);
   const [selectedLayerIndex, setSelectedLayerIndex] = useState(null);
@@ -244,9 +256,14 @@ export default function MenuPage({ onSelectProduct }) {
   useEffect(() => {
     const data = menuData.find(c => c.category === activeCategory);
     if (data?.sections) {
-      setActiveSubcategory(data.sections[0].title);
+      const isAlreadyValid = data.sections.some(s => s.title === activeSubcategory);
+      if (!isAlreadyValid) {
+        setActiveSubcategory(data.sections[0].title);
+      }
     } else {
-      setActiveSubcategory(null);
+      if (activeSubcategory !== null) {
+        setActiveSubcategory(null);
+      }
     }
   }, [activeCategory]);
 

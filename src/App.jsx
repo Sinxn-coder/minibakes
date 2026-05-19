@@ -393,6 +393,8 @@ function App() {
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [previousView, setPreviousView] = useState('home');
+  const [menuActiveCategory, setMenuActiveCategory] = useState('Cakes');
+  const [menuActiveSubcategory, setMenuActiveSubcategory] = useState(null);
   const [isOverDark, setIsOverDark] = useState(false);
 
   // Scroll observer for floating cart color change
@@ -1138,11 +1140,17 @@ function App() {
         </div>
       )}
 
-      {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
-        setPreviousView(currentView);
-        setCustomizingProduct(item);
-        setCurrentView('product-details');
-      }} />}
+      {currentView === 'menu' && <MenuPage 
+        activeCategory={menuActiveCategory}
+        setActiveCategory={setMenuActiveCategory}
+        activeSubcategory={menuActiveSubcategory}
+        setActiveSubcategory={setMenuActiveSubcategory}
+        onSelectProduct={(item) => {
+          setPreviousView(currentView);
+          setCustomizingProduct(item);
+          setCurrentView('product-details');
+        }} 
+      />}
       {currentView === 'classes' && <StudioPage />}
       {currentView === 'order' && <OrderPage
         cart={cart}
