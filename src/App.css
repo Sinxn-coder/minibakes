@@ -13,10 +13,15 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #fcfcfc;
   color: var(--text-dark);
+  scroll-behavior: smooth;
 }
 
 .main-layout {
@@ -1458,7 +1463,6 @@ body {
   overflow-x: auto;
   gap: 2.5rem;
   padding: 1rem 2rem 4rem;
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
   max-width: 100vw;
@@ -1477,7 +1481,6 @@ body {
 .review-card {
   flex: 0 0 450px;
   /* Slightly wider for luxury desktop feel */
-  scroll-snap-align: center;
   background-color: #fff;
   border-radius: 40px;
   padding: 3.5rem 2.5rem;

@@ -450,22 +450,24 @@ function App() {
     grid.addEventListener('touchstart', handleMouseEnter, { passive: true });
     grid.addEventListener('touchend', handleMouseLeave, { passive: true });
 
-    const interval = setInterval(() => {
-      if (isHovered) return;
-      
-      const cardWidth = window.innerWidth > 768 ? 490 : 320; // card width + gap
-      const maxScroll = grid.scrollWidth - grid.clientWidth;
-      
-      if (grid.scrollLeft >= maxScroll - 10) {
-        // Smoothly loop back to start
-        grid.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    let animationFrameId;
+    const scroll = () => {
+      if (!isHovered) {
+        grid.scrollLeft += 0.8; // Silky speed (less than 1px per frame for elegance)
+        
+        // When it reaches halfway (the end of the first duplicated set), wrap back to start instantly and seamlessly
+        const singleSetWidth = grid.scrollWidth / 2;
+        if (grid.scrollLeft >= singleSetWidth) {
+          grid.scrollLeft = 0;
+        }
       }
-    }, 4000); // Auto-scroll every 4 seconds
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
 
     return () => {
-      clearInterval(interval);
+      cancelAnimationFrame(animationFrameId);
       grid.removeEventListener('mouseenter', handleMouseEnter);
       grid.removeEventListener('mouseleave', handleMouseLeave);
       grid.removeEventListener('touchstart', handleMouseEnter);
@@ -976,7 +978,7 @@ function App() {
           >
             <h2 className="reviews-title">CLIENT REVIEWS</h2>
             <div className="reviews-grid" ref={reviewsGridRef}>
-              {clientReviews.map((review, idx) => (
+              {[...clientReviews, ...clientReviews].map((review, idx) => (
                 <div key={idx} className="review-card">
                   {review.fbLink ? (
                     <a href={review.fbLink} target="_blank" rel="noopener noreferrer" className="review-fb-link">
