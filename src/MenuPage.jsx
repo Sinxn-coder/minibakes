@@ -421,38 +421,40 @@ export default function MenuPage({ onSelectProduct }) {
         )}
       </div>
 
-      {/* Fixed Cake Gallery Button */}
-      {activeCategory === "Cakes" && (
-        <button 
-          className="menu-fixed-gallery-btn"
-          onClick={() => {
-            const cakeCat = menuData.find(c => c.category === "Cakes");
-            if (!cakeCat) return;
-            const items = cakeCat.items || (cakeCat.sections ? cakeCat.sections.flatMap(s => s.items) : []);
-            const allCakeImages = Array.from(new Set(
-              items.flatMap(item => item.images || [])
-            ));
-            if (allCakeImages.length > 0) {
-              openGallery(allCakeImages);
-            }
-          }}
-        >
-          <div className="whatsapp-icon-circle gallery-circle">
-            <ImageIcon size={24} />
-          </div>
-          <div className="whatsapp-content">
-            <span className="whatsapp-title">Cake Gallery</span>
-            <span className="whatsapp-subtitle">View all our designs</span>
-          </div>
-        </button>
-      )}
+      {/* Dynamic Fixed Gallery Button */}
+      {(() => {
+        const catData = menuData.find(c => c.category === activeCategory);
+        if (!catData) return null;
+        const items = catData.items || (catData.sections ? catData.sections.flatMap(s => s.items) : []);
+        const allImages = Array.from(new Set(
+          items.flatMap(item => item.images || [])
+        ));
+        if (allImages.length === 0) return null;
+
+        return (
+          <button 
+            className="menu-fixed-gallery-btn"
+            onClick={() => openGallery(allImages)}
+            aria-label={`Open ${activeCategory} Gallery`}
+          >
+            <div className="whatsapp-icon-circle gallery-circle">
+              <ImageIcon size={24} />
+            </div>
+            <div className="whatsapp-content">
+              <span className="whatsapp-title">{activeCategory} Gallery</span>
+              <span className="whatsapp-subtitle">View all our designs</span>
+            </div>
+          </button>
+        );
+      })()}
 
       {/* Fixed WhatsApp Button */}
       <a 
-        href="https://wa.me/35600000000?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
+        href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
         target="_blank" 
         rel="noopener noreferrer" 
         className="menu-fixed-whatsapp"
+        aria-label="Contact Special Request on WhatsApp"
       >
         <div className="whatsapp-icon-circle">
           <MessageSquare size={24} />

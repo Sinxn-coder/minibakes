@@ -270,13 +270,14 @@
     padding: 0;
     width: 50px;
     height: 50px;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
     border-radius: 50px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     overflow: hidden;
-    animation: expandContract 6s infinite;
-    background: var(--secondary); /* Fallback */
+    background: var(--secondary);
     border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .whatsapp-icon-circle {
@@ -293,14 +294,7 @@
   }
 
   .whatsapp-content {
-    display: flex;
-    flex-direction: column;
-    white-space: nowrap;
-    padding-left: 0.5rem;
-    padding-right: 2.2rem;
-    opacity: 0;
-    animation: fadeInOutContent 6s infinite;
-    z-index: 1;
+    display: none !important;
   }
 
   .whatsapp-title {
@@ -1071,22 +1065,18 @@
 
 @media (max-width: 768px) {
   .menu-fixed-gallery-btn {
-    bottom: calc(1.5rem + 65px);
+    bottom: calc(1.5rem + 60px);
     right: 1.2rem;
     padding: 0;
     width: 50px;
     height: 50px;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
     border-radius: 50px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     overflow: hidden;
-    animation: expandContract 6s infinite;
-    animation-delay: 3s; /* Take turns expanding with WhatsApp */
     background: var(--secondary);
     border: none;
-  }
-  
-  .menu-fixed-gallery-btn .whatsapp-content {
-    animation-delay: 3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
