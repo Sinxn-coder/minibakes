@@ -171,34 +171,38 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Bows Add-On */}
-              <div className="option-group">
-                <label>
-                  Add-Ons
-                  <span className="option-label-hint"> — tap to add</span>
-                </label>
-                <div className="addon-grid">
-                  <button
-                    className={`addon-btn ${options.bows ? 'active' : ''}`}
-                    onClick={() => setOptions({...options, bows: !options.bows})}
-                  >
-                    <span className="addon-icon">🎀</span>
-                    <span className="addon-label">Bows</span>
-                    <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
-                  </button>
+              {!isCupcake && (
+                <div className="option-group">
+                  <label>
+                    Add-Ons
+                    <span className="option-label-hint"> — tap to add</span>
+                  </label>
+                  <div className="addon-grid">
+                    <button
+                      className={`addon-btn ${options.bows ? 'active' : ''}`}
+                      onClick={() => setOptions({...options, bows: !options.bows})}
+                    >
+                      <span className="addon-icon">🎀</span>
+                      <span className="addon-label">Bows</span>
+                      <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Message */}
-              <div className="option-group">
-                <label>Message / Text on Product</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Happy Birthday! or Custom Name" 
-                  className="details-input"
-                  value={options.message}
-                  onChange={(e) => setOptions({...options, message: e.target.value})}
-                />
-              </div>
+              {!isCupcake && (
+                <div className="option-group">
+                  <label>Message / Text on Product</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Happy Birthday! or Custom Name" 
+                    className="details-input"
+                    value={options.message}
+                    onChange={(e) => setOptions({...options, message: e.target.value})}
+                  />
+                </div>
+              )}
 
               {/* Reference Image */}
               <div className="option-group">

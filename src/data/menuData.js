@@ -49,10 +49,10 @@ const roundImages = [
 ];
 
 // Cupcake Gallery
-import cupcake_1 from '../assets/cupcakes/butter1.png';
+import cupcake_1 from '../assets/cupcakes/butter1.jpeg';
 import cupcake_2 from '../assets/cupcakes/butter2.jpeg';
 import cupcake_3 from '../assets/cupcakes/butter3.jpeg';
-import cupcake_4 from '../assets/cupcakes/whitechoclate1.jpeg';
+import cupcake_4 from '../assets/cupcakes/whitechoclate1.png';
 import cupcake_5 from '../assets/cupcakes/whitechoclate2.png';
 import cupcake_6 from '../assets/cupcakes/whitechoclate3.jpg';
 
