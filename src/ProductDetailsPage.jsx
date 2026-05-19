@@ -86,6 +86,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCakesicleBulk = productId === 'cakesicles-bulk';
   const hasSpreads = isCake || isMiniCake || isBrownie || isCupcake;
 
+  const minQty = isMiniCake ? 4 : 1;
+
+  useEffect(() => {
+    if (product) {
+      setQuantity(minQty);
+    }
+  }, [product, minQty]);
+
   const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isBreakableHeart || isCakesicleBulk
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
                   ['Classic Chocolate'];
@@ -439,7 +447,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               {/* Quantity + Confirm */}
               <div className="quantity-checkout-row">
                 <div className="quantity-selector">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={20} /></button>
+                  <button onClick={() => setQuantity(Math.max(minQty, quantity - 1))}><Minus size={20} /></button>
                   <span>{quantity}</span>
                   <button onClick={() => setQuantity(quantity + 1)}><Plus size={20} /></button>
                 </div>

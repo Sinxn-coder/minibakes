@@ -498,10 +498,15 @@ function App() {
   };
 
   const updateQuantity = (cartId, newQty) => {
-    if (newQty < 1) return;
-    setCart(prev => prev.map(item =>
-      item.cartId === cartId ? { ...item, quantity: newQty } : item
-    ));
+    setCart(prev => prev.map(item => {
+      if (item.cartId === cartId) {
+        const isMiniCake = item.id?.startsWith('mc');
+        const minQty = isMiniCake ? 4 : 1;
+        if (newQty < minQty) return item;
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }));
   };
 
   const calculateTotal = () => {
