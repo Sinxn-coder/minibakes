@@ -303,14 +303,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie && !isBreakableHeart) && (
+              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && (
+                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
@@ -336,7 +336,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Message */}
-              {!isCupcake && !isCakePop && (
+              {!isCupcake && !isCakePop && !isMiniCake && (
                 <div className="option-group">
                   <label>{isBreakableHeart ? 'Message / Text on Heart' : 'Message / Text on Product'}</label>
                   <input 
