@@ -247,10 +247,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               {/* Message */}
               {!isCupcake && !isCakePop && (
                 <div className="option-group">
-                  <label>Message / Text on Product</label>
+                  <label>{isBreakableHeart ? 'Message / Text on Heart' : 'Message / Text on Product'}</label>
                   <input 
                     type="text" 
-                    placeholder="e.g. Happy Birthday! or Custom Name" 
+                    placeholder={isBreakableHeart ? "e.g. HBD Sarah! or Custom Name" : "e.g. Happy Birthday! or Custom Name"} 
                     className="details-input"
                     value={options.message}
                     onChange={(e) => setOptions({...options, message: e.target.value})}
