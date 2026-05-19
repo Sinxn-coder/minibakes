@@ -142,7 +142,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       gap: '10px',
                       alignItems: 'flex-start'
                     }}>
-                      <span style={{ fontSize: '16px', lineHeight: '1.2', marginTop: '1px' }}>✨</span>
+                      <span style={{ fontSize: '16px', lineHeight: '1.2', marginTop: '1px' }}>📏</span>
                       <p className="brownie-batch-note" style={{ 
                         fontSize: '12px', 
                         color: '#6b1111', 
