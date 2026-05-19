@@ -392,6 +392,7 @@ function App() {
   const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
+  const [previousView, setPreviousView] = useState('home');
   const [isOverDark, setIsOverDark] = useState(false);
 
   // Scroll observer for floating cart color change
@@ -413,6 +414,9 @@ function App() {
   }, [currentView]); // Re-run when view changes to find new elements
 
   const navigateTo = (view) => {
+    if (currentView !== 'product-details') {
+      setPreviousView(currentView);
+    }
     setCurrentView(view);
     setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
@@ -806,7 +810,7 @@ function App() {
       {currentView === 'product-details' ? (
         <ProductDetailsPage
           product={customizingProduct}
-          onBack={() => setCurrentView('menu')}
+          onBack={() => setCurrentView(previousView)}
           cartCount={cart.length}
           onOpenCart={() => {
             if (window.innerWidth > 768) {
@@ -893,6 +897,7 @@ function App() {
                         </div>
                       )}
                       <button className="add-to-cart-btn" onClick={() => {
+                        setPreviousView(currentView);
                         setCustomizingProduct(featuredItems[expandedDesktopCard]);
                         setExpandedDesktopCard(null);
                         setCurrentView('product-details');
@@ -1094,6 +1099,7 @@ function App() {
                     </div>
                   )}
                   <button className="add-to-cart-btn" onClick={() => {
+                    setPreviousView(currentView);
                     setCustomizingProduct(featuredItems[expandedMobileCard]);
                     setExpandedMobileCard(null);
                     setCurrentView('product-details');
@@ -1122,6 +1128,7 @@ function App() {
                 {selectedSearchProduct.description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
               </p>
               <button className="add-to-cart-btn" onClick={() => {
+                setPreviousView(currentView);
                 setCustomizingProduct(selectedSearchProduct);
                 setSelectedSearchProduct(null);
                 setCurrentView('product-details');
@@ -1132,6 +1139,7 @@ function App() {
       )}
 
       {currentView === 'menu' && <MenuPage onSelectProduct={(item) => {
+        setPreviousView(currentView);
         setCustomizingProduct(item);
         setCurrentView('product-details');
       }} />}
