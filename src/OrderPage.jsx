@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles, Cake, AlertCircle } from 'lucide-react';
 import './OrderPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
@@ -18,6 +18,11 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 
 export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
   const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [step]);
+
   const [warningNotification, setWarningNotification] = useState('');
   const [formData, setFormData] = useState({
     name: '',
