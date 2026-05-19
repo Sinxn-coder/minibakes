@@ -102,7 +102,9 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                     { name: 'Nutella', color: '#3d1e16' },
                     { name: 'Biscoff', color: '#b07d4b' },
                     { name: 'Pistachio', color: '#a2d187' },
-                    { name: 'Kinder', color: '#e8d8c8' }
+                    { name: 'Kinder', color: '#e8d8c8' },
+                    { name: 'White Chocolate', color: '#f5ebd6' },
+                    { name: 'Ferrero Rocher', color: '#5c3a21' }
                   ].map(spread => (
                     <button 
                       key={spread.name}

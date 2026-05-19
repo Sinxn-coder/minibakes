@@ -47,7 +47,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
                   ['Classic Chocolate'];
 
-  const spreads = ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
+  const spreads = isCake 
+    ? ['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher']
+    : ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
 
   const basePrice = parseFloat((product?.price || '0').replace(/[^\d.]/g, '')) || 0;
   
