@@ -143,8 +143,8 @@ export const menuData = [
   {
     category: "Mini Cakes",
     items: [
-      { id: 'mc1', name: 'Mini Cake (Small)', price: '€5.50', img: mini2, images: [mini2, mini1], description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
-      { id: 'mc2', name: 'Mini Cake (Large)', price: '€3.50', img: mini1, images: [mini1, mini2], description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
+      { id: 'mc1', name: 'Mini Cake (Small)', price: '€3.65', img: mini2, images: [mini2, mini1], description: 'Bite-sized indulgence (Single portion). Choice of 1 signature spread.' },
+      { id: 'mc2', name: 'Mini Cake (Large)', price: '€5.50', img: mini1, images: [mini1, mini2], description: 'A delightful small treat (Large portion). Choice of 1 signature spread.' },
     ]
   },
   {
