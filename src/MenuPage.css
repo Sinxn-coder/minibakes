@@ -270,14 +270,19 @@
     padding: 0;
     width: 50px;
     height: 50px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border-radius: 50px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     overflow: hidden;
     background: var(--secondary);
     border: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    z-index: 1000;
+    
+    /* Auto-expand after 5 seconds */
+    animation: expandMobileButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: 5s;
   }
 
   .whatsapp-icon-circle {
@@ -294,7 +299,18 @@
   }
 
   .whatsapp-content {
-    display: none !important;
+    display: flex !important;
+    flex-direction: column;
+    white-space: nowrap;
+    padding-left: 0.5rem;
+    padding-right: 1.5rem;
+    opacity: 0;
+    z-index: 1;
+    color: var(--secondary);
+    
+    /* Fade in after button expands */
+    animation: fadeInContentMobile 0.5s ease forwards;
+    animation-delay: 5.2s;
   }
 
   .whatsapp-title {
@@ -306,33 +322,28 @@
     display: none;
   }
 
-  @keyframes expandContract {
-    0%, 45% { 
-      width: 50px; 
+  @keyframes expandMobileButton {
+    from {
+      width: 50px;
       background: var(--secondary);
+      border: none;
     }
-    50%, 95% { 
-      width: 205px; 
+    to {
+      width: 205px;
       background: white;
-    }
-    100% { 
-      width: 50px; 
-      background: var(--secondary);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.18);
     }
   }
 
-  @keyframes fadeInOutContent {
-    0%, 48% { 
-      opacity: 0; 
-      color: white;
+  @keyframes fadeInContentMobile {
+    from {
+      opacity: 0;
+      transform: translateX(10px);
     }
-    52%, 92% { 
-      opacity: 1; 
-      color: var(--secondary);
-    }
-    96%, 100% { 
-      opacity: 0; 
-      color: white;
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 }
@@ -1070,13 +1081,33 @@
     padding: 0;
     width: 50px;
     height: 50px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border-radius: 50px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     overflow: hidden;
     background: var(--secondary);
     border: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    z-index: 1000;
+    
+    /* Auto-expand after 5 seconds */
+    animation: expandMobileButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: 5s;
+  }
+  
+  .menu-fixed-gallery-btn .whatsapp-content {
+    display: flex !important;
+    flex-direction: column;
+    white-space: nowrap;
+    padding-left: 0.5rem;
+    padding-right: 1.5rem;
+    opacity: 0;
+    z-index: 1;
+    color: var(--secondary);
+    
+    /* Fade in after button expands */
+    animation: fadeInContentMobile 0.5s ease forwards;
+    animation-delay: 5.2s;
   }
 }
