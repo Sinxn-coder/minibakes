@@ -603,108 +603,110 @@ function App() {
         <div className="hero-overlay"></div>
       </div>
 
-      <header className={`header ${isScrolled || currentView !== 'home' ? 'scrolled' : ''} ${isSearchOpen ? 'search-open' : ''}`}>
-        <div className="logo-container">
-          <img src={logo} alt="Mini Bakes Logo" />
-        </div>
-
-        <div className="header-right">
-          <div className={`search-wrapper ${isSearchOpen ? 'open' : ''}`}>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search desserts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchOpen(true)}
-            />
-            {isSearchOpen ? (
-              <X size={28} strokeWidth={1.5} className="search-icon" onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }} />
-            ) : (
-              <Search size={28} strokeWidth={1.5} className="search-icon" onClick={() => setIsSearchOpen(true)} />
-            )}
-
-            {/* Dropdown Search Results */}
-            {isSearchOpen && searchQuery.trim() !== '' && (
-              <div className="search-results-dropdown">
-                {(() => {
-                  const q = searchQuery.toLowerCase();
-                  
-                  // Helper to get all items from any category structure
-                  const getCategoryItems = (cat) => {
-                    if (cat.items) return cat.items;
-                    if (cat.sections) return cat.sections.flatMap(s => s.items || []);
-                    return [];
-                  };
-
-                  const categoryMatches = menuData
-                    .filter(cat => cat.category.toLowerCase().includes(q))
-                    .flatMap(getCategoryItems);
-
-                  const nameMatches = menuData
-                    .flatMap(getCategoryItems)
-                    .filter(item =>
-                      item && item.name && item.name.toLowerCase().includes(q) &&
-                      !categoryMatches.some(cm => cm && cm.id === item.id)
-                    );
-
-                  const allResults = [...categoryMatches, ...nameMatches].filter(Boolean);
-
-                  if (allResults.length === 0) {
-                    return (
-                      <div className="search-no-results">
-                        No desserts found for "{searchQuery}"
-                      </div>
-                    );
-                  }
-
-                  return allResults.map(item => (
-                    <div
-                      key={item.id}
-                      className="search-result-item"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedSearchProduct(item);
-                        setIsSearchOpen(false);
-                      }}
-                    >
-                      <img src={item.img} alt={item.name} className="search-result-img" />
-                      <div className="search-result-info">
-                        <h4>{item.name}</h4>
-                        <p>{item.price}</p>
-                      </div>
-                    </div>
-                  ));
-                })()}
-              </div>
-            )}
+      {currentView !== 'product-details' && (
+        <header className={`header ${isScrolled || currentView !== 'home' ? 'scrolled' : ''} ${isSearchOpen ? 'search-open' : ''}`}>
+          <div className="logo-container">
+            <img src={logo} alt="Mini Bakes Logo" />
           </div>
-          <nav className="nav-links">
-            <a href="#home" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>Home</a>
-            <span className="nav-divider">|</span>
-            <a href="#menu" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>Menu</a>
-            <span className="nav-divider">|</span>
-            <a href="#classes" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('classes'); }}>Classes</a>
-            <span className="nav-divider">|</span>
-            <a href="#order" className="nav-link" onClick={(e) => {
-              e.preventDefault();
-              if (window.innerWidth > 768) setIsCartOpen(true);
-              else navigateTo('order');
-            }}>
-              Order
-            </a>
-            <span className="nav-divider">|</span>
-            <a href="#contact" className="nav-link" onClick={(e) => {
-              e.preventDefault();
-              navigateTo('contact');
-            }}>Contact</a>
-          </nav>
 
-          <div className="menu-icon" onClick={() => setIsMobileMenuOpen(true)}>
-            <Menu size={28} strokeWidth={1.5} />
+          <div className="header-right">
+            <div className={`search-wrapper ${isSearchOpen ? 'open' : ''}`}>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search desserts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchOpen(true)}
+              />
+              {isSearchOpen ? (
+                <X size={28} strokeWidth={1.5} className="search-icon" onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }} />
+              ) : (
+                <Search size={28} strokeWidth={1.5} className="search-icon" onClick={() => setIsSearchOpen(true)} />
+              )}
+
+              {/* Dropdown Search Results */}
+              {isSearchOpen && searchQuery.trim() !== '' && (
+                <div className="search-results-dropdown">
+                  {(() => {
+                    const q = searchQuery.toLowerCase();
+                    
+                    // Helper to get all items from any category structure
+                    const getCategoryItems = (cat) => {
+                      if (cat.items) return cat.items;
+                      if (cat.sections) return cat.sections.flatMap(s => s.items || []);
+                      return [];
+                    };
+
+                    const categoryMatches = menuData
+                      .filter(cat => cat.category.toLowerCase().includes(q))
+                      .flatMap(getCategoryItems);
+
+                    const nameMatches = menuData
+                      .flatMap(getCategoryItems)
+                      .filter(item =>
+                        item && item.name && item.name.toLowerCase().includes(q) &&
+                        !categoryMatches.some(cm => cm && cm.id === item.id)
+                      );
+
+                    const allResults = [...categoryMatches, ...nameMatches].filter(Boolean);
+
+                    if (allResults.length === 0) {
+                      return (
+                        <div className="search-no-results">
+                          No desserts found for "{searchQuery}"
+                        </div>
+                      );
+                    }
+
+                    return allResults.map(item => (
+                      <div
+                        key={item.id}
+                        className="search-result-item"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedSearchProduct(item);
+                          setIsSearchOpen(false);
+                        }}
+                      >
+                        <img src={item.img} alt={item.name} className="search-result-img" />
+                        <div className="search-result-info">
+                          <h4>{item.name}</h4>
+                          <p>{item.price}</p>
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              )}
+            </div>
+            <nav className="nav-links">
+              <a href="#home" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>Home</a>
+              <span className="nav-divider">|</span>
+              <a href="#menu" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>Menu</a>
+              <span className="nav-divider">|</span>
+              <a href="#classes" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('classes'); }}>Classes</a>
+              <span className="nav-divider">|</span>
+              <a href="#order" className="nav-link" onClick={(e) => {
+                e.preventDefault();
+                if (window.innerWidth > 768) setIsCartOpen(true);
+                else navigateTo('order');
+              }}>
+                Order
+              </a>
+              <span className="nav-divider">|</span>
+              <a href="#contact" className="nav-link" onClick={(e) => {
+                e.preventDefault();
+                navigateTo('contact');
+              }}>Contact</a>
+            </nav>
+
+            <div className="menu-icon" onClick={() => setIsMobileMenuOpen(true)}>
+              <Menu size={28} strokeWidth={1.5} />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
 
       {/* Floating Cart Button (Visible when cart has items and NOT on order page) */}
