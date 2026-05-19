@@ -701,13 +701,14 @@
   }
 
   .classes-hero { 
-    padding-top: 2rem;
-    padding-bottom: 3rem;
+    padding: 2rem 1.5rem 3rem;
     background: #fdf2f2;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .classes-hero-content {
@@ -735,7 +736,9 @@
   .classes-hero-image {
     order: -1; 
     border-radius: 20px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 100%;
   }
 
   .classes-floating-card {
