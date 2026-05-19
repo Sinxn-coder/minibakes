@@ -37,8 +37,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   if (!product) return null;
 
   const productId = product?.id || '';
-  const isCake = productId.startsWith('c') && !productId.startsWith('cu');
+  const isCake = productId.startsWith('c') && !productId.startsWith('cu') && !productId.startsWith('cp');
   const isCupcake = productId.startsWith('cu');
+  const isCakePop = productId.startsWith('cp');
   const isMiniCake = productId.startsWith('mc');
   const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
   const isCakesicleBulk = productId === 'cakesicles-bulk';
@@ -186,14 +187,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {(!isCupcake || isWhiteChocolateCupcake) && (
+              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {!isCupcake && (
+                    {!isCupcake && !isCakePop && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
@@ -219,7 +220,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Message */}
-              {!isCupcake && (
+              {!isCupcake && !isCakePop && (
                 <div className="option-group">
                   <label>Message / Text on Product</label>
                   <input 
