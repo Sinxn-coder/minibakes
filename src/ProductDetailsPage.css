@@ -712,10 +712,19 @@
     }
   
     .details-image-side {
-      height: 35vh;
+      height: auto;
+      min-height: 250px;
+      max-height: 45vh;
       flex: none;
       width: 100%;
-      padding: 1rem; /* Boxed padding for mobile */
+      padding: 1.5rem; /* Boxed padding for mobile */
+      box-sizing: border-box;
+    }
+
+    .details-image-side .main-details-img,
+    .details-image-side .main-details-img img {
+      border-radius: 20px !important;
+      max-height: 40vh !important;
     }
 
     .back-btn-details span {
