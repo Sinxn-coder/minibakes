@@ -46,7 +46,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCakesicleBulk = productId === 'cakesicles-bulk';
   const hasSpreads = isCake || isMiniCake || isBrownie || isCupcake;
 
-  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk
+  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isBreakableHeart || isCakesicleBulk
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
                   ['Classic Chocolate'];
 
