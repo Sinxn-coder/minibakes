@@ -803,7 +803,27 @@ function App() {
         </div>
       </div>
 
-      <div key={currentView} className="page-transition-wrapper">
+      {currentView === 'product-details' ? (
+        <ProductDetailsPage
+          product={customizingProduct}
+          onBack={() => setCurrentView('menu')}
+          cartCount={cart.length}
+          onOpenCart={() => {
+            if (window.innerWidth > 768) {
+              setIsCartOpen(true);
+            } else {
+              setCurrentView('order');
+            }
+          }}
+          onConfirm={(orderData) => {
+            addToCart(orderData);
+            if (window.innerWidth > 768) {
+              setIsCartOpen(true);
+            }
+          }}
+        />
+      ) : (
+        <div key={currentView} className="page-transition-wrapper">
         {currentView === 'home' && (
         <>
           {/* Hero Section */}
@@ -1122,33 +1142,14 @@ function App() {
         onRemoveItem={removeFromCart}
         onUpdateQuantity={updateQuantity}
       />}
-      {currentView === 'product-details' && (
-        <ProductDetailsPage
-          product={customizingProduct}
-          onBack={() => setCurrentView('menu')}
-          cartCount={cart.length}
-          onOpenCart={() => {
-            if (window.innerWidth > 768) {
-              setIsCartOpen(true);
-            } else {
-              setCurrentView('order');
-            }
-          }}
-          onConfirm={(orderData) => {
-            addToCart(orderData);
-            if (window.innerWidth > 768) {
-              setIsCartOpen(true);
-            }
-          }}
-        />
+          {currentView === 'care' && (
+            <CakeCarePage onBack={() => setCurrentView('home')} />
+          )}
+          {currentView === 'contact' && (
+            <ContactPage onBack={() => setCurrentView('home')} />
+          )}
+        </div>
       )}
-      {currentView === 'care' && (
-        <CakeCarePage onBack={() => setCurrentView('home')} />
-      )}
-        {currentView === 'contact' && (
-          <ContactPage onBack={() => setCurrentView('home')} />
-        )}
-      </div>
 
       {/* Desktop Cart Drawer */}
       <div className={`cart-drawer-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)}>
