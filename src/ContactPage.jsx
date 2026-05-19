@@ -127,22 +127,6 @@ const ContactPage = ({ onBack }) => {
                 <span>Mini Bakes</span>
               </a>
             </div>
-            
-            <div className="contact-hours">
-              <h3>Working Hours</h3>
-              <div className="hours-row">
-                <span>Mon - Fri</span>
-                <span>09:00 - 18:00</span>
-              </div>
-              <div className="hours-row">
-                <span>Saturday</span>
-                <span>10:00 - 15:00</span>
-              </div>
-              <div className="hours-row">
-                <span>Sunday</span>
-                <span>Closed</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
