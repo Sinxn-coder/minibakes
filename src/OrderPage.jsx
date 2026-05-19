@@ -151,6 +151,29 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     setStep('success');
   };
 
+  const handleConfirmClick = (e) => {
+    const form = document.getElementById('checkout-form');
+    if (form && !form.checkValidity()) {
+      const firstInvalid = form.querySelector(':invalid');
+      if (firstInvalid) {
+        e.preventDefault();
+        const headerOffset = 120;
+        const elementPosition = firstInvalid.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+        
+        setTimeout(() => {
+          firstInvalid.focus();
+          firstInvalid.reportValidity();
+        }, 500);
+      }
+    }
+  };
+
   if (step === 'success') {
     return (
       <div className="order-page success-view">
@@ -400,6 +423,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
             type="submit"
             form="checkout-form"
             className="checkout-btn confirm-btn"
+            onClick={handleConfirmClick}
           >
             Confirm & Order
           </button>
