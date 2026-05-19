@@ -60,6 +60,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 export default function ProductDetailsPage({ product, onBack, onConfirm, cartCount, onOpenCart }) {
   const [quantity, setQuantity] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
+  const [warningNotification, setWarningNotification] = useState('');
   const displayImg = product?.img;
   const [options, setOptions] = useState({
     flavor: '',
@@ -93,6 +94,19 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
       setQuantity(minQty);
     }
   }, [product, minQty]);
+
+  const handleDecrement = () => {
+    if (quantity <= minQty) {
+      if (isMiniCake) {
+        setWarningNotification('Minimum order for Mini Cakes is 4 pieces.');
+      } else {
+        setWarningNotification(`Minimum order for this item is ${minQty} piece.`);
+      }
+      setTimeout(() => setWarningNotification(''), 3000);
+    } else {
+      setQuantity(quantity - 1);
+    }
+  };
 
   const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isBreakableHeart || isCakesicleBulk
                   ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
@@ -131,6 +145,12 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
         <div className="added-notification">
           <CheckCircle2 size={18} className="notification-icon" />
           Successfully added to your order!
+        </div>
+      )}
+      {warningNotification && (
+        <div className="added-notification" style={{ background: '#d32f2f', boxShadow: '0 10px 30px rgba(211, 47, 47, 0.3)' }}>
+          <AlertCircle size={18} className="notification-icon" />
+          <span>{warningNotification}</span>
         </div>
       )}
       <div className="details-container">
@@ -445,31 +465,39 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               </div>
 
               {/* Quantity + Confirm */}
-              <div className="quantity-checkout-row">
-                <div className="quantity-selector">
-                  <button onClick={() => setQuantity(Math.max(minQty, quantity - 1))}><Minus size={20} /></button>
-                  <span>{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)}><Plus size={20} /></button>
+              <div className="quantity-checkout-wrapper" style={{ width: '100%' }}>
+                <div className="quantity-checkout-row">
+                  <div className="quantity-selector">
+                    <button onClick={handleDecrement}><Minus size={20} /></button>
+                    <span>{quantity}</span>
+                    <button onClick={() => setQuantity(quantity + 1)}><Plus size={20} /></button>
+                  </div>
+                  <button 
+                    className="add-to-order-final-btn"
+                    onClick={() => {
+                      onConfirm({ ...product, quantity, options });
+                      setShowNotification(true);
+                      setTimeout(() => setShowNotification(false), 3000);
+                    }}
+                  >
+                    Add to Order • {grandTotal === 0 ? (
+                      <span 
+                        className="price-wa-tag tooltip-trigger" 
+                        style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
+                        data-tooltip="Final price will be provided via WhatsApp."
+                      >
+                        <WhatsAppIcon size={14} />
+                        <span style={{ marginLeft: '4px' }}>WA</span>
+                      </span>
+                    ) : `€${grandTotal.toFixed(2)}`}
+                  </button>
                 </div>
-                <button 
-                  className="add-to-order-final-btn"
-                  onClick={() => {
-                    onConfirm({ ...product, quantity, options });
-                    setShowNotification(true);
-                    setTimeout(() => setShowNotification(false), 3000);
-                  }}
-                >
-                  Add to Order • {grandTotal === 0 ? (
-                    <span 
-                      className="price-wa-tag tooltip-trigger" 
-                      style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
-                      data-tooltip="Final price will be provided via WhatsApp."
-                    >
-                      <WhatsAppIcon size={14} />
-                      <span style={{ marginLeft: '4px' }}>WA</span>
-                    </span>
-                  ) : `€${grandTotal.toFixed(2)}`}
-                </button>
+                {isMiniCake && (
+                  <div className="min-order-alert-note" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b71c1c', fontSize: '0.85rem', fontWeight: '600', marginTop: '10px', justifyContent: 'center' }}>
+                    <AlertCircle size={14} />
+                    <span>Minimum order: 4 Mini Cakes required</span>
+                  </div>
+                )}
               </div>
 
             </div>

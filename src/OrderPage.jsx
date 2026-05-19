@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles, Cake } from 'lucide-react';
+import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles, Cake, AlertCircle } from 'lucide-react';
 import './OrderPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
 
@@ -18,6 +18,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 
 export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
   const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
+  const [warningNotification, setWarningNotification] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -25,6 +26,21 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     date: '',
     note: ''
   });
+
+  const handleDecrementCart = (item) => {
+    const isMiniCake = item.id?.startsWith('mc');
+    const minQty = isMiniCake ? 4 : 1;
+    if (item.quantity <= minQty) {
+      if (isMiniCake) {
+        setWarningNotification('Minimum order for Mini Cakes is 4 pieces.');
+      } else {
+        setWarningNotification(`Minimum order for this item is ${minQty} piece.`);
+      }
+      setTimeout(() => setWarningNotification(''), 3000);
+    } else {
+      onUpdateQuantity(item.cartId, item.quantity - 1);
+    }
+  };
 
   const [orderId, setOrderId] = useState('');
 
@@ -173,6 +189,12 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
 
   return (
     <div className={`order-page ${step === 'checkout' ? 'checkout-view' : ''}`}>
+      {warningNotification && (
+        <div className="added-notification" style={{ position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)', background: '#d32f2f', color: 'white', padding: '0.8rem 1.5rem', borderRadius: '50px', fontWeight: '600', fontPosition: 'relative', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem', zIndex: 9999, boxShadow: '0 10px 30px rgba(211, 47, 47, 0.3)', animation: 'slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          <AlertCircle size={18} className="notification-icon" style={{ stroke: '#fff' }} />
+          <span>{warningNotification}</span>
+        </div>
+      )}
       <div className="order-header">
         <button className="back-btn" onClick={step === 'checkout' ? () => setStep('cart') : onBack}>
           <ArrowLeft size={24} />
@@ -218,6 +240,12 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       {item.options.message && <span> • Text: "{item.options.message}"</span>}
                       {item.options.innerMessage && <span> • Note Inside: "{item.options.innerMessage}"</span>}
                     </p>
+                    {item.id?.startsWith('mc') && (
+                      <div className="cart-min-order-note" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#b71c1c', fontSize: '0.75rem', fontWeight: '500', marginTop: '4px', marginBottom: '4px' }}>
+                        <AlertCircle size={12} />
+                        <span>Minimum order of 4 Mini Cakes required</span>
+                      </div>
+                    )}
                     {item.options.notes && (
                       <p className="order-item-notes">" {item.options.notes} "</p>
                     )}
@@ -263,7 +291,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                         ) : `€${getItemTotal(item).toFixed(2)}`}
                       </span>
                       <div className="order-qty-selector">
-                        <button onClick={() => onUpdateQuantity(item.cartId, item.quantity - 1)}><Minus size={14} /></button>
+                        <button onClick={() => handleDecrementCart(item)}><Minus size={14} /></button>
                         <span>{item.quantity}</span>
                         <button onClick={() => onUpdateQuantity(item.cartId, item.quantity + 1)}><Plus size={14} /></button>
                       </div>
