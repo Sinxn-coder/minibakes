@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import Cake3D from './Cake3D';
 import './ProductDetailsPage.css';
@@ -143,7 +143,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       gap: '10px',
                       alignItems: 'flex-start'
                     }}>
-                      <span style={{ fontSize: '16px', lineHeight: '1.2', marginTop: '1px' }}>📏</span>
+                      <AlertCircle size={16} style={{ color: '#6b1111', flexShrink: 0, marginTop: '2px' }} />
                       <p className="brownie-batch-note" style={{ 
                         fontSize: '12px', 
                         color: '#6b1111', 
