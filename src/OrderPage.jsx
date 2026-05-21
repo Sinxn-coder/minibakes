@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, ShoppingBag, ArrowLeft, Minus, Plus, CheckCircle2, Calendar, Phone, MessageSquare, User, Sparkles, Cake, AlertCircle } from 'lucide-react';
 import './OrderPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
+import { supabase } from './supabase';
 
 const WhatsAppIcon = ({ size = 16, ...props }) => (
   <svg
@@ -17,7 +18,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 );
 
 export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
-  const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success'
+  const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success' | 'processing'
   const [phoneCode, setPhoneCode] = useState('+356');
   const [whatsappCode, setWhatsappCode] = useState('+356');
   
@@ -102,8 +103,10 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     return date.toISOString().split('T')[0];
   };
 
-  const handleCheckoutSubmit = (e) => {
+  const handleCheckoutSubmit = async (e) => {
     e.preventDefault();
+    setStep('processing'); // Show processing state
+    
     const newId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(newId);
 
@@ -114,48 +117,128 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
       localStorage.setItem('minibakes_client_id', clientId);
     }
 
-    // 2. Build the order payload matching Admin Panel's model
-    const newOrder = {
-      id: newId,
-      customer: formData.name,
-      phone: `${phoneCode} ${formData.phone}`,
-      whatsapp: `${whatsappCode} ${formData.whatsapp}`,
-      date: new Date().toISOString().split('T')[0],
-      total: `€${totalPrice.toFixed(2)}`,
-      status: 'pending',
-      clientId: clientId, // Persistent device identification
-      details: {
-        whatsapp: `${whatsappCode} ${formData.whatsapp}`,
-        pickupDate: formData.date,
-        pickupPeriod: 'Morning',
-        pickupNotes: formData.note,
-        itemType: cart[0]?.name || 'Sweet Assortment',
-        quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
-        flavor: cart[0]?.options?.flavor || 'Assorted',
-        items: cart.map(item => ({
-          itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
-          quantity: item.quantity,
-          flavor: (item.options?.flavor || 'Assorted') 
-            + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
-            + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
-            + (item.options?.innerMessage ? ` (Inner Note: "${item.options.innerMessage}")` : ''),
-          price: `€${getItemTotal(item).toFixed(2)}`
-        }))
+    // 2. Upload reference/inspiration images if any exist, and build item details
+    try {
+      const itemsWithUrls = [];
+      for (let i = 0; i < cart.length; i++) {
+        const item = cart[i];
+        let refImageUrl = null;
+        if (item.options?.refImage) {
+          try {
+            const file = item.options.refImage;
+            const fileExt = file.name.split('.').pop();
+            const fileName = `order-${newId}-${i}-${Date.now()}.${fileExt}`;
+            
+            const { data, error: uploadError } = await supabase.storage
+              .from('inspiration-images')
+              .upload(fileName, file);
+              
+            if (uploadError) throw uploadError;
+            
+            if (data) {
+              const { data: { publicUrl } } = supabase.storage
+                .from('inspiration-images')
+                .getPublicUrl(fileName);
+              refImageUrl = publicUrl;
+            }
+          } catch (err) {
+            console.error('Error uploading inspiration image:', err);
+          }
+        }
+        itemsWithUrls.push({
+          ...item,
+          refImageUrl
+        });
       }
-    };
 
-    // 3. Save order to localStorage so the Admin panel can access it
-    const existingOrders = JSON.parse(localStorage.getItem('minibakes_placed_orders') || '[]');
-    existingOrders.unshift(newOrder);
-    localStorage.setItem('minibakes_placed_orders', JSON.stringify(existingOrders));
+      // Build the order payload
+      const newOrder = {
+        id: newId,
+        customer: formData.name,
+        phone: `${phoneCode} ${formData.phone}`,
+        whatsapp: `${whatsappCode} ${formData.whatsapp}`,
+        date: new Date().toISOString().split('T')[0],
+        total: `€${totalPrice.toFixed(2)}`,
+        status: 'pending',
+        client_id: clientId, // Maps to snake_case table column
+        details: {
+          whatsapp: `${whatsappCode} ${formData.whatsapp}`,
+          pickupDate: formData.date,
+          pickupPeriod: 'Morning',
+          pickupNotes: formData.note,
+          itemType: cart[0]?.name || 'Sweet Assortment',
+          quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
+          flavor: cart[0]?.options?.flavor || 'Assorted',
+          items: itemsWithUrls.map(item => ({
+            itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
+            quantity: item.quantity,
+            flavor: (item.options?.flavor || 'Assorted') 
+              + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
+              + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
+              + (item.options?.innerMessage ? ` (Inner Note: "${item.options.innerMessage}")` : ''),
+            price: `€${getItemTotal(item).toFixed(2)}`,
+            refImageUrl: item.refImageUrl
+          }))
+        }
+      };
 
-    // 4. Dispatch a global event to let App.jsx clear the cart state
-    if (typeof window !== 'undefined' && window.dispatchEvent) {
-      const event = new CustomEvent('minibakes_order_completed');
-      window.dispatchEvent(event);
+      // 3. Save order to Supabase
+      const { error } = await supabase
+        .from('orders')
+        .insert([newOrder]);
+
+      if (error) throw error;
+
+      // 4. Upsert client device into analytics table
+      const { data: existingClient } = await supabase
+        .from('clients')
+        .select('order_count, total_spent')
+        .eq('client_id', clientId)
+        .single();
+
+      if (existingClient) {
+        await supabase.from('clients').update({
+          last_seen: new Date().toISOString(),
+          order_count: (existingClient.order_count || 0) + 1,
+          total_spent: parseFloat(existingClient.total_spent || 0) + totalPrice,
+          device_info: {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            screen: `${screen.width}x${screen.height}`,
+            lastCustomer: formData.name
+          }
+        }).eq('client_id', clientId);
+      } else {
+        await supabase.from('clients').insert([{
+          client_id: clientId,
+          order_count: 1,
+          total_spent: totalPrice,
+          device_info: {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            screen: `${screen.width}x${screen.height}`,
+            lastCustomer: formData.name
+          }
+        }]);
+      }
+      
+      // Keep a local copy as backup for the customer browser
+      const existingOrders = JSON.parse(localStorage.getItem('minibakes_placed_orders') || '[]');
+      existingOrders.unshift(newOrder);
+      localStorage.setItem('minibakes_placed_orders', JSON.stringify(existingOrders));
+
+      // 5. Dispatch a global event to let App.jsx clear the cart state
+      if (typeof window !== 'undefined' && window.dispatchEvent) {
+        const event = new CustomEvent('minibakes_order_completed');
+        window.dispatchEvent(event);
+      }
+
+      setStep('success');
+    } catch (error) {
+      console.error('Error saving order:', error);
+      alert('There was an issue processing your order. Please try again.');
+      setStep('checkout');
     }
-
-    setStep('success');
   };
 
   const handleConfirmClick = (e) => {

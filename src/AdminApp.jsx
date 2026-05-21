@@ -23,7 +23,7 @@ import cupcakeImg from './assets/cupcake4.png';
 import cakeImg from './assets/roundcake1.png';
 import founderImg from './assets/founder.jpg';
 
-const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
+const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL;
 
 const analyticsData = {
   'this-week': {
@@ -165,19 +165,33 @@ export default function AdminApp() {
     { id: 'ACT-004', action: 'Review Submitted', target: 'Sophia Rossi', time: '1 day ago', status: 'completed' },
   ];
 
-  const [allProducts, setAllProducts] = useState([
-    { id: 101, name: '2 Layer 6 inch', price: '€45.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
-    { id: 102, name: '2 Layer 8 inch', price: '€65.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
-    { id: 103, name: '3 Layer', price: '€85.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
-    { id: 201, name: 'Box of 6 Cupcakes', price: '€18.00', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
-    { id: 202, name: 'Box of 12 Cupcakes', price: '€31.20', status: 'In Stock', flavours: ['Chocolate', 'Vanilla'], spreads: ['Nutella', 'Caramel'] },
-    { id: 3, name: 'Cake Pops', price: '€1.70', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
-    { id: 401, name: 'Box of 5 Cakesicles', price: '€17.00', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
-    { id: 402, name: 'Box of 10 Cakesicles', price: '€29.00', status: 'In Stock', flavours: ['Chocolate'], spreads: [] },
-    { id: 5, name: 'Breakable Heart', price: '€37.00', status: 'In Stock', flavours: [], spreads: [] },
-    { id: 6, name: 'Brownies', price: '€32.00', status: 'In Stock', flavours: ['Double Choc'], spreads: [] },
-    { id: 999, name: 'Custom Creation', price: 'Quote', status: 'In Stock', flavours: [], spreads: [] }
-  ]);
+  const [allProducts, setAllProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!isSupabaseLive) return;
+      try {
+        const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
+        if (error) {
+          if (error.message?.includes('fetch')) return;
+          throw error;
+        }
+        if (data) {
+          // Format Supabase data to include missing properties for Admin UI safely
+          const formatted = data.map(dbProd => ({
+            ...dbProd,
+            status: 'In Stock',
+            flavours: [],
+            spreads: []
+          }));
+          setAllProducts(formatted);
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -202,63 +216,49 @@ export default function AdminApp() {
     { name: 'Sun', engagements: 85 },
   ];
 
-  const [allOrders, setAllOrders] = useState(() => {
-    const saved = localStorage.getItem('minibakes_placed_orders');
-    const parsed = saved ? JSON.parse(saved) : [];
-    
-    const mockOrders = [
-      { id: 'ORD-1045', customer: 'Olivia Smith', date: '2026-04-18', total: '€112.50', status: 'pending', clientId: 'client-olivia', details: { whatsapp: '+1 555-0198', pickupDate: '2026-04-25', pickupPeriod: 'Morning', pickupNotes: 'Will be sending my husband.', itemType: 'Custom Cake', quantity: 1, occasion: 'Birthday', theme: 'Pastel Pink & Gold', guests: '20', flavor: 'Vanilla Bean & Raspberry', referenceImages: ['https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80'] } },
-      { 
-        id: 'ORD-1046', 
-        customer: 'Sxn Coder', 
-        date: '2026-04-19', 
-        total: '€55.20', 
-        status: 'pending', 
-        clientId: 'client-sxn',
-        details: { 
-          whatsapp: '+1 555-9999', 
-          pickupDate: '2026-04-30', 
-          pickupPeriod: 'Morning', 
-          pickupNotes: 'Multi-item order test.',
-          items: [
-            { 
-              itemType: 'Standard Cake', 
-              quantity: 1, 
-              flavor: 'Chocolate', 
-              price: '€45.00',
-              occasion: 'Birthday',
-              productImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80',
-              referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80']
-            },
-            { 
-              itemType: 'Box of 6 Cupcakes', 
-              quantity: 2, 
-              flavor: 'Vanilla & Oreo', 
-              price: '€10.20',
-              productImage: 'https://images.unsplash.com/photo-1614707267537-b85af00c4b81?w=500&q=80',
-              referenceImages: []
-            }
-          ]
-        } 
-      },
-      { id: 'ORD-1044', customer: 'Noah Johnson', date: '2026-04-18', total: '€35.00', status: 'pending', clientId: 'client-noah', details: { whatsapp: '+1 555-0200', pickupDate: '2026-04-20', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Chocolate Fudge', referenceImages: null } },
-      { id: 'ORD-1043', customer: 'William Brown', date: '2026-04-18', total: '€48.00', status: 'processing', clientId: 'client-william', details: { whatsapp: '+44 7700 900077', pickupDate: '2026-04-21', pickupPeriod: 'Afternoon', pickupNotes: 'Please text when ready.', itemType: 'Standard Cake', quantity: 1, flavor: 'Red Velvet', referenceImages: ['https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
-      { id: 'ORD-1042', customer: 'Emma Thompson', date: '2026-04-18', total: '€45.00', status: 'processing', clientId: 'client-emma', details: { whatsapp: '+1 555-0322', pickupDate: '2026-04-19', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Standard Cake', quantity: 1, flavor: 'Lemon Blueberry', referenceImages: null } },
-      { id: 'ORD-1041', customer: 'Liam Davies', date: '2026-04-18', total: '€18.00', status: 'completed', clientId: 'client-liam', details: { whatsapp: '+1 555-0100', pickupDate: '2026-04-18', pickupPeriod: 'Afternoon', pickupNotes: '', itemType: 'Assortment Box', quantity: 2, flavor: 'Mini Cupcakes Assorted', referenceImages: null } },
-      { id: 'ORD-1040', customer: 'Sophia Rossi', date: '2026-04-17', total: '€65.00', status: 'completed', clientId: 'client-sophia', details: { whatsapp: '+39 333 444 5555', pickupDate: '2026-04-17', pickupPeriod: 'Evening', pickupNotes: '', itemType: 'Custom Cake', quantity: 1, occasion: 'Anniversary', theme: 'Coffee Lover', guests: '10', flavor: 'Caramel Macchiato', referenceImages: null } },
-      { id: 'ORD-1039', customer: 'Lucas Ali', date: '2026-04-17', total: '€24.50', status: 'completed', clientId: 'client-lucas', details: { whatsapp: '+1 555-9892', pickupDate: '2026-04-17', pickupPeriod: 'Morning', pickupNotes: '', itemType: 'Cupcakes', quantity: 3, flavor: 'Strawberry Shortcake', referenceImages: null } },
-      { id: 'ORD-1038', customer: 'Isabella King', date: '2026-04-16', total: '€85.00', status: 'completed', clientId: 'client-isabella', details: { whatsapp: '+1 555-7788', pickupDate: '2026-04-16', pickupPeriod: 'Afternoon', pickupNotes: 'Handle with care!', itemType: 'Custom Cake', quantity: 1, occasion: 'Wedding Shower', theme: 'Modern Vintage', guests: '30', flavor: 'Matcha Green Tea', referenceImages: ['https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500&q=80', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500&q=80'] } },
-    ];
-    
-    // Combine mock orders and user-placed orders uniquely by ID
-    const combined = [...parsed];
-    mockOrders.forEach(mockOrder => {
-      if (!combined.some(o => o.id === mockOrder.id)) {
-        combined.push(mockOrder);
+  const [allOrders, setAllOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!isSupabaseLive) return;
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
+          
+        if (error) {
+          if (error.message?.includes('fetch')) return;
+          throw error;
+        }
+        
+        if (data) {
+          const formattedData = data.map(dbOrder => ({
+            ...dbOrder,
+            clientId: dbOrder.client_id
+          }));
+          setAllOrders(formattedData);
+        }
+      } catch (err) {
+        console.error('Error fetching orders:', err);
       }
-    });
-    return combined;
-  });
+    };
+    
+    fetchOrders();
+
+    if (isSupabaseLive) {
+      const ordersSubscription = supabase
+        .channel('public:orders')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, payload => {
+          fetchOrders();
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(ordersSubscription);
+      };
+    }
+  }, []);
 
   const [bookedDates, setBookedDates] = useState([]);
   const [viewDate, setViewDate] = useState(new Date());
@@ -457,17 +457,40 @@ export default function AdminApp() {
     }
   };
 
-  const handleUpdateProduct = (id, updatedData) => {
-    setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
-    setEditingProduct(null);
-    triggerToast('Product details updated successfully! ✨', 'success');
+  const handleUpdateProduct = async (id, updatedData) => {
+    // Save to Supabase
+    try {
+      if (isSupabaseLive) {
+        const payload = {
+          name: updatedData.name,
+          price: updatedData.price,
+        };
+        const { error } = await supabase.from('products').update(payload).eq('id', id);
+        if (error && !error.message?.includes('fetch')) throw error;
+      }
+      setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+      setEditingProduct(null);
+      triggerToast('Product details updated successfully! ✨', 'success');
+    } catch (err) {
+      console.error('Error updating product:', err);
+      triggerToast('Error saving to database.', 'error');
+    }
   };
 
-  const handleUpdateStatus = (orderId, newStatus) => {
+  const handleUpdateStatus = async (orderId, newStatus) => {
     setAllOrders(prev => prev.map(order => 
       order.id === orderId ? { ...order, status: newStatus } : order
     ));
     setSelectedOrder(prev => ({ ...prev, status: newStatus }));
+    // Persist to Supabase
+    if (isSupabaseLive) {
+      try {
+        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+        if (error && !error.message?.includes('fetch')) console.error('Error updating order status:', error);
+      } catch (err) {
+        console.error('Error updating order status:', err);
+      }
+    }
   };
 
   const filteredOrders = allOrders.filter(order => {
@@ -1201,6 +1224,10 @@ export default function AdminApp() {
                             onClick={() => {
                               if (confirm('Delete this product?')) {
                                 setAllProducts(prev => prev.filter(p => p.id !== product.id));
+                                if (isSupabaseLive) {
+                                  supabase.from('products').delete().eq('id', product.id)
+                                    .then(({ error }) => { if (error) console.error('Error deleting product:', error); });
+                                }
                               }
                             }}
                             style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 

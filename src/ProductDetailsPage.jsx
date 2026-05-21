@@ -82,12 +82,16 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCupcake = productId.startsWith('cu');
   const isCakePop = productId.startsWith('cp');
   const isMiniCake = productId.startsWith('mc');
-  const isBrownie = productId.startsWith('t1') || productId === 'brownies-box';
+  const isBrownie = productId.startsWith('t1') || productId === 'brownies-box' || productId === 't-featured';
   const isBreakableHeart = productId.startsWith('t2');
   const isCakesicleBulk = productId === 'cakesicles-bulk';
-  const hasSpreads = isCake || isMiniCake || isBrownie || isCupcake;
+  const isCakesicle = productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk;
 
-  const minQty = isMiniCake ? 4 : 1;
+  const minQty = product?.min_qty !== undefined && product?.min_qty !== null ? product.min_qty : (isMiniCake ? 4 : 1);
+
+  const hasSpreads = product?.spreads && product.spreads.length > 0 
+    ? true 
+    : (isCake || isMiniCake || isBrownie || isCupcake);
 
   useEffect(() => {
     if (product) {
@@ -97,8 +101,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   const handleDecrement = () => {
     if (quantity <= minQty) {
-      if (isMiniCake) {
-        setWarningNotification('Minimum order for Mini Cakes is 4 pieces.');
+      if (isMiniCake || minQty > 1) {
+        setWarningNotification(`Minimum order is ${minQty} pieces.`);
       } else {
         setWarningNotification(`Minimum order for this item is ${minQty} piece.`);
       }
@@ -108,13 +112,17 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     }
   };
 
-  const flavors = isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isBreakableHeart || isCakesicleBulk
-                  ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
-                  ['Classic Chocolate'];
+  const flavors = product?.flavours && product.flavours.length > 0
+                  ? product.flavours
+                  : (isCake || isCupcake || productId.startsWith('cp') || productId.startsWith('t3') || productId.startsWith('t4') || isBreakableHeart || isCakesicleBulk
+                     ? ['Vanilla', 'Chocolate', 'Red Velvet'] : 
+                     ['Classic Chocolate']);
 
-  const spreads = isCake 
-    ? ['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher']
-    : ['Nutella', 'Biscoff', 'Pistachio', 'Kinder'];
+  const spreads = product?.spreads && product.spreads.length > 0
+                  ? product.spreads
+                  : (isCake 
+                    ? ['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher']
+                    : ['Nutella', 'Biscoff', 'Pistachio', 'Kinder']);
 
   const basePrice = parseFloat((product?.price || '0').replace(/[^\d.]/g, '')) || 0;
   
@@ -131,9 +139,28 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     cupcakesPerBox = 12;
   }
 
-  const isWhiteChocolateCupcake = ['cu4', 'cu5', 'cu6'].includes(productId);
+  const isWhiteChocolateCupcake = ['cu4', 'cu5', 'cu6'].includes(productId) || (isCupcake && product?.individual_packaging);
+  
+  const showBows = product?.bows !== undefined && product?.bows !== null 
+    ? product.bows 
+    : (!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake && !isCakesicle);
+
+  const showIndividualPackaging = product?.individual_packaging !== undefined && product?.individual_packaging !== null
+    ? product.individual_packaging
+    : (isWhiteChocolateCupcake || isCakesicle);
+
+  const showMessage = product?.has_message !== undefined && product?.has_message !== null
+    ? product.has_message
+    : (!isCupcake && !isCakePop && !isMiniCake);
+
+  const showInnerMessage = product?.has_inner_message !== undefined && product?.has_inner_message !== null
+    ? product.has_inner_message
+    : isBreakableHeart;
+
   const spreadsPrice = (isCupcake && options.spreads.length > 0) ? (0.45 * cupcakesPerBox) : 0;
-  const packagingPrice = (isWhiteChocolateCupcake && options.individualPackaging) ? (0.15 * cupcakesPerBox) : 0;
+  const packagingPrice = (showIndividualPackaging && options.individualPackaging)
+    ? (isCakesicle ? 0.15 : 0.15 * cupcakesPerBox)
+    : 0;
 
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
   const unitTotal = currentUnitPrice + bowsTotal + spreadsPrice + packagingPrice;
@@ -303,15 +330,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {((!isCupcake || isWhiteChocolateCupcake) && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake) && (
+              {(showBows || showIndividualPackaging) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
                     <span className="option-label-hint"> — tap to add</span>
                   </label>
                   <div className="addon-grid">
-                    {/* Bows - removed for Cakesicles via condition */}
-                    {!isCupcake && !isCakePop && !isBrownie && !isBreakableHeart && !isMiniCake && !(productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk) && (
+                    {showBows && (
                       <button
                         className={`addon-btn ${options.bows ? 'active' : ''}`}
                         onClick={() => setOptions({...options, bows: !options.bows})}
@@ -322,27 +348,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       </button>
                     )}
 
-                    {/* Individual Packaging for White Chocolate Cupcake */}
-                    {isWhiteChocolateCupcake && (
+                    {showIndividualPackaging && (
                       <button
                         className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
                         onClick={() => setOptions({...options, individualPackaging: !options.individualPackaging})}
                       >
                         <span className="addon-icon">📦</span>
                         <span className="addon-label">Individual Packaging</span>
-                        <span className="addon-price">+€{(0.15 * cupcakesPerBox).toFixed(2)}</span>
-                      </button>
-                    )}
-
-                    {/* Individual Packaging for Cakesicles */}
-                    {(productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk) && (
-                      <button
-                        className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, individualPackaging: !options.individualPackaging})}
-                      >
-                        <span className="addon-icon">📦</span>
-                        <span className="addon-label">Individual Packaging</span>
-                        <span className="addon-price">+€0.15 per piece</span>
+                        <span className="addon-price">+€{isCakesicle ? '0.15 per piece' : (0.15 * cupcakesPerBox).toFixed(2)}</span>
                       </button>
                     )}
                   </div>
@@ -350,7 +363,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Message */}
-              {!isCupcake && !isCakePop && !isMiniCake && (
+              {showMessage && (
                 <div className="option-group">
                   <label>{isBreakableHeart ? 'Message / Text on Heart' : 'Message / Text on Product'}</label>
                   <input 
@@ -363,8 +376,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
               )}
 
-              {/* Message Inside the Heart (Only for Breakable Heart) */}
-              {isBreakableHeart && (
+              {/* Message Inside the Heart */}
+              {showInnerMessage && (
                 <div className="option-group animate-in fade-in slide-in-from-top-1">
                   <label>Personalised Message Inside the Heart</label>
                   <textarea 

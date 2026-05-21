@@ -4,6 +4,7 @@ import './MenuPage.css';
 import Cake3D from './Cake3D';
 
 import { menuData } from './data/menuData';
+import { supabase } from './supabase';
 import SafeImage from './components/SafeImage';
 
 const MAX_LAYERS = 3;
@@ -252,9 +253,87 @@ export default function MenuPage({
   const [cakeLayers, setCakeLayers] = useState([]);
   const [toastMessage, setToastMessage] = useState(null);
   const [selectedLayerIndex, setSelectedLayerIndex] = useState(null);
+  const [liveProducts, setLiveProducts] = useState([]);
 
   useEffect(() => {
-    const data = menuData.find(c => c.category === activeCategory);
+    const fetchProducts = async () => {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase.from('products').select('*');
+        if (error && !error.message?.includes('fetch')) throw error;
+        if (data) setLiveProducts(data);
+      } catch (err) {
+        console.error('Error fetching live products:', err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const mergedMenuData = React.useMemo(() => {
+    if (liveProducts.length === 0) return menuData;
+
+    return menuData.map(categoryObj => {
+      const newCategoryObj = { ...categoryObj };
+      
+      if (newCategoryObj.items) {
+        newCategoryObj.items = newCategoryObj.items.map(item => {
+          const liveItem = liveProducts.find(p => p.id === item.id);
+          if (liveItem) {
+            return {
+              ...item,
+              name: liveItem.name,
+              price: liveItem.price,
+              description: liveItem.description,
+              options: liveItem.options || item.options,
+              flavours: liveItem.flavours,
+              spreads: liveItem.spreads,
+              status: liveItem.status,
+              bows: liveItem.bows,
+              individual_packaging: liveItem.individual_packaging,
+              min_qty: liveItem.min_qty,
+              has_message: liveItem.has_message,
+              has_inner_message: liveItem.has_inner_message
+            };
+          }
+          return item;
+        });
+      }
+
+      if (newCategoryObj.sections) {
+        newCategoryObj.sections = newCategoryObj.sections.map(section => {
+          return {
+            ...section,
+            items: section.items.map(item => {
+              const liveItem = liveProducts.find(p => p.id === item.id);
+              if (liveItem) {
+                return {
+                  ...item,
+                  name: liveItem.name,
+                  price: liveItem.price,
+                  description: liveItem.description,
+                  options: liveItem.options || item.options,
+                  flavours: liveItem.flavours,
+                  spreads: liveItem.spreads,
+                  status: liveItem.status,
+                  bows: liveItem.bows,
+                  individual_packaging: liveItem.individual_packaging,
+                  min_qty: liveItem.min_qty,
+                  has_message: liveItem.has_message,
+                  has_inner_message: liveItem.has_inner_message
+                };
+              }
+              return item;
+            })
+          };
+        });
+      }
+
+      return newCategoryObj;
+    });
+  }, [liveProducts]);
+
+  useEffect(() => {
+    const data = mergedMenuData.find(c => c.category === activeCategory);
     if (data?.sections) {
       const isAlreadyValid = data.sections.some(s => s.title === activeSubcategory);
       if (!isAlreadyValid) {
@@ -339,7 +418,7 @@ export default function MenuPage({
   const layerLabel = { '6round': '6" Round', '8round': '8" Round', '6heart': '6" Heart', '8heart': '8" Heart' };
   const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circle size={16} />;
 
-  const activeData = menuData.find(c => c.category === activeCategory) || menuData[0];
+  const activeData = mergedMenuData.find(c => c.category === activeCategory) || mergedMenuData[0];
 
   return (
     <div className="menu-page">
@@ -349,7 +428,7 @@ export default function MenuPage({
       </div>
 
       <div className="menu-categories">
-        {menuData.map(cat => (
+        {mergedMenuData.map(cat => (
           <button 
             key={cat.category}
             className={`category-btn ${activeCategory === cat.category ? 'active' : ''}`}
