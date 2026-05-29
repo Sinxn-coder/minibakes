@@ -166,6 +166,17 @@ export default function AdminApp() {
   ];
 
   const [allProducts, setAllProducts] = useState([]);
+  const [productCategoryFilter, setProductCategoryFilter] = useState('All');
+
+  const productCategories = useMemo(() => {
+    const cats = new Set(allProducts.map(p => p.category).filter(Boolean));
+    return ['All', ...Array.from(cats)];
+  }, [allProducts]);
+  
+  const filteredProducts = useMemo(() => {
+    if (productCategoryFilter === 'All') return allProducts;
+    return allProducts.filter(p => p.category === productCategoryFilter);
+  }, [allProducts, productCategoryFilter]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -1281,9 +1292,18 @@ export default function AdminApp() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
                 <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>All Products</h2>
+                <select 
+                  value={productCategoryFilter} 
+                  onChange={(e) => setProductCategoryFilter(e.target.value)}
+                  style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff', fontSize: '14px', outline: 'none', cursor: 'pointer', minWidth: '150px' }}
+                >
+                  {productCategories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-                {allProducts.map(product => (
+                {filteredProducts.map(product => (
                   <div key={product.id} style={{ height: '240px', position: 'relative' }}>
                     <div className="premium-card" style={{ 
                       position: 'absolute',
