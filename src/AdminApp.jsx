@@ -46,6 +46,89 @@ const AdminProductImage = ({ product }) => {
   );
 };
 
+const ProductOptionsBuilder = ({ options, setOptions }) => {
+  const [newOptionName, setNewOptionName] = useState('');
+  
+  const addOptionGroup = () => {
+    if (!newOptionName.trim()) return;
+    if (options.some(o => o.name.toLowerCase() === newOptionName.toLowerCase())) {
+      alert("Option already exists!");
+      return;
+    }
+    setOptions([...options, { name: newOptionName.trim(), values: [] }]);
+    setNewOptionName('');
+  };
+
+  const removeOptionGroup = (index) => {
+    setOptions(options.filter((_, i) => i !== index));
+  };
+
+  const addValue = (groupIndex, value) => {
+    if (!value.trim()) return;
+    const newOptions = [...options];
+    if (!newOptions[groupIndex].values.includes(value.trim())) {
+      newOptions[groupIndex].values.push(value.trim());
+      setOptions(newOptions);
+    }
+  };
+
+  const removeValue = (groupIndex, valueIndex) => {
+    const newOptions = [...options];
+    newOptions[groupIndex].values.splice(valueIndex, 1);
+    setOptions(newOptions);
+  };
+
+  return (
+    <div style={{ marginTop: '16px', padding: '16px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
+      <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '12px' }}>Product Options / Attributes</label>
+      
+      {options.map((opt, gIdx) => (
+        <div key={gIdx} style={{ marginBottom: '16px', padding: '12px', background: '#fff', borderRadius: '8px', border: '1px solid #ddd' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <span style={{ fontWeight: '600', fontSize: '13px', color: '#1a1a1a' }}>{opt.name}</span>
+            <button onClick={() => removeOptionGroup(gIdx)} style={{ background: 'none', border: 'none', color: '#e53935', cursor: 'pointer', fontSize: '12px', fontWeight: '500' }}>Remove Group</button>
+          </div>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+            {opt.values.map((val, vIdx) => (
+              <div key={vIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#FFF0F4', color: '#800000', padding: '4px 10px', borderRadius: '16px', fontSize: '12px', fontWeight: '600' }}>
+                {val}
+                <X size={12} style={{ cursor: 'pointer', opacity: 0.7 }} onClick={() => removeValue(gIdx, vIdx)} />
+              </div>
+            ))}
+          </div>
+          
+          <input 
+            type="text" 
+            placeholder={`Add a ${opt.name.toLowerCase()} value and press Enter`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                addValue(gIdx, e.target.value);
+                e.target.value = '';
+              }
+            }}
+            style={{ width: '100%', padding: '8px 12px', border: '1px solid #eee', borderRadius: '6px', fontSize: '13px', outline: 'none', background: '#fcfcfc' }}
+          />
+        </div>
+      ))}
+
+      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+        <input 
+          type="text" 
+          value={newOptionName} 
+          onChange={e => setNewOptionName(e.target.value)} 
+          placeholder="New Option Name (e.g. Sizes, Fillings)" 
+          style={{ flex: 1, padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
+        />
+        <button onClick={addOptionGroup} style={{ padding: '8px 16px', background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
+          Add Group
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const WhatsAppIcon = ({ size = 16, ...props }) => (
   <svg 
     viewBox="0 0 24 24" 
@@ -247,6 +330,7 @@ export default function AdminApp() {
   }, []);
 
   const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProductOptions, setEditingProductOptions] = useState([]);
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [newProductData, setNewProductData] = useState({
     name: '',
@@ -254,8 +338,7 @@ export default function AdminApp() {
     category: 'Cakes',
     status: 'In Stock',
     file: null,
-    flavours: [],
-    spreads: []
+    options: []
   });
 
   const handleConfirmAddProduct = async () => {
@@ -278,14 +361,19 @@ export default function AdminApp() {
         finalImgUrl = publicUrl;
       }
       
+      const flavoursGroup = newProductData.options.find(o => o.name.toLowerCase() === 'flavors' || o.name.toLowerCase() === 'flavours');
+      const spreadsGroup = newProductData.options.find(o => o.name.toLowerCase() === 'spreads');
+      const otherOptions = newProductData.options.filter(o => !['flavors', 'flavours', 'spreads'].includes(o.name.toLowerCase()));
+      
       const payload = {
         id: newId,
         name: newProductData.name,
         price: newProductData.price,
         category: newProductData.category,
         status: newProductData.status,
-        flavours: newProductData.flavours,
-        spreads: newProductData.spreads,
+        flavours: flavoursGroup ? flavoursGroup.values : [],
+        spreads: spreadsGroup ? spreadsGroup.values : [],
+        options: otherOptions,
         created_at: new Date().toISOString()
       };
       if (finalImgUrl) payload.img = finalImgUrl;
@@ -297,7 +385,7 @@ export default function AdminApp() {
       
       setAllProducts([payload, ...allProducts]);
       setIsAddProductModalOpen(false);
-      setNewProductData({ name: '', price: '', category: 'Cakes', status: 'In Stock', file: null, flavours: [], spreads: [] });
+      setNewProductData({ name: '', price: '', category: 'Cakes', status: 'In Stock', file: null, options: [] });
       triggerToast('Product added successfully!', 'success');
     } catch (err) {
       console.error('Error adding product:', err);
@@ -650,12 +738,17 @@ export default function AdminApp() {
         }
       }
 
+      const flavoursGroup = updatedData.options?.find(o => o.name.toLowerCase() === 'flavors' || o.name.toLowerCase() === 'flavours');
+      const spreadsGroup = updatedData.options?.find(o => o.name.toLowerCase() === 'spreads');
+      const otherOptions = updatedData.options?.filter(o => !['flavors', 'flavours', 'spreads'].includes(o.name.toLowerCase())) || [];
+
       if (isSupabaseLive) {
         const payload = {
           name: updatedData.name,
           price: updatedData.price,
-          flavours: updatedData.flavours,
-          spreads: updatedData.spreads,
+          flavours: flavoursGroup ? flavoursGroup.values : [],
+          spreads: spreadsGroup ? spreadsGroup.values : [],
+          options: otherOptions,
           status: updatedData.status
         };
         if (finalImgUrl) payload.img = finalImgUrl;
@@ -672,7 +765,12 @@ export default function AdminApp() {
         }
       }
       
-      const updateObj = { ...updatedData };
+      const updateObj = { 
+        ...updatedData, 
+        flavours: flavoursGroup ? flavoursGroup.values : [],
+        spreads: spreadsGroup ? spreadsGroup.values : [],
+        options: otherOptions
+      };
       delete updateObj.file;
       if (finalImgUrl) updateObj.img = finalImgUrl;
       updateObj.isNew = false;
@@ -1481,7 +1579,14 @@ export default function AdminApp() {
 
                           <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
                             <button 
-                              onClick={() => setEditingProduct(product.id)}
+                              onClick={() => {
+                                setEditingProduct(product.id);
+                                const currentOptions = [];
+                                if (product.flavours && product.flavours.length > 0) currentOptions.push({ name: 'Flavours', values: product.flavours });
+                                if (product.spreads && product.spreads.length > 0) currentOptions.push({ name: 'Spreads', values: product.spreads });
+                                if (product.options && product.options.length > 0) currentOptions.push(...product.options);
+                                setEditingProductOptions(currentOptions);
+                              }}
                               style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
                             >
                               Edit Item
@@ -1569,23 +1674,10 @@ export default function AdminApp() {
                            </div>
                          </div>
                          
-                         <div>
-                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>FLAVOURS (Comma separated)</label>
-                            <textarea 
-                              defaultValue={product.flavours?.join(', ')} 
-                              id={`edit-p-flavours-${product.id}`}
-                              placeholder="e.g. Chocolate, Vanilla"
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '50px', resize: 'none' }}
-                            />
-                         </div>
-
-                         <div>
-                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>SPREADS (Comma separated)</label>
-                            <textarea 
-                              defaultValue={product.spreads?.join(', ')} 
-                              id={`edit-p-spreads-${product.id}`}
-                              placeholder="e.g. Nutella, Biscoff"
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', minHeight: '50px', resize: 'none' }}
+                         <div style={{ marginTop: '8px' }}>
+                            <ProductOptionsBuilder 
+                              options={editingProductOptions} 
+                              setOptions={setEditingProductOptions} 
                             />
                          </div>
 
@@ -1597,8 +1689,7 @@ export default function AdminApp() {
                                   name: document.getElementById(`edit-p-name-${product.id}`).value,
                                   price: document.getElementById(`edit-p-price-${product.id}`).value,
                                   status: document.getElementById(`edit-p-status-${product.id}`).value,
-                                  flavours: document.getElementById(`edit-p-flavours-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
-                                  spreads: document.getElementById(`edit-p-spreads-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
+                                  options: editingProductOptions,
                                   file: newProductImageFile
                                 });
                               }}
@@ -2892,6 +2983,11 @@ export default function AdminApp() {
                   <input type="file" accept="image/*" onChange={e => e.target.files && e.target.files[0] && setNewProductData({...newProductData, file: e.target.files[0]})} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
                 </div>
               </div>
+
+              <ProductOptionsBuilder 
+                options={newProductData.options} 
+                setOptions={opts => setNewProductData({...newProductData, options: opts})} 
+              />
             </div>
 
             <div style={{ marginTop: '30px', display: 'flex', gap: '12px' }}>
