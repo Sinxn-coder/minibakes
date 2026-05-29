@@ -1304,16 +1304,16 @@ export default function AdminApp() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                 {filteredProducts.map(product => (
-                  <div key={product.id} style={{ height: '240px', position: 'relative' }}>
+                  <div key={product.id} style={{ height: '340px', position: 'relative' }}>
                     <div className="premium-card" style={{ 
                       position: 'absolute',
                       top: 0, left: 0, right: 0,
-                      height: editingProduct === product.id ? '450px' : '100%',
+                      height: editingProduct === product.id ? '580px' : '100%',
                       zIndex: editingProduct === product.id ? 50 : 1,
-                      padding: '20px', 
+                      padding: '0', 
                       border: editingProduct === product.id ? '2px solid #800000' : '1px solid #e9ecef', 
                       borderRadius: '12px', 
-                      boxShadow: editingProduct === product.id ? '0 12px 30px rgba(0,0,0,0.15)' : '0 2px 8px rgba(0,0,0,0.02)',
+                      boxShadow: editingProduct === product.id ? '0 12px 30px rgba(0,0,0,0.15)' : '0 4px 12px rgba(0,0,0,0.04)',
                       background: '#fff',
                       transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                       overflow: 'hidden',
@@ -1330,64 +1330,78 @@ export default function AdminApp() {
                         display: 'flex',
                         flexDirection: 'column'
                       }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                           <h3 style={{ margin: 0, fontSize: '16px', color: '#111', fontWeight: '700' }}>{product.name}</h3>
-                           <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '12px' }}>{product.status}</span>
+                        {/* PRODUCT IMAGE */}
+                        <div style={{
+                          height: '150px',
+                          width: '100%',
+                          backgroundColor: '#f8f9fa',
+                          backgroundImage: `url(${product.img || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          position: 'relative',
+                          borderBottom: '1px solid #eee'
+                        }}>
+                          <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ position: 'absolute', top: '12px', right: '12px', fontSize: '10px', padding: '4px 10px', borderRadius: '12px', background: product.status === 'In Stock' ? 'rgba(232,245,233,0.9)' : 'rgba(255,235,238,0.9)', backdropFilter: 'blur(4px)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>{product.status}</span>
                         </div>
-                        
-                        <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
-                        
-                        {product.flavours && product.flavours.length > 0 && (
-                          <div style={{ marginBottom: '8px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                              {product.flavours.slice(0, 3).map((f, idx) => (
-                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
-                              ))}
-                              {product.flavours.length > 3 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.flavours.length - 3} more</span>}
-                            </div>
-                          </div>
-                        )}
 
-                        {product.spreads && product.spreads.length > 0 && (
-                          <div style={{ marginBottom: '16px' }}>
-                            <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                              {product.spreads.slice(0, 2).map((s, idx) => (
-                                <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
-                              ))}
-                              {product.spreads.length > 2 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.spreads.length - 2} more</span>}
+                        {/* PRODUCT INFO */}
+                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#111', fontWeight: '700', lineHeight: '1.3' }}>{product.name}</h3>
+                          <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
+                          
+                          {product.flavours && product.flavours.length > 0 && (
+                            <div style={{ marginBottom: '8px' }}>
+                              <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                {product.flavours.slice(0, 3).map((f, idx) => (
+                                  <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
+                                ))}
+                                {product.flavours.length > 3 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.flavours.length - 3} more</span>}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
-                        <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
-                          <button 
-                            onClick={() => setEditingProduct(product.id)}
-                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
-                          >
-                            Edit Item
-                          </button>
-                          <button 
-                            onClick={() => {
-                              if (confirm('Delete this product?')) {
-                                setAllProducts(prev => prev.filter(p => p.id !== product.id));
-                                if (isSupabaseLive) {
-                                  supabase.from('products').delete().eq('id', product.id)
-                                    .then(({ error }) => { if (error) console.error('Error deleting product:', error); });
+                          {product.spreads && product.spreads.length > 0 && (
+                            <div style={{ marginBottom: '12px' }}>
+                              <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                {product.spreads.slice(0, 2).map((s, idx) => (
+                                  <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
+                                ))}
+                                {product.spreads.length > 2 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.spreads.length - 2} more</span>}
+                              </div>
+                            </div>
+                          )}
+
+                          <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => setEditingProduct(product.id)}
+                              style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
+                            >
+                              Edit Item
+                            </button>
+                            <button 
+                              onClick={() => {
+                                if (confirm('Delete this product?')) {
+                                  setAllProducts(prev => prev.filter(p => p.id !== product.id));
+                                  if (isSupabaseLive) {
+                                    supabase.from('products').delete().eq('id', product.id)
+                                      .then(({ error }) => { if (error) console.error('Error deleting product:', error); });
+                                  }
                                 }
-                              }
-                            }}
-                            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
-                            title="Delete Product"
-                          >
-                             <Trash2 size={16} />
-                          </button>
+                              }}
+                              style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+                              title="Delete Product"
+                            >
+                               <Trash2 size={16} />
+                            </button>
+                          </div>
                         </div>
                       </div>
 
                       {/* EDIT STATE LAYER */}
                       <div style={{
+                        padding: '20px',
                         transition: 'all 0.5s ease-in-out',
                         transform: editingProduct === product.id ? 'translateY(0)' : 'translateY(100px)',
                         opacity: editingProduct === product.id ? 1 : 0,
