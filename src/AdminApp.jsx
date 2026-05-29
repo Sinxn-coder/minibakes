@@ -232,7 +232,7 @@ const analyticsData = {
   }
 };
 
-export default function AdminApp() {
+function AdminAppContent() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState('this-month');
   const [orderSearchQuery, setOrderSearchQuery] = useState('');
@@ -886,7 +886,7 @@ export default function AdminApp() {
           })}
         </nav>
         <div style={{ marginTop: 'auto', padding: '0 16px' }}>
-            <button className="admin-nav-item" style={{ width: '100%', color: '#666' }} onClick={() => window.location.href = '/'}>
+            <button className="admin-nav-item" style={{ width: '100%', color: '#666' }} onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}>
               <LogOut size={20} />
               Exit Admin
             </button>
@@ -3031,6 +3031,70 @@ export default function AdminApp() {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+export default function AdminApp() {
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', color: '#800000', fontWeight: 'bold' }}>Loading Admin Panel...</div>;
+  }
+
+  if (!session) {
+    return <AdminLogin />;
+  }
+
+  return <AdminAppContent />;
+}
+
+function AdminLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) setError(error.message);
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
+      <form onSubmit={handleLogin} style={{ background: '#fff', padding: '40px', borderRadius: '16px', boxShadow: '0 12px 40px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#800000', fontWeight: '800' }}>Admin Login</h2>
+        {error && <div style={{ background: '#ffebee', color: '#c62828', padding: '12px', borderRadius: '8px', marginBottom: '16px', fontSize: '14px', textAlign: 'center', fontWeight: '600' }}>{error}</div>}
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#444' }}>Email</label>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#444' }}>Password</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} />
+        </div>
+        <button type="submit" disabled={loading} style={{ width: '100%', padding: '14px', background: loading ? '#aaa' : '#800000', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}>
+          {loading ? 'Authenticating...' : 'Sign In'}
+        </button>
+      </form>
     </div>
   );
 }
