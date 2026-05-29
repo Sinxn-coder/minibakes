@@ -11,6 +11,41 @@ menuData.forEach(cat => {
   if (cat.sections) cat.sections.forEach(sec => sec.items.forEach(item => defaultProductImages[item.id] = item.img));
 });
 
+const AdminProductImage = ({ product }) => {
+  const [loaded, setLoaded] = useState(false);
+  const src = product.img || defaultProductImages[product.id] || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+  
+  return (
+    <div style={{
+      height: '150px',
+      width: '100%',
+      backgroundColor: '#f0f0f0',
+      position: 'relative',
+      borderBottom: '1px solid #eee',
+      overflow: 'hidden'
+    }}>
+      {!loaded && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%)',
+          backgroundSize: '200% 100%',
+          animation: 'admin-shimmer 1.5s infinite linear'
+        }} />
+      )}
+      <img 
+        src={src} 
+        alt={product.name}
+        onLoad={() => setLoaded(true)}
+        style={{
+          width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+          opacity: loaded ? 1 : 0, transition: 'opacity 0.3s ease'
+        }}
+      />
+      <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 10, fontSize: '10px', padding: '4px 10px', borderRadius: '12px', background: product.status === 'In Stock' ? 'rgba(232,245,233,0.9)' : 'rgba(255,235,238,0.9)', backdropFilter: 'blur(4px)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>{product.status}</span>
+    </div>
+  );
+};
+
 const WhatsAppIcon = ({ size = 16, ...props }) => (
   <svg 
     viewBox="0 0 24 24" 
@@ -1413,18 +1448,7 @@ export default function AdminApp() {
                         flexDirection: 'column'
                       }}>
                         {/* PRODUCT IMAGE */}
-                        <div style={{
-                          height: '150px',
-                          width: '100%',
-                          backgroundColor: '#f8f9fa',
-                          backgroundImage: `url(${product.img || defaultProductImages[product.id] || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          position: 'relative',
-                          borderBottom: '1px solid #eee'
-                        }}>
-                          <span className={`status-badge ${product.status === 'In Stock' ? 'completed' : 'cancelled'}`} style={{ position: 'absolute', top: '12px', right: '12px', fontSize: '10px', padding: '4px 10px', borderRadius: '12px', background: product.status === 'In Stock' ? 'rgba(232,245,233,0.9)' : 'rgba(255,235,238,0.9)', backdropFilter: 'blur(4px)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>{product.status}</span>
-                        </div>
+                        <AdminProductImage product={product} />
 
                         {/* PRODUCT INFO */}
                         <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
