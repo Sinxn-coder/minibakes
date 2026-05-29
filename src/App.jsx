@@ -517,9 +517,9 @@ function App() {
   };
 
   const [featuredItems, setFeaturedItems] = useState([
-    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: '€xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
-    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: '€xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
-    { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: '€xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
+    { id: 't-featured', img: brownieImg, name: 'Brownie Selection', price: '', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.' },
+    { id: 'cu-featured', img: cupcakeImg, name: 'Signature Cupcakes', price: '', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.' },
+    { id: 'c-featured', img: cakeImg, name: 'Best Seller cake', price: '', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.' },
   ]);
 
   useEffect(() => {
@@ -845,10 +845,6 @@ function App() {
                 <span className="hero-serif-accent">celebration</span>
               </h1>
 
-              <p className="hero-subtext">
-                Bespoke buttercream cakes, decadent sweet treats, and hands-on cake decorating masterclasses handcrafted with love.
-              </p>
-
               <div className="hero-cta-buttons">
                 <button className="hero-cta-btn primary" onClick={() => navigateTo('menu')}>
                   Browse Menu
@@ -946,8 +942,8 @@ function App() {
               To make it live, you can use a free service like Behold.so 
               and paste their embed code below. */}
               <div className="insta-row">
-                {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <InstaPost key={i} post={instaPosts[i]} index={i} />
+                {[...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
+                  <InstaPost key={i} post={post} index={i} />
                 ))}
               </div>
 

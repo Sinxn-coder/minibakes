@@ -70,7 +70,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     notes: '',
     bows: false,
     individualPackaging: false,
-    boxSize: product?.options ? product.options[0].value : ''
+    boxSize: product?.options ? product.options[0].value : '',
+    ediblePrinting: false
   });
 
   const BOW_ADDON_PRICE = 5;
@@ -157,6 +158,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     ? product.has_inner_message
     : isBreakableHeart;
 
+  const showEdiblePrinting = product?.has_edible_printing !== undefined && product?.has_edible_printing !== null
+    ? product.has_edible_printing
+    : isCakesicle;
+
   const spreadsPrice = (isCupcake && options.spreads.length > 0) ? (0.45 * cupcakesPerBox) : 0;
   const packagingPrice = (showIndividualPackaging && options.individualPackaging)
     ? (isCakesicle ? 0.15 : 0.15 * cupcakesPerBox)
@@ -164,7 +169,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   const bowsTotal = options.bows ? BOW_ADDON_PRICE : 0;
   const unitTotal = currentUnitPrice + bowsTotal + spreadsPrice + packagingPrice;
-  const grandTotal = unitTotal * quantity;
+  const ediblePrintingTotal = options.ediblePrinting ? 12 : 0;
+  const grandTotal = (unitTotal * quantity) + ediblePrintingTotal;
 
   return (
     <div className="product-details-page">
@@ -330,7 +336,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Add-Ons */}
-              {(showBows || showIndividualPackaging) && (
+              {(showBows || showIndividualPackaging || showEdiblePrinting) && (
                 <div className="option-group">
                   <label>
                     Add-Ons
@@ -356,6 +362,17 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                         <span className="addon-icon">📦</span>
                         <span className="addon-label">Individual Packaging</span>
                         <span className="addon-price">+€{isCakesicle ? '0.15 per piece' : (0.15 * cupcakesPerBox).toFixed(2)}</span>
+                      </button>
+                    )}
+
+                    {showEdiblePrinting && (
+                      <button
+                        className={`addon-btn ${options.ediblePrinting ? 'active' : ''}`}
+                        onClick={() => setOptions({...options, ediblePrinting: !options.ediblePrinting})}
+                      >
+                        <span className="addon-icon">🖨️</span>
+                        <span className="addon-label">Edible Printing</span>
+                        <span className="addon-price">+€12.00</span>
                       </button>
                     )}
                   </div>
@@ -471,6 +488,13 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     <div className="price-row price-row-addon">
                       <span className="price-row-label">↳ Qty × {quantity}</span>
                       <span className="price-row-value">€{unitTotal.toFixed(2)} each</span>
+                    </div>
+                  )}
+
+                  {options.ediblePrinting && (
+                    <div className="price-row price-row-addon">
+                      <span className="price-row-label">↳ Edible Printing 🖨️</span>
+                      <span className="price-row-value">+€12.00</span>
                     </div>
                   )}
 

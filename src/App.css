@@ -584,7 +584,7 @@ body {
 
 .hero-top-left-content {
   position: absolute;
-  top: 9rem;
+  top: 13rem;
   left: 4rem;
   z-index: 20;
   text-align: left;
@@ -594,6 +594,7 @@ body {
 .hero-celebration-text {
   color: var(--secondary);
   line-height: 1.1;
+  margin-bottom: 2rem;
 }
 
 /* Hero Rating Badge */

@@ -292,7 +292,10 @@ export default function MenuPage({
               individual_packaging: liveItem.individual_packaging,
               min_qty: liveItem.min_qty,
               has_message: liveItem.has_message,
-              has_inner_message: liveItem.has_inner_message
+              has_inner_message: liveItem.has_inner_message,
+              has_edible_printing: liveItem.has_edible_printing,
+              img: liveItem.img || item.img,
+              images: liveItem.img ? [liveItem.img, ...(item.images ? item.images.slice(1) : [])] : item.images
             };
           }
           return item;
@@ -319,7 +322,10 @@ export default function MenuPage({
                   individual_packaging: liveItem.individual_packaging,
                   min_qty: liveItem.min_qty,
                   has_message: liveItem.has_message,
-                  has_inner_message: liveItem.has_inner_message
+                  has_inner_message: liveItem.has_inner_message,
+                  has_edible_printing: liveItem.has_edible_printing,
+                  img: liveItem.img || item.img,
+                  images: liveItem.img ? [liveItem.img, ...(item.images ? item.images.slice(1) : [])] : item.images
                 };
               }
               return item;

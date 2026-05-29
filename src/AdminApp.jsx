@@ -391,6 +391,10 @@ export default function AdminApp() {
   const [imageModal, setImageModal] = useState(null); // { slot: 1 } or null
   const [newHighlight, setNewHighlight] = useState({ title: '', text: '' });
   const [newImageUrl, setNewImageUrl] = useState('');
+  const [newImageFile, setNewImageFile] = useState(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [newProductImageFile, setNewProductImageFile] = useState(null);
+  const [isUploadingProductImage, setIsUploadingProductImage] = useState(false);
 
   // Fetch featured items from Supabase
   useEffect(() => {
@@ -431,6 +435,52 @@ export default function AdminApp() {
     fetchFeatured();
   }, []);
 
+  const handleImageSave = async () => {
+    if (!imageModal) return;
+    const slot = imageModal.slot;
+    const item = featuredDesserts.find(d => d.slot === slot);
+    let finalImageUrl = newImageUrl || imageModal.currentImg;
+
+    if (newImageFile) {
+      setIsUploadingImage(true);
+      try {
+        const fileExt = newImageFile.name.split('.').pop();
+        const fileName = `slot-${slot}-${Date.now()}.${fileExt}`;
+        
+        // Upload new image
+        const { error: uploadError } = await supabase.storage
+          .from('featured-images')
+          .upload(fileName, newImageFile);
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('featured-images')
+          .getPublicUrl(fileName);
+          
+        finalImageUrl = publicUrl;
+
+        // Delete old image if it's hosted on our Supabase bucket
+        if (item.img && item.img.includes('featured-images')) {
+          const oldUrlParts = item.img.split('/');
+          const oldFileName = oldUrlParts[oldUrlParts.length - 1];
+          await supabase.storage.from('featured-images').remove([oldFileName]);
+        }
+      } catch (err) {
+        console.error('Error uploading image:', err);
+        triggerToast('Failed to upload image', 'error');
+        setIsUploadingImage(false);
+        return;
+      }
+      setIsUploadingImage(false);
+    }
+
+    handleUpdateFeatured(slot, { ...item, img: finalImageUrl });
+    setNewImageUrl('');
+    setNewImageFile(null);
+    setImageModal(null);
+  };
+
   const handleUpdateFeatured = async (slot, updatedItem) => {
     try {
       const { error } = await supabase
@@ -459,25 +509,103 @@ export default function AdminApp() {
 
   const handleUpdateProduct = async (id, updatedData) => {
     // Save to Supabase
+    setIsUploadingProductImage(true);
     try {
+      let finalImgUrl = undefined;
+      const product = allProducts.find(p => p.id === id);
+
+      if (updatedData.file) {
+        const fileExt = updatedData.file.name.split('.').pop();
+        const fileName = `product-${id}-${Date.now()}.${fileExt}`;
+        
+        // Upload new image
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, updatedData.file);
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName);
+          
+        finalImgUrl = publicUrl;
+
+        // Delete old image if it was in Supabase
+        if (product.img && product.img.includes('product-images')) {
+          const oldUrlParts = product.img.split('/');
+          const oldFileName = oldUrlParts[oldUrlParts.length - 1];
+          await supabase.storage.from('product-images').remove([oldFileName]);
+        }
+      }
+
       if (isSupabaseLive) {
         const payload = {
           name: updatedData.name,
           price: updatedData.price,
+          flavours: updatedData.flavours,
+          spreads: updatedData.spreads,
+          status: updatedData.status
         };
+        if (finalImgUrl) payload.img = finalImgUrl;
+
         const { error } = await supabase.from('products').update(payload).eq('id', id);
         if (error && !error.message?.includes('fetch')) throw error;
       }
-      setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+      
+      const updateObj = { ...updatedData };
+      delete updateObj.file;
+      if (finalImgUrl) updateObj.img = finalImgUrl;
+
+      setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updateObj } : p));
       setEditingProduct(null);
+      setNewProductImageFile(null);
       triggerToast('Product details updated successfully! ✨', 'success');
     } catch (err) {
       console.error('Error updating product:', err);
       triggerToast('Error saving to database.', 'error');
     }
+    setIsUploadingProductImage(false);
   };
 
   const handleUpdateStatus = async (orderId, newStatus) => {
+    // Auto-delete inspiration images if order is completed
+    if (newStatus === 'completed' && isSupabaseLive) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (order && order.details) {
+        let urlsToDelete = [];
+        
+        // Single item order
+        if (order.details.referenceImg) urlsToDelete.push(order.details.referenceImg);
+        if (order.details.referenceImages) urlsToDelete.push(...order.details.referenceImages);
+        
+        // Multi-item order
+        if (order.details.items) {
+          order.details.items.forEach(item => {
+            if (item.referenceImg) urlsToDelete.push(item.referenceImg);
+            if (item.referenceImages) urlsToDelete.push(...item.referenceImages);
+          });
+        }
+        
+        // Filter Supabase storage URLs and extract file names
+        const fileNamesToDelete = urlsToDelete
+          .filter(url => typeof url === 'string' && url.includes('customer-uploads'))
+          .map(url => {
+            const parts = url.split('/');
+            return parts[parts.length - 1];
+          });
+          
+        if (fileNamesToDelete.length > 0) {
+          try {
+            await supabase.storage.from('customer-uploads').remove(fileNamesToDelete);
+            console.log('Cleaned up inspiration images:', fileNamesToDelete);
+          } catch (err) {
+            console.error('Failed to clean up inspiration images:', err);
+          }
+        }
+      }
+    }
+
     setAllOrders(prev => prev.map(order => 
       order.id === orderId ? { ...order, status: newStatus } : order
     ));
@@ -1255,6 +1383,20 @@ export default function AdminApp() {
                          </div>
                          
                          <div>
+                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>PRODUCT IMAGE</label>
+                            <input 
+                              type="file" 
+                              accept="image/*"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  setNewProductImageFile(e.target.files[0]);
+                                }
+                              }}
+                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', fontSize: '12px' }}
+                            />
+                         </div>
+
+                         <div>
                             <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>NAME</label>
                             <input 
                               type="text" 
@@ -1309,6 +1451,7 @@ export default function AdminApp() {
 
                          <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
                             <button 
+                              disabled={isUploadingProductImage}
                               onClick={() => {
                                 handleUpdateProduct(product.id, {
                                   name: document.getElementById(`edit-p-name-${product.id}`).value,
@@ -1316,14 +1459,18 @@ export default function AdminApp() {
                                   status: document.getElementById(`edit-p-status-${product.id}`).value,
                                   flavours: document.getElementById(`edit-p-flavours-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
                                   spreads: document.getElementById(`edit-p-spreads-${product.id}`).value.split(',').map(s => s.trim()).filter(s => s),
+                                  file: newProductImageFile
                                 });
                               }}
-                              style={{ flex: 1, padding: '10px', borderRadius: '6px', background: '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                              style={{ flex: 1, padding: '10px', borderRadius: '6px', background: isUploadingProductImage ? '#aaa' : '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: isUploadingProductImage ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                             >
-                              <Save size={16} /> Save Changes
+                              <Save size={16} /> {isUploadingProductImage ? 'Saving...' : 'Save Changes'}
                             </button>
                             <button 
-                              onClick={() => setEditingProduct(null)}
+                              onClick={() => {
+                                setEditingProduct(null);
+                                setNewProductImageFile(null);
+                              }}
                               style={{ padding: '10px 16px', borderRadius: '6px', background: '#f5f5f5', border: '1px solid #ddd', cursor: 'pointer', fontWeight: '500' }}
                             >
                               Cancel
@@ -2140,6 +2287,7 @@ export default function AdminApp() {
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
+                        setNewImageFile(file);
                         const reader = new FileReader();
                         reader.onload = (e) => setNewImageUrl(e.target.result);
                         reader.readAsDataURL(file);
@@ -2168,16 +2316,11 @@ export default function AdminApp() {
               </div>
 
               <button 
-                onClick={() => {
-                  const slot = imageModal.slot;
-                  const item = featuredDesserts.find(d => d.slot === slot);
-                  handleUpdateFeatured(slot, { ...item, img: newImageUrl || imageModal.currentImg });
-                  setNewImageUrl('');
-                  setImageModal(null);
-                }}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#800000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                onClick={handleImageSave}
+                disabled={isUploadingImage}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: isUploadingImage ? '#aaa' : '#800000', color: '#fff', border: 'none', cursor: isUploadingImage ? 'not-allowed' : 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
               >
-                <Save size={18} /> Save Changes
+                <Save size={18} /> {isUploadingImage ? 'Uploading...' : 'Save Changes'}
               </button>
             </div>
           </div>
