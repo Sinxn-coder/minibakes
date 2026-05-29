@@ -2,7 +2,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { menuData } from './data/menuData';
 import './AdminApp.css';
+
+const defaultProductImages = {};
+menuData.forEach(cat => {
+  if (cat.items) cat.items.forEach(item => defaultProductImages[item.id] = item.img);
+  if (cat.sections) cat.sections.forEach(sec => sec.items.forEach(item => defaultProductImages[item.id] = item.img));
+});
 
 const WhatsAppIcon = ({ size = 16, ...props }) => (
   <svg 
@@ -1369,7 +1376,7 @@ export default function AdminApp() {
                           height: '150px',
                           width: '100%',
                           backgroundColor: '#f8f9fa',
-                          backgroundImage: `url(${product.img || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'})`,
+                          backgroundImage: `url(${product.img || defaultProductImages[product.id] || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           position: 'relative',
