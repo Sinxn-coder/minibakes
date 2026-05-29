@@ -206,6 +206,23 @@ export default function AdminApp() {
 
   const [editingProduct, setEditingProduct] = useState(null);
 
+  const handleAddProduct = () => {
+    const newId = `PROD-${Date.now()}`;
+    const newProduct = {
+      id: newId,
+      name: 'New Product',
+      price: '€0.00',
+      category: productCategoryFilter !== 'All' ? productCategoryFilter : 'Custom Cakes',
+      status: 'In Stock',
+      img: '',
+      flavours: [],
+      spreads: [],
+      isNew: true
+    };
+    setAllProducts([newProduct, ...allProducts]);
+    setEditingProduct(newId);
+  };
+
   const adminCustomers = [
     { id: 'CUST-008', name: 'Olivia Smith', phone: '+1 555-0198', lastOrderValue: '€112.50', lastEngagement: '2 hrs ago', source: 'Instagram Menu', status: 'High Intent' },
     { id: 'CUST-007', name: 'Noah Johnson', phone: '+1 555-0200', lastOrderValue: '€35.00', lastEngagement: '5 hrs ago', source: 'Direct Search', status: 'First-time' },
@@ -560,13 +577,22 @@ export default function AdminApp() {
         };
         if (finalImgUrl) payload.img = finalImgUrl;
 
-        const { error } = await supabase.from('products').update(payload).eq('id', id);
-        if (error && !error.message?.includes('fetch')) throw error;
+        if (product.isNew) {
+          payload.id = id;
+          payload.category = product.category;
+          payload.created_at = new Date().toISOString();
+          const { error } = await supabase.from('products').insert([payload]);
+          if (error && !error.message?.includes('fetch')) throw error;
+        } else {
+          const { error } = await supabase.from('products').update(payload).eq('id', id);
+          if (error && !error.message?.includes('fetch')) throw error;
+        }
       }
       
       const updateObj = { ...updatedData };
       delete updateObj.file;
       if (finalImgUrl) updateObj.img = finalImgUrl;
+      updateObj.isNew = false;
 
       setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updateObj } : p));
       setEditingProduct(null);
@@ -1292,15 +1318,23 @@ export default function AdminApp() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
                 <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>All Products</h2>
-                <select 
-                  value={productCategoryFilter} 
-                  onChange={(e) => setProductCategoryFilter(e.target.value)}
-                  style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff', fontSize: '14px', outline: 'none', cursor: 'pointer', minWidth: '150px' }}
-                >
-                  {productCategories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <select 
+                    value={productCategoryFilter} 
+                    onChange={(e) => setProductCategoryFilter(e.target.value)}
+                    style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff', fontSize: '14px', outline: 'none', cursor: 'pointer', minWidth: '150px' }}
+                  >
+                    {productCategories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  <button 
+                    onClick={handleAddProduct}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', border: 'none', background: '#800000', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer', transition: '0.2s' }}
+                  >
+                    <Plus size={16} /> Add Product
+                  </button>
+                </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                 {filteredProducts.map(product => (
