@@ -212,22 +212,63 @@ export default function AdminApp() {
   }, []);
 
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [newProductData, setNewProductData] = useState({
+    name: '',
+    price: '',
+    category: 'Cakes',
+    status: 'In Stock',
+    file: null,
+    flavours: [],
+    spreads: []
+  });
 
-  const handleAddProduct = () => {
-    const newId = `PROD-${Date.now()}`;
-    const newProduct = {
-      id: newId,
-      name: 'New Product',
-      price: '€0.00',
-      category: productCategoryFilter !== 'All' ? productCategoryFilter : 'Custom Cakes',
-      status: 'In Stock',
-      img: '',
-      flavours: [],
-      spreads: [],
-      isNew: true
-    };
-    setAllProducts([newProduct, ...allProducts]);
-    setEditingProduct(newId);
+  const handleConfirmAddProduct = async () => {
+    if (!newProductData.name || !newProductData.price) {
+      triggerToast('Please provide at least a name and price.', 'error');
+      return;
+    }
+    
+    setIsUploadingProductImage(true);
+    try {
+      const newId = `PROD-${Date.now()}`;
+      let finalImgUrl = undefined;
+      
+      if (newProductData.file) {
+        const fileExt = newProductData.file.name.split('.').pop();
+        const fileName = `product-${newId}-${Date.now()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, newProductData.file);
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        finalImgUrl = publicUrl;
+      }
+      
+      const payload = {
+        id: newId,
+        name: newProductData.name,
+        price: newProductData.price,
+        category: newProductData.category,
+        status: newProductData.status,
+        flavours: newProductData.flavours,
+        spreads: newProductData.spreads,
+        created_at: new Date().toISOString()
+      };
+      if (finalImgUrl) payload.img = finalImgUrl;
+
+      if (isSupabaseLive) {
+        const { error } = await supabase.from('products').insert([payload]);
+        if (error && !error.message?.includes('fetch')) throw error;
+      }
+      
+      setAllProducts([payload, ...allProducts]);
+      setIsAddProductModalOpen(false);
+      setNewProductData({ name: '', price: '', category: 'Cakes', status: 'In Stock', file: null, flavours: [], spreads: [] });
+      triggerToast('Product added successfully!', 'success');
+    } catch (err) {
+      console.error('Error adding product:', err);
+      triggerToast('Error adding product.', 'error');
+    }
+    setIsUploadingProductImage(false);
   };
 
   const adminCustomers = [
@@ -1336,7 +1377,7 @@ export default function AdminApp() {
                     ))}
                   </select>
                   <button 
-                    onClick={handleAddProduct}
+                    onClick={() => setIsAddProductModalOpen(true)}
                     style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', border: 'none', background: '#800000', color: '#fff', fontSize: '14px', fontWeight: '600', cursor: 'pointer', transition: '0.2s' }}
                   >
                     <Plus size={16} /> Add Product
@@ -2773,6 +2814,68 @@ export default function AdminApp() {
                   Cancel
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Product Modal */}
+      {isAddProductModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', padding: '30px', boxShadow: '0 24px 48px rgba(0,0,0,0.2)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h3 style={{ margin: 0, fontSize: '20px', color: '#1a1a1a', fontWeight: '600' }}>Add New Product</h3>
+              <button onClick={() => setIsAddProductModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: '#666' }}><X size={20} /></button>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px' }}>Product Name</label>
+                <input type="text" value={newProductData.name} onChange={e => setNewProductData({...newProductData, name: e.target.value})} style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', outline: 'none' }} placeholder="e.g. 6 inch Velvet Cake" />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px' }}>Price</label>
+                <input type="text" value={newProductData.price} onChange={e => setNewProductData({...newProductData, price: e.target.value})} style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', outline: 'none' }} placeholder="e.g. €45" />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px' }}>Category</label>
+                <select value={newProductData.category} onChange={e => setNewProductData({...newProductData, category: e.target.value})} style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', outline: 'none', background: '#fff' }}>
+                  {productCategories.filter(c => c !== 'All').map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px' }}>Status</label>
+                <select value={newProductData.status} onChange={e => setNewProductData({...newProductData, status: e.target.value})} style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', outline: 'none', background: '#fff' }}>
+                  <option value="In Stock">In Stock</option>
+                  <option value="Out of Stock">Out of Stock</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '6px' }}>Product Image</label>
+                <div style={{ position: 'relative', width: '100%', height: '120px', borderRadius: '8px', border: '2px dashed #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', overflow: 'hidden' }}>
+                  {newProductData.file ? (
+                    <img src={URL.createObjectURL(newProductData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#666' }}>
+                      <Upload size={24} style={{ marginBottom: '8px' }} />
+                      <span style={{ fontSize: '13px' }}>Click to upload</span>
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={e => e.target.files && e.target.files[0] && setNewProductData({...newProductData, file: e.target.files[0]})} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '30px', display: 'flex', gap: '12px' }}>
+              <button onClick={() => setIsAddProductModalOpen(false)} style={{ flex: 1, padding: '12px', background: '#f5f5f5', border: 'none', borderRadius: '8px', fontWeight: '600', color: '#444', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={handleConfirmAddProduct} disabled={isUploadingProductImage} style={{ flex: 2, padding: '12px', background: '#800000', border: 'none', borderRadius: '8px', fontWeight: '600', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {isUploadingProductImage ? <span className="admin-spinner" style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> : <CheckCircle2 size={18} />}
+                {isUploadingProductImage ? 'Saving...' : 'Confirm & Add Product'}
+              </button>
             </div>
           </div>
         </div>
