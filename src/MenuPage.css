@@ -846,8 +846,7 @@
   }
 
   .full-width-card {
-    grid-column: 1 / -1;
-    margin-bottom: 8rem; /* Extra space for the two stacked buttons below the card */
+    display: none !important;
   }
 
   .menu-card-image {
@@ -883,9 +882,7 @@
     font-size: 0.8rem;
   }
 
-  .full-width-card {
-    grid-column: 1 / -1;
-  }
+
 
   .designer-ui {
     overflow-x: auto;
