@@ -7,6 +7,7 @@ const SafeImage = ({ src, alt, className = "" }) => {
       <img 
         src={src} 
         alt={alt} 
+        loading="lazy"
         className={`image-loading ${loaded ? 'image-loaded' : ''}`}
         onLoad={() => setLoaded(true)}
       />
