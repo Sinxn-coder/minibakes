@@ -242,6 +242,9 @@ function AdminAppContent() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [toast, setToast] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const triggerToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -2557,6 +2560,72 @@ function AdminAppContent() {
           </div>
         </div>
       )}
+
+      {activeTab === 'settings' && (
+        <div className="admin-panel" style={{ minHeight: '600px' }}>
+          <h2 className="admin-panel-title">Account Settings</h2>
+          <div style={{ marginTop: '32px', maxWidth: '400px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
+            <h3 style={{ fontSize: '18px', color: '#1a1a1a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              Change Admin Password
+            </h3>
+            <p style={{ fontSize: '13px', color: '#666', marginBottom: '24px' }}>
+              Update the password used to access the Minibakes admin dashboard.
+            </p>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              if (newPassword !== confirmPassword) {
+                triggerToast('Passwords do not match', 'error');
+                return;
+              }
+              if (newPassword.length < 6) {
+                triggerToast('Password must be at least 6 characters', 'error');
+                return;
+              }
+              setIsUpdatingPassword(true);
+              const { error } = await supabase.auth.updateUser({ password: newPassword });
+              setIsUpdatingPassword(false);
+              if (error) {
+                triggerToast(error.message, 'error');
+              } else {
+                triggerToast('Password updated successfully! 🔒', 'success');
+                setNewPassword('');
+                setConfirmPassword('');
+              }
+            }}>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>New Password</label>
+                <input 
+                  type="password" 
+                  required 
+                  value={newPassword} 
+                  onChange={e => setNewPassword(e.target.value)} 
+                  placeholder="Enter new password"
+                  style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                />
+              </div>
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Confirm New Password</label>
+                <input 
+                  type="password" 
+                  required 
+                  value={confirmPassword} 
+                  onChange={e => setConfirmPassword(e.target.value)} 
+                  placeholder="Confirm new password"
+                  style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={isUpdatingPassword} 
+                style={{ width: '100%', padding: '14px', background: isUpdatingPassword ? '#aaa' : '#800000', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: isUpdatingPassword ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: '0.2s' }}
+              >
+                {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Notification Full Screen */}
       {showNotifications && (
         <div className="notifications-fullscreen-overlay">
