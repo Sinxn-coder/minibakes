@@ -1,47 +1,47 @@
 
 
 
-import brownies from '../assets/brownies_box.png';
-import brownie_2 from '../assets/brownies/brownie (2).png';
-import brownie_3 from '../assets/brownies/brownie (3).png';
-import brownie_4 from '../assets/brownies/brownie (4).png';
+import brownies from '../assets/brownies_box.webp';
+import brownie_2 from '../assets/brownies/brownie (2).webp';
+import brownie_3 from '../assets/brownies/brownie (3).webp';
+import brownie_4 from '../assets/brownies/brownie (4).webp';
 
-import pops_1 from '../assets/cake pops/pops (1).png';
-import pops_2 from '../assets/cake pops/pops (2).png';
-import pops_3 from '../assets/cake pops/pops (3).png';
-import heart1 from '../assets/1.jpg';
-import sicles1 from '../assets/cake sicles/cakesicles (1).png';
-import sicles2 from '../assets/cake sicles/cakesicles (2).png';
-import sicles3 from '../assets/cake sicles/cakesicles (3).png';
-import sicles4 from '../assets/cake sicles/cakesicles (4).png';
-import sicles5 from '../assets/cake sicles/cakesicles (5).png';
-import mini1 from '../assets/minicakes/1.png';
-import mini2 from '../assets/minicakes/2.png';
+import pops_1 from '../assets/cake pops/pops (1).webp';
+import pops_2 from '../assets/cake pops/pops (2).webp';
+import pops_3 from '../assets/cake pops/pops (3).webp';
+import heart1 from '../assets/1.webp';
+import sicles1 from '../assets/cake sicles/cakesicles (1).webp';
+import sicles2 from '../assets/cake sicles/cakesicles (2).webp';
+import sicles3 from '../assets/cake sicles/cakesicles (3).webp';
+import sicles4 from '../assets/cake sicles/cakesicles (4).webp';
+import sicles5 from '../assets/cake sicles/cakesicles (5).webp';
+import mini1 from '../assets/minicakes/1.webp';
+import mini2 from '../assets/minicakes/2.webp';
 
 
 // Heart Cake Gallery
-import heart_1 from '../assets/cakes/heart/heart (1).png';
-import heart_2 from '../assets/cakes/heart/heart (2).png';
-import heart_3 from '../assets/cakes/heart/heart (3).png';
-import heart_4 from '../assets/cakes/heart/heart (4).png';
-import heart_5 from '../assets/cakes/heart/heart (5).png';
-import heart_6 from '../assets/cakes/heart/heart (6).png';
+import heart_1 from '../assets/cakes/heart/heart (1).webp';
+import heart_2 from '../assets/cakes/heart/heart (2).webp';
+import heart_3 from '../assets/cakes/heart/heart (3).webp';
+import heart_4 from '../assets/cakes/heart/heart (4).webp';
+import heart_5 from '../assets/cakes/heart/heart (5).webp';
+import heart_6 from '../assets/cakes/heart/heart (6).webp';
 
 const heartImages = [heart_1, heart_2, heart_3, heart_4, heart_5, heart_6];
 
 // Round Cake Gallery
-import round_1 from '../assets/cakes/round/round (1).png';
-import round_2 from '../assets/cakes/round/round (2).png';
-import round_3 from '../assets/cakes/round/round (3).png';
-import round_4 from '../assets/cakes/round/round (4).png';
-import round_5 from '../assets/cakes/round/round (5).png';
-import round_6 from '../assets/cakes/round/round (6).png';
-import round_7 from '../assets/cakes/round/round (7).png';
-import round_8 from '../assets/cakes/round/round (8).png';
-import round_9 from '../assets/cakes/round/round (9).png';
-import round_10 from '../assets/cakes/round/round (10).png';
-import round_11 from '../assets/cakes/round/round (11).png';
-import round_12 from '../assets/cakes/round/round (12).png';
+import round_1 from '../assets/cakes/round/round (1).webp';
+import round_2 from '../assets/cakes/round/round (2).webp';
+import round_3 from '../assets/cakes/round/round (3).webp';
+import round_4 from '../assets/cakes/round/round (4).webp';
+import round_5 from '../assets/cakes/round/round (5).webp';
+import round_6 from '../assets/cakes/round/round (6).webp';
+import round_7 from '../assets/cakes/round/round (7).webp';
+import round_8 from '../assets/cakes/round/round (8).webp';
+import round_9 from '../assets/cakes/round/round (9).webp';
+import round_10 from '../assets/cakes/round/round (10).webp';
+import round_11 from '../assets/cakes/round/round (11).webp';
+import round_12 from '../assets/cakes/round/round (12).webp';
 
 const roundImages = [
   round_1, round_2, round_3, round_4, round_5, round_6,
@@ -49,12 +49,12 @@ const roundImages = [
 ];
 
 // Cupcake Gallery
-import cupcake_1 from '../assets/cupcakes/butter1.jpeg';
-import cupcake_2 from '../assets/cupcakes/butter2.jpeg';
-import cupcake_3 from '../assets/cupcakes/butter3.jpeg';
-import cupcake_4 from '../assets/cupcakes/whitechoclate1.png';
-import cupcake_5 from '../assets/cupcakes/whitechoclate2.png';
-import cupcake_6 from '../assets/cupcakes/whitechoclate3.jpg';
+import cupcake_1 from '../assets/cupcakes/butter1.webp';
+import cupcake_2 from '../assets/cupcakes/butter2.webp';
+import cupcake_3 from '../assets/cupcakes/butter3.webp';
+import cupcake_4 from '../assets/cupcakes/whitechoclate1.webp';
+import cupcake_5 from '../assets/cupcakes/whitechoclate2.webp';
+import cupcake_6 from '../assets/cupcakes/whitechoclate3.webp';
 
 const cupcakeImages = [
   cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6

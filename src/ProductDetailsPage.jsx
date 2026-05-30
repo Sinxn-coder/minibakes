@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle } from 'lucide-react';
 import SafeImage from './components/SafeImage';
-import Cake3D from './Cake3D';
+import ErrorBoundary from './ErrorBoundary';
+const Cake3D = React.lazy(() => import('./Cake3D'));
 import './ProductDetailsPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
 
-import style1 from './assets/style1.png';
-import style2 from './assets/style2.png';
-import style3 from './assets/stlye3.png'; // Note: spelling matches assets folder exactly!
-import style4 from './assets/style4.png';
-import style5 from './assets/style5.png';
-import style6 from './assets/style6.png';
-import style7 from './assets/style7.png';
-import style8 from './assets/style8.png';
+import style1 from './assets/style1.webp';
+import style2 from './assets/style2.webp';
+import style3 from './assets/stlye3.webp'; // Note: spelling matches assets folder exactly!
+import style4 from './assets/style4.webp';
+import style5 from './assets/style5.webp';
+import style6 from './assets/style6.webp';
+import style7 from './assets/style7.webp';
+import style8 from './assets/style8.webp';
 
 const detailsBackgroundPatterns = [
   // Top Area
@@ -227,7 +228,11 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
             {product.layers ? (
               <div className="details-3d-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-                <Cake3D layers={product.layers} />
+                <ErrorBoundary>
+                  <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '300px', background: '#fdf2f2', borderRadius: '20px' }}>Loading 3D model...</div>}>
+                    <Cake3D layers={product.layers} />
+                  </React.Suspense>
+                </ErrorBoundary>
               </div>
             ) : (
               <SafeImage src={displayImg} alt={product.name} key={displayImg} className="main-details-img" />

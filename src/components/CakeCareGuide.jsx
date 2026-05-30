@@ -1,12 +1,12 @@
 import React from 'react';
 import './CakeCareGuide.css';
 
-import care1 from '../assets/care/care1.png';
-import care2 from '../assets/care/care2.png';
-import care3 from '../assets/care/care3.png';
-import care4 from '../assets/care/care4.png';
-import care5 from '../assets/care/care5.png';
-import care6 from '../assets/care/care6.png';
+import care1 from '../assets/care/care1.webp';
+import care2 from '../assets/care/care2.webp';
+import care3 from '../assets/care/care3.webp';
+import care4 from '../assets/care/care4.webp';
+import care5 from '../assets/care/care5.webp';
+import care6 from '../assets/care/care6.webp';
 
 const CakeCareGuide = () => {
   const instructions = [

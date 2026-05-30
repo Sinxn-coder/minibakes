@@ -386,15 +386,19 @@ export default function Cake3D({ layers = [] }) {
   const [zoom, setZoom] = useState(5.5);
 
   return (
-    <div style={{ 
-      position: 'relative',
-      width: '100%', 
-      height: '100%', 
-      minHeight: '300px', 
-      background: '#fdf2f2', 
-      borderRadius: '20px', 
-      overflow: 'hidden' 
-    }}>
+    <div 
+      role="region" 
+      aria-label="Interactive 3D model of a custom cake"
+      style={{ 
+        position: 'relative',
+        width: '100%', 
+        height: '100%', 
+        minHeight: '300px', 
+        background: '#fdf2f2', 
+        borderRadius: '20px', 
+        overflow: 'hidden' 
+      }}
+    >
       {/* Zoom Controller */}
       <div style={{
         position: 'absolute',

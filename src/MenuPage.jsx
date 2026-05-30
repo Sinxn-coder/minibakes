@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import './MenuPage.css';
-import Cake3D from './Cake3D';
+import ErrorBoundary from './ErrorBoundary';
+const Cake3D = React.lazy(() => import('./Cake3D'));
 
 import { menuData } from './data/menuData';
 import { supabase } from './supabase';
@@ -29,7 +30,11 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
     <div className={`menu-card ${item.isFullWidth ? 'full-width-card' : ''}`}>
       <div className="menu-card-image">
         {item.isFullWidth ? (
-          <Cake3D layers={cakeLayers} />
+          <ErrorBoundary>
+            <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '300px', background: '#fdf2f2', borderRadius: '20px' }}>Loading 3D model...</div>}>
+              <Cake3D layers={cakeLayers} />
+            </React.Suspense>
+          </ErrorBoundary>
         ) : (
           <SafeImage src={displayImg} alt={item.name} key={displayImg} />
         )}
