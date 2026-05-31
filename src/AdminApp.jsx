@@ -286,12 +286,33 @@ function AdminAppContent() {
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-  const recentActivities = [
-    { id: 'ACT-001', action: 'New Order Placed', target: 'Emma Thompson', time: '10 mins ago', status: 'pending' },
-    { id: 'ACT-002', action: 'Customer Registered', target: 'Liam Davies', time: '1 hour ago', status: 'completed' },
-    { id: 'ACT-003', action: 'Product Stock Updated', target: 'Red Velvet Cake', time: '3 hours ago', status: 'processing' },
-    { id: 'ACT-004', action: 'Review Submitted', target: 'Sophia Rossi', time: '1 day ago', status: 'completed' },
-  ];
+  const recentActivities = useMemo(() => {
+    if (allOrders.length === 0) {
+      return [
+        { id: 'ACT-001', action: 'New Order Placed', target: 'Emma Thompson', time: '10 mins ago', status: 'pending' },
+        { id: 'ACT-002', action: 'Customer Registered', target: 'Liam Davies', time: '1 hour ago', status: 'completed' },
+        { id: 'ACT-003', action: 'Product Stock Updated', target: 'Red Velvet Cake', time: '3 hours ago', status: 'processing' },
+        { id: 'ACT-004', action: 'Review Submitted', target: 'Sophia Rossi', time: '1 day ago', status: 'completed' },
+      ];
+    }
+
+    const timeAgo = (dateStr) => {
+      const diff = new Date() - new Date(dateStr);
+      const minutes = Math.max(0, Math.floor(diff / 60000));
+      if (minutes < 60) return `${minutes || 1} mins ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} hours ago`;
+      return `${Math.floor(hours / 24)} days ago`;
+    };
+
+    return allOrders.slice(0, 5).map((order, i) => ({
+      id: order.id.slice(0, 8).toUpperCase(),
+      action: 'New Order Placed',
+      target: order.customer || 'Unknown',
+      time: order.created_at ? timeAgo(order.created_at) : (order.date ? timeAgo(order.date) : 'Just now'),
+      status: order.status || 'pending'
+    }));
+  }, [allOrders]);
 
   const [allProducts, setAllProducts] = useState([]);
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
