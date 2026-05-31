@@ -14,15 +14,6 @@ export default defineConfig({
     host: true, // Changes the host from localhost to 0.0.0.0 (allows network access)
   },
   build: {
-    chunkSizeWarningLimit: 1500,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) {
-            return 'three-vendor';
-          }
-        }
-      }
-    }
+    chunkSizeWarningLimit: 1500
   }
 })
