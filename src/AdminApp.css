@@ -119,46 +119,80 @@
 /* Dashboard Cards */
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 32px;
 }
 
 .metric-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  border: 1px solid #e9ecef;
+  padding: 16px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.05);
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+}
+
+.metric-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .metric-icon-box {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
-  background-color: #FFF0F4;
-  color: var(--color-main, #800000);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .metric-info h3 {
-  font-size: 13px;
-  color: #666;
+  font-size: 11px;
+  color: #888;
   margin: 0 0 4px 0;
   text-transform: uppercase;
+  font-weight: 600;
   letter-spacing: 0.5px;
 }
 
 .metric-info p {
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
   margin: 0;
+}
+
+.metric-pill {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Table */
