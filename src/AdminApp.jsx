@@ -286,30 +286,6 @@ function AdminAppContent() {
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-  const recentActivities = useMemo(() => {
-    if (allOrders.length === 0) {
-      return [
-        { id: '-', action: 'No Data', target: 'Waiting for orders...', time: '-', status: 'pending' }
-      ];
-    }
-
-    const timeAgo = (dateStr) => {
-      const diff = new Date() - new Date(dateStr);
-      const minutes = Math.max(0, Math.floor(diff / 60000));
-      if (minutes < 60) return `${minutes || 1} mins ago`;
-      const hours = Math.floor(minutes / 60);
-      if (hours < 24) return `${hours} hours ago`;
-      return `${Math.floor(hours / 24)} days ago`;
-    };
-
-    return allOrders.slice(0, 5).map((order, i) => ({
-      id: order.id.slice(0, 8).toUpperCase(),
-      action: 'New Order Placed',
-      target: order.customer || 'Unknown',
-      time: order.created_at ? timeAgo(order.created_at) : (order.date ? timeAgo(order.date) : 'Just now'),
-      status: order.status || 'pending'
-    }));
-  }, [allOrders]);
 
   const [allProducts, setAllProducts] = useState([]);
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
@@ -484,6 +460,31 @@ function AdminAppContent() {
   const [viewDate, setViewDate] = useState(new Date());
 
   // Derive unique Customer profiles from persistent Client Device IDs legally
+  const recentActivities = useMemo(() => {
+    if (allOrders.length === 0) {
+      return [
+        { id: '-', action: 'No Data', target: 'Waiting for orders...', time: '-', status: 'pending' }
+      ];
+    }
+
+    const timeAgo = (dateStr) => {
+      const diff = new Date() - new Date(dateStr);
+      const minutes = Math.max(0, Math.floor(diff / 60000));
+      if (minutes < 60) return `${minutes || 1} mins ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} hours ago`;
+      return `${Math.floor(hours / 24)} days ago`;
+    };
+
+    return allOrders.slice(0, 5).map((order, i) => ({
+      id: order.id.slice(0, 8).toUpperCase(),
+      action: 'New Order Placed',
+      target: order.customer || 'Unknown',
+      time: order.created_at ? timeAgo(order.created_at) : (order.date ? timeAgo(order.date) : 'Just now'),
+      status: order.status || 'pending'
+    }));
+  }, [allOrders]);
+
   const dynamicCustomers = useMemo(() => {
     const custMap = new Map();
     allOrders.forEach(order => {
