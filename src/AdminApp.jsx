@@ -889,7 +889,7 @@ function AdminAppContent() {
           })}
         </nav>
         <div style={{ marginTop: 'auto', padding: '0 16px' }}>
-            <button className="admin-nav-item" style={{ width: '100%', color: '#666' }} onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}>
+            <button className="admin-nav-item" style={{ width: '100%', color: '#666' }} onClick={async () => { await supabase.auth.signOut(); }}>
               <LogOut size={20} />
               Exit Admin
             </button>
@@ -3169,7 +3169,7 @@ function AdminLogin() {
       {/* Left Branding Side */}
       <div style={{ 
         flex: 1.2, 
-        background: 'linear-gradient(135deg, #800000 0%, #4a0000 100%)', 
+        background: 'linear-gradient(135deg, #5c0d1b 0%, #3a0811 100%)', 
         padding: '60px', 
         display: 'flex', 
         flexDirection: 'column', 
@@ -3196,7 +3196,7 @@ function AdminLogin() {
 
           <h2 style={{ fontSize: '56px', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
             <span style={{ color: 'rgba(255,255,255,0.9)' }}>Command the</span><br />
-            <span style={{ color: '#ffb3b3' }}>Bakery.</span>
+            <span style={{ color: '#FFD1DC' }}>Bakery.</span>
           </h2>
 
           <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)', marginBottom: '60px', maxWidth: '480px' }}>
@@ -3221,8 +3221,8 @@ function AdminLogin() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px', position: 'relative' }}>
         <div style={{ width: '100%', maxWidth: '420px', textAlign: 'center' }}>
           
-          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', background: '#FFF0F4', borderRadius: '20px', marginBottom: '32px', boxShadow: '0 8px 24px rgba(128,0,0,0.1)' }}>
-            <Shield size={32} color="#800000" />
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', background: '#FFF0F4', borderRadius: '20px', marginBottom: '32px', boxShadow: '0 8px 24px rgba(92,13,27,0.1)' }}>
+            <Shield size={32} color="#5c0d1b" />
           </div>
 
           <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 12px 0' }}>Admin Portal</h2>
@@ -3233,15 +3233,15 @@ function AdminLogin() {
             
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '700', color: '#444', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email Address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#5c0d1b'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             
             <div style={{ marginBottom: '32px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '700', color: '#444', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#5c0d1b'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             
-            <button type="submit" disabled={loading} style={{ width: '100%', padding: '16px', background: loading ? '#aaa' : '#1a1a1a', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 8px 16px rgba(0,0,0,0.1)' }}>
+            <button type="submit" disabled={loading} style={{ width: '100%', padding: '16px', background: loading ? '#aaa' : '#5c0d1b', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 8px 16px rgba(92,13,27,0.2)' }}>
               {loading ? 'Authenticating...' : 'Continue to Dashboard'}
             </button>
           </form>
