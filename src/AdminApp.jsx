@@ -532,38 +532,69 @@ function AdminAppContent() {
 
   const realAnalyticsData = useMemo(() => {
     const now = new Date();
-    let filteredOrders = [];
+    
+    const computeMetrics = (orders) => {
+      let totalRevenue = 0;
+      let customCakesCount = 0;
+      orders.forEach(o => {
+        totalRevenue += parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+        const hasCustomCake = (o.details?.items || []).some(item => item.name?.toLowerCase().includes('custom') || item.category?.toLowerCase() === 'custom cakes');
+        if (hasCustomCake) customCakesCount++;
+      });
+      const totalOrders = orders.length;
+      const avgOrderValue = totalOrders > 0 ? (totalRevenue / totalOrders) : 0;
+      const customCakesShare = totalOrders > 0 ? (customCakesCount / totalOrders) * 100 : 0;
+      return { totalRevenue, totalOrders, avgOrderValue, customCakesShare };
+    };
+
+    let currentOrders = [];
+    let previousOrders = [];
+
     if (analyticsTimeframe === 'this-week') {
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      filteredOrders = allOrders.filter(o => new Date(o.created_at || o.date) >= oneWeekAgo);
+      const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+      currentOrders = allOrders.filter(o => new Date(o.created_at || o.date) >= oneWeekAgo);
+      previousOrders = allOrders.filter(o => {
+        const d = new Date(o.created_at || o.date);
+        return d >= twoWeeksAgo && d < oneWeekAgo;
+      });
     } else if (analyticsTimeframe === 'this-month') {
       const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      filteredOrders = allOrders.filter(o => new Date(o.created_at || o.date) >= oneMonthAgo);
+      const twoMonthsAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+      currentOrders = allOrders.filter(o => new Date(o.created_at || o.date) >= oneMonthAgo);
+      previousOrders = allOrders.filter(o => {
+        const d = new Date(o.created_at || o.date);
+        return d >= twoMonthsAgo && d < oneMonthAgo;
+      });
     } else {
-      filteredOrders = allOrders;
+      currentOrders = allOrders;
+      previousOrders = [];
     }
 
-    let totalRevenue = 0;
-    let customCakesCount = 0;
-    
-    filteredOrders.forEach(o => {
-      totalRevenue += parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
-      const hasCustomCake = (o.details?.items || []).some(item => item.name?.toLowerCase().includes('custom') || item.category?.toLowerCase() === 'custom cakes');
-      if (hasCustomCake) customCakesCount++;
-    });
+    const current = computeMetrics(currentOrders);
+    const previous = computeMetrics(previousOrders);
 
-    const totalOrders = filteredOrders.length;
-    const avgOrderValue = totalOrders > 0 ? (totalRevenue / totalOrders) : 0;
-    const customCakesShare = totalOrders > 0 ? (customCakesCount / totalOrders) * 100 : 0;
+    const getTrend = (curr, prev) => {
+      if (prev === 0 && curr === 0) return { text: '+0.0%', positive: true };
+      if (prev === 0) return { text: '+100.0%', positive: true };
+      const diff = ((curr - prev) / prev) * 100;
+      return { text: `${diff >= 0 ? '+' : ''}${diff.toFixed(1)}%`, positive: diff >= 0 };
+    };
+
+    const revTrend = getTrend(current.totalRevenue, previous.totalRevenue);
+    const ordTrend = getTrend(current.totalOrders, previous.totalOrders);
+    const aovTrend = getTrend(current.avgOrderValue, previous.avgOrderValue);
+    const customTrend = getTrend(current.customCakesShare, previous.customCakesShare);
+
     const baseData = analyticsData[analyticsTimeframe] || analyticsData['all-time'];
 
     return {
       ...baseData,
       metrics: [
-        { label: 'Total Revenue', value: `€${totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, change: '+12.4%', positive: true, icon: ShoppingCart, bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)', color: '#1565C0' },
-        { label: 'Total Orders', value: totalOrders.toString(), change: '+8.2%', positive: true, icon: ShoppingCart, bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', color: '#7B1FA2' },
-        { label: 'Avg Order Value', value: `€${avgOrderValue.toFixed(2)}`, change: '+4.1%', positive: true, icon: Package, bg: 'linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)', color: '#F57F17' },
-        { label: 'Custom Cakes Share', value: `${customCakesShare.toFixed(1)}%`, change: '+6.8%', positive: true, icon: Cake, bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)', color: '#2E7D32' },
+        { label: 'Total Revenue', value: `€${current.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, change: revTrend.text, positive: revTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)', color: '#1565C0' },
+        { label: 'Total Orders', value: current.totalOrders.toString(), change: ordTrend.text, positive: ordTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', color: '#7B1FA2' },
+        { label: 'Avg Order Value', value: `€${current.avgOrderValue.toFixed(2)}`, change: aovTrend.text, positive: aovTrend.positive, icon: Package, bg: 'linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)', color: '#F57F17' },
+        { label: 'Custom Cakes Share', value: `${current.customCakesShare.toFixed(1)}%`, change: customTrend.text, positive: customTrend.positive, icon: Cake, bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)', color: '#2E7D32' },
       ]
     };
   }, [allOrders, analyticsTimeframe]);

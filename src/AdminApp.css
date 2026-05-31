@@ -198,9 +198,6 @@
 }
 
 .metric-change-pill {
-  position: absolute;
-  top: 24px;
-  right: 24px;
   font-size: 12px;
   font-weight: 700;
   padding: 6px 10px;
@@ -210,6 +207,9 @@
   gap: 4px;
   backdrop-filter: blur(4px);
   z-index: 1;
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin-top: -4px;
 }
 
 /* Table */
