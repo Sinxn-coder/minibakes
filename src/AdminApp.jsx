@@ -289,10 +289,7 @@ function AdminAppContent() {
   const recentActivities = useMemo(() => {
     if (allOrders.length === 0) {
       return [
-        { id: 'ACT-001', action: 'New Order Placed', target: 'Emma Thompson', time: '10 mins ago', status: 'pending' },
-        { id: 'ACT-002', action: 'Customer Registered', target: 'Liam Davies', time: '1 hour ago', status: 'completed' },
-        { id: 'ACT-003', action: 'Product Stock Updated', target: 'Red Velvet Cake', time: '3 hours ago', status: 'processing' },
-        { id: 'ACT-004', action: 'Review Submitted', target: 'Sophia Rossi', time: '1 day ago', status: 'completed' },
+        { id: '-', action: 'No Data', target: 'Waiting for orders...', time: '-', status: 'pending' }
       ];
     }
 
