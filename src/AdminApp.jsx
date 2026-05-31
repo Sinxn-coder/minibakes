@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { menuData } from './data/menuData';
@@ -3165,22 +3165,97 @@ function AdminLogin() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
-      <form onSubmit={handleLogin} style={{ background: '#fff', padding: '40px', borderRadius: '16px', boxShadow: '0 12px 40px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#800000', fontWeight: '800' }}>Admin Login</h2>
-        {error && <div style={{ background: '#ffebee', color: '#c62828', padding: '12px', borderRadius: '8px', marginBottom: '16px', fontSize: '14px', textAlign: 'center', fontWeight: '600' }}>{error}</div>}
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#444' }}>Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} />
+    <div style={{ display: 'flex', height: '100vh', width: '100vw', background: '#fff', fontFamily: "'Inter', sans-serif" }}>
+      {/* Left Branding Side */}
+      <div style={{ 
+        flex: 1.2, 
+        background: 'linear-gradient(135deg, #800000 0%, #4a0000 100%)', 
+        padding: '60px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center',
+        color: '#fff',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Abstract background shapes */}
+        <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '60%', height: '60%', background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%' }}></div>
+        
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '600px', margin: '0 auto' }}>
+          {/* Logo Area */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '60px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.1)', padding: '12px', borderRadius: '12px', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Cake size={32} color="#fff" />
+            </div>
+            <div>
+              <h1 style={{ margin: 0, fontSize: '28px', fontWeight: '800', letterSpacing: '-0.5px' }}>Mini Bakes</h1>
+              <p style={{ margin: 0, fontSize: '12px', fontWeight: '600', letterSpacing: '2px', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Executive Console</p>
+            </div>
+          </div>
+
+          <h2 style={{ fontSize: '56px', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
+            <span style={{ color: 'rgba(255,255,255,0.9)' }}>Command the</span><br />
+            <span style={{ color: '#ffb3b3' }}>Bakery.</span>
+          </h2>
+
+          <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)', marginBottom: '60px', maxWidth: '480px' }}>
+            The centralized hub for moderating orders, analyzing growth, and controlling the Mini Bakes platform from a single executive interface.
+          </p>
+
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600' }}>
+              <BarChart3 size={16} /> Real-time Analytics
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600' }}>
+              <Database size={16} /> Global Database
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600' }}>
+              <Activity size={16} /> Live Monitoring
+            </div>
+          </div>
         </div>
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#444' }}>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} />
+      </div>
+
+      {/* Right Login Side */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px', position: 'relative' }}>
+        <div style={{ width: '100%', maxWidth: '420px', textAlign: 'center' }}>
+          
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', background: '#FFF0F4', borderRadius: '20px', marginBottom: '32px', boxShadow: '0 8px 24px rgba(128,0,0,0.1)' }}>
+            <Shield size={32} color="#800000" />
+          </div>
+
+          <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#1a1a1a', margin: '0 0 12px 0' }}>Admin Portal</h2>
+          <p style={{ color: '#666', margin: '0 0 40px 0', fontSize: '15px' }}>Identity verification required for command access.</p>
+
+          <form onSubmit={handleLogin} style={{ textAlign: 'left' }}>
+            {error && <div style={{ background: '#ffebee', color: '#c62828', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center', fontWeight: '600' }}>{error}</div>}
+            
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '700', color: '#444', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email Address</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
+            </div>
+            
+            <div style={{ marginBottom: '32px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '700', color: '#444', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: '16px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none', boxSizing: 'border-box', fontSize: '15px', background: '#fafafa', transition: 'border-color 0.2s' }} onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e0e0e0'} />
+            </div>
+            
+            <button type="submit" disabled={loading} style={{ width: '100%', padding: '16px', background: loading ? '#aaa' : '#1a1a1a', color: '#fff', border: 'none', borderRadius: '12px', fontSize: '16px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 8px 16px rgba(0,0,0,0.1)' }}>
+              {loading ? 'Authenticating...' : 'Continue to Dashboard'}
+            </button>
+          </form>
+
+          <div style={{ marginTop: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '12px', color: '#888', fontWeight: '500' }}>
+            <Sparkles size={12} color="#f5a623" />
+            Encrypted Terminal v2.5.0 Professional
+          </div>
         </div>
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: '14px', background: loading ? '#aaa' : '#800000', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}>
-          {loading ? 'Authenticating...' : 'Sign In'}
-        </button>
-      </form>
+
+        <div style={{ position: 'absolute', bottom: '24px', fontSize: '12px', color: '#aaa', fontWeight: '500' }}>
+          &copy; {new Date().getFullYear()} Mini Bakes &bull; Authorized Personnel Only
+        </div>
+      </div>
     </div>
   );
 }
