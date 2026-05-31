@@ -12,5 +12,15 @@ export default defineConfig({
   server: {
     port: 3000, // Changes the port from 5173 to 3000
     host: true, // Changes the host from localhost to 0.0.0.0 (allows network access)
+  },
+  build: {
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei']
+        }
+      }
+    }
   }
 })
