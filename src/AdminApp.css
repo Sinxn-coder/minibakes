@@ -124,6 +124,39 @@
   margin-bottom: 32px;
 }
 
+.metric-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid #e9ecef;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metric-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-info h3 {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.metric-info p {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
 .metric-card-premium {
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(16px);
