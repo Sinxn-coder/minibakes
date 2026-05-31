@@ -77,6 +77,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   const BOW_ADDON_PRICE = 5;
 
+  const minQty = product?.min_qty !== undefined && product?.min_qty !== null ? product.min_qty : (product?.id?.startsWith('mc') ? 4 : 1);
+
+  useEffect(() => {
+    if (product) {
+      setQuantity(minQty);
+    }
+  }, [product, minQty]);
+
   if (!product) return null;
 
   const productId = product?.id || '';
@@ -89,17 +97,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const isCakesicleBulk = productId === 'cakesicles-bulk';
   const isCakesicle = productId.startsWith('t3') || productId.startsWith('t4') || isCakesicleBulk;
 
-  const minQty = product?.min_qty !== undefined && product?.min_qty !== null ? product.min_qty : (isMiniCake ? 4 : 1);
-
   const hasSpreads = product?.spreads && product.spreads.length > 0 
     ? true 
     : (isCake || isMiniCake || isBrownie || isCupcake);
-
-  useEffect(() => {
-    if (product) {
-      setQuantity(minQty);
-    }
-  }, [product, minQty]);
 
   const handleDecrement = () => {
     if (quantity <= minQty) {
