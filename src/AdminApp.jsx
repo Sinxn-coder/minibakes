@@ -2438,11 +2438,12 @@ function AdminAppContent() {
                                 <span className="admin-layer-dot" style={{ backgroundColor: layer.color }}></span>
                                 <span className="admin-layer-label">
                                   <strong>Layer {idx + 1}:</strong> {layer.type.includes('6') ? '6"' : '8"'} {layer.type.includes('heart') ? 'Heart' : 'Round'}
-                                  {(layer.topBorder || layer.bottomBorder || layer.pearlBottom) && (
+                                  {(layer.topBorder || layer.bottomBorder || layer.pearlBottom || layer.sidePiping) && (
                                     <div className="layer-design-tags" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
                                       {layer.topBorder && <span className="design-tag">Shell Top</span>}
                                       {layer.bottomBorder && <span className="design-tag">Shell Bottom</span>}
                                       {layer.pearlBottom && <span className="design-tag">Pearl</span>}
+                                      {layer.sidePiping && <span className="design-tag">Side Piping</span>}
                                     </div>
                                   )}
                                 </span>

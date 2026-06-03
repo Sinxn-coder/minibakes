@@ -225,7 +225,7 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
 }
 
 // --- Single Round Layer ---
-function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
+function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, sidePiping, pearlBottom, spread, customText, sizeNum }) {
   return (
     <group position={[0, posY, 0]}>
       <mesh castShadow>
@@ -235,13 +235,14 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
+      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 36)} yOffset={0} color={color} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
 }
 
 // --- Single Heart Layer ---
-function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
+function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePiping, pearlBottom, spread, customText, sizeNum }) {
   const { cakeGeo, curve } = useMemo(() => {
     const shape = createHeartShape(size);
     const extrudeSettings = { depth: height, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6, curveSegments: 64 };
@@ -264,6 +265,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
+      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 42)} yOffset={0} color={color} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
@@ -306,17 +308,18 @@ function CakeModel({ layers }) {
     const color = layer.color || '#F9C6C9';
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
+    const sidePiping = layer.sidePiping || false;
 
     const spread = layer.spread || null;
     const customText = layer.customText || '';
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 

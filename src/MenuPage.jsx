@@ -140,6 +140,13 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                     <ChevronDown size={20} />
                     <span className="designer-card-label">Bottom Shell</span>
                   </button>
+                  <button 
+                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.sidePiping ? 'active-design' : ''}`}
+                    onClick={() => toggleDesign('sidePiping')}
+                  >
+                    <AlignJustify size={20} />
+                    <span className="designer-card-label">Side Piping</span>
+                  </button>
                 </div>
               </div>
             </div>
