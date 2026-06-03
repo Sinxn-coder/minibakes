@@ -7,7 +7,7 @@ const flowerModelUrl = `${import.meta.env.BASE_URL}3d/flower.glb`;
 
 // --- Layer size config ---
 const BASE_RADIUS = 1.35; // constant base width
-const LAYER_HEIGHTS = { '6': 0.85, '8': 0.95 }; // '8' is taller than '6'
+const LAYER_HEIGHTS = { '6': 0.98, '8': 0.95 }; // '8' is wider, '6' is taller proportionally
 const SHRINK_FACTOR = 0.82; // each stacked layer is 82% of the one below
 
 // --- Heart shape helper ---
@@ -339,7 +339,11 @@ function CakeModel({ layers }) {
     const scaleFactor = Math.pow(SHRINK_FACTOR, i);
     const [sizeNum, shapeType] = layer.type.match(/^(\d+)(.+)$/).slice(1);
 
-    const scaledRadius = BASE_RADIUS * scaleFactor;
+    let scaledRadius = BASE_RADIUS * scaleFactor;
+    if (sizeNum === '6') {
+      scaledRadius *= 0.85; // Make 6-inch less wide
+    }
+    
     const height = LAYER_HEIGHTS[sizeNum] ?? 0.65;
     const layerY = currentY + height / 2;
     const color = layer.color || '#F9C6C9';
