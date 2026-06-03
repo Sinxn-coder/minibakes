@@ -400,7 +400,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
 
               {/* Color Selection for Cakes */}
-              {(isCake || isMiniCake || isCupcake) && (
+              {isCake && (
                 <div className="option-group">
                   <label>Cake/Frosting Color</label>
                   <input 
