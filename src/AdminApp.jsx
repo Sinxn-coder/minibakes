@@ -2345,6 +2345,12 @@ function AdminAppContent() {
                                   <div className="premium-info-value">{item.flavor}</div>
                                 </div>
                               )}
+                              {item.color && (
+                                <div className="premium-info-row">
+                                  <div className="premium-info-label"><Palette size={16}/> Color</div>
+                                  <div className="premium-info-value">{item.color}</div>
+                                </div>
+                              )}
                               {item.occasion && (
                                 <div className="premium-info-row">
                                   <div className="premium-info-label"><Calendar size={16}/> Occasion</div>

@@ -172,6 +172,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
           items: itemsWithUrls.map(item => ({
             itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
             quantity: item.quantity,
+            color: item.options?.color || '',
             flavor: (item.options?.flavor || 'Assorted') 
               + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
               + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
@@ -365,6 +366,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                       {item.options.boxSize && <span>Box of {item.options.boxSize} • </span>}
                       {item.options.flavor && <span>{item.options.flavor}</span>}
                       {item.options.spreads && item.options.spreads.length > 0 && <span> • {item.options.spreads.join(', ')}</span>}
+                      {item.options.color && <span> • Color: {item.options.color}</span>}
                       {item.options.individualPackaging && <span> • Individual Packaging 📦</span>}
                       {item.options.message && <span> • Text: "{item.options.message}"</span>}
                       {item.options.innerMessage && <span> • Note Inside: "{item.options.innerMessage}"</span>}

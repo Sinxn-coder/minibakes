@@ -72,7 +72,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     bows: false,
     individualPackaging: false,
     boxSize: product?.options ? product.options[0].value : '',
-    ediblePrinting: false
+    ediblePrinting: false,
+    color: ''
   });
 
   const BOW_ADDON_PRICE = 5;
@@ -394,6 +395,20 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     className="details-input"
                     value={options.message}
                     onChange={(e) => setOptions({...options, message: e.target.value})}
+                  />
+                </div>
+              )}
+
+              {/* Color Selection for Cakes */}
+              {(isCake || isMiniCake || isCupcake) && (
+                <div className="option-group">
+                  <label>Cake/Frosting Color</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Light Pink, Sage Green, Baby Blue..." 
+                    className="details-input"
+                    value={options.color}
+                    onChange={(e) => setOptions({...options, color: e.target.value})}
                   />
                 </div>
               )}
