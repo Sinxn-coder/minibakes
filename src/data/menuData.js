@@ -40,7 +40,7 @@ import round_7 from '../assets/cakes/round/round (7).webp';
 import round_8 from '../assets/cakes/round/round (8).webp';
 import round_9 from '../assets/cakes/round/round (9).webp';
 import round_10 from '../assets/cakes/round/round (10).webp';
-import round_11 from '../assets/cakes/round/round (11).webp';
+import round_11 from '../assets/cakes/round/round (11).jpeg';
 import round_12 from '../assets/cakes/round/round (12).webp';
 
 const roundImages = [
