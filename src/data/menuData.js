@@ -9,7 +9,7 @@ import brownie_4 from '../assets/brownies/brownie (4).webp';
 import pops_1 from '../assets/cake pops/pops (1).webp';
 import pops_2 from '../assets/cake pops/pops (2).webp';
 import pops_3 from '../assets/cake pops/pops (3).webp';
-import heart1 from '../assets/1.webp';
+import heart1 from '../assets/1.png';
 import sicles1 from '../assets/cake sicles/cakesicles (1).webp';
 import sicles2 from '../assets/cake sicles/cakesicles (2).webp';
 import sicles3 from '../assets/cake sicles/cakesicles (3).webp';
@@ -20,7 +20,7 @@ import mini2 from '../assets/minicakes/2.webp';
 
 
 // Heart Cake Gallery
-import heart_1 from '../assets/cakes/heart/heart (1).webp';
+import heart_1 from '../assets/cakes/heart/heart (1).png';
 import heart_2 from '../assets/cakes/heart/heart (2).webp';
 import heart_3 from '../assets/cakes/heart/heart (3).webp';
 import heart_4 from '../assets/cakes/heart/heart (4).webp';
@@ -49,7 +49,7 @@ const roundImages = [
 ];
 
 // Cupcake Gallery
-import cupcake_1 from '../assets/cupcakes/butter1.webp';
+import cupcake_1 from '../assets/cupcakes/butter1.jpg';
 import cupcake_2 from '../assets/cupcakes/butter2.webp';
 import cupcake_3 from '../assets/cupcakes/butter3.webp';
 import cupcake_4 from '../assets/cupcakes/whitechoclate1.webp';
