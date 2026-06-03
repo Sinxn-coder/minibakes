@@ -49,7 +49,7 @@ function createHeartShape(size) {
 }
 
 // --- Piped Border Helper ---
-function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
+function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1, swags = 0 }) {
   const geo = useMemo(() => {
     const baseRadius = 0.08 * scaleMultiplier;
     // High segments to support deep ridges and twist
@@ -95,7 +95,14 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
         const t = i / count;
         pos = curve.getPointAt(t);
         tangent = curve.getTangentAt(t);
-        pos.set(pos.x, yOffset, -pos.y);
+        
+        let drop = 0;
+        if (swags > 0) {
+          const local_t = (t * swags) % 1;
+          drop = 0.2 * Math.sin(local_t * Math.PI);
+        }
+        
+        pos.set(pos.x, yOffset - drop, -pos.y);
         tangent.set(tangent.x, 0, -tangent.y);
         
         if (inset !== 0) {
@@ -103,9 +110,17 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
           pos.addScaledVector(normal, inset);
         }
       } else {
-        const angle = (i / count) * Math.PI * 2;
+        const t = i / count;
+        const angle = t * Math.PI * 2;
         const actualRadius = radius - inset;
-        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
+        
+        let drop = 0;
+        if (swags > 0) {
+          const local_t = (t * swags) % 1;
+          drop = 0.2 * Math.sin(local_t * Math.PI);
+        }
+
+        pos.set(Math.cos(angle) * actualRadius, yOffset - drop, Math.sin(angle) * actualRadius);
         tangent.set(-Math.sin(angle), 0, Math.cos(angle));
       }
 
@@ -235,7 +250,7 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, side
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 36)} yOffset={0} color={color} />}
+      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 45)} yOffset={height / 2 - 0.05} color={color} swags={8} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
@@ -265,7 +280,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePi
       {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 42)} yOffset={0} color={color} />}
+      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 55)} yOffset={height / 2 - 0.05} color={color} swags={10} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
