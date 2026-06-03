@@ -140,13 +140,6 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                     <ChevronDown size={20} />
                     <span className="designer-card-label">Bottom Shell</span>
                   </button>
-                  <button 
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.flowerCluster ? 'active-design' : ''}`}
-                    onClick={() => toggleDesign('flowerCluster')}
-                  >
-                    <Flower size={20} />
-                    <span className="designer-card-label">Flower Cluster</span>
-                  </button>
                 </div>
               </div>
             </div>
