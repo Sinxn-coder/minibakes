@@ -2438,12 +2438,11 @@ function AdminAppContent() {
                                 <span className="admin-layer-dot" style={{ backgroundColor: layer.color }}></span>
                                 <span className="admin-layer-label">
                                   <strong>Layer {idx + 1}:</strong> {layer.type.includes('6') ? '6"' : '8"'} {layer.type.includes('heart') ? 'Heart' : 'Round'}
-                                  {(layer.topBorder || layer.bottomBorder || layer.pearlBottom || layer.sidePiping) && (
+                                  {((layer.topBorder && layer.topBorder !== 'none') || (layer.bottomBorder && layer.bottomBorder !== 'none') || layer.pearlBottom) && (
                                     <div className="layer-design-tags" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
-                                      {layer.topBorder && <span className="design-tag">Shell Top</span>}
-                                      {layer.bottomBorder && <span className="design-tag">Shell Bottom</span>}
+                                      {layer.topBorder && layer.topBorder !== 'none' && <span className="design-tag" style={{textTransform: 'capitalize'}}>Top: {layer.topBorder === true ? 'Shell' : layer.topBorder}</span>}
+                                      {layer.bottomBorder && layer.bottomBorder !== 'none' && <span className="design-tag" style={{textTransform: 'capitalize'}}>Bottom: {layer.bottomBorder === true ? 'Shell' : layer.bottomBorder}</span>}
                                       {layer.pearlBottom && <span className="design-tag">Pearl</span>}
-                                      {layer.sidePiping && <span className="design-tag">Side Piping</span>}
                                     </div>
                                   )}
                                 </span>

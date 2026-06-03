@@ -400,9 +400,8 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                             <span className="layer-dot" style={{ backgroundColor: layer.color || '#f1f1f1' }}></span>
                             <span className="layer-text">
                               {layer.type.includes('6') ? '6"' : '8"'} {layer.type.includes('heart') ? 'Heart' : 'Round'}
-                              {layer.topBorder && ' • Shell Top'}
-                              {layer.bottomBorder && ' • Shell Bottom'}
-                              {layer.sidePiping && ' • Side Piping'}
+                              {layer.topBorder && layer.topBorder !== 'none' && ` • Top: ${layer.topBorder === true ? 'Shell' : layer.topBorder}`}
+                              {layer.bottomBorder && layer.bottomBorder !== 'none' && ` • Bottom: ${layer.bottomBorder === true ? 'Shell' : layer.bottomBorder}`}
                             </span>
                           </div>
                         ))}

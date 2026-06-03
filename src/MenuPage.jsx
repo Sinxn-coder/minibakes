@@ -123,31 +123,36 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                   ))}
                 </div>
               </div>
-              <div className="designer-column">
-                <h4>Designs</h4>
-                <div className="designer-options">
-                  <button 
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.topBorder ? 'active-design' : ''}`}
-                    onClick={() => toggleDesign('topBorder')}
-                  >
-                    <ChevronUp size={20} />
-                    <span className="designer-card-label">Top Shell</span>
-                  </button>
-                  <button 
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.bottomBorder ? 'active-design' : ''}`}
-                    onClick={() => toggleDesign('bottomBorder')}
-                  >
-                    <ChevronDown size={20} />
-                    <span className="designer-card-label">Bottom Shell</span>
-                  </button>
-                  <button 
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.sidePiping ? 'active-design' : ''}`}
-                    onClick={() => toggleDesign('sidePiping')}
-                  >
-                    <AlignJustify size={20} />
-                    <span className="designer-card-label">Side Piping</span>
-                  </button>
-                </div>
+              <div className="designer-column" style={{ minWidth: '220px' }}>
+                <h4>Top Border</h4>
+                <select 
+                  className="designer-select"
+                  value={cakeLayers[selectedLayerIndex]?.topBorder || 'none'}
+                  onChange={(e) => setBorderDesign('topBorder', e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '16px', backgroundColor: '#fff', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
+                >
+                  <option value="none">None</option>
+                  <option value="shell">Shell (Classic)</option>
+                  <option value="rope">Rope Twist</option>
+                  <option value="rosette">Rosette Swirl</option>
+                  <option value="pearl">Pearl Bead</option>
+                  <option value="zigzag">Zigzag Ribbon</option>
+                </select>
+                
+                <h4>Bottom Border</h4>
+                <select 
+                  className="designer-select"
+                  value={cakeLayers[selectedLayerIndex]?.bottomBorder || 'none'}
+                  onChange={(e) => setBorderDesign('bottomBorder', e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', backgroundColor: '#fff', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit' }}
+                >
+                  <option value="none">None</option>
+                  <option value="shell">Shell (Classic)</option>
+                  <option value="rope">Rope Twist</option>
+                  <option value="rosette">Rosette Swirl</option>
+                  <option value="pearl">Pearl Bead</option>
+                  <option value="zigzag">Zigzag Ribbon</option>
+                </select>
               </div>
             </div>
             <div className="designer-summary">
@@ -403,6 +408,18 @@ export default function MenuPage({
       if (i !== selectedLayerIndex) return layer;
       const newSpread = layer.spread === spreadType ? null : spreadType;
       return { ...layer, spread: newSpread };
+    }));
+  };
+
+  const setBorderDesign = (borderType, style) => {
+    if (selectedLayerIndex === null || cakeLayers.length === 0) {
+      setToastMessage("Please select a layer below first!");
+      setTimeout(() => setToastMessage(null), 3000);
+      return;
+    }
+    setCakeLayers(prev => prev.map((layer, i) => {
+      if (i !== selectedLayerIndex) return layer;
+      return { ...layer, [borderType]: style === 'none' ? false : style };
     }));
   };
 

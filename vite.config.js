@@ -14,6 +14,7 @@ export default defineConfig({
     host: true, // Changes the host from localhost to 0.0.0.0 (allows network access)
   },
   build: {
+    minify: false,
     chunkSizeWarningLimit: 1500
   }
 })

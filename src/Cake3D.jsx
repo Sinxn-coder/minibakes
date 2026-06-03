@@ -48,40 +48,26 @@ function createHeartShape(size) {
   return shape;
 }
 
-// --- Piped Border Helper ---
-function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1, swags = 0 }) {
+// --- 1. Shell Border (Classic) ---
+function ShellBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
   const geo = useMemo(() => {
     const baseRadius = 0.08 * scaleMultiplier;
-    // High segments to support deep ridges and twist
     const g = new THREE.SphereGeometry(baseRadius, 32, 32); 
     const pos = g.attributes.position;
-
     for (let i = 0; i < pos.count; i++) {
-      let x = pos.getX(i);
-      let y = pos.getY(i);
-      let z = pos.getZ(i);
-
+      let x = pos.getX(i); let y = pos.getY(i); let z = pos.getZ(i);
       let angle = Math.atan2(z, x);
-      let normalizedY = y / baseRadius; // -1 to 1
-      
-      // 10 ridges for a star-tip look. Taper them at poles to avoid jagged tips
+      let normalizedY = y / baseRadius;
       let taper = 1 - Math.abs(normalizedY); 
       let ridge = 1 + (0.3 * taper * Math.cos(angle * 10));
-
-      x *= ridge;
-      z *= ridge;
-
-      // Twist the shell 
+      x *= ridge; z *= ridge;
       let twist = normalizedY * 2.0; 
-      
       let tx = x * Math.cos(twist) - z * Math.sin(twist);
       let tz = x * Math.sin(twist) + z * Math.cos(twist);
-
-      pos.setX(i, tx);
-      pos.setZ(i, tz);
+      pos.setX(i, tx); pos.setZ(i, tz);
     }
     g.computeVertexNormals();
-    g.rotateX(Math.PI / 2); // Align poles with Z axis for the piped shell look
+    g.rotateX(Math.PI / 2);
     return g;
   }, [scaleMultiplier]);
 
@@ -90,46 +76,27 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
     for (let i = 0; i < count; i++) {
       let pos = new THREE.Vector3();
       let tangent = new THREE.Vector3();
-
       if (curve) {
         const t = i / count;
         pos = curve.getPointAt(t);
         tangent = curve.getTangentAt(t);
-        
-        let drop = 0;
-        if (swags > 0) {
-          const local_t = (t * swags) % 1;
-          drop = 0.35 * Math.sin(local_t * Math.PI);
-        }
-        
-        pos.set(pos.x, yOffset - drop, -pos.y);
+        pos.set(pos.x, yOffset, -pos.y);
         tangent.set(tangent.x, 0, -tangent.y);
-        
         if (inset !== 0) {
           const normal = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
           pos.addScaledVector(normal, inset);
         }
       } else {
-        const t = i / count;
-        const angle = t * Math.PI * 2;
+        const angle = (i / count) * Math.PI * 2;
         const actualRadius = radius - inset;
-        
-        let drop = 0;
-        if (swags > 0) {
-          const local_t = (t * swags) % 1;
-          drop = 0.35 * Math.sin(local_t * Math.PI);
-        }
-
-        pos.set(Math.cos(angle) * actualRadius, yOffset - drop, Math.sin(angle) * actualRadius);
+        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
         tangent.set(-Math.sin(angle), 0, Math.cos(angle));
       }
-
       const dummy = new THREE.Object3D();
       dummy.position.copy(pos);
       dummy.lookAt(pos.clone().add(tangent));
-      dummy.rotateX(Math.PI / 6); // Tilt forward so the fat back rests on the tail of the previous shell
+      dummy.rotateX(Math.PI / 6);
       dummy.updateMatrix();
-
       arr.push(
         <mesh key={i} position={dummy.position} quaternion={dummy.quaternion} scale={[1, 0.85, 1.8]} geometry={geo} castShadow>
           <meshStandardMaterial color={color} roughness={0.3} metalness={0.02} />
@@ -137,11 +104,223 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
       );
     }
     return arr;
-  }, [count, curve, radius, yOffset, color, inset, geo, swags]);
+  }, [count, curve, radius, yOffset, color, inset, geo]);
 
   return <group>{dollops}</group>;
 }
 
+// --- 2. Pearl Bead Border ---
+function PearlBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
+  const geo = useMemo(() => new THREE.SphereGeometry(0.06 * scaleMultiplier, 32, 32), [scaleMultiplier]);
+  
+  const pearls = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < count; i++) {
+      let pos = new THREE.Vector3();
+      if (curve) {
+        const t = i / count;
+        pos = curve.getPointAt(t);
+        let tangent = curve.getTangentAt(t);
+        pos.set(pos.x, yOffset, -pos.y);
+        if (inset !== 0) {
+          const normal = new THREE.Vector3(-tangent.x, 0, tangent.y).normalize();
+          pos.addScaledVector(normal, inset);
+        }
+      } else {
+        const angle = (i / count) * Math.PI * 2;
+        const actualRadius = radius - inset;
+        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
+      }
+      arr.push(
+        <mesh key={i} position={pos} scale={[1, 0.9, 1]} geometry={geo} castShadow>
+          <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} />
+        </mesh>
+      );
+    }
+    return arr;
+  }, [count, curve, radius, yOffset, color, inset, geo]);
+
+  return <group>{pearls}</group>;
+}
+
+// --- 3. Rope Border ---
+function RopeBorder({ curve, radius, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
+  const strands = useMemo(() => {
+    const segments = 200;
+    const pathPoints1 = [];
+    const pathPoints2 = [];
+    const strandRadius = 0.04 * scaleMultiplier;
+    const twists = 40;
+
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      let pos = new THREE.Vector3();
+      let tangent = new THREE.Vector3();
+      let normal = new THREE.Vector3();
+
+      if (curve) {
+        pos = curve.getPointAt(t);
+        tangent = curve.getTangentAt(t);
+        pos.set(pos.x, yOffset, -pos.y);
+        tangent.set(tangent.x, 0, -tangent.y);
+        normal.set(-tangent.z, 0, tangent.x).normalize();
+        if (inset !== 0) {
+          pos.addScaledVector(normal, inset);
+        }
+      } else {
+        const angle = t * Math.PI * 2;
+        const actualRadius = radius - inset;
+        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
+        tangent.set(-Math.sin(angle), 0, Math.cos(angle));
+        normal.set(Math.cos(angle), 0, Math.sin(angle));
+      }
+
+      const up = new THREE.Vector3(0, 1, 0);
+      const angleOffset = t * Math.PI * 2 * twists;
+      
+      const p1 = pos.clone().add(normal.clone().multiplyScalar(Math.cos(angleOffset) * strandRadius * 0.8))
+                          .add(up.clone().multiplyScalar(Math.sin(angleOffset) * strandRadius * 0.8));
+      const p2 = pos.clone().add(normal.clone().multiplyScalar(Math.cos(angleOffset + Math.PI) * strandRadius * 0.8))
+                          .add(up.clone().multiplyScalar(Math.sin(angleOffset + Math.PI) * strandRadius * 0.8));
+      
+      pathPoints1.push(p1);
+      pathPoints2.push(p2);
+    }
+
+    const curve1 = new THREE.CatmullRomCurve3(pathPoints1);
+    const curve2 = new THREE.CatmullRomCurve3(pathPoints2);
+
+    return [
+      <mesh key="s1" castShadow><tubeGeometry args={[curve1, segments, strandRadius, 16, false]} /><meshStandardMaterial color={color} roughness={0.3} metalness={0.02} /></mesh>,
+      <mesh key="s2" castShadow><tubeGeometry args={[curve2, segments, strandRadius, 16, false]} /><meshStandardMaterial color={color} roughness={0.3} metalness={0.02} /></mesh>
+    ];
+  }, [curve, radius, yOffset, color, inset, scaleMultiplier]);
+
+  return <group>{strands}</group>;
+}
+
+// --- 4. Zigzag Ribbon Border ---
+function ZigzagBorder({ curve, radius, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
+  const ribbon = useMemo(() => {
+    const segments = 200;
+    const pathPoints = [];
+    const zigzags = 35;
+    const amplitude = 0.05 * scaleMultiplier;
+
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      let pos = new THREE.Vector3();
+      let tangent = new THREE.Vector3();
+      let normal = new THREE.Vector3();
+
+      if (curve) {
+        pos = curve.getPointAt(t);
+        tangent = curve.getTangentAt(t);
+        pos.set(pos.x, yOffset, -pos.y);
+        tangent.set(tangent.x, 0, -tangent.y);
+        normal.set(-tangent.z, 0, tangent.x).normalize();
+        if (inset !== 0) pos.addScaledVector(normal, inset);
+      } else {
+        const angle = t * Math.PI * 2;
+        const actualRadius = radius - inset;
+        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
+        tangent.set(-Math.sin(angle), 0, Math.cos(angle));
+        normal.set(Math.cos(angle), 0, Math.sin(angle));
+      }
+
+      const wave = Math.sin(t * Math.PI * 2 * zigzags);
+      pos.add(normal.multiplyScalar(wave * amplitude));
+      pathPoints.push(pos);
+    }
+
+    const zigzagCurve = new THREE.CatmullRomCurve3(pathPoints);
+    return (
+      <mesh castShadow>
+        <tubeGeometry args={[zigzagCurve, segments, 0.04 * scaleMultiplier, 16, false]} />
+        <meshStandardMaterial color={color} roughness={0.3} metalness={0.02} />
+      </mesh>
+    );
+  }, [curve, radius, yOffset, color, inset, scaleMultiplier]);
+
+  return <group>{ribbon}</group>;
+}
+
+// --- 5. Rosette Swirl Border ---
+function RosetteBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
+  const geo = useMemo(() => {
+    const g = new THREE.CylinderGeometry(0.01, 0.1 * scaleMultiplier, 0.1 * scaleMultiplier, 32, 4);
+    const pos = g.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      let x = pos.getX(i); let y = pos.getY(i); let z = pos.getZ(i);
+      let angle = Math.atan2(z, x);
+      let r = Math.sqrt(x*x + z*z);
+      // Star ridges
+      r *= 1 + 0.15 * Math.cos(angle * 8);
+      // Twist
+      let twist = y * 20.0;
+      let tx = r * Math.cos(angle + twist);
+      let tz = r * Math.sin(angle + twist);
+      pos.setX(i, tx); pos.setZ(i, tz);
+    }
+    g.computeVertexNormals();
+    g.translate(0, 0.05 * scaleMultiplier, 0); // sit on bottom
+    return g;
+  }, [scaleMultiplier]);
+
+  const rosettes = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < count; i++) {
+      let pos = new THREE.Vector3();
+      let tangent = new THREE.Vector3();
+      if (curve) {
+        const t = i / count;
+        pos = curve.getPointAt(t);
+        tangent = curve.getTangentAt(t);
+        pos.set(pos.x, yOffset, -pos.y);
+        tangent.set(tangent.x, 0, -tangent.y);
+        if (inset !== 0) {
+          const normal = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
+          pos.addScaledVector(normal, inset);
+        }
+      } else {
+        const angle = (i / count) * Math.PI * 2;
+        const actualRadius = radius - inset;
+        pos.set(Math.cos(angle) * actualRadius, yOffset, Math.sin(angle) * actualRadius);
+        tangent.set(-Math.sin(angle), 0, Math.cos(angle));
+      }
+      
+      const dummy = new THREE.Object3D();
+      dummy.position.copy(pos);
+      dummy.lookAt(pos.clone().add(tangent));
+      // Orient rosette to face slightly outward and up
+      dummy.rotateX(-Math.PI / 2);
+      dummy.rotateZ(Math.PI / 4);
+      dummy.updateMatrix();
+      
+      arr.push(
+        <mesh key={i} position={dummy.position} quaternion={dummy.quaternion} geometry={geo} castShadow>
+          <meshStandardMaterial color={color} roughness={0.3} metalness={0.02} />
+        </mesh>
+      );
+    }
+    return arr;
+  }, [count, curve, radius, yOffset, color, inset, geo]);
+
+  return <group>{rosettes}</group>;
+}
+
+// --- Procedural Border Switcher ---
+function ProceduralBorder(props) {
+  if (!props.styleType || props.styleType === 'none') return null;
+  switch (props.styleType) {
+    case 'shell': return <ShellBorder {...props} count={props.count} />;
+    case 'rope': return <RopeBorder {...props} />;
+    case 'rosette': return <RosetteBorder {...props} count={Math.floor(props.count * 0.6)} />; // Rosettes are wider
+    case 'pearl': return <PearlBorder {...props} count={Math.floor(props.count * 1.6)} />; // Pearls are smaller
+    case 'zigzag': return <ZigzagBorder {...props} />;
+    default: return <ShellBorder {...props} count={props.count} />;
+  }
+}
 
 
 function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }) {
@@ -240,7 +419,7 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
 }
 
 // --- Single Round Layer ---
-function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, sidePiping, pearlBottom, spread, customText, sizeNum }) {
+function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
   return (
     <group position={[0, posY, 0]}>
       <mesh castShadow>
@@ -249,15 +428,14 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, side
       </mesh>
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
-      {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 45)} yOffset={height / 2 - 0.05} color={color} swags={8} />}
-      {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
+      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
 }
 
 // --- Single Heart Layer ---
-function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePiping, pearlBottom, spread, customText, sizeNum }) {
+function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
   const { cakeGeo, curve } = useMemo(() => {
     const shape = createHeartShape(size);
     const extrudeSettings = { depth: height, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6, curveSegments: 64 };
@@ -279,9 +457,8 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePi
       </mesh>
       {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
-      {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 55)} yOffset={height / 2 - 0.05} color={color} swags={10} />}
-      {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
+      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
 }
@@ -323,18 +500,17 @@ function CakeModel({ layers }) {
     const color = layer.color || '#F9C6C9';
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
-    const sidePiping = layer.sidePiping || false;
 
     const spread = layer.spread || null;
     const customText = layer.customText || '';
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} sidePiping={sidePiping} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 
