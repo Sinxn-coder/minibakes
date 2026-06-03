@@ -137,7 +137,7 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
       );
     }
     return arr;
-  }, [count, curve, radius, yOffset, color, inset, geo]);
+  }, [count, curve, radius, yOffset, color, inset, geo, swags]);
 
   return <group>{dollops}</group>;
 }
