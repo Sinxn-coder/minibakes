@@ -1,9 +1,8 @@
 import React, { useMemo, Suspense, useState, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, useGLTF, Text } from '@react-three/drei';
+import { OrbitControls, Environment, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const flowerModelUrl = `${import.meta.env.BASE_URL}3d/flower.glb`;
 
 // --- Layer size config ---
 const BASE_RADIUS = 1.35; // constant base width
@@ -130,41 +129,6 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
 
 
 
-// --- Flower Model from GLB ---
-function FlowerCluster({ radius, yOffset, isHeart = false, size = 0, sizeNum = '8' }) {
-  const { scene } = useGLTF(flowerModelUrl);
-  const masterScale = (sizeNum === '6' ? 0.78 : 1.0) * 0.8; // Significantly larger for the GLB
-  
-  const clonedScene = useMemo(() => {
-    const s = scene.clone();
-    s.traverse((node) => {
-      if (node.isMesh) {
-        node.castShadow = true;
-        node.receiveShadow = true;
-      }
-    });
-    return s;
-  }, [scene]);
-
-  const pos = useMemo(() => {
-    const lift = 0.12; 
-    if (isHeart) return [size * 1.0, yOffset + lift, -size * 0.4];
-    return [0, yOffset + lift, radius + 0.03]; 
-  }, [isHeart, size, radius, yOffset]);
-
-  const rotation = useMemo(() => {
-    if (isHeart) return [0.1, Math.PI / 1.6, 0];
-    return [0.2, -Math.PI / 2.2, 0];
-  }, [isHeart]);
-
-  return (
-    <group position={pos} scale={masterScale} rotation={rotation}>
-      <primitive object={clonedScene} />
-    </group>
-  );
-}
-
-// --- Drip Effect Helper ---
 function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }) {
   const dripColor = color === 'Nutella' ? '#3d1e16' : 
                     color === 'White Chocolate' ? '#f5ebd6' :
@@ -236,9 +200,6 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
   return <group>{drips}</group>;
 }
 
-useGLTF.preload(flowerModelUrl);
-
-
 // --- Cake Text Helper ---
 function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' }) {
   if (!text) return null;
@@ -264,7 +225,7 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
 }
 
 // --- Single Round Layer ---
-function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, flowerCluster, spread, customText, sizeNum }) {
+function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
   return (
     <group position={[0, posY, 0]}>
       <mesh castShadow>
@@ -275,14 +236,12 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-
-      {flowerCluster && <FlowerCluster radius={radius} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
 }
 
 // --- Single Heart Layer ---
-function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, flowerCluster, spread, customText, sizeNum }) {
+function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
   const { cakeGeo, curve } = useMemo(() => {
     const shape = createHeartShape(size);
     const extrudeSettings = { depth: height, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6, curveSegments: 64 };
@@ -306,8 +265,6 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
-
-      {flowerCluster && <FlowerCluster isHeart size={size} yOffset={-height / 2} sizeNum={sizeNum} />}
     </group>
   );
 }
@@ -350,17 +307,16 @@ function CakeModel({ layers }) {
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
 
-    const flowerCluster = layer.flowerCluster || false;
     const spread = layer.spread || null;
     const customText = layer.customText || '';
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} flowerCluster={flowerCluster} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 
