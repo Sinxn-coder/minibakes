@@ -99,7 +99,7 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
         let drop = 0;
         if (swags > 0) {
           const local_t = (t * swags) % 1;
-          drop = 0.2 * Math.sin(local_t * Math.PI);
+          drop = 0.35 * Math.sin(local_t * Math.PI);
         }
         
         pos.set(pos.x, yOffset - drop, -pos.y);
@@ -117,7 +117,7 @@ function PipedBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
         let drop = 0;
         if (swags > 0) {
           const local_t = (t * swags) % 1;
-          drop = 0.2 * Math.sin(local_t * Math.PI);
+          drop = 0.35 * Math.sin(local_t * Math.PI);
         }
 
         pos.set(Math.cos(angle) * actualRadius, yOffset - drop, Math.sin(angle) * actualRadius);
@@ -250,7 +250,7 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, side
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && <PipedBorder radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 45)} yOffset={height / 2 - 0.15} color={color} swags={8} />}
+      {sidePiping && <PipedBorder radius={radius * 0.98} inset={0.02} count={Math.floor(radius * 45)} yOffset={height / 2 - 0.05} color={color} swags={8} />}
       {bottomBorder && <PipedBorder radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
@@ -280,7 +280,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, sidePi
       {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && <PipedBorder curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
-      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 55)} yOffset={height / 2 - 0.15} color={color} swags={10} />}
+      {sidePiping && <PipedBorder curve={curve} inset={0.02} count={Math.floor(size * 55)} yOffset={height / 2 - 0.05} color={color} swags={10} />}
       {bottomBorder && <PipedBorder curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
     </group>
   );
