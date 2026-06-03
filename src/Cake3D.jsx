@@ -395,7 +395,7 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
 }
 // --- Fondant Bow Helper ---
 function FondantBow({ radius, yOffset, color, isHeart, size }) {
-  const pos = isHeart ? [0, yOffset, size * 0.95] : [0, yOffset, radius + 0.05];
+  const pos = isHeart ? [0, yOffset, size * 1.05 + 0.05] : [0, yOffset, radius + 0.05];
   
   return (
     <group position={pos} rotation={[0, 0, 0]} scale={1.2}>
