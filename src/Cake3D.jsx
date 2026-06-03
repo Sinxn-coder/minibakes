@@ -393,6 +393,40 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
 
   return <group>{drips}</group>;
 }
+// --- Fondant Bow Helper ---
+function FondantBow({ radius, yOffset, color, isHeart, size }) {
+  const pos = isHeart ? [0, yOffset, size * 0.95] : [0, yOffset, radius + 0.05];
+  
+  return (
+    <group position={pos} rotation={[0, 0, 0]} scale={1.2}>
+      {/* Left Loop */}
+      <mesh position={[-0.2, 0, 0]} rotation={[0, 0, Math.PI / 8]} scale={[1, 0.6, 0.3]} castShadow>
+        <sphereGeometry args={[0.25, 32, 32]} />
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+      {/* Right Loop */}
+      <mesh position={[0.2, 0, 0]} rotation={[0, 0, -Math.PI / 8]} scale={[1, 0.6, 0.3]} castShadow>
+        <sphereGeometry args={[0.25, 32, 32]} />
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+      {/* Center Knot */}
+      <mesh position={[0, 0, 0.08]} scale={[1, 1, 0.5]} castShadow>
+        <sphereGeometry args={[0.12, 16, 16]} />
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+      {/* Left Tail */}
+      <mesh position={[-0.15, -0.25, 0.02]} rotation={[0, 0, -Math.PI / 6]} scale={[1, 1, 0.1]} castShadow>
+        <cylinderGeometry args={[0.02, 0.12, 0.4, 16]} />
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+      {/* Right Tail */}
+      <mesh position={[0.15, -0.25, 0.02]} rotation={[0, 0, Math.PI / 6]} scale={[1, 1, 0.1]} castShadow>
+        <cylinderGeometry args={[0.02, 0.12, 0.4, 16]} />
+        <meshStandardMaterial color={color} roughness={0.6} />
+      </mesh>
+    </group>
+  );
+}
 
 // --- Cake Text Helper ---
 function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' }) {
@@ -419,7 +453,7 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
 }
 
 // --- Single Round Layer ---
-function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
+function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pearlBottom, bow, spread, customText, sizeNum }) {
   return (
     <group position={[0, posY, 0]}>
       <mesh castShadow>
@@ -430,12 +464,13 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
       {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
       {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {bow && <FondantBow radius={radius} yOffset={0} color={color} />}
     </group>
   );
 }
 
 // --- Single Heart Layer ---
-function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, spread, customText, sizeNum }) {
+function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlBottom, bow, spread, customText, sizeNum }) {
   const { cakeGeo, curve } = useMemo(() => {
     const shape = createHeartShape(size);
     const extrudeSettings = { depth: height, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6, curveSegments: 64 };
@@ -459,6 +494,7 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
       {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
       {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {bow && <FondantBow isHeart size={size} yOffset={0} color={color} />}
     </group>
   );
 }
@@ -500,17 +536,18 @@ function CakeModel({ layers }) {
     const color = layer.color || '#F9C6C9';
     const topBorder = layer.topBorder || false;
     const bottomBorder = layer.bottomBorder || false;
-
+    const bow = layer.bow || false;
+    
     const spread = layer.spread || null;
     const customText = layer.customText || '';
 
     if (shapeType === 'round') {
       renderedLayers.push(
-        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <RoundLayer key={i} radius={scaledRadius} posY={layerY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} bow={bow} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     } else {
       renderedLayers.push(
-        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} spread={spread} customText={customText} sizeNum={sizeNum} />
+        <HeartLayer key={i} size={scaledRadius * 0.87} posY={currentY} color={color} height={height} topBorder={topBorder} bottomBorder={bottomBorder} bow={bow} spread={spread} customText={customText} sizeNum={sizeNum} />
       );
     }
 
