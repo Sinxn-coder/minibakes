@@ -469,6 +469,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   });
 
   return (
+    <>
     <div className="product-details-page">
       {showNotification && (
         <div className="added-notification">
@@ -673,7 +674,6 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             )}
             </div>
           </div>
-      </div>
       
       {showCareModal && (
         <div className="care-modal-overlay" onClick={() => setShowCareModal(false)}>
@@ -685,5 +685,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
           </div>
         </div>
       )}
-    </div>);
+    </div>
+    </>);
 }
+
+
