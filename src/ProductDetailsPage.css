@@ -116,6 +116,7 @@
   width: 100%;
   flex: 1;
   overflow: hidden;
+  background: #66021F;
 }
 
 .details-image-side {
