@@ -1209,3 +1209,38 @@ input:checked + .conv-slider:before {
     display: none;
   }
 }
+
+/* --- Desktop Button & Quantity Tweaks --- */
+@media (min-width: 769px) {
+  .details-chat-panel .quantity-checkout-wrapper {
+    position: sticky;
+    bottom: -2rem; /* Negate the chat panel bottom padding to stick flush */
+    background: #faf8f8;
+    padding: 1.5rem 0 2rem 0;
+    margin-top: auto;
+    border-top: 1.5px solid rgba(102, 2, 31, 0.08);
+    z-index: 10;
+  }
+
+  .details-chat-panel .add-to-order-final-btn {
+    background: transparent;
+    color: #66021F;
+    border: 2px solid #66021F;
+    padding: 0.8rem 1.5rem; /* smaller height */
+    font-size: 0.95rem;
+    border-radius: 30px; /* softer pill shape */
+  }
+
+  .details-chat-panel .add-to-order-final-btn:hover {
+    background: #66021F;
+    color: #fff;
+  }
+
+  .details-chat-panel .quantity-selector {
+    background: transparent;
+    border: 1.5px solid rgba(102, 2, 31, 0.2);
+    border-radius: 30px;
+    padding: 0.4rem 0.8rem;
+    height: auto;
+  }
+}

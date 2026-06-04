@@ -644,6 +644,13 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     </div>
                   </div>
                 ))}
+                {currentStepIndex >= formSteps.length && formSteps.length > 0 && (
+                  <div className="conv-step" style={{ animationDelay: '0.1s' }}>
+                    <div className="conv-question-bubble" style={{ background: '#eaf4ea', color: '#1b5e20', border: '1px solid #c8e6c9' }}>
+                      🎉 Awesome! You're all set. You can now add this to your order.
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Quantity + Confirm */}
