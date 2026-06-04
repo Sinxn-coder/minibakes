@@ -1126,7 +1126,7 @@ input:checked + .conv-slider:before {
     overflow: visible !important;
   }
 
-  /* 2. Hide the order summary (price-breakdown) from summary panel on mobile — show at bottom */
+  /* 2. Hide the order summary (price-breakdown) from summary panel on mobile ï¿½ show at bottom */
   .details-summary-panel .price-breakdown {
     display: none;
   }
