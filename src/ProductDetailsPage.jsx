@@ -670,11 +670,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </button>
               )}
 
-            </div>
           </div>
         </div>
       </div>
-      
+
       {showCareModal && (
         <div className="care-modal-overlay" onClick={() => setShowCareModal(false)}>
           <div className="care-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -688,5 +687,3 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     </div>
   );
 }
-
-
