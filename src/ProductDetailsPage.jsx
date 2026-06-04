@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import ErrorBoundary from './ErrorBoundary';
 import './ProductDetailsPage.css';
@@ -63,6 +63,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const [showNotification, setShowNotification] = useState(false);
   const [warningNotification, setWarningNotification] = useState('');
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [showCareModal, setShowCareModal] = useState(false);
   const displayImg = product?.img;
   const [options, setOptions] = useState({
     flavor: '',
@@ -660,14 +661,29 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 )}
               </div>
 
+              </div>
+  
+            {isCake && (
+              <button 
+                className="care-guide-btn" 
+                onClick={() => setShowCareModal(true)}
+              >
+                <Info size={16} /> View Cake Care Instructions
+              </button>
+            )}
             </div>
-
-            {isCake && <CakeCareGuide />}
+          </div>
+      </div>
+      
+      {showCareModal && (
+        <div className="care-modal-overlay" onClick={() => setShowCareModal(false)}>
+          <div className="care-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="care-modal-close" onClick={() => setShowCareModal(false)}>
+              <X size={24} />
+            </button>
+            <CakeCareGuide />
           </div>
         </div>
-    </div>
-  );
+      )}
+    </div>);
 }
-
-
-
