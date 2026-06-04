@@ -177,10 +177,6 @@
   position: relative;
 }
 
-.details-image-side:hover .main-details-img {
-  transform: scale(1.05);
-}
-
 .details-info-side {
   flex: 1;
   height: 100%;
