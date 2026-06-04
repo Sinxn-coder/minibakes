@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import ErrorBoundary from './ErrorBoundary';
-const Cake3D = React.lazy(() => import('./Cake3D'));
 import './ProductDetailsPage.css';
 import CakeCareGuide from './components/CakeCareGuide';
+const Cake3D = React.lazy(() => import('./Cake3D'));
 
 import style1 from './assets/style1.webp';
 import style2 from './assets/style2.webp';
@@ -540,7 +540,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
             <div className="customization-section conversational-form">
               {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => (
-                <div key={step.id} className="conv-step" style={{ animationDelay: `${idx === currentStepIndex ? '0.1s' : '0s'}` }}>
+                <div key={step.id} className="conv-step" style={{ animationDelay: idx === currentStepIndex ? '0.1s' : '0s' }}>
                   <div className="conv-question-bubble">
                     {step.question}
                   </div>
@@ -665,7 +665,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             {isCake && <CakeCareGuide />}
           </div>
         </div>
-      </div>
     </div>
   );
 }
+
+
+
