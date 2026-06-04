@@ -1098,3 +1098,114 @@ input:checked + .conv-slider:before {
     padding: 1.5rem;
   }
 }
+
+/* -- Mobile: reorder panels, boxed chat, summary at bottom -- */
+@media (max-width: 768px) {
+  .details-info-side {
+    flex-direction: column !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+  }
+
+  /* 1. Summary panel: name/price/desc right under image */
+  .details-summary-panel {
+    order: 1;
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1.5px solid rgba(102, 2, 31, 0.08) !important;
+    border-radius: 0 !important;
+    padding: 1.4rem 1.2rem 1rem !important;
+    background: #fff !important;
+    flex-shrink: 0;
+    overflow: visible !important;
+  }
+
+  /* 2. Hide the order summary (price-breakdown) from summary panel on mobile — show at bottom */
+  .details-summary-panel .price-breakdown {
+    display: none;
+  }
+
+  /* 2. Chat panel: boxed with its own scroll */
+  .details-chat-panel {
+    order: 2;
+    width: 100% !important;
+    flex: none !important;
+    height: 55vh;
+    max-height: 55vh;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    background: #faf8f8 !important;
+    border-radius: 20px;
+    margin: 0.8rem 1rem;
+    width: calc(100% - 2rem) !important;
+    padding: 1.2rem !important;
+    box-shadow: 0 4px 20px rgba(102, 2, 31, 0.08);
+    border: 1px solid rgba(102, 2, 31, 0.08);
+    position: relative;
+  }
+
+  /* Subtle scroll indicator at bottom of chat box */
+  .details-chat-panel::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to top, rgba(250,248,248,0.95), transparent);
+    pointer-events: none;
+    display: block;
+    margin-top: -40px;
+  }
+
+  /* 3. Order summary at the bottom */
+  .mobile-order-summary-footer {
+    order: 3;
+    width: 100% !important;
+    padding: 1rem 1.2rem 2rem !important;
+    background: #fff;
+    border-top: 1.5px solid rgba(102, 2, 31, 0.08);
+  }
+
+  /* Move the quantity + add-to-order inside chat panel on mobile */
+  .details-chat-panel .quantity-checkout-wrapper {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(102, 2, 31, 0.08);
+  }
+
+  /* Care guide button inside summary */
+  .details-summary-panel .care-guide-btn {
+    margin-top: 0.8rem;
+  }
+}
+
+/* Mobile footer: hidden on desktop */
+.mobile-order-summary-footer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-order-summary-footer {
+    display: block;
+    order: 3;
+    width: 100%;
+    padding: 1.2rem 1.2rem 2.5rem;
+    background: #fff;
+    border-top: 1.5px solid rgba(102, 2, 31, 0.08);
+    flex-shrink: 0;
+  }
+  /* Hide the price-breakdown and care button inside summary panel on mobile */
+  .details-summary-panel .price-breakdown,
+  .details-summary-panel .summary-divider,
+  .details-summary-panel .care-guide-btn {
+    display: none;
+  }
+}
