@@ -123,6 +123,7 @@
   height: 100%;
   position: relative;
   background: #ffffff;
+  border-right: 2px dashed var(--color-accent-1);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -716,6 +717,8 @@
       width: 100%;
       padding: 0;
       box-sizing: border-box;
+      border-right: none;
+      border-bottom: 2px dashed var(--color-accent-1);
     }
 
     .details-image-side .main-details-img,
