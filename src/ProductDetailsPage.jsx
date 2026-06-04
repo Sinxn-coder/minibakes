@@ -535,24 +535,16 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
           </div>
 
           <div className="details-info-side">
-            <h1 className="details-title">{product.name}</h1>
-            <p className="details-price">{product.price}</p>
-            <p className="details-description">{product.description}</p>
 
-            <div className="customization-section conversational-form">
-              {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => (
-                <div key={step.id} className="conv-step" style={{ animationDelay: idx === currentStepIndex ? '0.1s' : '0s' }}>
-                  <div className="conv-question-bubble">
-                    {step.question}
-                  </div>
-                  <div className="conv-answer-area">
-                    {step.render()}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* ── LEFT: Product Summary Panel ── */}
+            <div className="details-summary-panel">
+              <h1 className="details-title">{product.name}</h1>
+              <p className="details-price">{product.price}</p>
+              <p className="details-description">{product.description}</p>
 
-              {/* ── Live Price Breakdown ── */}
+              <div className="summary-divider" />
+
+              {/* Live Price Breakdown */}
               <div className="price-breakdown">
                 <h4 className="price-breakdown-title">Order Summary</h4>
                 <div className="price-breakdown-rows">
@@ -625,6 +617,35 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 </div>
               </div>
 
+              {isCake && (
+                <button 
+                  className="care-guide-btn" 
+                  onClick={() => setShowCareModal(true)}
+                >
+                  <Info size={16} /> View Cake Care Instructions
+                </button>
+              )}
+            </div>
+
+            {/* ── RIGHT: Chat / Customization Panel ── */}
+            <div className="details-chat-panel">
+              <div className="chat-panel-header">
+                <span className="chat-panel-badge">🎂 Customize Your Order</span>
+              </div>
+
+              <div className="customization-section conversational-form">
+                {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => (
+                  <div key={step.id} className="conv-step" style={{ animationDelay: idx === currentStepIndex ? '0.1s' : '0s' }}>
+                    <div className="conv-question-bubble">
+                      {step.question}
+                    </div>
+                    <div className="conv-answer-area">
+                      {step.render()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* Quantity + Confirm */}
               <div className="quantity-checkout-wrapper" style={{ width: '100%' }}>
                 <div className="quantity-checkout-row">
@@ -660,15 +681,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   </div>
                 )}
               </div>
-
-              {isCake && (
-                <button 
-                  className="care-guide-btn" 
-                  onClick={() => setShowCareModal(true)}
-                >
-                  <Info size={16} /> View Cake Care Instructions
-                </button>
-              )}
+            </div>
 
           </div>
         </div>
