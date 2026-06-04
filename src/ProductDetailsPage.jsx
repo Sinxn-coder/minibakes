@@ -62,6 +62,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const [quantity, setQuantity] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
   const [warningNotification, setWarningNotification] = useState('');
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const displayImg = product?.img;
   const [options, setOptions] = useState({
     flavor: '',
@@ -174,6 +175,298 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const ediblePrintingTotal = options.ediblePrinting ? 12 : 0;
   const grandTotal = (unitTotal * quantity) + ediblePrintingTotal;
 
+  // Build the form steps dynamically
+  const formSteps = [];
+  
+  if (product.options) {
+    formSteps.push({
+      id: 'boxSize',
+      question: "What box size would you like?",
+      render: () => (
+        <div className="conv-pill-grid">
+          {product.options.map(opt => (
+            <button 
+              key={opt.value}
+              className={`conv-pill ${options.boxSize === opt.value ? 'active' : ''}`}
+              onClick={() => {
+                setOptions({...options, boxSize: opt.value});
+                if (currentStepIndex === formSteps.findIndex(s => s.id === 'boxSize')) {
+                  setCurrentStepIndex(currentStepIndex + 1);
+                }
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+          {isBrownie && (
+            <div className="brownie-notice-box" style={{ 
+              background: 'rgba(128, 0, 0, 0.035)', 
+              border: '1px solid rgba(128, 0, 0, 0.12)', 
+              borderRadius: '12px', 
+              padding: '12px 16px', 
+              marginTop: '12px',
+              display: 'flex',
+              gap: '10px',
+              alignItems: 'flex-start',
+              width: '100%'
+            }}>
+              <AlertCircle size={16} style={{ color: '#6b1111', flexShrink: 0, marginTop: '2px' }} />
+              <p className="brownie-batch-note" style={{ 
+                fontSize: '12px', 
+                color: '#6b1111', 
+                margin: 0, 
+                fontWeight: '500', 
+                lineHeight: '1.5',
+                textAlign: 'left'
+              }}>
+                <strong>Important Note:</strong> Standard batch size is 22cm x 22cm. Depending on the quantity selected, each brownie piece will be adjusted in size accordingly.
+              </p>
+            </div>
+          )}
+        </div>
+      )
+    });
+  }
+
+  if (flavors.length > 0) {
+    formSteps.push({
+      id: 'flavor',
+      question: "What flavor would you like?",
+      render: () => (
+        <div className="conv-pill-grid">
+          {flavors.map(f => (
+            <button 
+              key={f} 
+              className={`conv-pill ${options.flavor === f ? 'active' : ''}`}
+              onClick={() => {
+                setOptions({...options, flavor: f});
+                if (currentStepIndex === formSteps.findIndex(s => s.id === 'flavor')) {
+                  setCurrentStepIndex(currentStepIndex + 1);
+                }
+              }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      )
+    });
+  }
+
+  if (hasSpreads) {
+    formSteps.push({
+      id: 'spreads',
+      question: isCupcake ? 'Any inner spread?' : (isBrownie ? 'Select Spreads (Up to 3)' : 'Select your inner spread:'),
+      render: () => (
+        <div className="conv-pill-grid">
+          {spreads.map(s => {
+            const isActive = options.spreads.includes(s);
+            return (
+              <button 
+                key={s} 
+                className={`conv-pill ${isActive ? 'active' : ''}`}
+                onClick={() => {
+                  let newSpreads;
+                  if (isBrownie) {
+                    if (isActive) newSpreads = options.spreads.filter(item => item !== s);
+                    else if (options.spreads.length < 3) newSpreads = [...options.spreads, s];
+                    else newSpreads = options.spreads;
+                  } else {
+                    newSpreads = isActive ? [] : [s];
+                  }
+                  setOptions({...options, spreads: newSpreads});
+                }}
+              >
+                {s}
+              </button>
+            );
+          })}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+            <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      )
+    });
+  }
+
+  if (isCake) {
+    formSteps.push({
+      id: 'color',
+      question: "Any specific color for the cake or frosting?",
+      render: () => (
+        <div className="conv-input-wrapper">
+          <input 
+            type="text" 
+            placeholder="e.g. Light Pink, Sage Green..." 
+            className="conv-input"
+            value={options.color}
+            onChange={(e) => setOptions({...options, color: e.target.value})}
+            onKeyDown={(e) => e.key === 'Enter' && setCurrentStepIndex(currentStepIndex + 1)}
+          />
+          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )
+    });
+  }
+
+  if (showMessage) {
+    formSteps.push({
+      id: 'message',
+      question: isBreakableHeart ? "What should we write on the heart?" : "What should we write on the product?",
+      render: () => (
+        <div className="conv-input-wrapper">
+          <input 
+            type="text" 
+            placeholder={isBreakableHeart ? "e.g. HBD Sarah! (Optional)" : "e.g. Happy Birthday! (Optional)"} 
+            className="conv-input"
+            value={options.message}
+            onChange={(e) => setOptions({...options, message: e.target.value})}
+            onKeyDown={(e) => e.key === 'Enter' && setCurrentStepIndex(currentStepIndex + 1)}
+          />
+          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )
+    });
+  }
+
+  if (showInnerMessage) {
+    formSteps.push({
+      id: 'innerMessage',
+      question: "Write a secret note to be placed inside (included):",
+      render: () => (
+        <div className="conv-input-wrapper" style={{ alignItems: 'flex-end' }}>
+          <textarea 
+            placeholder="Your secret message..." 
+            className="conv-input conv-textarea"
+            value={options.innerMessage || ''}
+            onChange={(e) => setOptions({...options, innerMessage: e.target.value})}
+          />
+          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )
+    });
+  }
+
+  formSteps.push({
+    id: 'refImage',
+    question: "Do you have an inspiration image?",
+    render: () => (
+      <div className="conv-input-wrapper" style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+        <div className="conv-upload-box">
+          <input 
+            type="file" 
+            id="ref-image" 
+            accept="image/*"
+            onChange={(e) => {
+               setOptions({...options, refImage: e.target.files[0]});
+               setCurrentStepIndex(currentStepIndex + 1);
+            }}
+            style={{ display: 'none' }}
+          />
+          <label htmlFor="ref-image" style={{ cursor: 'pointer', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {options.refImage ? (
+              <>
+                <CheckCircle2 size={24} />
+                <span>{options.refImage.name}</span>
+              </>
+            ) : (
+              <>
+                <Upload size={24} />
+                <span>Tap to upload image (Optional)</span>
+              </>
+            )}
+          </label>
+        </div>
+        {!options.refImage && (
+          <button 
+            style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.9rem', marginTop: '0.5rem', textDecoration: 'underline' }}
+            onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
+          >
+            Skip for now
+          </button>
+        )}
+      </div>
+    )
+  });
+
+  if (showBows || showIndividualPackaging || showEdiblePrinting) {
+    formSteps.push({
+      id: 'addons',
+      question: "Any final additions?",
+      render: () => (
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          {showBows && (
+            <div className="conv-toggle-row">
+              <div className="conv-toggle-label">
+                <span className="conv-toggle-title">🎀 Add Bows</span>
+                <span className="conv-toggle-desc">+€{BOW_ADDON_PRICE}</span>
+              </div>
+              <label className="conv-switch">
+                <input type="checkbox" checked={options.bows} onChange={() => setOptions({...options, bows: !options.bows})} />
+                <span className="conv-slider"></span>
+              </label>
+            </div>
+          )}
+          {showIndividualPackaging && (
+            <div className="conv-toggle-row">
+              <div className="conv-toggle-label">
+                <span className="conv-toggle-title">📦 Individual Packaging</span>
+                <span className="conv-toggle-desc">+€{isCakesicle ? '0.15 per piece' : (0.15 * cupcakesPerBox).toFixed(2)}</span>
+              </div>
+              <label className="conv-switch">
+                <input type="checkbox" checked={options.individualPackaging} onChange={() => setOptions({...options, individualPackaging: !options.individualPackaging})} />
+                <span className="conv-slider"></span>
+              </label>
+            </div>
+          )}
+          {showEdiblePrinting && (
+            <div className="conv-toggle-row">
+              <div className="conv-toggle-label">
+                <span className="conv-toggle-title">🖨️ Edible Printing</span>
+                <span className="conv-toggle-desc">+€12.00</span>
+              </div>
+              <label className="conv-switch">
+                <input type="checkbox" checked={options.ediblePrinting} onChange={() => setOptions({...options, ediblePrinting: !options.ediblePrinting})} />
+                <span className="conv-slider"></span>
+              </label>
+            </div>
+          )}
+          <button className="conv-next-btn" style={{ marginTop: '1rem' }} onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )
+    });
+  }
+
+  formSteps.push({
+    id: 'notes',
+    question: "Any allergies or special instructions?",
+    render: () => (
+      <div className="conv-input-wrapper" style={{ alignItems: 'flex-end' }}>
+        <textarea 
+          placeholder="e.g. No nuts, please!" 
+          className="conv-input conv-textarea"
+          value={options.notes}
+          onChange={(e) => setOptions({...options, notes: e.target.value})}
+        />
+        <button className="conv-next-btn" onClick={() => {
+          if (currentStepIndex < formSteps.length) setCurrentStepIndex(currentStepIndex + 1);
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    )
+  });
+
   return (
     <div className="product-details-page">
       {showNotification && (
@@ -245,222 +538,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             <p className="details-price">{product.price}</p>
             <p className="details-description">{product.description}</p>
 
-            <div className="customization-section">
-
-              {/* Product Options (e.g. Box Size) */}
-              {product.options && (
-                <div className="option-group">
-                  <label>Select Box Size</label>
-                  <div className="option-grid">
-                    {product.options.map(opt => (
-                      <button 
-                        key={opt.value}
-                        className={`option-btn ${options.boxSize === opt.value ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, boxSize: opt.value})}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+            <div className="customization-section conversational-form">
+              {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => (
+                <div key={step.id} className="conv-step" style={{ animationDelay: `${idx === currentStepIndex ? '0.1s' : '0s'}` }}>
+                  <div className="conv-question-bubble">
+                    {step.question}
                   </div>
-                  {isBrownie && (
-                    <div className="brownie-notice-box" style={{ 
-                      background: 'rgba(128, 0, 0, 0.035)', 
-                      border: '1px solid rgba(128, 0, 0, 0.12)', 
-                      borderRadius: '12px', 
-                      padding: '12px 16px', 
-                      marginTop: '12px',
-                      display: 'flex',
-                      gap: '10px',
-                      alignItems: 'flex-start'
-                    }}>
-                      <AlertCircle size={16} style={{ color: '#6b1111', flexShrink: 0, marginTop: '2px' }} />
-                      <p className="brownie-batch-note" style={{ 
-                        fontSize: '12px', 
-                        color: '#6b1111', 
-                        margin: 0, 
-                        fontWeight: '500', 
-                        lineHeight: '1.5',
-                        textAlign: 'left'
-                      }}>
-                        <strong>Important Note:</strong> Standard batch size is 22cm x 22cm. Depending on the quantity selected (6, 9, 12, etc.), each brownie piece will be adjusted in size accordingly.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Flavor */}
-              <div className="option-group">
-                <label>Select Flavor</label>
-                <div className="option-grid">
-                  {flavors.map(f => (
-                    <button 
-                      key={f} 
-                      className={`option-btn ${options.flavor === f ? 'active' : ''}`}
-                      onClick={() => setOptions({...options, flavor: f})}
-                    >
-                      {f}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Spread — cakes and cupcakes, toggle-able */}
-              {hasSpreads && (
-                <div className="option-group">
-                  <label>
-                    {isCupcake ? 'Select Inner Spread' : (isBrownie ? 'Select Spreads (Up to 3)' : 'Inner Spread')}
-                    <span className="option-label-hint">
-                      {isCupcake ? ' — +€0.45 per cupcake' : (isBrownie ? ' — Choose up to 3' : ' — Included')}
-                    </span>
-                  </label>
-                  <div className="option-grid">
-                    {spreads.map(s => {
-                      const isActive = options.spreads.includes(s);
-                      return (
-                        <button 
-                          key={s} 
-                          className={`option-btn ${isActive ? 'active' : ''}`}
-                          onClick={() => {
-                            if (isBrownie) {
-                              if (isActive) {
-                                setOptions({...options, spreads: options.spreads.filter(item => item !== s)});
-                              } else if (options.spreads.length < 3) {
-                                setOptions({...options, spreads: [...options.spreads, s]});
-                              }
-                            } else {
-                              setOptions({...options, spreads: isActive ? [] : [s]});
-                            }
-                          }}
-                        >
-                          {s}
-                        </button>
-                      );
-                    })}
+                  <div className="conv-answer-area">
+                    {step.render()}
                   </div>
                 </div>
-              )}
-
-              {/* Add-Ons */}
-              {(showBows || showIndividualPackaging || showEdiblePrinting) && (
-                <div className="option-group">
-                  <label>
-                    Add-Ons
-                    <span className="option-label-hint"> — tap to add</span>
-                  </label>
-                  <div className="addon-grid">
-                    {showBows && (
-                      <button
-                        className={`addon-btn ${options.bows ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, bows: !options.bows})}
-                      >
-                        <span className="addon-icon">🎀</span>
-                        <span className="addon-label">Bows</span>
-                        <span className="addon-price">+€{BOW_ADDON_PRICE}</span>
-                      </button>
-                    )}
-
-                    {showIndividualPackaging && (
-                      <button
-                        className={`addon-btn ${options.individualPackaging ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, individualPackaging: !options.individualPackaging})}
-                      >
-                        <span className="addon-icon">📦</span>
-                        <span className="addon-label">Individual Packaging</span>
-                        <span className="addon-price">+€{isCakesicle ? '0.15 per piece' : (0.15 * cupcakesPerBox).toFixed(2)}</span>
-                      </button>
-                    )}
-
-                    {showEdiblePrinting && (
-                      <button
-                        className={`addon-btn ${options.ediblePrinting ? 'active' : ''}`}
-                        onClick={() => setOptions({...options, ediblePrinting: !options.ediblePrinting})}
-                      >
-                        <span className="addon-icon">🖨️</span>
-                        <span className="addon-label">Edible Printing</span>
-                        <span className="addon-price">+€12.00</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Message */}
-              {showMessage && (
-                <div className="option-group">
-                  <label>{isBreakableHeart ? 'Message / Text on Heart' : 'Message / Text on Product'}</label>
-                  <input 
-                    type="text" 
-                    placeholder={isBreakableHeart ? "e.g. HBD Sarah! or Custom Name" : "e.g. Happy Birthday! or Custom Name"} 
-                    className="details-input"
-                    value={options.message}
-                    onChange={(e) => setOptions({...options, message: e.target.value})}
-                  />
-                </div>
-              )}
-
-              {/* Color Selection for Cakes */}
-              {isCake && (
-                <div className="option-group">
-                  <label>Cake/Frosting Color</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Light Pink, Sage Green, Baby Blue..." 
-                    className="details-input"
-                    value={options.color}
-                    onChange={(e) => setOptions({...options, color: e.target.value})}
-                  />
-                </div>
-              )}
-
-              {/* Message Inside the Heart */}
-              {showInnerMessage && (
-                <div className="option-group animate-in fade-in slide-in-from-top-1">
-                  <label>Personalised Message Inside the Heart</label>
-                  <textarea 
-                    placeholder="Write a secret note to be placed inside the breakable chocolate heart box... (included)" 
-                    className="details-input"
-                    style={{ minHeight: '80px', resize: 'vertical', paddingTop: '10px', fontFamily: 'inherit' }}
-                    value={options.innerMessage || ''}
-                    onChange={(e) => setOptions({...options, innerMessage: e.target.value})}
-                  />
-                </div>
-              )}
-
-              {/* Reference Image */}
-              <div className="option-group">
-                <label>
-                  Upload Reference Image
-                  <span className="option-label-hint"> — Optional</span>
-                </label>
-                <div className="file-upload-wrapper">
-                  <input 
-                    type="file" 
-                    id="ref-image" 
-                    accept="image/*"
-                    onChange={(e) => setOptions({...options, refImage: e.target.files[0]})}
-                    className="file-input-hidden"
-                  />
-                  <label htmlFor="ref-image" className="file-upload-label">
-                    {options.refImage ? (
-                      <span className="file-name-display"><ImageIcon size={18} /> {options.refImage.name}</span>
-                    ) : (
-                      <span className="upload-prompt"><Upload size={18} /> Choose inspiration image</span>
-                    )}
-                  </label>
-                </div>
-              </div>
-
-              {/* Notes */}
-              <div className="option-group">
-                <label>Special Instructions & Details</label>
-                <textarea 
-                  placeholder="Any allergies, specific color requests, or other details?" 
-                  className="details-textarea"
-                  value={options.notes}
-                  onChange={(e) => setOptions({...options, notes: e.target.value})}
-                ></textarea>
-              </div>
+              ))}
+            </div>
 
               {/* ── Live Price Breakdown ── */}
               <div className="price-breakdown">
