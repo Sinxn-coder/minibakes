@@ -1244,3 +1244,23 @@ input:checked + .conv-slider:before {
     height: auto;
   }
 }
+
+/* --- Fix Mobile Add to Order to Bottom --- */
+@media (max-width: 768px) {
+  .details-chat-panel .quantity-checkout-wrapper {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 15px 20px 25px !important;
+    margin: 0 !important;
+    border-top: 1px solid rgba(102, 2, 31, 0.08);
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.08);
+    z-index: 9999;
+  }
+
+  .mobile-order-summary-footer {
+    padding-bottom: 110px !important; /* Space for the fixed checkout bar */
+  }
+}
