@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Minus, Plus, Image as ImageIcon, Upload, ShoppingBag, CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 import SafeImage from './components/SafeImage';
 import ErrorBoundary from './ErrorBoundary';
@@ -64,6 +64,13 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const [warningNotification, setWarningNotification] = useState('');
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentStepIndex, isTyping]);
 
   const goToNextStep = (targetIndex) => {
     setIsTyping(true);
@@ -192,21 +199,28 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
       id: 'boxSize',
       question: "What box size would you like?",
       render: () => (
-        <div className="conv-pill-grid">
-          {product.options.map(opt => (
-            <button 
-              key={opt.value}
-              className={`conv-pill ${options.boxSize === opt.value ? 'active' : ''}`}
-              onClick={() => {
-                setOptions({...options, boxSize: opt.value});
-                if (currentStepIndex === formSteps.findIndex(s => s.id === 'boxSize')) {
-                  goToNextStep(currentStepIndex + 1);
-                }
-              }}
+        <div className="conv-input-wrapper" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', width: '100%', gap: '0.5rem', alignItems: 'center' }}>
+            <select 
+              className="conv-input conv-select"
+              style={{ flex: 1 }}
+              value={options.boxSize}
+              onChange={(e) => setOptions({...options, boxSize: e.target.value})}
             >
-              {opt.label}
+              <option value="" disabled>Select box size...</option>
+              {product.options.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <button 
+              className="conv-next-btn" 
+              onClick={() => goToNextStep(currentStepIndex + 1)}
+              disabled={!options.boxSize}
+              style={{ opacity: !options.boxSize ? 0.5 : 1 }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
-          ))}
+          </div>
           {isBrownie && (
             <div className="brownie-notice-box" style={{ 
               background: 'rgba(128, 0, 0, 0.035)', 
@@ -242,21 +256,25 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
       id: 'flavor',
       question: "What flavor would you like?",
       render: () => (
-        <div className="conv-pill-grid">
-          {flavors.map(f => (
-            <button 
-              key={f} 
-              className={`conv-pill ${options.flavor === f ? 'active' : ''}`}
-              onClick={() => {
-                setOptions({...options, flavor: f});
-                if (currentStepIndex === formSteps.findIndex(s => s.id === 'flavor')) {
-                  goToNextStep(currentStepIndex + 1);
-                }
-              }}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="conv-input-wrapper">
+          <select 
+            className="conv-input conv-select"
+            value={options.flavor}
+            onChange={(e) => setOptions({...options, flavor: e.target.value})}
+          >
+            <option value="" disabled>Select flavor...</option>
+            {flavors.map(f => (
+              <option key={f} value={f}>{f}</option>
+            ))}
+          </select>
+          <button 
+            className="conv-next-btn" 
+            onClick={() => goToNextStep(currentStepIndex + 1)}
+            disabled={!options.flavor}
+            style={{ opacity: !options.flavor ? 0.5 : 1 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
         </div>
       )
     });
@@ -267,34 +285,46 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
       id: 'spreads',
       question: isCupcake ? 'Any inner spread?' : (isBrownie ? 'Select Spreads (Up to 3)' : 'Select your inner spread:'),
       render: () => (
-        <div className="conv-pill-grid">
-          {spreads.map(s => {
-            const isActive = options.spreads.includes(s);
-            return (
-              <button 
-                key={s} 
-                className={`conv-pill ${isActive ? 'active' : ''}`}
-                onClick={() => {
-                  let newSpreads;
-                  if (isBrownie) {
-                    if (isActive) newSpreads = options.spreads.filter(item => item !== s);
-                    else if (options.spreads.length < 3) newSpreads = [...options.spreads, s];
-                    else newSpreads = options.spreads;
+        <div className="conv-input-wrapper" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', width: '100%', gap: '0.5rem', alignItems: 'flex-start' }}>
+            <select 
+              className="conv-input conv-select"
+              multiple={isBrownie}
+              style={{ flex: 1, minHeight: isBrownie ? '100px' : 'auto' }}
+              value={isBrownie ? options.spreads : (options.spreads[0] || 'None')}
+              onChange={(e) => {
+                if (isBrownie) {
+                  const selected = Array.from(e.target.selectedOptions, option => option.value);
+                  if (selected.includes('None')) {
+                    setOptions({...options, spreads: []});
                   } else {
-                    newSpreads = isActive ? [] : [s];
+                    if (selected.length <= 3) {
+                      setOptions({...options, spreads: selected});
+                    }
                   }
-                  setOptions({...options, spreads: newSpreads});
-                }}
-              >
-                {s}
-              </button>
-            );
-          })}
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-            <button className="conv-next-btn" onClick={() => goToNextStep(currentStepIndex + 1)}>
+                } else {
+                  setOptions({...options, spreads: e.target.value === 'None' ? [] : [e.target.value]});
+                }
+              }}
+            >
+              <option value="None">None</option>
+              {spreads.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <button 
+              className="conv-next-btn" 
+              style={{ marginTop: isBrownie ? 'auto' : '0' }}
+              onClick={() => goToNextStep(currentStepIndex + 1)}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
+          {isBrownie && (
+            <span style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem' }}>
+              Hold Ctrl/Cmd to select up to 3 options, or select 'None'.
+            </span>
+          )}
         </div>
       )
     });
@@ -707,6 +737,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   </div>
                 )}
               </div>
+
+              <div ref={chatEndRef} style={{ height: 1, width: '100%', flexShrink: 0 }} />
 
               {/* Quantity + Confirm */}
               <div className="quantity-checkout-wrapper" style={{ width: '100%' }}>
