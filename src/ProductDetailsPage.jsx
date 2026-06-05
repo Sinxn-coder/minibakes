@@ -63,6 +63,14 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   const [showNotification, setShowNotification] = useState(false);
   const [warningNotification, setWarningNotification] = useState('');
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const goToNextStep = (targetIndex) => {
+    setIsTyping(true);
+    setCurrentStepIndex(targetIndex);
+    setTimeout(() => setIsTyping(false), 1200);
+  };
+
   const [showCareModal, setShowCareModal] = useState(false);
   const displayImg = product?.img;
   const [options, setOptions] = useState({
@@ -192,7 +200,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               onClick={() => {
                 setOptions({...options, boxSize: opt.value});
                 if (currentStepIndex === formSteps.findIndex(s => s.id === 'boxSize')) {
-                  setCurrentStepIndex(currentStepIndex + 1);
+                  goToNextStep(currentStepIndex + 1);
                 }
               }}
             >
@@ -242,7 +250,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               onClick={() => {
                 setOptions({...options, flavor: f});
                 if (currentStepIndex === formSteps.findIndex(s => s.id === 'flavor')) {
-                  setCurrentStepIndex(currentStepIndex + 1);
+                  goToNextStep(currentStepIndex + 1);
                 }
               }}
             >
@@ -283,7 +291,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             );
           })}
           <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-            <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+            <button className="conv-next-btn" onClick={() => goToNextStep(currentStepIndex + 1)}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -304,11 +312,23 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             className="conv-input"
             value={options.color}
             onChange={(e) => setOptions({...options, color: e.target.value})}
-            onKeyDown={(e) => e.key === 'Enter' && setCurrentStepIndex(currentStepIndex + 1)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (!options.color.trim()) setOptions({...options, color: 'No specific color'});
+                goToNextStep(currentStepIndex + 1);
+              }
+            }}
           />
-          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
+          {!options.color.trim() ? (
+            <button className="conv-skip-btn" onClick={() => {
+              setOptions({...options, color: 'No specific color'});
+              goToNextStep(currentStepIndex + 1);
+            }}>Skip</button>
+          ) : (
+            <button className="conv-next-btn" onClick={() => goToNextStep(currentStepIndex + 1)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          )}
         </div>
       )
     });
@@ -326,11 +346,23 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             className="conv-input"
             value={options.message}
             onChange={(e) => setOptions({...options, message: e.target.value})}
-            onKeyDown={(e) => e.key === 'Enter' && setCurrentStepIndex(currentStepIndex + 1)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (!options.message.trim()) setOptions({...options, message: 'No Message'});
+                goToNextStep(currentStepIndex + 1);
+              }
+            }}
           />
-          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
+          {!options.message.trim() ? (
+            <button className="conv-skip-btn" onClick={() => {
+              setOptions({...options, message: 'No Message'});
+              goToNextStep(currentStepIndex + 1);
+            }}>Skip</button>
+          ) : (
+            <button className="conv-next-btn" onClick={() => goToNextStep(currentStepIndex + 1)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          )}
         </div>
       )
     });
@@ -348,9 +380,16 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             value={options.innerMessage || ''}
             onChange={(e) => setOptions({...options, innerMessage: e.target.value})}
           />
-          <button className="conv-next-btn" onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
+          {!(options.innerMessage || '').trim() ? (
+            <button className="conv-skip-btn" onClick={() => {
+              setOptions({...options, innerMessage: 'None'});
+              goToNextStep(currentStepIndex + 1);
+            }}>Skip</button>
+          ) : (
+            <button className="conv-next-btn" onClick={() => goToNextStep(currentStepIndex + 1)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          )}
         </div>
       )
     });
@@ -368,7 +407,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
             accept="image/*"
             onChange={(e) => {
                setOptions({...options, refImage: e.target.files[0]});
-               setCurrentStepIndex(currentStepIndex + 1);
+               goToNextStep(currentStepIndex + 1);
             }}
             style={{ display: 'none' }}
           />
@@ -389,7 +428,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
         {!options.refImage && (
           <button 
             style={{ background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.9rem', marginTop: '0.5rem', textDecoration: 'underline' }}
-            onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
+            onClick={() => goToNextStep(currentStepIndex + 1)}
           >
             Skip for now
           </button>
@@ -440,7 +479,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               </label>
             </div>
           )}
-          <button className="conv-next-btn" style={{ marginTop: '1rem' }} onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>
+          <button className="conv-next-btn" style={{ marginTop: '1rem' }} onClick={() => goToNextStep(currentStepIndex + 1)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </div>
@@ -459,11 +498,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
           value={options.notes}
           onChange={(e) => setOptions({...options, notes: e.target.value})}
         />
-        <button className="conv-next-btn" onClick={() => {
-          if (currentStepIndex < formSteps.length) setCurrentStepIndex(currentStepIndex + 1);
-        }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
+          {!options.notes.trim() ? (
+            <button className="conv-skip-btn" onClick={() => {
+              setOptions({...options, notes: 'None'});
+              if (currentStepIndex < formSteps.length) goToNextStep(currentStepIndex + 1);
+            }}>Skip</button>
+          ) : (
+            <button className="conv-next-btn" onClick={() => {
+              if (currentStepIndex < formSteps.length) goToNextStep(currentStepIndex + 1);
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          )}
       </div>
     )
   });
@@ -634,16 +680,25 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               </div>
 
               <div className="customization-section conversational-form">
-                {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => (
-                  <div key={step.id} className="conv-step" style={{ animationDelay: idx === currentStepIndex ? '0.1s' : '0s' }}>
-                    <div className="conv-question-bubble">
-                      {step.question}
+                {formSteps.slice(0, currentStepIndex + 1).map((step, idx) => {
+                  const isLastAndTyping = (idx === currentStepIndex) && isTyping;
+                  return (
+                    <div key={step.id} className="conv-step" style={{ animationDelay: isLastAndTyping ? '0s' : '0.1s' }}>
+                      <div className="conv-question-bubble">
+                        {isLastAndTyping ? (
+                          <div className="typing-indicator"><span></span><span></span><span></span></div>
+                        ) : (
+                          step.question
+                        )}
+                      </div>
+                      {!isLastAndTyping && (
+                        <div className="conv-answer-area">
+                          {step.render()}
+                        </div>
+                      )}
                     </div>
-                    <div className="conv-answer-area">
-                      {step.render()}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
                 {currentStepIndex >= formSteps.length && formSteps.length > 0 && (
                   <div className="conv-step" style={{ animationDelay: '0.1s' }}>
                     <div className="conv-question-bubble" style={{ background: '#eaf4ea', color: '#1b5e20', border: '1px solid #c8e6c9' }}>
