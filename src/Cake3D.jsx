@@ -77,7 +77,7 @@ function ShellBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
     }
     g.computeVertexNormals();
     g.rotateX(Math.PI / 2);
-    g.translate(0, baseRadius * 0.4, 0); // Shift slightly so it sits nicely on the surface
+    g.translate(0, -baseRadius * 0.5, 0); // Move piping down to side of cake
     return g;
   }, [scaleMultiplier]);
 
@@ -105,7 +105,7 @@ function ShellBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
       const dummy = new THREE.Object3D();
       dummy.position.copy(pos);
       dummy.lookAt(pos.clone().add(tangent));
-      dummy.rotateX(Math.PI / 8); // Tilt upwards slightly for a piped look
+      dummy.rotateX(0); // Align piping to side, no upward tilt
       dummy.updateMatrix();
       arr.push(
         <mesh key={i} position={dummy.position} quaternion={dummy.quaternion} scale={[1, 0.9, 1.4]} geometry={geo} castShadow>
