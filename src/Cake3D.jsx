@@ -343,26 +343,41 @@ function ProceduralBorder(props) {
 
 
 function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }) {
-  const dripColor = color === 'Nutella' ? '#3d1e16' : 
-                    color === 'White Chocolate' ? '#f5ebd6' :
-                    color === 'Pistachio' ? '#a2d187' :
-                    color === 'Ferrero Rocher' ? '#5c3a21' :
-                    color === 'Kinder' ? '#e8d8c8' :
+  const isNutella = color === 'Nutella';
+  const isWhiteChoc = color === 'White Chocolate';
+  const isPistachio = color === 'Pistachio';
+  const isFerrero = color === 'Ferrero Rocher';
+  const isKinder = color === 'Kinder';
+  const isBiscoff = color === 'Biscoff' || !['Nutella', 'White Chocolate', 'Pistachio', 'Ferrero Rocher', 'Kinder'].includes(color);
+
+  const dripColor = isNutella ? '#3d1e16' : 
+                    isWhiteChoc ? '#f5ebd6' :
+                    isPistachio ? '#a2d187' :
+                    isFerrero ? '#5c3a21' :
+                    isKinder ? '#e8d8c8' :
                     '#b07d4b'; // Biscoff / default
   
   const drips = useMemo(() => {
     const arr = [];
     const dripCount = isHeart ? 40 : 30;
-    const dripLength = 0.25;
     
+    // Adjust drip characteristics based on spread type
+    let baseH = 0.15;
+    let baseThick = 0.03;
+    let roughness = 0.05;
+    
+    if (isWhiteChoc) { baseH = 0.25; baseThick = 0.02; } // Thinner, longer drips
+    if (isNutella) { baseH = 0.12; baseThick = 0.04; } // Thicker, shorter drips
+    if (isFerrero) { roughness = 0.15; } // Slightly rougher for chunky spreads
+
     // 1. Top "Sauce" Coating
     const liquidMaterial = (
       <meshPhysicalMaterial 
         color={dripColor} 
-        roughness={0.05} 
+        roughness={roughness} 
         metalness={0.0} 
         clearcoat={1.0} 
-        clearcoatRoughness={0.05}
+        clearcoatRoughness={roughness}
       />
     );
 
@@ -379,11 +394,92 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
     } else {
       arr.push(
         <mesh key="sauce-top" position={[0, yOffset + 0.015, 0]} receiveShadow>
-          {/* Thick liquid top layer */}
           <cylinderGeometry args={[radius * 0.98, radius * 0.98, 0.03, 64]} />
           {liquidMaterial}
         </mesh>
       );
+    }
+
+    // 1.5 Procedural Specific Features
+    
+    // Kinder: White Chocolate Swirls
+    if (isKinder) {
+      const swirlColor = '#ffffff'; 
+      if (isHeart) {
+        const shape = createHeartShape(size * 0.85); // smaller inner shape
+        const extrudeSettings = { depth: 0.01, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 };
+        const sauceGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        sauceGeo.rotateX(-Math.PI / 2);
+        arr.push(
+          <mesh key="kinder-swirl" geometry={sauceGeo} position={[0, yOffset + 0.02, 0]} receiveShadow>
+            <meshPhysicalMaterial color={swirlColor} roughness={0.05} clearcoat={1.0} />
+          </mesh>
+        );
+      } else {
+        // Swirl lines on round cake
+        for(let i = 0; i < 5; i++) {
+          arr.push(
+            <mesh key={`kinder-swirl-${i}`} position={[0, yOffset + 0.03, 0]} rotation={[0, (Math.PI / 5) * i, 0]} receiveShadow>
+              <tubeGeometry args={[new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-radius * 0.8, 0, Math.sin(i)*0.2),
+                new THREE.Vector3(0, 0, -Math.sin(i)*0.2),
+                new THREE.Vector3(radius * 0.8, 0, Math.sin(i)*0.2)
+              ]), 20, 0.015, 8, false]} />
+              <meshPhysicalMaterial color={swirlColor} roughness={0.05} clearcoat={1.0} />
+            </mesh>
+          );
+        }
+      }
+    }
+
+    // Additive Scatter Elements (Nuts, Chunks, Crumbs)
+    let scatterCount = 0;
+    let scatterSize = 0.01;
+    let ScatterGeo = null;
+    let ScatterMat = null;
+
+    if (isPistachio) {
+      scatterCount = 120;
+      scatterSize = 0.015;
+      ScatterGeo = <dodecahedronGeometry args={[scatterSize, 0]} />;
+      ScatterMat = <meshStandardMaterial color="#8bba65" roughness={0.8} />;
+    } else if (isFerrero) {
+      scatterCount = 60;
+      scatterSize = 0.035;
+      ScatterGeo = <sphereGeometry args={[scatterSize, 5, 5]} />;
+      ScatterMat = <meshStandardMaterial color="#4a2e1b" roughness={0.9} />;
+    } else if (isBiscoff) {
+      scatterCount = 150;
+      scatterSize = 0.012;
+      ScatterGeo = <cylinderGeometry args={[scatterSize, scatterSize, 0.005, 5]} />;
+      ScatterMat = <meshStandardMaterial color="#a66a38" roughness={1.0} />;
+    }
+
+    if (scatterCount > 0) {
+      for (let i = 0; i < scatterCount; i++) {
+        // Random position
+        let px, pz;
+        if (isHeart) {
+          px = (Math.random() - 0.5) * size * 1.3;
+          pz = (Math.random() - 0.5) * size * 1.3;
+        } else {
+          const r = Math.random() * (radius * 0.85);
+          const theta = Math.random() * 2 * Math.PI;
+          px = r * Math.cos(theta);
+          pz = r * Math.sin(theta);
+        }
+
+        const py = yOffset + 0.03 + (Math.random() * 0.01);
+        const rotX = Math.random() * Math.PI;
+        const rotY = Math.random() * Math.PI;
+        
+        arr.push(
+          <mesh key={`scatter-${i}`} position={[px, py, pz]} rotation={[rotX, rotY, 0]} castShadow receiveShadow>
+            {ScatterGeo}
+            {ScatterMat}
+          </mesh>
+        );
+      }
     }
 
     // 2. The Drips
@@ -399,9 +495,8 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
         pos.set(Math.cos(angle) * (radius * 0.98), yOffset, Math.sin(angle) * (radius * 0.98));
       }
 
-      // Randomize drip length and thickness for realism
-      const h = 0.15 + Math.random() * 0.25;
-      const thick = 0.03 + Math.random() * 0.02;
+      const h = baseH + Math.random() * 0.25;
+      const thick = baseThick + Math.random() * 0.02;
       
       arr.push(
         <group key={`drip-${i}`} position={pos}>
@@ -415,11 +510,19 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
             <sphereGeometry args={[thick * 0.8, 16, 16]} />
             {liquidMaterial}
           </mesh>
+          
+          {/* Ferrero Chunks on drips */}
+          {isFerrero && Math.random() > 0.4 && (
+            <mesh position={[0, -h/2 + Math.random()*0.1, thick * 0.6]} castShadow>
+               <sphereGeometry args={[0.025, 5, 5]} />
+               <meshStandardMaterial color="#4a2e1b" roughness={0.9} />
+            </mesh>
+          )}
         </group>
       );
     }
     return arr;
-  }, [curve, radius, yOffset, dripColor, isHeart, size]);
+  }, [curve, radius, yOffset, color, isHeart, size, dripColor, isWhiteChoc, isNutella, isPistachio, isFerrero, isKinder, isBiscoff]);
 
   return <group>{drips}</group>;
 }
