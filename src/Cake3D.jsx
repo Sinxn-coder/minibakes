@@ -356,21 +356,32 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
     const dripLength = 0.25;
     
     // 1. Top "Sauce" Coating
+    const liquidMaterial = (
+      <meshPhysicalMaterial 
+        color={dripColor} 
+        roughness={0.05} 
+        metalness={0.0} 
+        clearcoat={1.0} 
+        clearcoatRoughness={0.05}
+      />
+    );
+
     if (isHeart) {
       const shape = createHeartShape(size * 1.02); // slightly larger than cake
-      const extrudeSettings = { depth: 0.02, bevelEnabled: false };
+      const extrudeSettings = { depth: 0.03, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 };
       const sauceGeo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
       sauceGeo.rotateX(-Math.PI / 2);
       arr.push(
         <mesh key="sauce-top" geometry={sauceGeo} position={[0, yOffset + 0.01, 0]} receiveShadow>
-          <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+          {liquidMaterial}
         </mesh>
       );
     } else {
       arr.push(
-        <mesh key="sauce-top" position={[0, yOffset + 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <circleGeometry args={[radius * 0.98, 64]} />
-          <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+        <mesh key="sauce-top" position={[0, yOffset + 0.015, 0]} receiveShadow>
+          {/* Thick liquid top layer */}
+          <cylinderGeometry args={[radius * 0.98, radius * 0.98, 0.03, 64]} />
+          {liquidMaterial}
         </mesh>
       );
     }
@@ -396,13 +407,13 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
         <group key={`drip-${i}`} position={pos}>
           {/* Main Drip Body */}
           <mesh position={[0, -h/2, 0]} castShadow>
-            <cylinderGeometry args={[thick, thick * 0.6, h, 8]} />
-            <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+            <cylinderGeometry args={[thick * 1.2, thick * 0.7, h, 16]} />
+            {liquidMaterial}
           </mesh>
           {/* Drip Droplet Tip */}
           <mesh position={[0, -h, 0]} castShadow>
-            <sphereGeometry args={[thick * 1.1, 8, 8]} />
-            <meshStandardMaterial color={dripColor} roughness={0.1} metalness={0.1} />
+            <sphereGeometry args={[thick * 0.8, 16, 16]} />
+            {liquidMaterial}
           </mesh>
         </group>
       );
