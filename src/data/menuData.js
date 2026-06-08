@@ -1,7 +1,6 @@
 
 
 
-import brownies from '../assets/brownies_box.webp';
 import brownie_new from '../assets/brownies/brownie.webp';
 
 import pops_1 from '../assets/cake pops/pops (1).webp';
@@ -59,7 +58,7 @@ const cupcakeImages = [
 ];
 
 const brownieImages = [
-  brownies, brownie_new
+  brownie_new
 ];
 
 const popsImages = [
