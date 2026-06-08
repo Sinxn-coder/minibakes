@@ -350,7 +350,7 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
   const isKinder = color === 'Kinder';
   const isBiscoff = color === 'Biscoff' || !['Nutella', 'White Chocolate', 'Pistachio', 'Ferrero Rocher', 'Kinder'].includes(color);
 
-  const dripColor = isNutella ? '#3d1e16' : 
+  const dripColor = isNutella ? '#351508' : 
                     isWhiteChoc ? '#f5ebd6' :
                     isPistachio ? '#a2d187' :
                     isFerrero ? '#5c3a21' :
@@ -365,9 +365,15 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
     let baseH = 0.15;
     let baseThick = 0.03;
     let roughness = 0.05;
+    let clearcoat = 1.0;
     
     if (isWhiteChoc) { baseH = 0.25; baseThick = 0.02; } // Thinner, longer drips
-    if (isNutella) { baseH = 0.12; baseThick = 0.04; } // Thicker, shorter drips
+    if (isNutella) { 
+      baseH = 0.08; // Much shorter drips (tightness)
+      baseThick = 0.05; // Thicker, viscous blobs
+      roughness = 0.12; // Slightly matte finish due to hazelnuts
+      clearcoat = 0.8;
+    }
     if (isFerrero) { roughness = 0.15; } // Slightly rougher for chunky spreads
 
     // 1. Top "Sauce" Coating
@@ -376,7 +382,7 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
         color={dripColor} 
         roughness={roughness} 
         metalness={0.0} 
-        clearcoat={1.0} 
+        clearcoat={clearcoat} 
         clearcoatRoughness={roughness}
       />
     );
