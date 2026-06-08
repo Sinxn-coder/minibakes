@@ -369,10 +369,10 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
     
     if (isWhiteChoc) { baseH = 0.25; baseThick = 0.02; } // Thinner, longer drips
     if (isNutella) { 
-      baseH = 0.08; // Much shorter drips (tightness)
-      baseThick = 0.05; // Thicker, viscous blobs
-      roughness = 0.12; // Slightly matte finish due to hazelnuts
-      clearcoat = 0.8;
+      baseH = 0.12; 
+      baseThick = 0.035; 
+      roughness = 0.1; 
+      clearcoat = 0.9;
     }
     if (isFerrero) { roughness = 0.15; } // Slightly rougher for chunky spreads
 
@@ -495,11 +495,11 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
       
       if (isHeart && curve) {
         pos = curve.getPointAt(t);
-        pos.set(pos.x * 0.96, yOffset, -pos.y * 0.96);
+        // Start drips slightly inside the sauce and at the sauce's height
+        pos.set(pos.x * 0.98, yOffset + 0.015, -pos.y * 0.98);
       } else {
         const angle = t * Math.PI * 2;
-        // Position drips slightly inward so they flow from inside the top layer
-        pos.set(Math.cos(angle) * (radius * 0.96), yOffset, Math.sin(angle) * (radius * 0.96));
+        pos.set(Math.cos(angle) * (radius * 0.98), yOffset + 0.015, Math.sin(angle) * (radius * 0.98));
       }
 
       const h = baseH + Math.random() * 0.25;
@@ -507,19 +507,14 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
       
       arr.push(
         <group key={`drip-${i}`} position={pos}>
-          {/* Smooth Root connection to the top sauce */}
-          <mesh position={[0, 0.015, 0]} castShadow>
-            <sphereGeometry args={[thick * 1.5, 16, 16]} />
-            {liquidMaterial}
-          </mesh>
           {/* Main Drip Body */}
           <mesh position={[0, -h/2, 0]} castShadow>
-            <cylinderGeometry args={[thick * 1.2, thick * 0.7, h, 16]} />
+            <cylinderGeometry args={[thick * 1.1, thick * 0.6, h, 16]} />
             {liquidMaterial}
           </mesh>
           {/* Drip Droplet Tip */}
           <mesh position={[0, -h, 0]} castShadow>
-            <sphereGeometry args={[thick * 0.8, 16, 16]} />
+            <sphereGeometry args={[thick * 0.7, 16, 16]} />
             {liquidMaterial}
           </mesh>
           
