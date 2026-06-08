@@ -52,22 +52,32 @@ function createHeartShape(size) {
 function ShellBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
   const geo = useMemo(() => {
     const baseRadius = 0.08 * scaleMultiplier;
-    const g = new THREE.SphereGeometry(baseRadius, 32, 32); 
+    const g = new THREE.SphereGeometry(baseRadius, 64, 64); 
     const pos = g.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       let x = pos.getX(i); let y = pos.getY(i); let z = pos.getZ(i);
       let angle = Math.atan2(z, x);
-      let normalizedY = y / baseRadius;
-      let taper = 1 - Math.abs(normalizedY); 
-      let ridge = 1 + (0.3 * taper * Math.cos(angle * 10));
-      x *= ridge; z *= ridge;
-      let twist = normalizedY * 2.0; 
+      let normalizedY = y / baseRadius; // -1 to 1
+      let t = (normalizedY + 1) / 2; // 0 to 1
+      
+      // More realistic shell profile: fat at back, tapering to tail
+      let profile = 0.1 + 0.9 * Math.sin(t * Math.PI * 0.8); 
+      
+      // Deeper ridges for 3D realism
+      let ridge = 1 + (0.35 * Math.sin(t * Math.PI) * Math.cos(angle * 14));
+      
+      x *= profile * ridge; 
+      z *= profile * ridge;
+      
+      // Elegant twist
+      let twist = t * 1.5; 
       let tx = x * Math.cos(twist) - z * Math.sin(twist);
       let tz = x * Math.sin(twist) + z * Math.cos(twist);
       pos.setX(i, tx); pos.setZ(i, tz);
     }
     g.computeVertexNormals();
     g.rotateX(Math.PI / 2);
+    g.translate(0, baseRadius * 0.4, 0); // Shift slightly so it sits nicely on the surface
     return g;
   }, [scaleMultiplier]);
 
@@ -95,11 +105,11 @@ function ShellBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMul
       const dummy = new THREE.Object3D();
       dummy.position.copy(pos);
       dummy.lookAt(pos.clone().add(tangent));
-      dummy.rotateX(Math.PI / 6);
+      dummy.rotateX(Math.PI / 8); // Tilt upwards slightly for a piped look
       dummy.updateMatrix();
       arr.push(
-        <mesh key={i} position={dummy.position} quaternion={dummy.quaternion} scale={[1, 0.85, 1.8]} geometry={geo} castShadow>
-          <meshStandardMaterial color={color} roughness={0.3} metalness={0.02} />
+        <mesh key={i} position={dummy.position} quaternion={dummy.quaternion} scale={[1, 0.9, 1.4]} geometry={geo} castShadow>
+          <meshStandardMaterial color={color} roughness={0.25} metalness={0.05} />
         </mesh>
       );
     }
@@ -248,22 +258,31 @@ function ZigzagBorder({ curve, radius, yOffset, color, inset = 0, scaleMultiplie
 // --- 5. Rosette Swirl Border ---
 function RosetteBorder({ curve, radius, count, yOffset, color, inset = 0, scaleMultiplier = 1 }) {
   const geo = useMemo(() => {
-    const g = new THREE.CylinderGeometry(0.01, 0.1 * scaleMultiplier, 0.1 * scaleMultiplier, 32, 4);
+    const height = 0.15 * scaleMultiplier;
+    const g = new THREE.CylinderGeometry(0.01, 0.12 * scaleMultiplier, height, 64, 8);
     const pos = g.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       let x = pos.getX(i); let y = pos.getY(i); let z = pos.getZ(i);
       let angle = Math.atan2(z, x);
       let r = Math.sqrt(x*x + z*z);
-      // Star ridges
-      r *= 1 + 0.15 * Math.cos(angle * 8);
-      // Twist
-      let twist = y * 20.0;
+      
+      // Star ridges for piping tip effect
+      r *= 1 + 0.2 * Math.cos(angle * 6);
+      
+      // Twist and profile for rosette look
+      let normalizedY = (y + (height / 2)) / height; // 0 to 1
+      let twist = normalizedY * Math.PI * 3.5; 
+      
+      // Bulbous shape in the middle
+      let profile = Math.sin(normalizedY * Math.PI);
+      r *= profile * 1.3;
+
       let tx = r * Math.cos(angle + twist);
       let tz = r * Math.sin(angle + twist);
       pos.setX(i, tx); pos.setZ(i, tz);
     }
     g.computeVertexNormals();
-    g.translate(0, 0.05 * scaleMultiplier, 0); // sit on bottom
+    g.translate(0, height * 0.4, 0); // sit on bottom
     return g;
   }, [scaleMultiplier]);
 
@@ -462,8 +481,8 @@ function RoundLayer({ radius, posY, color, height, topBorder, bottomBorder, pear
       </mesh>
       {spread && <DripEffect radius={radius * 0.95} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} size={radius} />}
-      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} radius={radius * 0.95} inset={0.08} count={Math.floor(radius * 36)} yOffset={height / 2} color={color} />}
-      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} radius={radius * 1.02} inset={0.04} count={Math.floor(radius * 26)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} radius={radius * 0.95} inset={0.02} count={Math.floor(radius * 42)} yOffset={height / 2} color={color} />}
+      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} radius={radius * 1.02} inset={0.02} count={Math.floor(radius * 32)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
       {bow && <FondantBow radius={radius} yOffset={0} color={color} />}
     </group>
   );
@@ -492,8 +511,8 @@ function HeartLayer({ size, posY, color, height, topBorder, bottomBorder, pearlB
       </mesh>
       {spread && <DripEffect isHeart size={size} curve={curve} yOffset={height / 2} color={spread} />}
       {customText && <CakeText text={customText} yOffset={height / 2} isHeart size={size} />}
-      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} curve={curve} inset={0.08} count={Math.floor(size * 42)} yOffset={height / 2} color={color} />}
-      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} curve={curve} inset={0.04} count={Math.floor(size * 30)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
+      {topBorder && topBorder !== 'none' && <ProceduralBorder styleType={topBorder} curve={curve} inset={0.02} count={Math.floor(size * 50)} yOffset={height / 2} color={color} />}
+      {bottomBorder && bottomBorder !== 'none' && <ProceduralBorder styleType={bottomBorder} curve={curve} inset={0.02} count={Math.floor(size * 36)} yOffset={-height / 2} color={color} scaleMultiplier={1.4} />}
       {bow && <FondantBow isHeart size={size} yOffset={0} color={color} />}
     </group>
   );
