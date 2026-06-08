@@ -495,10 +495,11 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
       
       if (isHeart && curve) {
         pos = curve.getPointAt(t);
-        pos.set(pos.x, yOffset, -pos.y);
+        pos.set(pos.x * 0.96, yOffset, -pos.y * 0.96);
       } else {
         const angle = t * Math.PI * 2;
-        pos.set(Math.cos(angle) * (radius * 0.98), yOffset, Math.sin(angle) * (radius * 0.98));
+        // Position drips slightly inward so they flow from inside the top layer
+        pos.set(Math.cos(angle) * (radius * 0.96), yOffset, Math.sin(angle) * (radius * 0.96));
       }
 
       const h = baseH + Math.random() * 0.25;
@@ -506,6 +507,11 @@ function DripEffect({ curve, radius, yOffset, color, isHeart = false, size = 0 }
       
       arr.push(
         <group key={`drip-${i}`} position={pos}>
+          {/* Smooth Root connection to the top sauce */}
+          <mesh position={[0, 0.015, 0]} castShadow>
+            <sphereGeometry args={[thick * 1.5, 16, 16]} />
+            {liquidMaterial}
+          </mesh>
           {/* Main Drip Body */}
           <mesh position={[0, -h/2, 0]} castShadow>
             <cylinderGeometry args={[thick * 1.2, thick * 0.7, h, 16]} />
