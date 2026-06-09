@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, Clapperboard, Link } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { menuData } from './data/menuData';
@@ -283,80 +283,9 @@ function AdminAppContent() {
     { id: 'products', label: 'Products', icon: Package },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'classes', label: 'Classes', icon: Calendar },
-    { id: 'instagram', label: 'Instagram', icon: Clapperboard },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-
-  // --- Instagram Reels State ---
-  const [instagramReels, setInstagramReels] = useState([]);
-  const [newReelUrl, setNewReelUrl] = useState('');
-  const [isAddingReel, setIsAddingReel] = useState(false);
-  const [reelPreviews, setReelPreviews] = useState({});
-
-  useEffect(() => {
-    const fetchReels = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('instagram_reels')
-          .select('*')
-          .order('display_order', { ascending: true });
-        if (error) throw error;
-        if (data) setInstagramReels(data);
-      } catch (err) {
-        console.error('Error fetching reels:', err);
-      }
-    };
-    fetchReels();
-  }, []);
-
-  const handleAddReel = async () => {
-    if (!newReelUrl.trim() || !newReelUrl.includes('instagram.com')) {
-      triggerToast('Please enter a valid Instagram reel URL.', 'error');
-      return;
-    }
-    setIsAddingReel(true);
-    try {
-      // Fetch thumbnail via oEmbed
-      const metaToken = '964218176615723|b5c93e7b3b552e6d68c88d90abc39361';
-      const oembedRes = await fetch(
-        `https://graph.facebook.com/v18.0/instagram_oembed?url=${encodeURIComponent(newReelUrl)}&access_token=${metaToken}&fields=thumbnail_url,title`
-      );
-      const oembedData = await oembedRes.json();
-      const thumbnail = oembedData.thumbnail_url || null;
-
-      const { data, error } = await supabase
-        .from('instagram_reels')
-        .insert([{
-          reel_url: newReelUrl.trim(),
-          thumbnail_url: thumbnail,
-          display_order: instagramReels.length
-        }])
-        .select();
-      if (error) throw error;
-      if (data) {
-        setInstagramReels(prev => [...prev, data[0]]);
-        setNewReelUrl('');
-        triggerToast('Reel added successfully! 🎬', 'success');
-      }
-    } catch (err) {
-      console.error('Error adding reel:', err);
-      triggerToast('Failed to add reel. Check the URL and try again.', 'error');
-    }
-    setIsAddingReel(false);
-  };
-
-  const handleDeleteReel = async (id) => {
-    try {
-      const { error } = await supabase.from('instagram_reels').delete().eq('id', id);
-      if (error) throw error;
-      setInstagramReels(prev => prev.filter(r => r.id !== id));
-      triggerToast('Reel removed.', 'success');
-    } catch (err) {
-      console.error('Error deleting reel:', err);
-      triggerToast('Failed to remove reel.', 'error');
-    }
-  };
 
   const [allProducts, setAllProducts] = useState([]);
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
@@ -2264,81 +2193,6 @@ function AdminAppContent() {
               </div>
 
 
-            </div>
-          )}
-
-          {activeTab === 'instagram' && (
-            <div className="admin-panel" style={{ minHeight: '600px' }}>
-              <h2 className="admin-panel-title">Instagram Reels</h2>
-              <p style={{ color: '#888', fontSize: '14px', marginBottom: '32px' }}>
-                Add Instagram reel sharing links below. They will appear automatically on the website's Instagram section.
-              </p>
-
-              {/* Add new reel */}
-              <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '24px', marginBottom: '36px', border: '1px solid #eee' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Link size={18} /> Add New Reel
-                </h3>
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <input
-                    type="url"
-                    value={newReelUrl}
-                    onChange={e => setNewReelUrl(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleAddReel()}
-                    placeholder="https://www.instagram.com/reel/ABC123/"
-                    style={{ flex: 1, minWidth: '260px', padding: '12px 16px', border: '1.5px solid #ddd', borderRadius: '10px', fontSize: '14px', outline: 'none', background: '#fff' }}
-                  />
-                  <button
-                    onClick={handleAddReel}
-                    disabled={isAddingReel}
-                    style={{ padding: '12px 28px', background: 'linear-gradient(135deg, #800000, #c0392b)', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap', opacity: isAddingReel ? 0.7 : 1 }}
-                  >
-                    {isAddingReel ? 'Adding...' : '+ Add Reel'}
-                  </button>
-                </div>
-                <p style={{ fontSize: '12px', color: '#aaa', marginTop: '10px' }}>Tip: Go to any reel → tap Share → Copy Link, then paste it here.</p>
-              </div>
-
-              {/* Reels grid */}
-              {instagramReels.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 20px', color: '#bbb' }}>
-                  <div style={{ fontSize: '48px', marginBottom: '12px' }}>📸</div>
-                  <p style={{ fontSize: '16px', fontWeight: '600' }}>No reels added yet</p>
-                  <p style={{ fontSize: '13px', marginTop: '4px' }}>Paste a reel link above to get started</p>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px' }}>
-                  {instagramReels.map((reel, idx) => (
-                    <div key={reel.id} style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', background: '#111', aspectRatio: '9/16', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', border: '1px solid #222' }}>
-                      {reel.thumbnail_url ? (
-                        <img src={reel.thumbnail_url} alt={`Reel ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a2e, #16213e)' }}>
-                          <span style={{ fontSize: '32px' }}>🎬</span>
-                        </div>
-                      )}
-                      {/* Overlay */}
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '12px' }}>
-                        <a href={reel.reel_url} target="_blank" rel="noreferrer" style={{ fontSize: '11px', color: '#fff', textDecoration: 'none', opacity: 0.8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
-                          View on Instagram ↗
-                        </a>
-                      </div>
-                      {/* Delete button */}
-                      <button
-                        onClick={() => handleDeleteReel(reel.id)}
-                        style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(220,38,38,0.85)', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '14px', backdropFilter: 'blur(4px)' }}
-                        title="Remove reel"
-                      >
-                        ×
-                      </button>
-                      {/* Order badge */}
-                      <div style={{ position: 'absolute', top: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', padding: '2px 8px', fontSize: '11px', color: '#fff', backdropFilter: 'blur(4px)' }}>
-                        #{idx + 1}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 
