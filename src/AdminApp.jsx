@@ -841,10 +841,11 @@ function AdminAppContent() {
         const optimizedFile = await optimizeAndConvertToWebP(updatedData.file);
         
         let fileName = `product-${id}.webp`;
-        if (product.img && product.img.includes('product-images')) {
-          const bucketIndex = product.img.indexOf('product-images/');
+        const currentImg = product.img || defaultProductImages[id];
+        if (currentImg && currentImg.includes('product-images')) {
+          const bucketIndex = currentImg.indexOf('product-images/');
           if (bucketIndex !== -1) {
-            fileName = product.img.substring(bucketIndex + 'product-images/'.length).split('?')[0];
+            fileName = currentImg.substring(bucketIndex + 'product-images/'.length).split('?')[0];
           }
         }
         
