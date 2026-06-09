@@ -59,7 +59,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
   </svg>
 );
 import './App.css';
-import { menuData } from './data/menuData';
+
 import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 import logo from './assets/mini_logo.webp';

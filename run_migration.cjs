@@ -1,147 +1,101 @@
 const { Client } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
-async function main() {
-  const client = new Client({
-    connectionString: 'postgresql://postgres.xrcypnyewxnsnjwsixot:minibakes%402021@aws-1-eu-central-2.pooler.supabase.com:6543/postgres'
-  });
+const connectionString = 'postgresql://postgres.xrcypnyewxnsnjwsixot:6FuC9V3W9fbaqK!@aws-1-eu-central-2.pooler.supabase.com:6543/postgres';
+
+const menuDataStr = fs.readFileSync(path.join(__dirname, 'src', 'data', 'menuData.js'), 'utf8');
+
+// Parse menuData
+const script = `
+  ${menuDataStr.replace(/export const menuData =/, 'global.menuData =')}
+`;
+eval(script);
+
+async function migrate() {
+  const client = new Client({ connectionString });
+  await client.connect();
 
   try {
-    await client.connect();
-    console.log('Connected to database for migration!');
-
-    // 1. Alter products table
-    console.log('Altering products table schema...');
+    console.log('Connected to DB. Adding images column if missing...');
     await client.query(`
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS flavours TEXT[] DEFAULT '{}';
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS spreads TEXT[] DEFAULT '{}';
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'In Stock';
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS bows BOOLEAN DEFAULT false;
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS individual_packaging BOOLEAN DEFAULT false;
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS min_qty INTEGER DEFAULT 1;
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS has_message BOOLEAN DEFAULT false;
-      ALTER TABLE public.products ADD COLUMN IF NOT EXISTS has_inner_message BOOLEAN DEFAULT false;
+      ALTER TABLE products 
+      ADD COLUMN IF NOT EXISTS images jsonb DEFAULT '[]'::jsonb;
     `);
-    console.log('Products table schema updated.');
+    console.log('images column ensured.');
 
-    // 2. Backfill options based on product type
-    console.log('Backfilling initial product options...');
+    const allProducts = [];
     
-    // Cakes (except 3D)
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet'],
-        spreads = ARRAY['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher'],
-        bows = true,
-        has_message = true
-      WHERE category = 'Cakes' AND id <> 'c-3d';
-    `);
+    global.menuData.forEach(cat => {
+      if (cat.items) {
+        cat.items.forEach(item => {
+          allProducts.push({
+            id: item.id,
+            category: cat.category,
+            subcategory: null,
+            name: item.name,
+            price: item.price,
+            description: item.description || '',
+            img: item.img,
+            images: JSON.stringify(item.images || []),
+            status: 'In Stock',
+            flavours: '[]',
+            spreads: '[]',
+            options: '[]'
+          });
+        });
+      }
+      if (cat.sections) {
+        cat.sections.forEach(sec => {
+          sec.items.forEach(item => {
+            allProducts.push({
+              id: item.id,
+              category: cat.category,
+              subcategory: sec.title,
+              name: item.name,
+              price: item.price,
+              description: item.description || '',
+              img: item.img,
+              images: JSON.stringify(item.images || []),
+              status: 'In Stock',
+              flavours: '[]',
+              spreads: '[]',
+              options: '[]'
+            });
+          });
+        });
+      }
+    });
 
-    // 3D Custom Cake
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet'],
-        spreads = ARRAY['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher'],
-        has_message = false
-      WHERE id = 'c-3d';
-    `);
+    console.log(`Found ${allProducts.length} products to upsert.`);
 
-    // Cupcakes
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet'],
-        spreads = ARRAY['Nutella', 'Biscoff', 'Pistachio', 'Kinder']
-      WHERE category = 'Cupcakes';
-    `);
+    for (const p of allProducts) {
+      // We will perform an UPSERT using id as primary key
+      const query = `
+        INSERT INTO products (id, category, subcategory, name, price, description, img, images, status, flavours, spreads, options)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, $10::jsonb, $11::jsonb, $12::jsonb)
+        ON CONFLICT (id) DO UPDATE SET
+          category = EXCLUDED.category,
+          subcategory = EXCLUDED.subcategory,
+          name = EXCLUDED.name,
+          price = EXCLUDED.price,
+          description = EXCLUDED.description,
+          img = EXCLUDED.img,
+          images = EXCLUDED.images
+      `;
+      const values = [
+        p.id, p.category, p.subcategory, p.name, p.price, p.description, p.img, p.images, p.status, p.flavours, p.spreads, p.options
+      ];
+      await client.query(query, values);
+      console.log(`Upserted ${p.id}: ${p.name}`);
+    }
 
-    // Cupcakes individual packaging for cu4, cu5, cu6 (White Chocolate)
-    await client.query(`
-      UPDATE public.products
-      SET individual_packaging = true
-      WHERE id IN ('cu4', 'cu5', 'cu6');
-    `);
-
-    // Cake Pops
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet']
-      WHERE category = 'Cake Pops';
-    `);
-
-    // Brownies
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Classic Chocolate'],
-        spreads = ARRAY['Nutella', 'Biscoff', 'Pistachio', 'Kinder'],
-        has_message = true
-      WHERE category = 'Brownies';
-    `);
-
-    // Breakable Hearts
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet'],
-        has_message = true,
-        has_inner_message = true
-      WHERE category = 'Breakable Hearts';
-    `);
-
-    // Mini Cakes
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Classic Chocolate'],
-        spreads = ARRAY['Nutella', 'Biscoff', 'Pistachio', 'Kinder'],
-        min_qty = 4
-      WHERE category = 'Mini Cakes';
-    `);
-
-    // Cakesicles
-    await client.query(`
-      UPDATE public.products 
-      SET 
-        flavours = ARRAY['Vanilla', 'Chocolate', 'Red Velvet'],
-        individual_packaging = true,
-        has_message = true
-      WHERE category = 'Cakesicles';
-    `);
-
-    console.log('Product options backfilled successfully.');
-
-    // 3. Set up storage bucket and policies
-    console.log('Setting up storage bucket and policies...');
-    await client.query(`
-      -- Create bucket
-      INSERT INTO storage.buckets (id, name, public)
-      VALUES ('inspiration-images', 'inspiration-images', true)
-      ON CONFLICT (id) DO NOTHING;
-
-      -- Drop policies if exist to recreate
-      DROP POLICY IF EXISTS "Public Upload" ON storage.objects;
-      DROP POLICY IF EXISTS "Public Read" ON storage.objects;
-      DROP POLICY IF EXISTS "Public Update" ON storage.objects;
-      DROP POLICY IF EXISTS "Public Delete" ON storage.objects;
-
-      -- Create insert policy (Allow anyone to upload)
-      CREATE POLICY "Public Upload" ON storage.objects
-      FOR INSERT TO public WITH CHECK (bucket_id = 'inspiration-images');
-
-      -- Create select policy (Allow anyone to view)
-      CREATE POLICY "Public Read" ON storage.objects
-      FOR SELECT TO public USING (bucket_id = 'inspiration-images');
-    `);
-    console.log('Storage bucket and policies configured.');
-
+    console.log('Migration complete!');
   } catch (err) {
-    console.error('Migration failed:', err);
+    console.error('Migration error:', err);
   } finally {
     await client.end();
   }
 }
 
-main();
+migrate();

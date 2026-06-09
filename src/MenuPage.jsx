@@ -4,7 +4,7 @@ import './MenuPage.css';
 import ErrorBoundary from './ErrorBoundary';
 const Cake3D = React.lazy(() => import('./Cake3D'));
 
-import { menuData } from './data/menuData';
+
 import { supabase } from './supabase';
 import SafeImage from './components/SafeImage';
 
@@ -235,9 +235,8 @@ export default function MenuPage({
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!supabase) return;
       try {
-        const { data, error } = await supabase.from('products').select('*');
+        const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
         if (error && !error.message?.includes('fetch')) throw error;
         if (data) setLiveProducts(data);
       } catch (err) {
@@ -248,71 +247,39 @@ export default function MenuPage({
   }, []);
 
   const mergedMenuData = React.useMemo(() => {
-    if (liveProducts.length === 0) return menuData;
+    if (liveProducts.length === 0) return [];
 
-    return menuData.map(categoryObj => {
-      const newCategoryObj = { ...categoryObj };
+    const categories = [...new Set(liveProducts.map(p => p.category))];
+    
+    return categories.map(cat => {
+      const catProducts = liveProducts.filter(p => p.category === cat);
       
-      if (newCategoryObj.items) {
-        newCategoryObj.items = newCategoryObj.items.map(item => {
-          const liveItem = liveProducts.find(p => p.id === item.id);
-          if (liveItem) {
-            return {
-              ...item,
-              name: liveItem.name,
-              price: liveItem.price,
-              description: liveItem.description,
-              options: liveItem.options || item.options,
-              flavours: liveItem.flavours,
-              spreads: liveItem.spreads,
-              status: liveItem.status,
-              bows: liveItem.bows,
-              individual_packaging: liveItem.individual_packaging,
-              min_qty: liveItem.min_qty,
-              has_message: liveItem.has_message,
-              has_inner_message: liveItem.has_inner_message,
-              has_edible_printing: liveItem.has_edible_printing,
-              img: liveItem.img || item.img,
-              images: liveItem.img ? [liveItem.img, ...(item.images ? item.images.slice(1) : [])] : item.images
-            };
-          }
-          return item;
-        });
-      }
+      const parsedCatProducts = catProducts.map(p => {
+        let options = p.options || [];
+        let images = p.img ? [p.img] : [];
+        const galleryOption = options.find(o => o.name === '__gallery_images');
+        if (galleryOption) {
+          images = galleryOption.values;
+          options = options.filter(o => o.name !== '__gallery_images');
+        }
+        
+        return {
+          ...p,
+          options,
+          images
+        };
+      });
 
-      if (newCategoryObj.sections) {
-        newCategoryObj.sections = newCategoryObj.sections.map(section => {
-          return {
-            ...section,
-            items: section.items.map(item => {
-              const liveItem = liveProducts.find(p => p.id === item.id);
-              if (liveItem) {
-                return {
-                  ...item,
-                  name: liveItem.name,
-                  price: liveItem.price,
-                  description: liveItem.description,
-                  options: liveItem.options || item.options,
-                  flavours: liveItem.flavours,
-                  spreads: liveItem.spreads,
-                  status: liveItem.status,
-                  bows: liveItem.bows,
-                  individual_packaging: liveItem.individual_packaging,
-                  min_qty: liveItem.min_qty,
-                  has_message: liveItem.has_message,
-                  has_inner_message: liveItem.has_inner_message,
-                  has_edible_printing: liveItem.has_edible_printing,
-                  img: liveItem.img || item.img,
-                  images: liveItem.img ? [liveItem.img, ...(item.images ? item.images.slice(1) : [])] : item.images
-                };
-              }
-              return item;
-            })
-          };
-        });
-      }
-
-      return newCategoryObj;
+      const subcategories = [...new Set(parsedCatProducts.map(p => p.subcategory).filter(Boolean))];
+      
+      return {
+        category: cat,
+        items: parsedCatProducts.filter(p => !p.subcategory),
+        sections: subcategories.map(sub => ({
+          title: sub,
+          items: parsedCatProducts.filter(p => p.subcategory === sub)
+        }))
+      };
     });
   }, [liveProducts]);
 

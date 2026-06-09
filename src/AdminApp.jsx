@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { menuData } from './data/menuData';
 import './AdminApp.css';
 
 const optimizeAndConvertToWebP = (file, maxWidth = 1000, quality = 0.8) => {
@@ -38,22 +37,9 @@ const optimizeAndConvertToWebP = (file, maxWidth = 1000, quality = 0.8) => {
   });
 };
 
-const defaultProductImages = {};
-const defaultGalleryImages = {};
-menuData.forEach(cat => {
-  if (cat.items) cat.items.forEach(item => {
-    defaultProductImages[item.id] = item.img;
-    defaultGalleryImages[item.id] = item.images || [];
-  });
-  if (cat.sections) cat.sections.forEach(sec => sec.items.forEach(item => {
-    defaultProductImages[item.id] = item.img;
-    defaultGalleryImages[item.id] = item.images || [];
-  }));
-});
-
 const AdminProductImage = ({ product }) => {
   const [loaded, setLoaded] = useState(false);
-  const src = product.img || defaultProductImages[product.id] || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+  const src = product.img || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
   
   return (
     <div style={{
@@ -366,33 +352,7 @@ function AdminAppContent() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const runMigration = async () => {
-      if (!isSupabaseLive || allProducts.length === 0) return;
-      const needsMigration = allProducts.some(p => p.img === null && defaultProductImages[p.id]);
-      if (needsMigration) {
-        console.log('Running automatic migration...');
-        for (const p of allProducts) {
-          const defaultImg = defaultProductImages[p.id];
-          if (p.img === null && defaultImg) {
-            const gallery = defaultGalleryImages[p.id];
-            let updatedOptions = p.options || [];
-            if (gallery && gallery.length > 0) {
-              const galleryOption = { name: '__gallery_images', values: gallery };
-              updatedOptions = [...updatedOptions, galleryOption];
-            }
-            const { error } = await supabase.from('products').update({ 
-              img: defaultImg,
-              options: updatedOptions
-            }).eq('id', p.id);
-            if (!error) console.log(`Migrated image for ${p.id}`);
-          }
-        }
-        window.location.reload();
-      }
-    };
-    runMigration();
-  }, [allProducts, isSupabaseLive]);
+
 
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingProductOptions, setEditingProductOptions] = useState([]);
