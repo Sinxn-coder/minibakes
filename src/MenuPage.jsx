@@ -285,7 +285,7 @@ export default function MenuPage({
 
   useEffect(() => {
     const data = mergedMenuData.find(c => c.category === activeCategory);
-    if (data?.sections) {
+    if (data?.sections?.length > 0) {
       const isAlreadyValid = data.sections.some(s => s.title === activeSubcategory);
       if (!isAlreadyValid) {
         setActiveSubcategory(data.sections[0].title);
@@ -295,7 +295,7 @@ export default function MenuPage({
         setActiveSubcategory(null);
       }
     }
-  }, [activeCategory]);
+  }, [activeCategory, mergedMenuData]);
 
 
 
@@ -400,7 +400,7 @@ export default function MenuPage({
         ))}
       </div>
 
-      {activeData.sections && (
+      {activeData.sections?.length > 0 && (
         <div className="menu-subcategory-selector">
           {activeData.sections.map(section => (
             <button 
@@ -416,7 +416,7 @@ export default function MenuPage({
       )}
 
       <div className="menu-grid">
-        {activeData.sections ? (
+        {activeData.sections?.length > 0 ? (
           activeData.sections
             .filter(section => section.title === activeSubcategory)
             .map(section => (
