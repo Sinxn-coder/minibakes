@@ -927,39 +927,31 @@ function App() {
             />
           </section>
 
-          {/* Instagram Feed Section */}
-          <section className="instagram-section">
-            <div className="insta-header">
-              <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
-              <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
-                @minibakes2021
-              </a>
-            </div>
-
-            <div className="insta-feed-container">
-              {/* This is a wrapper for the Instagram Widget. 
-              To make it live, you can use a free service like Behold.so 
-              and paste their embed code below. */}
-              <div className="insta-row">
-                {instaPosts.length === 0 ? (
-                  // Fallback skeleton placeholders while loading or if empty
-                  Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="insta-post" style={{ background: '#f0e8e8', borderRadius: '12px', aspectRatio: '1', minWidth: '140px' }} />
-                  ))
-                ) : (
-                  [...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
-                    <InstaPost key={i} post={post} index={i} />
-                  ))
-                )}
-              </div>
-
-              <div className="insta-footer">
-                <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
-                  View on Instagram
+          {/* Instagram Feed Section — only shown when reels exist */}
+          {instaPosts.length > 0 && (
+            <section className="instagram-section">
+              <div className="insta-header">
+                <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
+                <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
+                  @minibakes2021
                 </a>
               </div>
-            </div>
-          </section>
+
+              <div className="insta-feed-container">
+                <div className="insta-row">
+                  {[...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
+                    <InstaPost key={i} post={post} index={i} />
+                  ))}
+                </div>
+
+                <div className="insta-footer">
+                  <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
+                    View on Instagram
+                  </a>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* Meet the Founder Section */}
           <section className="founder-section">
