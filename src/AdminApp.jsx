@@ -834,25 +834,30 @@ function AdminAppContent() {
       if (updatedData.file) {
         const optimizedFile = await optimizeAndConvertToWebP(updatedData.file);
         
-        let fileName = `product-${id}.webp`;
+        const newFileName = `product-${id}-${Date.now()}.webp`;
         const currentImg = product.img;
-        if (currentImg && currentImg.includes('product-images')) {
+        
+        // Delete old image if it exists in the bucket
+        if (currentImg && currentImg.includes('product-images/')) {
           const bucketIndex = currentImg.indexOf('product-images/');
           if (bucketIndex !== -1) {
-            fileName = currentImg.substring(bucketIndex + 'product-images/'.length).split('?')[0];
+            const oldFileName = currentImg.substring(bucketIndex + 'product-images/'.length).split('?')[0];
+            if (oldFileName) {
+              await supabase.storage.from('product-images').remove([oldFileName]);
+            }
           }
         }
         
-        // Upload new image
+        // Upload new image with unique name
         const { error: uploadError } = await supabase.storage
           .from('product-images')
-          .upload(fileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
+          .upload(newFileName, optimizedFile, { contentType: 'image/webp' });
           
         if (uploadError) throw uploadError;
         
         const { data: { publicUrl } } = supabase.storage
           .from('product-images')
-          .getPublicUrl(fileName);
+          .getPublicUrl(newFileName);
           
         finalImgUrl = `${publicUrl}?t=${Date.now()}`;
       }
