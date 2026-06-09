@@ -859,7 +859,10 @@ function AdminAppContent() {
 
       const flavoursGroup = updatedData.options?.find(o => o.name.toLowerCase() === 'flavors' || o.name.toLowerCase() === 'flavours');
       const spreadsGroup = updatedData.options?.find(o => o.name.toLowerCase() === 'spreads');
-      const otherOptions = updatedData.options?.filter(o => !['flavors', 'flavours', 'spreads'].includes(o.name.toLowerCase())) || [];
+      const userOptions = updatedData.options?.filter(o => !['flavors', 'flavours', 'spreads'].includes(o.name.toLowerCase())) || [];
+      // Preserve __gallery_images from existing product options so gallery is not lost on save
+      const existingGalleryOption = (product.options || []).filter(o => o.name === '__gallery_images');
+      const otherOptions = [...userOptions, ...existingGalleryOption];
 
       if (isSupabaseLive) {
         const payload = {
@@ -1658,7 +1661,7 @@ function AdminAppContent() {
                             const opts = [];
                             if (product.flavours?.length) opts.push({ name: 'Flavours', values: product.flavours });
                             if (product.spreads?.length) opts.push({ name: 'Spreads', values: product.spreads });
-                            if (product.options?.length) opts.push(...product.options);
+                            if (product.options?.length) opts.push(...product.options.filter(o => o.name !== '__gallery_images'));
                             setEditProductModal({
                               product,
                               form: { name: product.name, price: product.price, description: product.description || '', status: product.status || 'In Stock' },
