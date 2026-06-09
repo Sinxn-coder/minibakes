@@ -266,7 +266,8 @@ export default function MenuPage({
         return {
           ...p,
           options,
-          images
+          images,
+          isFullWidth: p.name.toLowerCase().includes('3d')
         };
       });
 
@@ -417,29 +418,48 @@ export default function MenuPage({
 
       <div className="menu-grid">
         {activeData.sections?.length > 0 ? (
-          activeData.sections
-            .filter(section => section.title === activeSubcategory)
-            .map(section => (
-              <React.Fragment key={section.title}>
-                {section.items.map(item => (
-                  <MenuCard 
-                    key={item.id}
-                    item={item}
-                    cakeLayers={cakeLayers}
-                    setCakeLayers={setCakeLayers}
-                    selectedLayerIndex={selectedLayerIndex}
-                    setSelectedLayerIndex={setSelectedLayerIndex}
-                    addLayer={addLayer}
-                    removeLayer={removeLayer}
-                    applyColor={applyColor}
-                    toggleSpread={toggleSpread}
-                    toggleDesign={toggleDesign}
-                    toastMessage={toastMessage}
-                    onSelectProduct={onSelectProduct}
-                  />
-                ))}
-              </React.Fragment>
-            ))
+          <>
+            {activeData.sections
+              .filter(section => section.title === activeSubcategory)
+              .map(section => (
+                <React.Fragment key={section.title}>
+                  {section.items.map(item => (
+                    <MenuCard 
+                      key={item.id}
+                      item={item}
+                      cakeLayers={cakeLayers}
+                      setCakeLayers={setCakeLayers}
+                      selectedLayerIndex={selectedLayerIndex}
+                      setSelectedLayerIndex={setSelectedLayerIndex}
+                      addLayer={addLayer}
+                      removeLayer={removeLayer}
+                      applyColor={applyColor}
+                      toggleSpread={toggleSpread}
+                      toggleDesign={toggleDesign}
+                      toastMessage={toastMessage}
+                      onSelectProduct={onSelectProduct}
+                    />
+                  ))}
+                </React.Fragment>
+              ))}
+            {activeData.items.map(item => (
+              <MenuCard 
+                key={item.id}
+                item={item}
+                cakeLayers={cakeLayers}
+                setCakeLayers={setCakeLayers}
+                selectedLayerIndex={selectedLayerIndex}
+                setSelectedLayerIndex={setSelectedLayerIndex}
+                addLayer={addLayer}
+                removeLayer={removeLayer}
+                applyColor={applyColor}
+                toggleSpread={toggleSpread}
+                toggleDesign={toggleDesign}
+                toastMessage={toastMessage}
+                onSelectProduct={onSelectProduct}
+              />
+            ))}
+          </>
         ) : (
           activeData.items.map(item => (
             <MenuCard 
