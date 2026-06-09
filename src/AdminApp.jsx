@@ -5,6 +5,39 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { menuData } from './data/menuData';
 import './AdminApp.css';
 
+const optimizeAndConvertToWebP = (file, maxWidth = 1000, quality = 0.8) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > height && width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        } else if (height > maxWidth) {
+          width = Math.round((width * maxWidth) / height);
+          height = maxWidth;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => {
+          if (!blob) return reject(new Error('Canvas is empty'));
+          resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: "image/webp" }));
+        }, 'image/webp', quality);
+      };
+      img.onerror = reject;
+    };
+    reader.onerror = reject;
+  });
+};
+
 const defaultProductImages = {};
 menuData.forEach(cat => {
   if (cat.items) cat.items.forEach(item => defaultProductImages[item.id] = item.img);
@@ -350,9 +383,9 @@ function AdminAppContent() {
       let finalImgUrl = undefined;
       
       if (newProductData.file) {
-        const fileExt = newProductData.file.name.split('.').pop();
-        const fileName = `product-${newId}-${Date.now()}.${fileExt}`;
-        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, newProductData.file);
+        const optimizedFile = await optimizeAndConvertToWebP(newProductData.file);
+        const fileName = `product-${newId}-${Date.now()}.webp`;
+        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, optimizedFile);
         if (uploadError) throw uploadError;
         const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
         finalImgUrl = publicUrl;
@@ -734,13 +767,13 @@ function AdminAppContent() {
     if (newImageFile) {
       setIsUploadingImage(true);
       try {
-        const fileExt = newImageFile.name.split('.').pop();
-        const fileName = `slot-${slot}-${Date.now()}.${fileExt}`;
+        const optimizedFile = await optimizeAndConvertToWebP(newImageFile);
+        const fileName = `slot-${slot}-${Date.now()}.webp`;
         
         // Upload new image
         const { error: uploadError } = await supabase.storage
           .from('featured-images')
-          .upload(fileName, newImageFile);
+          .upload(fileName, optimizedFile);
           
         if (uploadError) throw uploadError;
         
@@ -805,13 +838,13 @@ function AdminAppContent() {
       const product = allProducts.find(p => p.id === id);
 
       if (updatedData.file) {
-        const fileExt = updatedData.file.name.split('.').pop();
-        const fileName = `product-${id}-${Date.now()}.${fileExt}`;
+        const optimizedFile = await optimizeAndConvertToWebP(updatedData.file);
+        const fileName = `product-${id}-${Date.now()}.webp`;
         
         // Upload new image
         const { error: uploadError } = await supabase.storage
           .from('product-images')
-          .upload(fileName, updatedData.file);
+          .upload(fileName, optimizedFile);
           
         if (uploadError) throw uploadError;
         
