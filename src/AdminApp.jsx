@@ -143,9 +143,9 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
 );
 
 // Default featured images
-import brownieImg from './assets/brownies/brownie.webp';
-import cupcakeImg from './assets/cupcake4.webp';
-import cakeImg from './assets/roundcake1.webp';
+const brownieImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/brownies/brownie.webp";
+const cupcakeImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcake4.webp";
+const cakeImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/roundcake1.webp";
 import founderImg from './assets/founder.webp';
 
 const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL;
