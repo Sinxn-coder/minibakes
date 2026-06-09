@@ -369,6 +369,16 @@ export default function MenuPage({
   const layerLabel = { '6round': '6" Round', '8round': '8" Round', '6heart': '6" Heart', '8heart': '8" Heart' };
   const layerIcon = (type) => type.includes('heart') ? <Heart size={16} /> : <Circle size={16} />;
 
+  if (liveProducts.length === 0) {
+    return (
+      <div className="menu-page">
+        <div style={{ padding: '6rem 2rem', textAlign: 'center', color: '#666' }}>
+          Loading menu...
+        </div>
+      </div>
+    );
+  }
+
   const activeData = mergedMenuData.find(c => c.category === activeCategory) || mergedMenuData[0];
 
   return (

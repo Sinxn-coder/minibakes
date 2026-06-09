@@ -354,8 +354,7 @@ function AdminAppContent() {
 
 
 
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [editingProductOptions, setEditingProductOptions] = useState([]);
+  const [editProductModal, setEditProductModal] = useState(null); // null or { product, form, options, imageFile, imagePreview }
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [newProductData, setNewProductData] = useState({
     name: '',
@@ -836,7 +835,7 @@ function AdminAppContent() {
         const optimizedFile = await optimizeAndConvertToWebP(updatedData.file);
         
         let fileName = `product-${id}.webp`;
-        const currentImg = product.img || defaultProductImages[id];
+        const currentImg = product.img;
         if (currentImg && currentImg.includes('product-images')) {
           const bucketIndex = currentImg.indexOf('product-images/');
           if (bucketIndex !== -1) {
@@ -896,8 +895,7 @@ function AdminAppContent() {
       updateObj.isNew = false;
 
       setAllProducts(prev => prev.map(p => p.id === id ? { ...p, ...updateObj } : p));
-      setEditingProduct(null);
-      setNewProductImageFile(null);
+      setEditProductModal(null);
       triggerToast('Product details updated successfully! ✨', 'success');
     } catch (err) {
       console.error('Error updating product:', err);
@@ -1646,196 +1644,48 @@ function AdminAppContent() {
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
                 {filteredProducts.map(product => (
-                  <div key={product.id} style={{ height: '340px', position: 'relative' }}>
-                    <div className="premium-card" style={{ 
-                      position: 'absolute',
-                      top: 0, left: 0, right: 0,
-                      height: editingProduct === product.id ? '580px' : '100%',
-                      zIndex: editingProduct === product.id ? 50 : 1,
-                      padding: '0', 
-                      border: editingProduct === product.id ? '2px solid #800000' : '1px solid #e9ecef', 
-                      borderRadius: '12px', 
-                      boxShadow: editingProduct === product.id ? '0 12px 30px rgba(0,0,0,0.15)' : '0 4px 12px rgba(0,0,0,0.04)',
-                      background: '#fff',
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column'
-                    }}>
-                      {/* VIEW STATE LAYER */}
-                      <div style={{
-                        transition: 'all 0.5s ease-in-out',
-                        transform: editingProduct === product.id ? 'translateY(-100%)' : 'translateY(0)',
-                        opacity: editingProduct === product.id ? 0 : 1,
-                        height: editingProduct === product.id ? 0 : '100%',
-                        pointerEvents: editingProduct === product.id ? 'none' : 'auto',
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}>
-                        {/* PRODUCT IMAGE */}
-                        <AdminProductImage product={product} />
-
-                        {/* PRODUCT INFO */}
-                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#111', fontWeight: '700', lineHeight: '1.3' }}>{product.name}</h3>
-                          <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '15px', marginBottom: '12px' }}>{product.price}</div>
-                          
-                          {product.flavours && product.flavours.length > 0 && (
-                            <div style={{ marginBottom: '8px' }}>
-                              <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>FLAVOURS</div>
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                                {product.flavours.slice(0, 3).map((f, idx) => (
-                                  <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#f5f5f5', borderRadius: '4px', color: '#666' }}>{f}</span>
-                                ))}
-                                {product.flavours.length > 3 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.flavours.length - 3} more</span>}
-                              </div>
-                            </div>
-                          )}
-
-                          {product.spreads && product.spreads.length > 0 && (
-                            <div style={{ marginBottom: '12px' }}>
-                              <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#888', marginBottom: '4px' }}>SPREADS</div>
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                                {product.spreads.slice(0, 2).map((s, idx) => (
-                                  <span key={idx} style={{ fontSize: '10px', padding: '2px 6px', background: '#fff9fa', borderRadius: '4px', color: '#800000', border: '1px solid #ffebee' }}>{s}</span>
-                                ))}
-                                {product.spreads.length > 2 && <span style={{ fontSize: '10px', color: '#999' }}>+{product.spreads.length - 2} more</span>}
-                              </div>
-                            </div>
-                          )}
-
-                          <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
-                            <button 
-                              onClick={() => {
-                                setEditingProduct(product.id);
-                                const currentOptions = [];
-                                if (product.flavours && product.flavours.length > 0) currentOptions.push({ name: 'Flavours', values: product.flavours });
-                                if (product.spreads && product.spreads.length > 0) currentOptions.push({ name: 'Spreads', values: product.spreads });
-                                if (product.options && product.options.length > 0) currentOptions.push(...product.options);
-                                setEditingProductOptions(currentOptions);
-                              }}
-                              style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '500', transition: '0.2s' }}
-                            >
-                              Edit Item
-                            </button>
-                            <button 
-                              onClick={() => {
-                                if (confirm('Delete this product?')) {
-                                  setAllProducts(prev => prev.filter(p => p.id !== product.id));
-                                  if (isSupabaseLive) {
-                                    supabase.from('products').delete().eq('id', product.id)
-                                      .then(({ error }) => { if (error) console.error('Error deleting product:', error); });
-                                  }
-                                }
-                              }}
-                              style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
-                              title="Delete Product"
-                            >
-                               <Trash2 size={16} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* EDIT STATE LAYER */}
-                      <div style={{
-                        padding: '20px',
-                        transition: 'all 0.5s ease-in-out',
-                        transform: editingProduct === product.id ? 'translateY(0)' : 'translateY(100px)',
-                        opacity: editingProduct === product.id ? 1 : 0,
-                        height: editingProduct === product.id ? '100%' : 0,
-                        pointerEvents: editingProduct === product.id ? 'auto' : 'none',
-                        display: editingProduct === product.id ? 'flex' : 'none',
-                        flexDirection: 'column',
-                        gap: '12px'
-                      }}>
-                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#800000', marginBottom: '4px' }}>
-                            <Edit3 size={16} />
-                            <span style={{ fontWeight: '700', fontSize: '14px' }}>Edit Product Details</span>
-                         </div>
-                         
-                         <div>
-                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>PRODUCT IMAGE</label>
-                            <input 
-                              type="file" 
-                              accept="image/*"
-                              onChange={(e) => {
-                                if (e.target.files && e.target.files[0]) {
-                                  setNewProductImageFile(e.target.files[0]);
-                                }
-                              }}
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd', fontSize: '12px' }}
-                            />
-                         </div>
-
-                         <div>
-                            <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>NAME</label>
-                            <input 
-                              type="text" 
-                              defaultValue={product.name} 
-                              id={`edit-p-name-${product.id}`}
-                              style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
-                            />
-                         </div>
-                         
-                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                           <div>
-                              <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>PRICE</label>
-                              <input 
-                                type="text" 
-                                defaultValue={product.price} 
-                                id={`edit-p-price-${product.id}`}
-                                style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
-                              />
-                           </div>
-                           <div>
-                              <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#888' }}>STATUS</label>
-                              <select 
-                                defaultValue={product.status} 
-                                id={`edit-p-status-${product.id}`}
-                                style={{ width: '100%', padding: '6px', borderRadius: '4px', border: '1px solid #ddd' }}
-                              >
-                                <option value="In Stock">In Stock</option>
-                                <option value="Out of Stock">Out of Stock</option>
-                              </select>
-                           </div>
-                         </div>
-                         
-                         <div style={{ marginTop: '8px' }}>
-                            <ProductOptionsBuilder 
-                              options={editingProductOptions} 
-                              setOptions={setEditingProductOptions} 
-                            />
-                         </div>
-
-                         <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
-                            <button 
-                              disabled={isUploadingProductImage}
-                              onClick={() => {
-                                handleUpdateProduct(product.id, {
-                                  name: document.getElementById(`edit-p-name-${product.id}`).value,
-                                  price: document.getElementById(`edit-p-price-${product.id}`).value,
-                                  status: document.getElementById(`edit-p-status-${product.id}`).value,
-                                  options: editingProductOptions,
-                                  file: newProductImageFile
-                                });
-                              }}
-                              style={{ flex: 1, padding: '10px', borderRadius: '6px', background: isUploadingProductImage ? '#aaa' : '#800000', color: '#fff', border: 'none', fontWeight: 'bold', cursor: isUploadingProductImage ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-                            >
-                              <Save size={16} /> {isUploadingProductImage ? 'Saving...' : 'Save Changes'}
-                            </button>
-                            <button 
-                              onClick={() => {
-                                setEditingProduct(null);
-                                setNewProductImageFile(null);
-                              }}
-                              style={{ padding: '10px 16px', borderRadius: '6px', background: '#f5f5f5', border: '1px solid #ddd', cursor: 'pointer', fontWeight: '500' }}
-                            >
-                              Cancel
-                            </button>
-                         </div>
+                  <div key={product.id} className="premium-card" style={{ padding: 0, borderRadius: '14px', overflow: 'hidden', border: '1px solid #e9ecef', boxShadow: '0 4px 12px rgba(0,0,0,0.04)', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                    <AdminProductImage product={product} />
+                    <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <h3 style={{ margin: '0 0 3px 0', fontSize: '15px', color: '#111', fontWeight: '700', lineHeight: '1.3' }}>{product.name}</h3>
+                      <div style={{ color: 'var(--color-main)', fontWeight: '700', fontSize: '14px', marginBottom: '8px' }}>{product.price}</div>
+                      <div style={{ fontSize: '11px', color: '#999', marginBottom: '12px' }}>{product.category}{product.subcategory ? ` · ${product.subcategory}` : ''}</div>
+                      <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => {
+                            const opts = [];
+                            if (product.flavours?.length) opts.push({ name: 'Flavours', values: product.flavours });
+                            if (product.spreads?.length) opts.push({ name: 'Spreads', values: product.spreads });
+                            if (product.options?.length) opts.push(...product.options);
+                            setEditProductModal({
+                              product,
+                              form: { name: product.name, price: product.price, description: product.description || '', status: product.status || 'In Stock' },
+                              options: opts,
+                              imageFile: null,
+                              imagePreview: null
+                            });
+                          }}
+                          style={{ flex: 1, padding: '8px', borderRadius: '8px', border: '1px solid #e0e0e0', background: '#fafafa', color: '#333', cursor: 'pointer', fontSize: '13px', fontWeight: '600', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                        >
+                          <Edit3 size={14} /> Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm('Delete this product?')) {
+                              setAllProducts(prev => prev.filter(p => p.id !== product.id));
+                              if (isSupabaseLive) {
+                                supabase.from('products').delete().eq('id', product.id)
+                                  .then(({ error }) => { if (error) console.error('Error deleting product:', error); });
+                              }
+                            }
+                          }}
+                          style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #ffcdd2', background: '#fffcfc', color: '#c62828', cursor: 'pointer', transition: '0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                          title="Delete Product"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -3130,6 +2980,133 @@ function AdminAppContent() {
                   Cancel
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Product Modal */}
+      {editProductModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+          onClick={e => { if (e.target === e.currentTarget) setEditProductModal(null); }}
+        >
+          <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '620px', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 32px 64px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: '#fff', zIndex: 10, borderRadius: '20px 20px 0 0' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#111' }}>Edit Product</h3>
+                <p style={{ margin: '3px 0 0', fontSize: '13px', color: '#888' }}>ID: {editProductModal.product.id} · {editProductModal.product.category}</p>
+              </div>
+              <button onClick={() => setEditProductModal(null)} style={{ background: '#f5f5f5', border: 'none', cursor: 'pointer', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Product Image</label>
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                  <div style={{ width: '110px', height: '110px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #f0f0f0', flexShrink: 0, background: '#f8f8f8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {editProductModal.imagePreview ? (
+                      <img src={editProductModal.imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : editProductModal.product.img ? (
+                      <img src={editProductModal.product.img} alt="Current" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <ImageIcon size={28} color="#ccc" />
+                    )}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ position: 'relative', border: '2px dashed #e0e0e0', borderRadius: '10px', padding: '16px', textAlign: 'center', cursor: 'pointer', background: '#fafafa' }}>
+                      <Upload size={20} color="#aaa" style={{ marginBottom: '6px' }} />
+                      <p style={{ margin: 0, fontSize: '13px', color: '#777', fontWeight: '500' }}>
+                        {editProductModal.imageFile ? editProductModal.imageFile.name : 'Click to upload new image'}
+                      </p>
+                      <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#aaa' }}>Auto-converted to WebP & optimized</p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={e => {
+                          if (e.target.files && e.target.files[0]) {
+                            const file = e.target.files[0];
+                            const preview = URL.createObjectURL(file);
+                            setEditProductModal(prev => ({ ...prev, imageFile: file, imagePreview: preview }));
+                          }
+                        }}
+                        style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' }}
+                      />
+                    </div>
+                    {editProductModal.imageFile && (
+                      <p style={{ margin: '6px 0 0', fontSize: '11px', color: '#4caf50', fontWeight: '600' }}>✓ New image selected</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Product Name</label>
+                  <input type="text" value={editProductModal.form.name}
+                    onChange={e => setEditProductModal(prev => ({ ...prev, form: { ...prev.form, name: e.target.value } }))}
+                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e8e8e8', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e8e8e8'}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Price</label>
+                  <input type="text" value={editProductModal.form.price}
+                    onChange={e => setEditProductModal(prev => ({ ...prev, form: { ...prev.form, price: e.target.value } }))}
+                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e8e8e8', borderRadius: '10px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+                    onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e8e8e8'}
+                    placeholder="e.g. €45"
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</label>
+                  <select value={editProductModal.form.status}
+                    onChange={e => setEditProductModal(prev => ({ ...prev, form: { ...prev.form, status: e.target.value } }))}
+                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e8e8e8', borderRadius: '10px', fontSize: '14px', outline: 'none', background: '#fff', boxSizing: 'border-box', cursor: 'pointer' }}
+                    onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e8e8e8'}
+                  >
+                    <option value="In Stock">In Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                  </select>
+                </div>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '7px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Description</label>
+                  <textarea value={editProductModal.form.description}
+                    onChange={e => setEditProductModal(prev => ({ ...prev, form: { ...prev.form, description: e.target.value } }))}
+                    rows={2}
+                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e8e8e8', borderRadius: '10px', fontSize: '13px', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                    onFocus={e => e.target.style.borderColor = '#800000'} onBlur={e => e.target.style.borderColor = '#e8e8e8'}
+                  />
+                </div>
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#555', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Options & Variants</label>
+                <ProductOptionsBuilder
+                  options={editProductModal.options}
+                  setOptions={opts => setEditProductModal(prev => ({ ...prev, options: opts }))}
+                />
+              </div>
+            </div>
+            <div style={{ padding: '16px 28px 24px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: '12px', position: 'sticky', bottom: 0, background: '#fff', borderRadius: '0 0 20px 20px' }}>
+              <button onClick={() => setEditProductModal(null)}
+                style={{ flex: 1, padding: '13px', background: '#f5f5f5', border: 'none', borderRadius: '12px', fontWeight: '600', color: '#555', cursor: 'pointer', fontSize: '14px' }}>
+                Cancel
+              </button>
+              <button
+                onClick={() => handleUpdateProduct(editProductModal.product.id, {
+                  name: editProductModal.form.name,
+                  price: editProductModal.form.price,
+                  description: editProductModal.form.description,
+                  status: editProductModal.form.status,
+                  options: editProductModal.options,
+                  file: editProductModal.imageFile
+                })}
+                disabled={isUploadingProductImage}
+                style={{ flex: 2, padding: '13px', background: isUploadingProductImage ? '#c0776e' : '#800000', border: 'none', borderRadius: '12px', fontWeight: '700', color: '#fff', cursor: isUploadingProductImage ? 'not-allowed' : 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {isUploadingProductImage
+                  ? <><span className="admin-spinner" style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />Saving...</>
+                  : <><Save size={16} />Save Product</>
+                }
+              </button>
             </div>
           </div>
         </div>
