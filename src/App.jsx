@@ -64,11 +64,11 @@ import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 import logo from './assets/mini_logo.webp';
 import bg1 from './assets/headerbg3.webp';
-import brownieImg from './assets/brownies/brownie.webp';
-import cupcakeImg from './assets/cupcake4.webp';
-import cupcake1 from './assets/cupcakes/butter1.webp';
-import cupcake2 from './assets/cupcakes/butter2.webp';
-import cakeImg from './assets/roundcake1.webp';
+const brownieImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/brownies/brownie.webp";
+const cupcakeImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcake4.webp";
+const cupcake1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter1.webp";
+const cupcake2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter2.webp";
+const cakeImg = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/roundcake1.webp";
 import founderImg from './assets/founder.webp';
 import style1 from './assets/style1.webp';
 import style2 from './assets/style2.webp';
@@ -78,14 +78,14 @@ import style5 from './assets/style5.webp';
 import style6 from './assets/style6.webp';
 import style7 from './assets/style7.webp';
 import style8 from './assets/style8.webp';
-import orbitCupcake from './assets/cupcakes/butter1.webp';
-import orbitRoundCake from './assets/cakes/round/round (1).webp';
-import orbitPop from './assets/cake pops/pops (1).webp';
-import orbitBrownie from './assets/brownies/brownie.webp';
-import orbitSicle from './assets/cake sicles/cakesicles (1).webp';
-import orbitBreakableHeart from './assets/1.webp';
-import orbitHeartCake from './assets/cakes/heart/heart (1).webp';
-import orbitBento from './assets/minicakes/1.webp';
+const orbitCupcake = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter1.webp";
+const orbitRoundCake = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(1).webp";
+const orbitPop = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-pops/pops-(1).webp";
+const orbitBrownie = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/brownies/brownie.webp";
+const orbitSicle = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(1).webp";
+const orbitBreakableHeart = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/1.webp";
+const orbitHeartCake = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(1).webp";
+const orbitBento = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/minicakes/1.webp";
 import MenuPage from './MenuPage';
 import OrderPage from './OrderPage';
 import ProductDetailsPage from './ProductDetailsPage';
@@ -321,6 +321,35 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    const fetchSearch = async () => {
+      if (!searchQuery.trim() || !supabase) {
+        setSearchResults([]);
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .ilike('name', `%${searchQuery}%`)
+          .limit(10);
+        
+        if (error) throw error;
+        setSearchResults(data || []);
+      } catch (err) {
+        console.error("Search error", err);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+    
+    const timeoutId = setTimeout(fetchSearch, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   const [customizingProduct, setCustomizingProduct] = useState(null);
   const [showSplash, setShowSplash] = useState(true);
@@ -522,7 +551,7 @@ function App() {
 
   useEffect(() => {
     const fetchFeatured = async () => {
-      const isSupabaseLive = supabase && import.meta.env.VITE_SUPABASE_URL && !import.meta.env.VITE_SUPABASE_URL.includes('xrcypnyewxnsnjwsixot');
+      const isSupabaseLive = !!supabase;
       if (!isSupabaseLive) return;
       
       try {
@@ -679,29 +708,11 @@ function App() {
               {isSearchOpen && searchQuery.trim() !== '' && (
                 <div className="search-results-dropdown">
                   {(() => {
-                    const q = searchQuery.toLowerCase();
-                    
-                    // Helper to get all items from any category structure
-                    const getCategoryItems = (cat) => {
-                      if (cat.items) return cat.items;
-                      if (cat.sections) return cat.sections.flatMap(s => s.items || []);
-                      return [];
-                    };
+                    if (isSearching) {
+                      return <div className="search-no-results">Searching...</div>;
+                    }
 
-                    const categoryMatches = menuData
-                      .filter(cat => cat.category.toLowerCase().includes(q))
-                      .flatMap(getCategoryItems);
-
-                    const nameMatches = menuData
-                      .flatMap(getCategoryItems)
-                      .filter(item =>
-                        item && item.name && item.name.toLowerCase().includes(q) &&
-                        !categoryMatches.some(cm => cm && cm.id === item.id)
-                      );
-
-                    const allResults = [...categoryMatches, ...nameMatches].filter(Boolean);
-
-                    if (allResults.length === 0) {
+                    if (searchResults.length === 0) {
                       return (
                         <div className="search-no-results">
                           No desserts found for "{searchQuery}"
@@ -709,7 +720,7 @@ function App() {
                       );
                     }
 
-                    return allResults.map(item => (
+                    return searchResults.map(item => (
                       <div
                         key={item.id}
                         className="search-result-item"

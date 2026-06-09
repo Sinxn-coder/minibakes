@@ -1,44 +1,44 @@
 
 
 
-import brownie_new from '../assets/brownies/brownie.webp';
+const brownie_new = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/brownies/brownie.webp";
 
-import pops_1 from '../assets/cake pops/pops (1).webp';
-import pops_2 from '../assets/cake pops/pops (2).webp';
-import pops_3 from '../assets/cake pops/pops (3).webp';
-import heart1 from '../assets/1.webp';
-import sicles1 from '../assets/cake sicles/cakesicles (1).webp';
-import sicles2 from '../assets/cake sicles/cakesicles (2).webp';
-import sicles3 from '../assets/cake sicles/cakesicles (3).webp';
-import sicles4 from '../assets/cake sicles/cakesicles (4).webp';
-import sicles5 from '../assets/cake sicles/cakesicles (5).webp';
-import mini1 from '../assets/minicakes/1.webp';
-import mini2 from '../assets/minicakes/2.webp';
+const pops_1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-pops/pops-(1).webp";
+const pops_2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-pops/pops-(2).webp";
+const pops_3 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-pops/pops-(3).webp";
+const heart1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/1.webp";
+const sicles1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(1).webp";
+const sicles2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(2).webp";
+const sicles3 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(3).webp";
+const sicles4 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(4).webp";
+const sicles5 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cake-sicles/cakesicles-(5).webp";
+const mini1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/minicakes/1.webp";
+const mini2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/minicakes/2.webp";
 
 
 // Heart Cake Gallery
-import heart_1 from '../assets/cakes/heart/heart (1).webp';
-import heart_2 from '../assets/cakes/heart/heart (2).webp';
-import heart_3 from '../assets/cakes/heart/heart (3).webp';
-import heart_4 from '../assets/cakes/heart/heart (4).webp';
-import heart_5 from '../assets/cakes/heart/heart (5).webp';
-import heart_6 from '../assets/cakes/heart/heart (6).webp';
+const heart_1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(1).webp";
+const heart_2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(2).webp";
+const heart_3 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(3).webp";
+const heart_4 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(4).webp";
+const heart_5 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(5).webp";
+const heart_6 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/heart/heart-(6).webp";
 
 const heartImages = [heart_1, heart_2, heart_3, heart_4, heart_5, heart_6];
 
 // Round Cake Gallery
-import round_1 from '../assets/cakes/round/round (1).webp';
-import round_2 from '../assets/cakes/round/round (2).webp';
-import round_3 from '../assets/cakes/round/round (3).webp';
-import round_4 from '../assets/cakes/round/round (4).webp';
-import round_5 from '../assets/cakes/round/round (5).webp';
-import round_6 from '../assets/cakes/round/round (6).webp';
-import round_7 from '../assets/cakes/round/round (7).webp';
-import round_8 from '../assets/cakes/round/round (8).webp';
-import round_9 from '../assets/cakes/round/round (9).webp';
-import round_10 from '../assets/cakes/round/round (10).webp';
-import round_11 from '../assets/cakes/round/round (11).webp';
-import round_12 from '../assets/cakes/round/round (12).webp';
+const round_1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(1).webp";
+const round_2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(2).webp";
+const round_3 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(3).webp";
+const round_4 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(4).webp";
+const round_5 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(5).webp";
+const round_6 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(6).webp";
+const round_7 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(7).webp";
+const round_8 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(8).webp";
+const round_9 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(9).webp";
+const round_10 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(10).webp";
+const round_11 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(11).webp";
+const round_12 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cakes/round/round-(12).webp";
 
 const roundImages = [
   round_1, round_2, round_3, round_4, round_5, round_6,
@@ -46,12 +46,12 @@ const roundImages = [
 ];
 
 // Cupcake Gallery
-import cupcake_1 from '../assets/cupcakes/butter1.webp';
-import cupcake_2 from '../assets/cupcakes/butter2.webp';
-import cupcake_3 from '../assets/cupcakes/butter3.webp';
-import cupcake_4 from '../assets/cupcakes/whitechoclate1.webp';
-import cupcake_5 from '../assets/cupcakes/whitechoclate2.webp';
-import cupcake_6 from '../assets/cupcakes/whitechoclate3.webp';
+const cupcake_1 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter1.webp";
+const cupcake_2 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter2.webp";
+const cupcake_3 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/butter3.webp";
+const cupcake_4 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/whitechoclate1.webp";
+const cupcake_5 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/whitechoclate2.webp";
+const cupcake_6 = "https://xrcypnyewxnsnjwsixot.supabase.co/storage/v1/object/public/product-images/cupcakes/whitechoclate3.webp";
 
 const cupcakeImages = [
   cupcake_1, cupcake_2, cupcake_3, cupcake_4, cupcake_5, cupcake_6

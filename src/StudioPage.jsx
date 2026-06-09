@@ -172,14 +172,29 @@ export default function ClassesPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
     setBookingStatus('loading');
-    // Simulate booking
-    setTimeout(() => {
+    
+    try {
+      const { error } = await supabase.from('class_bookings').insert([{
+        name: formData.name,
+        email: formData.email,
+        phone: `${phoneCode} ${formData.phone}`,
+        date: formData.date,
+        guests: parseInt(formData.guests, 10),
+        status: 'pending'
+      }]);
+      
+      if (error) throw error;
+      
       setBookingStatus('success');
       setFormData({ name: '', email: '', phone: '', date: '', guests: '1' });
-    }, 1500);
+    } catch (err) {
+      console.error('Error booking class:', err);
+      alert('There was an issue submitting your booking request. Please try again.');
+      setBookingStatus(null);
+    }
   };
 
   return (
