@@ -467,24 +467,39 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     )
   });
 
-  if (showBows || showIndividualPackaging || showEdiblePrinting) {
+  if (showBows) {
+    formSteps.push({
+      id: 'bows',
+      question: "Would you like to add a Fondant Bow?",
+      render: () => (
+        <div className="conv-input-wrapper">
+          <select 
+            className="conv-input conv-select"
+            value={options.bows ? 'Yes' : 'No'}
+            onChange={(e) => {
+              setOptions({...options, bows: e.target.value === 'Yes'});
+            }}
+          >
+            <option value="No">No Bow</option>
+            <option value="Yes">Yes, add a Bow (+€{BOW_ADDON_PRICE})</option>
+          </select>
+          <button 
+            className="conv-next-btn" 
+            onClick={() => goToNextStep(currentStepIndex + 1)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )
+    });
+  }
+
+  if (showIndividualPackaging || showEdiblePrinting) {
     formSteps.push({
       id: 'addons',
       question: "Any final additions?",
       render: () => (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          {showBows && (
-            <div className="conv-toggle-row">
-              <div className="conv-toggle-label">
-                <span className="conv-toggle-title">🎀 Add Bows</span>
-                <span className="conv-toggle-desc">+€{BOW_ADDON_PRICE}</span>
-              </div>
-              <label className="conv-switch">
-                <input type="checkbox" checked={options.bows} onChange={() => setOptions({...options, bows: !options.bows})} />
-                <span className="conv-slider"></span>
-              </label>
-            </div>
-          )}
           {showIndividualPackaging && (
             <div className="conv-toggle-row">
               <div className="conv-toggle-label">

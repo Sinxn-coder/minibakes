@@ -101,28 +101,7 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                   ))}
                 </div>
               </div>
-              <div className="designer-column">
-                <h4>Spreads</h4>
-                <div className="designer-options">
-                  {[
-                    { name: 'Nutella', color: '#3d1e16' },
-                    { name: 'Biscoff', color: '#b07d4b' },
-                    { name: 'Pistachio', color: '#a2d187' },
-                    { name: 'Kinder', color: '#e8d8c8' },
-                    { name: 'White Chocolate', color: '#f5ebd6' },
-                    { name: 'Ferrero Rocher', color: '#5c3a21' }
-                  ].map(spread => (
-                    <button 
-                      key={spread.name}
-                      className={`designer-card ${cakeLayers[selectedLayerIndex]?.spread === spread.name ? 'active-design' : ''}`}
-                      onClick={() => toggleSpread(spread.name)}
-                    >
-                      <Droplet size={20} color={spread.color} />
-                      <span className="designer-card-label">{spread.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
+
               <div className="designer-column">
                 <h4>Designs</h4>
                 <div className="designer-options">
@@ -139,13 +118,6 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                   >
                     <ChevronDown size={20} />
                     <span className="designer-card-label">Bottom Shell</span>
-                  </button>
-                  <button 
-                    className={`designer-card ${cakeLayers[selectedLayerIndex]?.bow ? 'active-design' : ''}`}
-                    onClick={() => toggleDesign('bow')}
-                  >
-                    <Gift size={20} />
-                    <span className="designer-card-label">Fondant Bow</span>
                   </button>
                 </div>
               </div>
