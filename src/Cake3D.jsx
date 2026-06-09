@@ -570,9 +570,8 @@ function FondantBow({ radius, yOffset, color, isHeart, size }) {
 
 // --- Cake Text Helper ---
 function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' }) {
-  if (!text) return null;
-  
   const texture = useMemo(() => {
+    if (!text) return null;
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 512;
@@ -595,6 +594,8 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
     tex.anisotropy = 16;
     return tex;
   }, [text]);
+
+  if (!text || !texture) return null;
 
   return (
     <group position={[0, yOffset + 0.035, isHeart ? -size * 0.1 : 0]} rotation={[-Math.PI / 2, 0, 0]}>
