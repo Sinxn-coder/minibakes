@@ -127,10 +127,10 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                 <p className="summary-title">Your Selection:</p>
                 {selectedLayerIndex !== null && cakeLayers.length > 0 && (
                   <div className="designer-text-input-wrapper">
-                    <input 
-                      type="text" 
+                    <textarea 
                       placeholder="Add text to cake (e.g. Love)" 
-                      maxLength={15}
+                      maxLength={30}
+                      rows={2}
                       className="designer-text-input"
                       value={cakeLayers[selectedLayerIndex]?.customText || ''}
                       onChange={(e) => {
@@ -139,9 +139,10 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
                           i === selectedLayerIndex ? { ...layer, customText: text } : layer
                         ));
                       }}
+                      style={{ resize: 'none', height: 'auto', minHeight: '40px' }}
                     />
                     <span className="text-char-limit">
-                      {(cakeLayers[selectedLayerIndex]?.customText || '').length}/15
+                      {(cakeLayers[selectedLayerIndex]?.customText || '').length}/30
                     </span>
                   </div>
                 )}

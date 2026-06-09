@@ -578,16 +578,19 @@ function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' 
   
   return (
     <group position={[0, yOffset + 0.02, isHeart ? -size * 0.1 : 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <Text
-        fontSize={isHeart ? 0.22 : 0.25}
-        color={textColor}
-        anchorX="center"
-        anchorY="middle"
-        maxWidth={isHeart ? size * 1.5 : size * 2}
-        textAlign="center"
-      >
-        {text}
-      </Text>
+      <Suspense fallback={null}>
+        <Text
+          fontSize={isHeart ? 0.22 : 0.25}
+          color={textColor}
+          anchorX="center"
+          anchorY="middle"
+          maxWidth={isHeart ? size * 1.5 : size * 2}
+          textAlign="center"
+          lineHeight={1.1}
+        >
+          {text}
+        </Text>
+      </Suspense>
     </group>
   );
 }
