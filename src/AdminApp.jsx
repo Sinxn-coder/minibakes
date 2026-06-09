@@ -771,8 +771,10 @@ function AdminAppContent() {
         
         let fileName = `slot-${slot}.webp`;
         if (item.img && item.img.includes('featured-images')) {
-          const oldUrlParts = item.img.split('/');
-          fileName = oldUrlParts[oldUrlParts.length - 1].split('?')[0];
+          const bucketIndex = item.img.indexOf('featured-images/');
+          if (bucketIndex !== -1) {
+            fileName = item.img.substring(bucketIndex + 'featured-images/'.length).split('?')[0];
+          }
         }
         
         // Upload new image
@@ -840,8 +842,10 @@ function AdminAppContent() {
         
         let fileName = `product-${id}.webp`;
         if (product.img && product.img.includes('product-images')) {
-          const oldUrlParts = product.img.split('/');
-          fileName = oldUrlParts[oldUrlParts.length - 1].split('?')[0];
+          const bucketIndex = product.img.indexOf('product-images/');
+          if (bucketIndex !== -1) {
+            fileName = product.img.substring(bucketIndex + 'product-images/'.length).split('?')[0];
+          }
         }
         
         // Upload new image
