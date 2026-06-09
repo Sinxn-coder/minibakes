@@ -384,11 +384,11 @@ function AdminAppContent() {
       
       if (newProductData.file) {
         const optimizedFile = await optimizeAndConvertToWebP(newProductData.file);
-        const fileName = `product-${newId}-${Date.now()}.webp`;
-        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, optimizedFile);
+        const fileName = `product-${newId}.webp`;
+        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
         if (uploadError) throw uploadError;
         const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
-        finalImgUrl = publicUrl;
+        finalImgUrl = `${publicUrl}?t=${Date.now()}`;
       }
       
       const flavoursGroup = newProductData.options.find(o => o.name.toLowerCase() === 'flavors' || o.name.toLowerCase() === 'flavours');
@@ -768,12 +768,17 @@ function AdminAppContent() {
       setIsUploadingImage(true);
       try {
         const optimizedFile = await optimizeAndConvertToWebP(newImageFile);
-        const fileName = `slot-${slot}-${Date.now()}.webp`;
+        
+        let fileName = `slot-${slot}.webp`;
+        if (item.img && item.img.includes('featured-images')) {
+          const oldUrlParts = item.img.split('/');
+          fileName = oldUrlParts[oldUrlParts.length - 1].split('?')[0];
+        }
         
         // Upload new image
         const { error: uploadError } = await supabase.storage
           .from('featured-images')
-          .upload(fileName, optimizedFile);
+          .upload(fileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
           
         if (uploadError) throw uploadError;
         
@@ -781,14 +786,7 @@ function AdminAppContent() {
           .from('featured-images')
           .getPublicUrl(fileName);
           
-        finalImageUrl = publicUrl;
-
-        // Delete old image if it's hosted on our Supabase bucket
-        if (item.img && item.img.includes('featured-images')) {
-          const oldUrlParts = item.img.split('/');
-          const oldFileName = oldUrlParts[oldUrlParts.length - 1];
-          await supabase.storage.from('featured-images').remove([oldFileName]);
-        }
+        finalImageUrl = `${publicUrl}?t=${Date.now()}`;
       } catch (err) {
         console.error('Error uploading image:', err);
         triggerToast('Failed to upload image', 'error');
@@ -839,12 +837,17 @@ function AdminAppContent() {
 
       if (updatedData.file) {
         const optimizedFile = await optimizeAndConvertToWebP(updatedData.file);
-        const fileName = `product-${id}-${Date.now()}.webp`;
+        
+        let fileName = `product-${id}.webp`;
+        if (product.img && product.img.includes('product-images')) {
+          const oldUrlParts = product.img.split('/');
+          fileName = oldUrlParts[oldUrlParts.length - 1].split('?')[0];
+        }
         
         // Upload new image
         const { error: uploadError } = await supabase.storage
           .from('product-images')
-          .upload(fileName, optimizedFile);
+          .upload(fileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
           
         if (uploadError) throw uploadError;
         
@@ -852,14 +855,7 @@ function AdminAppContent() {
           .from('product-images')
           .getPublicUrl(fileName);
           
-        finalImgUrl = publicUrl;
-
-        // Delete old image if it was in Supabase
-        if (product.img && product.img.includes('product-images')) {
-          const oldUrlParts = product.img.split('/');
-          const oldFileName = oldUrlParts[oldUrlParts.length - 1];
-          await supabase.storage.from('product-images').remove([oldFileName]);
-        }
+        finalImgUrl = `${publicUrl}?t=${Date.now()}`;
       }
 
       const flavoursGroup = updatedData.options?.find(o => o.name.toLowerCase() === 'flavors' || o.name.toLowerCase() === 'flavours');
