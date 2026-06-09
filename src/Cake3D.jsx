@@ -572,25 +572,36 @@ function FondantBow({ radius, yOffset, color, isHeart, size }) {
 function CakeText({ text, yOffset, isHeart = false, size = 0, color = '#ffffff' }) {
   if (!text) return null;
   
-  // Choose a contrasting color based on cake color if possible, 
-  // but for now white/dark brown works well.
-  const textColor = '#5c0d1b'; // Match secondary color for luxury look
-  
+  const texture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, 512, 512);
+    context.font = 'bold 50px "Georgia", serif';
+    context.fillStyle = '#5c0d1b'; // Match secondary color for luxury look
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    
+    const lines = text.split('\n');
+    const lineHeight = 60;
+    const startY = 256 - ((lines.length - 1) * lineHeight) / 2;
+    
+    lines.forEach((line, i) => {
+      context.fillText(line, 256, startY + i * lineHeight);
+    });
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 16;
+    return tex;
+  }, [text]);
+
   return (
-    <group position={[0, yOffset + 0.02, isHeart ? -size * 0.1 : 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <Suspense fallback={null}>
-        <Text
-          fontSize={isHeart ? 0.22 : 0.25}
-          color={textColor}
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={isHeart ? size * 1.5 : size * 2}
-          textAlign="center"
-          lineHeight={1.1}
-        >
-          {text}
-        </Text>
-      </Suspense>
+    <group position={[0, yOffset + 0.035, isHeart ? -size * 0.1 : 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh>
+        <planeGeometry args={[size * 1.8, size * 1.8]} />
+        <meshBasicMaterial key={text} map={texture} transparent={true} opacity={0.85} depthWrite={false} />
+      </mesh>
     </group>
   );
 }
