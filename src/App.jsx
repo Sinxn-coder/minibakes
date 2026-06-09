@@ -939,7 +939,7 @@ function App() {
 
               <div className="insta-feed-container">
                 <div className="insta-row">
-                  {[...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
+                  {instaPosts.map((post, i) => (
                     <InstaPost key={i} post={post} index={i} />
                   ))}
                 </div>
