@@ -98,39 +98,7 @@ import review3 from './assets/reviews/three.webp';
 import review4 from './assets/reviews/four.webp';
 import review5 from './assets/reviews/5th.webp';
 import review6 from './assets/reviews/6th.webp';
-import ig1 from './assets/instgram/ig1.webp';
-import ig2 from './assets/instgram/ig2.webp';
-import ig3 from './assets/instgram/ig3.webp';
-import ig4 from './assets/instgram/ig4.webp';
-import ig5 from './assets/instgram/ig5.webp';
-import ig6 from './assets/instgram/ig6.webp';
 
-const instaPosts = [
-  { 
-    img: ig1, 
-    link: 'https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==' 
-  },
-  { 
-    img: ig2, 
-    link: 'https://www.instagram.com/p/DLFxTWjoR1p/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
-  },
-  { 
-    img: ig3, 
-    link: 'https://www.instagram.com/reel/DX1pOqsRkRB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
-  },
-  { 
-    img: ig4, 
-    link: 'https://www.instagram.com/p/DU8xauIEe7_/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==' 
-  },
-  { 
-    img: ig5, 
-    link: 'https://www.instagram.com/reel/DYMG3CloNfE/?utm_source=ig_web_copy_link' 
-  },
-  { 
-    img: ig6, 
-    link: 'https://instagram.com/minibakes2021' 
-  }
-];
 
 const patternCoords = [
   // Row 1 (Top)
@@ -350,6 +318,28 @@ function App() {
     const timeoutId = setTimeout(fetchSearch, 300);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  const [instaPosts, setInstaPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchInstagramReels = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('instagram_reels')
+          .select('*')
+          .order('display_order', { ascending: true })
+          .limit(12);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setInstaPosts(data.map(r => ({ img: r.thumbnail_url, link: r.reel_url })));
+        }
+      } catch (err) {
+        console.error('Error fetching instagram reels:', err);
+      }
+    };
+    fetchInstagramReels();
+  }, []);
+
 
   const [customizingProduct, setCustomizingProduct] = useState(null);
   const [showSplash, setShowSplash] = useState(true);
@@ -951,9 +941,16 @@ function App() {
               To make it live, you can use a free service like Behold.so 
               and paste their embed code below. */}
               <div className="insta-row">
-                {[...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
-                  <InstaPost key={i} post={post} index={i} />
-                ))}
+                {instaPosts.length === 0 ? (
+                  // Fallback skeleton placeholders while loading or if empty
+                  Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="insta-post" style={{ background: '#f0e8e8', borderRadius: '12px', aspectRatio: '1', minWidth: '140px' }} />
+                  ))
+                ) : (
+                  [...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
+                    <InstaPost key={i} post={post} index={i} />
+                  ))
+                )}
               </div>
 
               <div className="insta-footer">
