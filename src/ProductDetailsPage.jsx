@@ -88,9 +88,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
     notes: '',
     bows: false,
     individualPackaging: false,
-    boxSize: product?.options ? product.options[0].value : '',
+    boxSize: '',
     ediblePrinting: false,
-    color: ''
+    color: '',
+    customOptions: {}
   });
 
   const BOW_ADDON_PRICE = 5;
@@ -102,6 +103,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
       setQuantity(minQty);
     }
   }, [product, minQty]);
+
+  useEffect(() => {
+    if (product?.options && Array.isArray(product.options)) {
+      const initialCustom = {};
+      product.options.forEach(opt => {
+        if (opt.name && opt.name !== '__gallery_images' && Array.isArray(opt.values) && opt.values.length > 0) {
+          initialCustom[opt.name] = opt.values[0];
+        }
+      });
+      setOptions(prev => ({ ...prev, customOptions: initialCustom }));
+    }
+  }, [product]);
 
   if (!product) return null;
 
@@ -194,60 +207,68 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   // Build the form steps dynamically
   const formSteps = [];
   
-  if (product.options) {
-    formSteps.push({
-      id: 'boxSize',
-      question: "What box size would you like?",
-      render: () => (
-        <div className="conv-input-wrapper" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', width: '100%', gap: '0.5rem', alignItems: 'center' }}>
-            <select 
-              className="conv-input conv-select"
-              style={{ flex: 1 }}
-              value={options.boxSize}
-              onChange={(e) => setOptions({...options, boxSize: e.target.value})}
-            >
-              <option value="" disabled>Select box size...</option>
-              {product.options.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-            <button 
-              className="conv-next-btn" 
-              onClick={() => goToNextStep(currentStepIndex + 1)}
-              disabled={!options.boxSize}
-              style={{ opacity: !options.boxSize ? 0.5 : 1 }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-          {isBrownie && (
-            <div className="brownie-notice-box" style={{ 
-              background: 'rgba(128, 0, 0, 0.035)', 
-              border: '1px solid rgba(128, 0, 0, 0.12)', 
-              borderRadius: '12px', 
-              padding: '12px 16px', 
-              marginTop: '12px',
-              display: 'flex',
-              gap: '10px',
-              alignItems: 'flex-start',
-              width: '100%'
-            }}>
-              <AlertCircle size={16} style={{ color: '#6b1111', flexShrink: 0, marginTop: '2px' }} />
-              <p className="brownie-batch-note" style={{ 
-                fontSize: '12px', 
-                color: '#6b1111', 
-                margin: 0, 
-                fontWeight: '500', 
-                lineHeight: '1.5',
-                textAlign: 'left'
-              }}>
-                <strong>Important Note:</strong> Standard batch size is 22cm x 22cm. Depending on the quantity selected, each brownie piece will be adjusted in size accordingly.
-              </p>
+  if (product?.options && Array.isArray(product.options)) {
+    product.options.forEach(opt => {
+      if (!opt.name || opt.name === '__gallery_images' || !Array.isArray(opt.values) || opt.values.length === 0) return;
+      
+      formSteps.push({
+        id: `custom_${opt.name}`,
+        question: `What ${opt.name.toLowerCase()} would you like?`,
+        render: () => (
+          <div className="conv-input-wrapper" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', width: '100%', gap: '0.5rem', alignItems: 'center' }}>
+              <select 
+                className="conv-input conv-select"
+                style={{ flex: 1 }}
+                value={options.customOptions?.[opt.name] || ''}
+                onChange={(e) => setOptions({
+                  ...options, 
+                  customOptions: { ...(options.customOptions || {}), [opt.name]: e.target.value }
+                })}
+              >
+                <option value="" disabled>Select {opt.name.toLowerCase()}...</option>
+                {opt.values.map(val => (
+                  <option key={val} value={val}>{val}</option>
+                ))}
+              </select>
+              <button 
+                className="conv-next-btn" 
+                onClick={() => goToNextStep(currentStepIndex + 1)}
+                disabled={!options.customOptions?.[opt.name]}
+                style={{ opacity: !options.customOptions?.[opt.name] ? 0.5 : 1 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
             </div>
-          )}
-        </div>
-      )
+            
+            {isBrownie && opt.name.toLowerCase().includes('size') && (
+              <div className="brownie-notice-box" style={{ 
+                background: 'rgba(128, 0, 0, 0.035)', 
+                border: '1px solid rgba(128, 0, 0, 0.12)', 
+                borderRadius: '12px', 
+                padding: '12px 16px', 
+                marginTop: '12px',
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'flex-start',
+                width: '100%'
+              }}>
+                <AlertCircle size={16} style={{ color: '#6b1111', flexShrink: 0, marginTop: '2px' }} />
+                <p className="brownie-batch-note" style={{ 
+                  fontSize: '12px', 
+                  color: '#6b1111', 
+                  margin: 0, 
+                  fontWeight: '500', 
+                  lineHeight: '1.5',
+                  textAlign: 'left'
+                }}>
+                  <strong>Important Note:</strong> Standard batch size is 22cm x 22cm. Depending on the quantity selected, each brownie piece will be adjusted in size accordingly.
+                </p>
+              </div>
+            )}
+          </div>
+        )
+      });
     });
   }
 
