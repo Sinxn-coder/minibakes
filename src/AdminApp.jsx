@@ -105,50 +105,64 @@ const ProductOptionsBuilder = ({ options, setOptions }) => {
   };
 
   return (
-    <div style={{ marginTop: '16px', padding: '16px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
-      <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#444', marginBottom: '12px' }}>Product Options / Attributes</label>
+    <div style={{ marginTop: '16px', padding: '20px', background: '#fafafa', borderRadius: '16px', border: '1px solid #eaeaea' }}>
+      <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#333', marginBottom: '16px', letterSpacing: '0.5px' }}>Configure Product Options</label>
       
-      {options.map((opt, gIdx) => (
-        <div key={gIdx} style={{ marginBottom: '16px', padding: '12px', background: '#fff', borderRadius: '8px', border: '1px solid #ddd' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ fontWeight: '600', fontSize: '13px', color: '#1a1a1a' }}>{opt.name}</span>
-            <button onClick={() => removeOptionGroup(gIdx)} style={{ background: 'none', border: 'none', color: '#e53935', cursor: 'pointer', fontSize: '12px', fontWeight: '500' }}>Remove Group</button>
-          </div>
-          
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
-            {opt.values.map((val, vIdx) => (
-              <div key={vIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#FFF0F4', color: '#800000', padding: '4px 10px', borderRadius: '16px', fontSize: '12px', fontWeight: '600' }}>
-                {val}
-                <X size={12} style={{ cursor: 'pointer', opacity: 0.7 }} onClick={() => removeValue(gIdx, vIdx)} />
-              </div>
-            ))}
-          </div>
-          
-          <input 
-            type="text" 
-            placeholder={`Add a ${opt.name.toLowerCase()} value and press Enter`}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                addValue(gIdx, e.target.value);
-                e.target.value = '';
-              }
-            }}
-            style={{ width: '100%', padding: '8px 12px', border: '1px solid #eee', borderRadius: '6px', fontSize: '13px', outline: 'none', background: '#fcfcfc' }}
-          />
+      {options.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '20px', color: '#888', fontSize: '13px', background: '#fff', borderRadius: '12px', border: '1px dashed #ddd', marginBottom: '16px' }}>
+          No options added yet. Add sizes, flavors, or spreads below.
         </div>
-      ))}
+      )}
 
-      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+        {options.map((opt, gIdx) => (
+          <div key={gIdx} style={{ padding: '16px', background: '#fff', borderRadius: '12px', border: '1px solid #e0e0e0', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <span style={{ fontWeight: '700', fontSize: '14px', color: '#111' }}>{opt.name}</span>
+              <button onClick={() => removeOptionGroup(gIdx)} style={{ background: '#ffebee', border: 'none', color: '#d32f2f', cursor: 'pointer', fontSize: '11px', fontWeight: '600', padding: '4px 8px', borderRadius: '6px', transition: '0.2s' }}>Remove</button>
+            </div>
+            
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+              {opt.values.length === 0 && <span style={{ fontSize: '12px', color: '#aaa', fontStyle: 'italic' }}>No values added</span>}
+              {opt.values.map((val, vIdx) => (
+                <div key={vIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#fff0f4', color: '#800000', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', border: '1px solid #fde0e6' }}>
+                  {val}
+                  <X size={14} style={{ cursor: 'pointer', opacity: 0.6 }} onClick={() => removeValue(gIdx, vIdx)} />
+                </div>
+              ))}
+            </div>
+            
+            <input 
+              type="text" 
+              placeholder={`Add a ${opt.name.toLowerCase()} value & press Enter`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addValue(gIdx, e.target.value);
+                  e.target.value = '';
+                }
+              }}
+              style={{ width: '100%', padding: '10px 14px', border: '1px solid #e0e0e0', borderRadius: '8px', fontSize: '13px', outline: 'none', background: '#f8f8f8', boxSizing: 'border-box' }}
+              onFocus={e => e.target.style.borderColor = '#800000'}
+              onBlur={e => e.target.style.borderColor = '#e0e0e0'}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', padding: '16px', background: '#fff', borderRadius: '12px', border: '1px dashed #ccc' }}>
         <input 
           type="text" 
           value={newOptionName} 
           onChange={e => setNewOptionName(e.target.value)} 
-          placeholder="New Option Name (e.g. Sizes, Fillings)" 
-          style={{ flex: 1, padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
+          placeholder="New Option Group (e.g. Sizes, Fillings)" 
+          style={{ flex: 1, padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: '8px', fontSize: '14px', outline: 'none' }}
+          onFocus={e => e.target.style.borderColor = '#800000'}
+          onBlur={e => e.target.style.borderColor = '#e0e0e0'}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addOptionGroup(); } }}
         />
-        <button onClick={addOptionGroup} style={{ padding: '8px 16px', background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
-          Add Group
+        <button onClick={addOptionGroup} style={{ padding: '12px 20px', background: '#111', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: '0.2s' }}>
+          <Plus size={16} /> Add Group
         </button>
       </div>
     </div>
@@ -2998,7 +3012,7 @@ function AdminAppContent() {
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
           onClick={e => { if (e.target === e.currentTarget) setEditProductModal(null); }}
         >
-          <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '620px', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 32px 64px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '800px', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 32px 64px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column' }}>
             <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: '#fff', zIndex: 10, borderRadius: '20px 20px 0 0' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '19px', fontWeight: '700', color: '#111' }}>Edit Product</h3>
