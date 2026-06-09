@@ -275,10 +275,10 @@ export default function MenuPage({
       
       return {
         category: cat,
-        items: parsedCatProducts.filter(p => !p.subcategory),
+        items: parsedCatProducts.filter(p => !p.subcategory).sort((a, b) => (a.isFullWidth === b.isFullWidth ? 0 : a.isFullWidth ? 1 : -1)),
         sections: subcategories.map(sub => ({
           title: sub,
-          items: parsedCatProducts.filter(p => p.subcategory === sub)
+          items: parsedCatProducts.filter(p => p.subcategory === sub).sort((a, b) => (a.isFullWidth === b.isFullWidth ? 0 : a.isFullWidth ? 1 : -1))
         }))
       };
     });
