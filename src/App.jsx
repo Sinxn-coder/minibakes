@@ -344,6 +344,7 @@ function App() {
           .from('products')
           .select('*')
           .ilike('name', `%${searchQuery}%`)
+          .not('name', 'ilike', '%3d custom cake%')
           .limit(10);
         
         if (error) throw error;
