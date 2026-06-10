@@ -15,7 +15,6 @@
 
 html {
   scroll-behavior: smooth;
-  overscroll-behavior-y: none;
 }
 
 body {
@@ -23,8 +22,6 @@ body {
   background-color: #fcfcfc;
   color: var(--text-dark);
   scroll-behavior: smooth;
-  overscroll-behavior-y: none;
-  overflow-x: hidden;
 }
 
 .main-layout {
