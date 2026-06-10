@@ -633,8 +633,61 @@ function AdminAppContent() {
 
     const baseData = analyticsData[analyticsTimeframe] || analyticsData['all-time'];
 
+    let computedChartData = [];
+    if (analyticsTimeframe === 'this-week') {
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const weekData = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
+      currentOrders.forEach(o => {
+        const d = new Date(o.created_at || o.date);
+        const dayName = days[d.getDay()];
+        weekData[dayName] += parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+      });
+      computedChartData = [
+        { name: 'Mon', revenue: weekData['Mon'] },
+        { name: 'Tue', revenue: weekData['Tue'] },
+        { name: 'Wed', revenue: weekData['Wed'] },
+        { name: 'Thu', revenue: weekData['Thu'] },
+        { name: 'Fri', revenue: weekData['Fri'] },
+        { name: 'Sat', revenue: weekData['Sat'] },
+        { name: 'Sun', revenue: weekData['Sun'] },
+      ];
+    } else if (analyticsTimeframe === 'this-month') {
+      const monthData = [0, 0, 0, 0];
+      const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      currentOrders.forEach(o => {
+        const d = new Date(o.created_at || o.date);
+        const diffDays = Math.floor((d - oneMonthAgo) / (1000 * 60 * 60 * 24));
+        const weekIndex = Math.min(Math.floor(diffDays / 7.5), 3);
+        if (weekIndex >= 0) {
+          monthData[weekIndex] += parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+        }
+      });
+      computedChartData = [
+        { name: 'Week 1', revenue: monthData[0] },
+        { name: 'Week 2', revenue: monthData[1] },
+        { name: 'Week 3', revenue: monthData[2] },
+        { name: 'Week 4', revenue: monthData[3] },
+      ];
+    } else {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthData = {};
+      currentOrders.forEach(o => {
+        const d = new Date(o.created_at || o.date);
+        const m = months[d.getMonth()];
+        monthData[m] = (monthData[m] || 0) + parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+      });
+      computedChartData = months.filter(m => monthData[m] !== undefined).map(m => ({
+        name: m,
+        revenue: monthData[m]
+      }));
+      if (computedChartData.length === 0) {
+        computedChartData = [{ name: 'No Data', revenue: 0 }];
+      }
+    }
+
     return {
       ...baseData,
+      chartData: computedChartData,
       metrics: [
         { label: 'Total Revenue', value: `€${current.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, change: revTrend.text, positive: revTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)', color: '#1565C0' },
         { label: 'Total Orders', value: current.totalOrders.toString(), change: ordTrend.text, positive: ordTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', color: '#7B1FA2' },
