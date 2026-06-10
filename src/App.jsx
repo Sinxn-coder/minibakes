@@ -425,7 +425,7 @@ function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [expandedDesktopCard, setExpandedDesktopCard] = useState(null);
   const [expandedMobileCard, setExpandedMobileCard] = useState(null);
-  const [selectedSearchProduct, setSelectedSearchProduct] = useState(null);
+
   const [expandedContactId, setExpandedContactId] = useState(null);
   const [currentView, setCurrentView] = useState('home');
   const [previousView, setPreviousView] = useState('home');
@@ -735,8 +735,11 @@ function App() {
                         className="search-result-item"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedSearchProduct(item);
                           setIsSearchOpen(false);
+                          setSearchQuery('');
+                          setPreviousView(currentView);
+                          setCustomizingProduct(item);
+                          setCurrentView('product-details');
                         }}
                       >
                         <img src={item.img} alt={item.name} className="search-result-img" />
@@ -1130,33 +1133,6 @@ function App() {
             </div>
           )}
         </>
-      )}
-
-      {/* Search Product Popup Modal */}
-      {selectedSearchProduct && (
-        <div className="mobile-popup-overlay">
-          <div className="mobile-popup-content">
-            <button className="close-popup-btn" onClick={() => setSelectedSearchProduct(null)}>
-              <X size={28} strokeWidth={1.5} />
-            </button>
-            <div className="popup-image-wrapper">
-              <SafeImage src={selectedSearchProduct.img} alt={selectedSearchProduct.name} />
-            </div>
-            <div className="popup-info">
-              <h3>{selectedSearchProduct.name}</h3>
-              <p className="popup-price">{selectedSearchProduct.price}</p>
-              <p className="popup-description">
-                {selectedSearchProduct.description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
-              </p>
-              <button className="add-to-cart-btn" onClick={() => {
-                setPreviousView(currentView);
-                setCustomizingProduct(selectedSearchProduct);
-                setSelectedSearchProduct(null);
-                setCurrentView('product-details');
-              }}>Add to Order</button>
-            </div>
-          </div>
-        </div>
       )}
 
       {currentView === 'menu' && <MenuPage 
