@@ -51,6 +51,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   };
 
   const [orderId, setOrderId] = useState('');
+  const [finalOrderTotal, setFinalOrderTotal] = useState(0);
 
   const getItemTotal = (item) => {
     let unitPrice = parseFloat((item.price || '0').replace(/[^\d.]/g, '')) || 0;
@@ -107,7 +108,32 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
     e.preventDefault();
     setStep('processing'); // Show processing state
     
-    const newId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+    setFinalOrderTotal(totalPrice);
+    
+    let orderNumber = 1;
+    try {
+      const { data: latestOrder } = await supabase
+        .from('orders')
+        .select('id')
+        .order('created_at', { ascending: false })
+        .limit(1);
+        
+      if (latestOrder && latestOrder.length > 0) {
+        const lastId = latestOrder[0].id;
+        const match = lastId.match(/ORD-(\d+)/);
+        if (match) {
+          orderNumber = parseInt(match[1], 10) + 1;
+        } else {
+          const { count } = await supabase.from('orders').select('*', { count: 'exact', head: true });
+          orderNumber = (count || 0) + 1;
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching latest order ID:', err);
+      orderNumber = Math.floor(1000 + Math.random() * 9000);
+    }
+    
+    const newId = `ORD-${String(orderNumber).padStart(4, '0')}`;
     setOrderId(newId);
 
     // 1. Generate or fetch unique persistent Client Device ID legally (strictly local and non-cookie)
@@ -286,7 +312,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
           <div className="order-summary-box">
             <div className="summary-item">
               <span>Order Total</span>
-              <strong>€{totalPrice.toFixed(2)}</strong>
+              <strong>€{finalOrderTotal.toFixed(2)}</strong>
             </div>
             <div className="summary-item">
               <span>Pickup Date</span>
