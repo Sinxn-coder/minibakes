@@ -495,14 +495,17 @@ function App() {
     let animationFrameId;
     const scroll = () => {
       if (!isHovered) {
-        grid.scrollLeft += 0.8; // Silky speed (less than 1px per frame for elegance)
-        
-        // When it reaches halfway (the end of the first duplicated set), wrap back to start instantly and seamlessly
-        const singleSetWidth = grid.scrollWidth / 2;
+        grid.scrollLeft += 0.8; // Silky speed
+      }
+      
+      const N = grid.children.length / 2;
+      if (N > 0 && grid.children[N]) {
+        const singleSetWidth = grid.children[N].offsetLeft - grid.children[0].offsetLeft;
         if (grid.scrollLeft >= singleSetWidth) {
-          grid.scrollLeft = 0;
+          grid.scrollLeft -= singleSetWidth;
         }
       }
+
       animationFrameId = requestAnimationFrame(scroll);
     };
 
