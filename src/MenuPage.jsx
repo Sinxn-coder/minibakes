@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare, ChevronLeft, ChevronRight, Image as ImageIcon, Gift } from 'lucide-react';
+import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare, MessageCircle, ChevronLeft, ChevronRight, Image as ImageIcon, Gift } from 'lucide-react';
 import './MenuPage.css';
 import ErrorBoundary from './ErrorBoundary';
 const Cake3D = React.lazy(() => import('./Cake3D'));
