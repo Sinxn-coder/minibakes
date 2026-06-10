@@ -702,6 +702,7 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
+      background: #faf8f8 !important;
     }
   
     .details-container {
@@ -1125,17 +1126,21 @@ input:checked + .conv-slider:before {
   /* 1. Summary panel: name/price/desc right under image */
   .details-summary-panel {
     order: 1;
-    width: 100% !important;
+    width: calc(100% - 2rem) !important;
     border-right: none !important;
-    border-bottom: 1.5px solid rgba(102, 2, 31, 0.08) !important;
-    border-radius: 0 !important;
-    padding: 1.4rem 1.2rem 1rem !important;
+    border-bottom: none !important;
+    border-radius: 24px !important;
+    padding: 1.8rem 1.5rem !important;
     background: #fff !important;
     flex-shrink: 0;
     overflow: visible !important;
+    margin: -40px auto 1rem auto !important;
+    box-shadow: 0 10px 30px rgba(102, 2, 31, 0.08) !important;
+    position: relative;
+    z-index: 10;
   }
 
-  /* 2. Hide the order summary (price-breakdown) from summary panel on mobile � show at bottom */
+  /* 2. Hide the order summary (price-breakdown) from summary panel on mobile */
   .details-summary-panel .price-breakdown {
     display: none;
   }
@@ -1196,28 +1201,7 @@ input:checked + .conv-slider:before {
   }
 }
 
-/* Mobile footer: hidden on desktop */
-.mobile-order-summary-footer {
-  display: none;
-}
 
-@media (max-width: 768px) {
-  .mobile-order-summary-footer {
-    display: block;
-    order: 3;
-    width: 100%;
-    padding: 1.2rem 1.2rem 2.5rem;
-    background: #fff;
-    border-top: 1.5px solid rgba(102, 2, 31, 0.08);
-    flex-shrink: 0;
-  }
-  /* Hide the price-breakdown and care button inside summary panel on mobile */
-  .details-summary-panel .price-breakdown,
-  .details-summary-panel .summary-divider,
-  .details-summary-panel .care-guide-btn {
-    display: none;
-  }
-}
 
 /* --- Desktop Button & Quantity Tweaks --- */
 @media (min-width: 769px) {

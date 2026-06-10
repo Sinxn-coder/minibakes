@@ -879,61 +879,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               </div>
             </div>
 
-            {/* ── MOBILE ONLY: Order Summary at bottom ── */}
-            <div className="mobile-order-summary-footer">
-              <h4 className="price-breakdown-title">Order Summary</h4>
-              <div className="price-breakdown-rows">
-                <div className="price-row">
-                  <span className="price-row-label">{product.name}</span>
-                  <span className="price-row-value">
-                    {currentUnitPrice === 0 ? (
-                      <span className="price-wa-tag tooltip-trigger" data-tooltip="Final price via WhatsApp.">
-                        <WhatsAppIcon size={14} /><span>WA</span>
-                      </span>
-                    ) : `€${currentUnitPrice.toFixed(2)}`}
-                  </span>
-                </div>
-                {options.spreads && options.spreads.length > 0 && (
-                  <div className="price-row price-row-addon">
-                    <span className="price-row-label">↳ Spreads: {options.spreads.join(', ')}</span>
-                    <span className="price-row-value">{isCupcake ? `+€${spreadsPrice.toFixed(2)}` : 'Included'}</span>
-                  </div>
-                )}
-                {options.bows && (
-                  <div className="price-row price-row-addon">
-                    <span className="price-row-label">↳ Bows 🎀</span>
-                    <span className="price-row-value">+€{BOW_ADDON_PRICE.toFixed(2)}</span>
-                  </div>
-                )}
-                {quantity > 1 && (
-                  <div className="price-row price-row-addon">
-                    <span className="price-row-label">↳ Qty × {quantity}</span>
-                    <span className="price-row-value">€{unitTotal.toFixed(2)} each</span>
-                  </div>
-                )}
-                {options.ediblePrinting && (
-                  <div className="price-row price-row-addon">
-                    <span className="price-row-label">↳ Edible Printing 🖨️</span>
-                    <span className="price-row-value">+€12.00</span>
-                  </div>
-                )}
-                <div className="price-row price-row-total">
-                  <span className="price-row-label">Total</span>
-                  <span className="price-row-value">
-                    {grandTotal === 0 ? (
-                      <span className="price-wa-tag tooltip-trigger" data-tooltip="Total via WhatsApp.">
-                        <WhatsAppIcon size={14} /><span>WA</span>
-                      </span>
-                    ) : `€${grandTotal.toFixed(2)}`}
-                  </span>
-                </div>
-              </div>
-              {isCake && (
-                <button className="care-guide-btn" onClick={() => setShowCareModal(true)}>
-                  <Info size={16} /> View Cake Care Instructions
-                </button>
-              )}
-            </div>
+
 
           </div>
         </div>
