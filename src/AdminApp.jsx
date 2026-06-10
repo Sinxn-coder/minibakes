@@ -487,15 +487,30 @@ function AdminAppContent() {
     { id: 'CUST-001', name: 'Isabella King', phone: '+1 555-7788', lastOrderValue: '€85.00', lastEngagement: '1 week ago', source: 'WhatsApp Promo', status: 'VIP' }
   ];
 
-  const engagementData = [
-    { name: 'Mon', engagements: 40 },
-    { name: 'Tue', engagements: 65 },
-    { name: 'Wed', engagements: 45 },
-    { name: 'Thu', engagements: 80 },
-    { name: 'Fri', engagements: 55 },
-    { name: 'Sat', engagements: 100 },
-    { name: 'Sun', engagements: 85 },
-  ];
+  const engagementData = useMemo(() => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const counts = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
+    
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    allOrders.forEach(o => {
+      const d = new Date(o.created_at || o.date);
+      if (d >= oneWeekAgo) {
+        counts[days[d.getDay()]] += 1;
+      }
+    });
+
+    return [
+      { name: 'Mon', engagements: counts['Mon'] },
+      { name: 'Tue', engagements: counts['Tue'] },
+      { name: 'Wed', engagements: counts['Wed'] },
+      { name: 'Thu', engagements: counts['Thu'] },
+      { name: 'Fri', engagements: counts['Fri'] },
+      { name: 'Sat', engagements: counts['Sat'] },
+      { name: 'Sun', engagements: counts['Sun'] },
+    ];
+  }, [allOrders]);
 
   const [allOrders, setAllOrders] = useState([]);
   const [isRefreshingOrders, setIsRefreshingOrders] = useState(false);
