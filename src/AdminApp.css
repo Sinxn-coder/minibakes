@@ -928,3 +928,9 @@
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+@keyframes spin-anim {
+  100% { transform: rotate(360deg); }
+}
+.spin-anim {
+  animation: spin-anim 1s linear infinite;
+}

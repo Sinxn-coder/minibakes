@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
@@ -454,33 +454,37 @@ function AdminAppContent() {
   ];
 
   const [allOrders, setAllOrders] = useState([]);
+  const [isRefreshingOrders, setIsRefreshingOrders] = useState(false);
+
+  const fetchOrders = async () => {
+    if (!isSupabaseLive) return;
+    setIsRefreshingOrders(true);
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        if (error.message?.includes('fetch')) return;
+        throw error;
+      }
+      
+      if (data) {
+        const formattedData = data.map(dbOrder => ({
+          ...dbOrder,
+          clientId: dbOrder.client_id
+        }));
+        setAllOrders(formattedData);
+      }
+    } catch (err) {
+      console.error('Error fetching orders:', err);
+    } finally {
+      setIsRefreshingOrders(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (!isSupabaseLive) return;
-      try {
-        const { data, error } = await supabase
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
-          
-        if (error) {
-          if (error.message?.includes('fetch')) return;
-          throw error;
-        }
-        
-        if (data) {
-          const formattedData = data.map(dbOrder => ({
-            ...dbOrder,
-            clientId: dbOrder.client_id
-          }));
-          setAllOrders(formattedData);
-        }
-      } catch (err) {
-        console.error('Error fetching orders:', err);
-      }
-    };
-    
     fetchOrders();
 
     if (isSupabaseLive) {
@@ -1367,7 +1371,31 @@ function AdminAppContent() {
           {activeTab === 'orders' && (
             <div className="admin-panel" style={{ minHeight: '600px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #e9ecef', paddingBottom: '16px' }}>
-                <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Orders Management</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Orders Management</h2>
+                  <button 
+                    onClick={fetchOrders} 
+                    disabled={isRefreshingOrders}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      background: '#f8f9fa',
+                      border: '1px solid #ddd',
+                      color: '#444',
+                      cursor: isRefreshingOrders ? 'not-allowed' : 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      transition: 'all 0.2s',
+                      opacity: isRefreshingOrders ? 0.7 : 1
+                    }}
+                  >
+                    <RefreshCw size={14} className={isRefreshingOrders ? 'spin-anim' : ''} />
+                    {isRefreshingOrders ? 'Refreshing...' : 'Refresh'}
+                  </button>
+                </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   {['all', 'pending', 'processing', 'completed'].map(status => (
                     <button 
