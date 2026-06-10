@@ -232,6 +232,15 @@ export default function MenuPage({
   const [toastMessage, setToastMessage] = useState(null);
   const [selectedLayerIndex, setSelectedLayerIndex] = useState(null);
   const [liveProducts, setLiveProducts] = useState([]);
+  const [showWaPopup, setShowWaPopup] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowWaPopup(true);
+      setTimeout(() => setShowWaPopup(false), 2000);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -482,21 +491,20 @@ export default function MenuPage({
       </div>
 
       {/* Fixed WhatsApp Button */}
-      <a 
-        href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="menu-fixed-whatsapp"
-        aria-label="Contact Special Request on WhatsApp"
-      >
-        <div className="whatsapp-icon-circle">
-          <MessageSquare size={24} />
+      <div className="menu-fixed-whatsapp-wrapper">
+        <div className={`whatsapp-popup ${showWaPopup ? 'show' : ''}`}>
+          Special Request?
         </div>
-        <div className="whatsapp-content">
-          <span className="whatsapp-title">Special Request?</span>
-          <span className="whatsapp-subtitle">Chat with us on WhatsApp</span>
-        </div>
-      </a>
+        <a 
+          href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="menu-fixed-whatsapp"
+          aria-label="Contact Special Request on WhatsApp"
+        >
+          <MessageCircle size={28} color="white" />
+        </a>
+      </div>
     </div>
   );
 }

@@ -202,149 +202,86 @@
   z-index: 1;
 }
 
-.menu-fixed-whatsapp {
+.menu-fixed-whatsapp-wrapper {
   position: fixed;
   bottom: 2.5rem;
   right: 2.5rem;
-  background: white;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-  padding: 0.8rem 1.5rem 0.8rem 0.8rem;
-  border-radius: 60px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-  text-decoration: none;
-  color: var(--secondary);
-  z-index: 1000;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(0,0,0,0.05);
 }
 
-@media (hover: hover) {
-  .menu-fixed-whatsapp:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.18);
-    border-color: var(--secondary);
-  }
-}
-
-.whatsapp-icon-circle {
-  width: 48px;
-  height: 48px;
-  background: var(--secondary);
-  color: white;
+.menu-fixed-whatsapp {
+  width: 60px;
+  height: 60px;
+  background: #25D366;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.4s ease;
+  box-shadow: 0 10px 40px rgba(37,211,102,0.3);
+  text-decoration: none;
+  color: white;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 2;
 }
 
 @media (hover: hover) {
-  .menu-fixed-whatsapp:hover .whatsapp-icon-circle {
-    transform: rotate(15deg) scale(1.1);
+  .menu-fixed-whatsapp:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 50px rgba(37,211,102,0.4);
+    background: #128C7E;
   }
 }
 
-.whatsapp-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.whatsapp-title {
+.whatsapp-popup {
+  position: absolute;
+  right: calc(100% + 15px);
+  background: white;
+  color: #333;
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
   font-weight: 700;
-  font-size: 1.05rem;
-  line-height: 1.2;
+  font-size: 0.95rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(0,0,0,0.05);
+  z-index: 1;
 }
 
-.whatsapp-subtitle {
-  font-size: 0.85rem;
-  opacity: 0.7;
+.whatsapp-popup::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%);
+  border-width: 6px 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
+  filter: drop-shadow(2px 0 2px rgba(0,0,0,0.05));
+}
+
+.whatsapp-popup.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
 }
 
 @media (max-width: 768px) {
-  .menu-fixed-whatsapp {
+  .menu-fixed-whatsapp-wrapper {
     bottom: 1.5rem;
-    right: 1.2rem;
-    padding: 0;
-    width: 50px;
-    height: 50px;
-    justify-content: flex-start;
-    align-items: center;
-    border-radius: 50px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-    overflow: hidden;
-    background: var(--secondary);
-    border: none;
-    display: flex;
-    z-index: 1000;
-    
-    /* Auto-expand after 5 seconds */
-    animation: expandMobileButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    animation-delay: 5s;
+    right: 1.5rem;
   }
-
-  .whatsapp-icon-circle {
-    width: 50px;
-    height: 50px;
-    background: var(--secondary);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border-radius: 50%;
-    z-index: 2;
-  }
-
-  .whatsapp-content {
-    display: flex !important;
-    flex-direction: column;
-    white-space: nowrap;
-    padding-left: 0.5rem;
-    padding-right: 1.5rem;
-    opacity: 0;
-    z-index: 1;
-    color: var(--secondary);
-    
-    /* Fade in after button expands */
-    animation: fadeInContentMobile 0.5s ease forwards;
-    animation-delay: 5.2s;
-  }
-
-  .whatsapp-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-  }
-
-  .whatsapp-subtitle {
-    display: none;
-  }
-
-  @keyframes expandMobileButton {
-    from {
-      width: 50px;
-      background: var(--secondary);
-      border: none;
-    }
-    to {
-      width: 205px;
-      background: white;
-      border: 1px solid rgba(0,0,0,0.08);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.18);
-    }
-  }
-
-  @keyframes fadeInContentMobile {
-    from {
-      opacity: 0;
-      transform: translateX(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  
+  .menu-fixed-whatsapp {
+    width: 55px;
+    height: 55px;
   }
 }
 
