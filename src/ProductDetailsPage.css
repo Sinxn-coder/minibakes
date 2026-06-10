@@ -1332,3 +1332,108 @@ input:checked + .conv-slider:before {
 .conv-select option {
   padding: 0.5rem;
 }
+
+/* --- Mobile Customize Trigger & Full-Screen Overlay --- */
+.mobile-customize-trigger {
+  display: none;
+}
+.mobile-close-overlay-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .details-chat-panel {
+    display: none !important; /* Hide inline chat on mobile by default */
+  }
+
+  /* Show trigger button */
+  .mobile-customize-trigger {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 15px 20px 25px;
+    border-top: 1px solid rgba(102, 2, 31, 0.08);
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.08);
+    z-index: 999;
+  }
+
+  .mobile-customize-btn {
+    width: 100%;
+    padding: 1.2rem;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(102, 2, 31, 0.3);
+  }
+
+  /* Full Screen Overlay */
+  .details-chat-panel.mobile-overlay-open {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 99999 !important;
+    background: #faf8f8 !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+  }
+
+  .details-chat-panel.mobile-overlay-open .chat-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.2rem 1rem;
+    background: #fff;
+    border-bottom: 1px solid rgba(102, 2, 31, 0.08);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  }
+
+  .details-chat-panel.mobile-overlay-open .chat-panel-badge {
+    font-size: 1rem;
+  }
+
+  .mobile-close-overlay-btn {
+    display: flex;
+    background: #fdf2f2;
+    border: none;
+    color: #66021F;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .details-chat-panel.mobile-overlay-open .customization-section {
+    padding: 1.5rem 1.2rem;
+    overflow-y: auto;
+    flex: 1;
+    padding-bottom: 120px; /* Space for the bottom fixed bar */
+  }
+
+  .details-chat-panel.mobile-overlay-open .quantity-checkout-wrapper {
+    position: absolute !important;
+    bottom: 0 !important;
+    padding: 15px 20px 25px !important;
+    background: #fff !important;
+    border-top: 1px solid rgba(102, 2, 31, 0.08);
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.08);
+  }
+}

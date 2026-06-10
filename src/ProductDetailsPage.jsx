@@ -79,6 +79,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
   };
 
   const [showCareModal, setShowCareModal] = useState(false);
+  const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const displayImg = product?.img;
   const [options, setOptions] = useState({
     flavor: '',
@@ -739,10 +740,22 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
               )}
             </div>
 
+            {/* ── MOBILE: Sticky Bottom Trigger ── */}
+            <div className="mobile-customize-trigger">
+              <button onClick={() => setIsMobileOverlayOpen(true)} className="mobile-customize-btn">
+                Customize & Order
+              </button>
+            </div>
+
             {/* ── RIGHT: Chat / Customization Panel ── */}
-            <div className="details-chat-panel">
+            <div className={`details-chat-panel ${isMobileOverlayOpen ? 'mobile-overlay-open' : ''}`}>
               <div className="chat-panel-header">
                 <span className="chat-panel-badge">🎂 Customize Your Order</span>
+                {isMobileOverlayOpen && (
+                  <button className="mobile-close-overlay-btn" onClick={() => setIsMobileOverlayOpen(false)}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
+                )}
               </div>
 
               <div className="customization-section conversational-form">
@@ -790,6 +803,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       onConfirm({ ...product, quantity, options });
                       setShowNotification(true);
                       setTimeout(() => setShowNotification(false), 3000);
+                      setIsMobileOverlayOpen(false);
                     }}
                   >
                     Add to Order • {grandTotal === 0 ? (
