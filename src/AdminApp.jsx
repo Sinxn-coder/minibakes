@@ -487,6 +487,9 @@ function AdminAppContent() {
     { id: 'CUST-001', name: 'Isabella King', phone: '+1 555-7788', lastOrderValue: '€85.00', lastEngagement: '1 week ago', source: 'WhatsApp Promo', status: 'VIP' }
   ];
 
+  const [allOrders, setAllOrders] = useState([]);
+  const [isRefreshingOrders, setIsRefreshingOrders] = useState(false);
+
   const engagementData = useMemo(() => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const counts = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
@@ -511,9 +514,6 @@ function AdminAppContent() {
       { name: 'Sun', engagements: counts['Sun'] },
     ];
   }, [allOrders]);
-
-  const [allOrders, setAllOrders] = useState([]);
-  const [isRefreshingOrders, setIsRefreshingOrders] = useState(false);
 
   const fetchOrders = async () => {
     if (!isSupabaseLive) return;
