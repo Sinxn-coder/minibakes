@@ -638,6 +638,45 @@ function AdminAppContent() {
     });
   }, [allOrders]);
 
+  const customerInsights = useMemo(() => {
+    const srcCounts = { Instagram: 0, Facebook: 0, Google: 0, Direct: 0 };
+    const returningCustomers = dynamicCustomers.filter(c => c.totalOrders > 1);
+    const returningRate = Math.round((returningCustomers.length / (dynamicCustomers.length || 1)) * 100);
+    
+    dynamicCustomers.forEach(c => {
+      const src = (c.source || '').toLowerCase();
+      if (src.includes('instagram') || src.includes('ig')) srcCounts.Instagram++;
+      else if (src.includes('facebook') || src.includes('fb')) srcCounts.Facebook++;
+      else if (src.includes('google') || src.includes('gl')) srcCounts.Google++;
+      else srcCounts.Direct++;
+    });
+
+    let topChannel = 'Direct';
+    let maxCount = srcCounts.Direct;
+    ['Instagram', 'Facebook', 'Google'].forEach(channel => {
+       if (srcCounts[channel] > maxCount) {
+          maxCount = srcCounts[channel];
+          topChannel = channel;
+       }
+    });
+
+    let retentionInsight = {};
+    if (returningRate > 30) {
+       retentionInsight = { title: 'Strong Customer Loyalty', text: `Your returning rate is ${returningRate}%, which is excellent! Consider launching a VIP rewards program to maintain this high retention.`, color: '#2e7d32', bg: '#e8f5e9', border: '#4caf50' };
+    } else {
+       retentionInsight = { title: 'Boost Returning Customers', text: `Returning rate is at ${returningRate}%. Try running a weekend promo broadcast to inactive contacts to trigger impulsive repurchases.`, color: '#f57f17', bg: '#fff8e1', border: '#fbc02d' };
+    }
+
+    let acquisitionInsight = {};
+    if (maxCount > 0 && topChannel !== 'Direct') {
+       acquisitionInsight = { title: 'Peak Acquisition Channel', text: `"${topChannel}" led your acquisition with ${maxCount} customers. Consider doubling down on this channel with targeted ads or pinned content.`, color: '#1565c0', bg: '#e3f2fd', border: '#1976d2' };
+    } else {
+       acquisitionInsight = { title: 'Acquisition Channels', text: `Currently, most of your traffic is Direct (${srcCounts.Direct} customers). Try sharing links with tracking tags on your social media to identify where customers are coming from!`, color: '#1565c0', bg: '#e3f2fd', border: '#1976d2' };
+    }
+
+    return { returningRate, srcCounts, retentionInsight, acquisitionInsight };
+  }, [dynamicCustomers]);
+
   const realAnalyticsData = useMemo(() => {
     const now = new Date();
     
@@ -1966,44 +2005,30 @@ function AdminAppContent() {
                   <div className="metric-icon-box" style={{backgroundColor: '#fff8e1', color: '#f57f17'}}><LayoutDashboard size={24} /></div>
                   <div className="metric-info">
                     <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Returning</h3>
-                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{Math.round((dynamicCustomers.filter(c => c.totalOrders > 1).length / (dynamicCustomers.length || 1)) * 100)}%</p>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{customerInsights.returningRate}%</p>
                   </div>
                 </div>
-                {(() => {
-                  const srcCounts = { Instagram: 0, Facebook: 0, Google: 0, Direct: 0 };
-                  dynamicCustomers.forEach(c => {
-                    const src = (c.source || '').toLowerCase();
-                    if (src.includes('instagram') || src.includes('ig')) srcCounts.Instagram++;
-                    else if (src.includes('facebook') || src.includes('fb')) srcCounts.Facebook++;
-                    else if (src.includes('google') || src.includes('gl')) srcCounts.Google++;
-                    else srcCounts.Direct++;
-                  });
-                  return (
-                    <>
-                      <div className="metric-card">
-                        <div className="metric-icon-box" style={{backgroundColor: '#fce4ec', color: '#c2185b'}}><InstagramIcon size={24} color="#c2185b" /></div>
-                        <div className="metric-info">
-                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Instagram</h3>
-                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Instagram}</p>
-                        </div>
-                      </div>
-                      <div className="metric-card">
-                        <div className="metric-icon-box" style={{backgroundColor: '#e8eaf6', color: '#3949ab'}}><FacebookIcon size={24} color="#3949ab" /></div>
-                        <div className="metric-info">
-                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Facebook</h3>
-                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Facebook}</p>
-                        </div>
-                      </div>
-                      <div className="metric-card">
-                        <div className="metric-icon-box" style={{backgroundColor: '#e0f7fa', color: '#0097a7'}}><Search size={24} /></div>
-                        <div className="metric-info">
-                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Google / Search</h3>
-                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Google}</p>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })()}
+                <div className="metric-card">
+                  <div className="metric-icon-box" style={{backgroundColor: '#fce4ec', color: '#c2185b'}}><InstagramIcon size={24} color="#c2185b" /></div>
+                  <div className="metric-info">
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Instagram</h3>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{customerInsights.srcCounts.Instagram}</p>
+                  </div>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-icon-box" style={{backgroundColor: '#e8eaf6', color: '#3949ab'}}><FacebookIcon size={24} color="#3949ab" /></div>
+                  <div className="metric-info">
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Facebook</h3>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{customerInsights.srcCounts.Facebook}</p>
+                  </div>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-icon-box" style={{backgroundColor: '#e0f7fa', color: '#0097a7'}}><Search size={24} /></div>
+                  <div className="metric-info">
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Google / Search</h3>
+                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{customerInsights.srcCounts.Google}</p>
+                  </div>
+                </div>
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '32px' }}>
@@ -2043,13 +2068,13 @@ function AdminAppContent() {
                     <h3 style={{ margin: 0, fontSize: '16px', color: '#333' }}>Growth Insights</h3>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-                    <div style={{ background: '#fff8e1', padding: '16px', borderRadius: '8px', borderLeft: '4px solid #fbc02d', fontSize: '13px', color: '#555', lineHeight: '1.6' }}>
-                      <strong style={{ display: 'block', color: '#f57f17', marginBottom: '6px', fontSize: '14px' }}>Boost Returning Customers</strong>
-                      WhatsApp Conversion is at 68%. Try running a weekend promo broadcast to the 32% of inactive contacts to trigger impulsive repurchases.
+                    <div style={{ background: customerInsights.retentionInsight.bg, padding: '16px', borderRadius: '8px', borderLeft: `4px solid ${customerInsights.retentionInsight.border}`, fontSize: '13px', color: '#555', lineHeight: '1.6' }}>
+                      <strong style={{ display: 'block', color: customerInsights.retentionInsight.color, marginBottom: '6px', fontSize: '14px' }}>{customerInsights.retentionInsight.title}</strong>
+                      {customerInsights.retentionInsight.text}
                     </div>
-                    <div style={{ background: '#e3f2fd', padding: '16px', borderRadius: '8px', borderLeft: '4px solid #1976d2', fontSize: '13px', color: '#555', lineHeight: '1.6' }}>
-                      <strong style={{ display: 'block', color: '#1565c0', marginBottom: '6px', fontSize: '14px' }}>Peak Acquisition Channel</strong>
-                      "Instagram Menu" shares led to the highest 'High Intent' leads this week. Pin your latest reel to maximize this profitable channel.
+                    <div style={{ background: customerInsights.acquisitionInsight.bg, padding: '16px', borderRadius: '8px', borderLeft: `4px solid ${customerInsights.acquisitionInsight.border}`, fontSize: '13px', color: '#555', lineHeight: '1.6' }}>
+                      <strong style={{ display: 'block', color: customerInsights.acquisitionInsight.color, marginBottom: '6px', fontSize: '14px' }}>{customerInsights.acquisitionInsight.title}</strong>
+                      {customerInsights.acquisitionInsight.text}
                     </div>
                   </div>
                 </div>
