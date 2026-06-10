@@ -1669,8 +1669,9 @@ body {
 
   .search-results-dropdown {
     width: calc(100vw - 3rem);
-    right: 50%;
-    transform: translateX(50%);
+    left: 0;
+    right: auto;
+    transform: none;
     top: calc(100% + 10px);
     max-height: 400px;
     padding: 0.8rem;
