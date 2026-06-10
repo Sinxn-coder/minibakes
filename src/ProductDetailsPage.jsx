@@ -780,8 +780,59 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                 })}
                 {currentStepIndex >= formSteps.length && formSteps.length > 0 && (
                   <div className="conv-step" style={{ animationDelay: '0.1s' }}>
-                    <div className="conv-question-bubble" style={{ background: '#eaf4ea', color: '#1b5e20', border: '1px solid #c8e6c9' }}>
-                      🎉 Awesome! You're all set. You can now add this to your order.
+                    <div className="conv-question-bubble" style={{ background: '#eaf4ea', color: '#1b5e20', border: '1px solid #c8e6c9', maxWidth: '100%' }}>
+                      🎉 Awesome! You're all set. Here is your order summary:
+                      
+                      <div className="price-breakdown-rows" style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid rgba(27, 94, 32, 0.2)' }}>
+                        <div className="price-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                          <span className="price-row-label" style={{ fontWeight: '600' }}>{product.name}</span>
+                          <span className="price-row-value" style={{ fontWeight: '600' }}>
+                            {currentUnitPrice === 0 ? 'WA' : `€${currentUnitPrice.toFixed(2)}`}
+                          </span>
+                        </div>
+                        
+                        {Object.entries(options.customOptions || {}).map(([key, val]) => (
+                          <div className="price-row price-row-addon" key={key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem', color: '#2e7d32' }}>
+                            <span className="price-row-label">↳ {key}: {val}</span>
+                            <span className="price-row-value">Included</span>
+                          </div>
+                        ))}
+
+                        {options.flavor && (
+                          <div className="price-row price-row-addon" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem', color: '#2e7d32' }}>
+                            <span className="price-row-label">↳ Flavor: {options.flavor}</span>
+                            <span className="price-row-value">Included</span>
+                          </div>
+                        )}
+                        
+                        {options.spreads && options.spreads.length > 0 && (
+                          <div className="price-row price-row-addon" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem', color: '#2e7d32' }}>
+                            <span className="price-row-label">↳ Spreads: {options.spreads.join(', ')}</span>
+                            <span className="price-row-value">{isCupcake ? `+€${spreadsPrice.toFixed(2)}` : 'Included'}</span>
+                          </div>
+                        )}
+                        
+                        {options.bows && (
+                          <div className="price-row price-row-addon" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem', color: '#2e7d32' }}>
+                            <span className="price-row-label">↳ Bows 🎀</span>
+                            <span className="price-row-value">+€{BOW_ADDON_PRICE.toFixed(2)}</span>
+                          </div>
+                        )}
+
+                        {options.ediblePrinting && (
+                          <div className="price-row price-row-addon" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.9rem', color: '#2e7d32' }}>
+                            <span className="price-row-label">↳ Edible Printing 🖨️</span>
+                            <span className="price-row-value">+€12.00</span>
+                          </div>
+                        )}
+                        
+                        <div className="price-row price-row-total" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(27, 94, 32, 0.2)', fontWeight: '700', fontSize: '1.1rem' }}>
+                          <span className="price-row-label">Item Total</span>
+                          <span className="price-row-value">
+                            {grandTotal === 0 ? 'WA' : `€${grandTotal.toFixed(2)}`}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
