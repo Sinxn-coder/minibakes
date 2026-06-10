@@ -685,9 +685,48 @@ function AdminAppContent() {
       }
     }
 
+    const categoryTotals = {};
+    let totalCatRevenue = 0;
+
+    currentOrders.forEach(o => {
+      const orderTotal = parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+      const cat = (o.details?.items && o.details.items.length > 0) ? (o.details.items[0].category || 'Other') : 'Other';
+      const c = cat.toLowerCase().includes('custom') ? 'Custom Cakes' : cat;
+      categoryTotals[c] = (categoryTotals[c] || 0) + orderTotal;
+      totalCatRevenue += orderTotal;
+    });
+
+    const defaultColors = ['var(--secondary)', '#d48a97', '#f8d2d9', '#e9ecef', '#adb5bd', '#6c757d'];
+    let colorIndex = 0;
+
+    const computedCategories = Object.keys(categoryTotals)
+      .map(cat => {
+        const val = categoryTotals[cat];
+        const pct = totalCatRevenue > 0 ? (val / totalCatRevenue) * 100 : 0;
+        let fill = defaultColors[colorIndex % defaultColors.length];
+        if (cat === 'Custom Cakes') fill = 'var(--secondary)';
+        else if (cat.toLowerCase().includes('standard')) fill = '#d48a97';
+        else if (cat.toLowerCase().includes('cupcake')) fill = '#f8d2d9';
+        else colorIndex++;
+
+        return {
+          name: cat,
+          value: `€${val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
+          percentage: `${pct.toFixed(1)}%`,
+          fill: fill,
+          rawVal: val
+        };
+      })
+      .sort((a, b) => b.rawVal - a.rawVal);
+
+    if (computedCategories.length === 0) {
+      computedCategories.push({ name: 'No Data', value: '€0.00', percentage: '0.0%', fill: '#e9ecef', rawVal: 0 });
+    }
+
     return {
       ...baseData,
       chartData: computedChartData,
+      categories: computedCategories,
       metrics: [
         { label: 'Total Revenue', value: `€${current.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, change: revTrend.text, positive: revTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)', color: '#1565C0' },
         { label: 'Total Orders', value: current.totalOrders.toString(), change: ordTrend.text, positive: ordTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', color: '#7B1FA2' },
@@ -1331,9 +1370,9 @@ function AdminAppContent() {
                 </div>
 
                 {/* Categories Share breakdown */}
-                <div className="admin-panel" style={{ margin: 0 }}>
+                <div className="admin-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column' }}>
                   <h2 className="admin-panel-title">Category Share</h2>
-                  <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div className="custom-scrollbar" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px', flex: 1, overflowY: 'auto', paddingRight: '8px', maxHeight: '260px' }}>
                     {realAnalyticsData.categories.map((cat, idx) => (
                       <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
