@@ -2080,45 +2080,7 @@ function AdminAppContent() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h3 style={{ margin: 0, fontSize: '16px', color: '#333' }}>Recent Audience Engagements</h3>
-              </div>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Customer Name</th>
-                    <th>Contact Info</th>
-                    <th>Total Orders</th>
-                    <th>Total Spent</th>
-                    <th>Last Active</th>
-                    <th>Audience Segment</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dynamicCustomers.map(customer => (
-                    <tr key={customer.id}>
-                      <td style={{fontWeight: '600'}}>{customer.name}</td>
-                      <td style={{color: '#555', fontFamily: 'monospace'}}>{customer.phone}</td>
-                      <td style={{color: '#555', fontWeight: '600', textAlign: 'center'}}>{customer.totalOrders}</td>
-                      <td style={{fontWeight: '600', color: 'var(--color-main)'}}>{customer.lastOrderValue}</td>
-                      <td style={{color: '#666'}}>{customer.lastEngagement}</td>
-                      <td>
-                        <span className={`status-badge ${customer.status === 'VIP' ? 'completed' : (customer.status === 'Returning' ? 'processing' : 'pending')}`} style={{ textTransform: 'uppercase', fontSize: '11px', fontWeight: 'bold' }}>
-                          {customer.status}
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{display: 'flex', gap: '8px'}}>
-                           <a href={`https://wa.me/${customer.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #c8e6c9', background: '#e8f5e9', color: '#2e7d32', cursor: 'pointer', fontSize: '13px', fontWeight: '500', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                             <MessageCircle size={14} /> Message
-                           </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+
             </div>
           )}
 
