@@ -68,7 +68,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
     }
   }, [currentStepIndex, isTyping]);
 
@@ -836,9 +838,8 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     </div>
                   </div>
                 )}
+                <div ref={chatEndRef} style={{ height: 1, width: '100%', flexShrink: 0 }} />
               </div>
-
-              <div ref={chatEndRef} style={{ height: 1, width: '100%', flexShrink: 0 }} />
 
               {/* Quantity + Confirm */}
               <div className="quantity-checkout-wrapper" style={{ width: '100%' }}>
@@ -850,7 +851,10 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   </div>
                   <button 
                     className="add-to-order-final-btn"
+                    disabled={currentStepIndex < formSteps.length}
+                    style={{ opacity: currentStepIndex < formSteps.length ? 0.5 : 1, cursor: currentStepIndex < formSteps.length ? 'not-allowed' : 'pointer' }}
                     onClick={() => {
+                      if (currentStepIndex < formSteps.length) return;
                       onConfirm({ ...product, quantity, options });
                       setShowNotification(true);
                       setTimeout(() => setShowNotification(false), 3000);
