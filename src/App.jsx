@@ -325,6 +325,14 @@ function App() {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get('source') || params.get('utm_source') || params.get('ref');
+    if (source) {
+      localStorage.setItem('customer_source', source.toLowerCase());
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchSearch = async () => {
       if (!searchQuery.trim() || !supabase) {
         setSearchResults([]);

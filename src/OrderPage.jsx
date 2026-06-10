@@ -209,6 +209,9 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
         }
       };
 
+      const customerSource = localStorage.getItem('customer_source') || 'Direct';
+      newOrder.details.source = customerSource;
+
       // 3. Save order to Supabase
       const { error } = await supabase
         .from('orders')

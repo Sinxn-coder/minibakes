@@ -540,6 +540,9 @@ function AdminAppContent() {
         const existing = custMap.get(idKey);
         existing.orderCount += 1;
         existing.totalSpent += orderValue;
+        if (!existing.source && order.details?.source) {
+          existing.source = order.details.source;
+        }
         if (new Date(order.date) > new Date(existing.lastOrderDate)) {
           existing.lastOrderDate = order.date;
           existing.name = order.customer;
@@ -552,25 +555,26 @@ function AdminAppContent() {
           phone: order.phone || order.details?.whatsapp || '',
           orderCount: 1,
           totalSpent: orderValue,
-          lastOrderDate: order.date
+          lastOrderDate: order.date,
+          source: order.details?.source || 'Direct'
         });
       }
     });
 
     return Array.from(custMap.values()).map(c => {
-      let status = 'First-time';
-      if (c.orderCount >= 3 || c.totalSpent >= 150) status = 'VIP';
-      else if (c.orderCount >= 2) status = 'Returning';
+      let status = 'Regular';
+      if (c.orderCount > 3) status = 'VIP';
+      else if (new Date(c.lastOrderDate) < new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)) status = 'Inactive';
       
       return {
         id: c.id,
         name: c.name,
-        phone: c.phone || 'N/A',
+        contact: c.phone,
         totalOrders: c.orderCount,
         lastOrderValue: `€${c.totalSpent.toFixed(2)}`,
         lastEngagement: `${new Date(c.lastOrderDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`,
         status: status,
-        source: 'Website Menu'
+        source: c.source
       };
     });
   }, [allOrders]);
@@ -1891,28 +1895,56 @@ function AdminAppContent() {
                 <h2 className="admin-panel-title" style={{ margin: 0, border: 'none', padding: 0 }}>Customer Engagement Analytics</h2>
               </div>
               
-              <div className="metrics-grid" style={{ marginBottom: '32px' }}>
+              <div className="metrics-grid" style={{ marginBottom: '32px', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
                 <div className="metric-card">
                   <div className="metric-icon-box" style={{backgroundColor: '#e3f2fd', color: '#1565c0'}}><Users size={24} /></div>
                   <div className="metric-info">
-                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Unique Web Customers</h3>
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Web Customers</h3>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{dynamicCustomers.length}</p>
-                  </div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-icon-box" style={{backgroundColor: '#e8f5e9', color: '#2e7d32'}}><MessageCircle size={24} /></div>
-                  <div className="metric-info">
-                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>WhatsApp Conversion</h3>
-                    <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>94%</p>
                   </div>
                 </div>
                 <div className="metric-card">
                   <div className="metric-icon-box" style={{backgroundColor: '#fff8e1', color: '#f57f17'}}><LayoutDashboard size={24} /></div>
                   <div className="metric-info">
-                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Returning Rate (Est.)</h3>
+                    <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Returning</h3>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{Math.round((dynamicCustomers.filter(c => c.totalOrders > 1).length / (dynamicCustomers.length || 1)) * 100)}%</p>
                   </div>
                 </div>
+                {(() => {
+                  const srcCounts = { Instagram: 0, Facebook: 0, Google: 0, Direct: 0 };
+                  dynamicCustomers.forEach(c => {
+                    const src = (c.source || '').toLowerCase();
+                    if (src.includes('instagram') || src.includes('ig')) srcCounts.Instagram++;
+                    else if (src.includes('facebook') || src.includes('fb')) srcCounts.Facebook++;
+                    else if (src.includes('google') || src.includes('gl')) srcCounts.Google++;
+                    else srcCounts.Direct++;
+                  });
+                  return (
+                    <>
+                      <div className="metric-card">
+                        <div className="metric-icon-box" style={{backgroundColor: '#fce4ec', color: '#c2185b'}}><InstagramIcon size={24} color="#c2185b" /></div>
+                        <div className="metric-info">
+                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Instagram</h3>
+                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Instagram}</p>
+                        </div>
+                      </div>
+                      <div className="metric-card">
+                        <div className="metric-icon-box" style={{backgroundColor: '#e8eaf6', color: '#3949ab'}}><FacebookIcon size={24} color="#3949ab" /></div>
+                        <div className="metric-info">
+                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Facebook</h3>
+                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Facebook}</p>
+                        </div>
+                      </div>
+                      <div className="metric-card">
+                        <div className="metric-icon-box" style={{backgroundColor: '#e0f7fa', color: '#0097a7'}}><Search size={24} /></div>
+                        <div className="metric-info">
+                          <h3 style={{ fontSize: '13px', color: '#666', margin: '0 0 4px 0', textTransform: 'uppercase', fontWeight: '600' }}>Google / Search</h3>
+                          <p style={{ fontSize: '24px', fontWeight: '700', margin: '0', color: '#111' }}>{srcCounts.Google}</p>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '32px' }}>
