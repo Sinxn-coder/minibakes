@@ -2447,7 +2447,7 @@ function AdminAppContent() {
             </div>
           )}
 
-          {activeTab !== 'dashboard' && activeTab !== 'orders' && activeTab !== 'products' && activeTab !== 'customers' && activeTab !== 'classes' && activeTab !== 'settings' && (
+          {activeTab !== 'dashboard' && activeTab !== 'analytics' && activeTab !== 'orders' && activeTab !== 'products' && activeTab !== 'customers' && activeTab !== 'classes' && activeTab !== 'settings' && (
             <div className="admin-panel" style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <p style={{ color: '#666', fontSize: '18px' }}>
                 {navItems.find(i => i.id === activeTab)?.label} Module - Under Construction
