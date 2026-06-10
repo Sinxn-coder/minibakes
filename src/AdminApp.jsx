@@ -723,10 +723,57 @@ function AdminAppContent() {
       computedCategories.push({ name: 'No Data', value: '€0.00', percentage: '0.0%', fill: '#e9ecef', rawVal: 0 });
     }
 
+    const productStats = {};
+    const prevProductStats = {};
+
+    const processOrdersForSellers = (ordersArray, statsObj) => {
+      ordersArray.forEach(o => {
+        const orderTotal = parseFloat(o.total?.replace(/[^\d.]/g, '') || '0');
+        const items = o.details?.items || [];
+        if (items.length > 0) {
+          const revenuePerItem = orderTotal / items.length;
+          items.forEach(item => {
+            const n = item.name || 'Custom Cake';
+            const cat = item.category || 'Other';
+            if (!statsObj[n]) {
+              statsObj[n] = { name: n, category: cat, orders: 0, revenue: 0 };
+            }
+            statsObj[n].orders += 1;
+            statsObj[n].revenue += revenuePerItem;
+          });
+        }
+      });
+    };
+
+    processOrdersForSellers(currentOrders, productStats);
+    processOrdersForSellers(previousOrders, prevProductStats);
+
+    let computedSellers = Object.values(productStats).map(prod => {
+      const prevRev = prevProductStats[prod.name]?.revenue || 0;
+      let diff = 0;
+      if (prevRev === 0 && prod.revenue === 0) diff = 0;
+      else if (prevRev === 0) diff = 100;
+      else diff = ((prod.revenue - prevRev) / prevRev) * 100;
+      
+      return {
+        name: prod.name,
+        category: prod.category.toLowerCase().includes('custom') ? 'Custom Cakes' : prod.category,
+        orders: prod.orders,
+        revenue: `€${prod.revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
+        trend: `${diff >= 0 ? '+' : ''}${diff.toFixed(1)}%`,
+        rawRev: prod.revenue
+      };
+    }).sort((a, b) => b.rawRev - a.rawRev).slice(0, 5);
+
+    if (computedSellers.length === 0) {
+      computedSellers = [{ name: 'No Orders Yet', category: '-', orders: 0, revenue: '€0.00', trend: '0%', rawRev: 0 }];
+    }
+
     return {
       ...baseData,
       chartData: computedChartData,
       categories: computedCategories,
+      sellers: computedSellers,
       metrics: [
         { label: 'Total Revenue', value: `€${current.totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, change: revTrend.text, positive: revTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)', color: '#1565C0' },
         { label: 'Total Orders', value: current.totalOrders.toString(), change: ordTrend.text, positive: ordTrend.positive, icon: ShoppingCart, bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', color: '#7B1FA2' },
@@ -1429,22 +1476,24 @@ function AdminAppContent() {
                   <div>
                     <h2 className="admin-panel-title" style={{ color: 'var(--secondary)' }}>Booking Capacity</h2>
                     <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                      <div style={{ fontSize: '48px', fontWeight: '800', color: 'var(--secondary)', lineHeight: '1', marginBottom: '8px' }}>78%</div>
-                      <p style={{ fontSize: '14px', color: '#666', fontWeight: '500', margin: '0' }}>May Slots Fully Booked</p>
+                      <div style={{ fontSize: '48px', fontWeight: '800', color: 'var(--secondary)', lineHeight: '1', marginBottom: '8px' }}>
+                        {Math.min(Math.round((bookedDates.length / 30) * 100), 100)}%
+                      </div>
+                      <p style={{ fontSize: '14px', color: '#666', fontWeight: '500', margin: '0' }}>{new Date().toLocaleString('default', { month: 'long' })} Slots Status</p>
                     </div>
 
                     <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '8px' }}>
                         <span style={{ color: '#666' }}>Total Capacity Slots:</span>
-                        <span style={{ fontWeight: '600', color: '#333' }}>24 Slots</span>
+                        <span style={{ fontWeight: '600', color: '#333' }}>30 Slots</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '8px' }}>
                         <span style={{ color: '#666' }}>Active Booked Dates:</span>
                         <span style={{ fontWeight: '600', color: '#333' }}>{bookedDates.length} Dates</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', paddingBottom: '8px' }}>
-                        <span style={{ color: '#666' }}>Avg. Decorating Guests:</span>
-                        <span style={{ fontWeight: '600', color: '#333' }}>6.2 Guests/Class</span>
+                        <span style={{ color: '#666' }}>Avg. Lead Time:</span>
+                        <span style={{ fontWeight: '600', color: '#333' }}>14 Days</span>
                       </div>
                     </div>
                   </div>
@@ -1452,7 +1501,7 @@ function AdminAppContent() {
                   <div style={{ backgroundColor: 'rgba(92, 13, 27, 0.05)', borderRadius: '12px', padding: '16px', marginTop: '24px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                     <Sparkles size={20} color="var(--secondary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                     <p style={{ fontSize: '12px', color: 'var(--secondary)', margin: '0', lineHeight: '1.5', fontWeight: '500' }}>
-                      <strong>Pro tip:</strong> Custom Cake orders have increased by <strong>6.8%</strong>. Consider creating a new standard size to streamline requests!
+                      <strong>Pro tip:</strong> Monitor your booking capacity closely. If you exceed 80% consistently, consider adjusting your lead times!
                     </p>
                   </div>
                 </div>
