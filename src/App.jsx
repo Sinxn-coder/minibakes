@@ -107,7 +107,7 @@ import ig6 from './assets/instgram/ig6.webp';
 
 const instaPosts = [
   { 
-    img: ig1, 
+    video: 'https://res.cloudinary.com/dphkfsgul/video/upload/v1781192648/Because_behind_every_mom_is_just_a_girl_who_deserves_something_sweet_Limited_quantity_book_yo_lszvii.mp4', 
     link: 'https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==' 
   },
   { 
@@ -228,14 +228,24 @@ const InstaPost = ({ post, index }) => {
             <InstagramIcon size={32} opacity={0.2} />
           </div>
         )}
-        {post && (
+        {post && post.video ? (
+          <video 
+            src={post.video} 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
+            onLoadedData={() => setLoaded(true)}
+          />
+        ) : post && post.img ? (
           <img 
             src={post.img} 
             alt={`Instagram Reel ${index + 1}`} 
             className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
             onLoad={() => setLoaded(true)}
           />
-        )}
+        ) : null}
       </a>
     </div>
   );
