@@ -4,6 +4,7 @@ import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
 
+
 const optimizeAndConvertToWebP = (file, maxWidth = 1000, quality = 0.8) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -2431,7 +2432,7 @@ function AdminAppContent({ session }) {
                     <div className="profile-card">
                       <div className="profile-avatar-wrapper">
                         <div className="profile-avatar">
-                          <User size={60} strokeWidth={1.5} />
+                          <img src={founderImg} alt="Admin Profile" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                         </div>
                         <div className="profile-status-badge"></div>
                       </div>
