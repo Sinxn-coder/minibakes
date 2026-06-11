@@ -278,38 +278,31 @@ const LiveInstagramFeed = () => {
     let attempts = 0;
     const checkTimer = setInterval(() => {
       attempts++;
-      const el = document.querySelector('[data-behold-id="o0M2VzIL6Up3E2HsHNu4"]') || document.querySelector('behold-widget');
+      const beholdEl = document.querySelector('behold-widget') || document.querySelector('[data-behold-id="o0M2VzIL6Up3E2HsHNu4"]');
       
-      if (el) {
-        // Behold typically attaches a shadow root or adds content inside
-        const hasShadow = !!el.shadowRoot;
-        const html = hasShadow ? el.shadowRoot.innerHTML.toLowerCase() : el.innerHTML.toLowerCase();
-        const text = hasShadow ? el.shadowRoot.textContent.toLowerCase() : el.textContent.toLowerCase();
-        
-        // 1. Check for specific error keywords
-        const hasErrorText = text.includes('error') || text.includes('not found') || text.includes('limit reached') || text.includes('suspended');
-        
-        // 2. Check for small height which indicates an error box instead of a full grid
-        const hasErrorBoxSize = html.length > 0 && el.clientHeight > 0 && el.clientHeight < 250;
-
-        if (hasErrorText || hasErrorBoxSize) {
-          setUseFallback(true);
-          clearInterval(checkTimer);
-          return;
+      if (beholdEl) {
+        let text = beholdEl.textContent || '';
+        if (beholdEl.shadowRoot) {
+           text += ' ' + beholdEl.shadowRoot.textContent;
         }
-
-        // 3. If completely empty after 6 seconds
-        if (attempts > 6 && !hasShadow && html.trim() === '') {
-          setUseFallback(true);
-          clearInterval(checkTimer);
-          return;
+        text = text.toLowerCase();
+        
+        const hasError = text.includes('error') || text.includes('not found') || text.includes('limit');
+        
+        // An error box is usually small, like < 200px. A real grid is much taller.
+        const rect = beholdEl.getBoundingClientRect();
+        const isSmallAndLoaded = attempts > 3 && rect.height > 10 && rect.height < 250;
+        const isEmpty = attempts > 5 && rect.height === 0;
+        
+        if (hasError || isSmallAndLoaded || isEmpty) {
+           setUseFallback(true);
+           clearInterval(checkTimer);
+           // Force remove behold element from DOM so it doesn't linger and overlap
+           beholdEl.remove();
         }
       }
-
-      // Stop checking after 10 seconds
-      if (attempts >= 10) {
-        clearInterval(checkTimer);
-      }
+      
+      if (attempts > 10) clearInterval(checkTimer);
     }, 1000);
 
     return () => clearInterval(checkTimer);
@@ -325,8 +318,11 @@ const LiveInstagramFeed = () => {
     );
   }
 
+  // Wrap in a stable div so React doesn't lose the parent node if Behold replaces the child
   return (
-    <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
+    <div className="behold-wrapper" style={{ width: '100%' }}>
+      <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
+    </div>
   );
 };
 
