@@ -1314,6 +1314,23 @@ body {
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .insta-feed-container {
+    padding: 0 0 1rem 0 !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .insta-feed-container::-webkit-scrollbar {
+    display: none;
+  }
+  .insta-feed-container > div {
+    min-width: 1000px !important;
+    padding: 0 1rem;
+  }
+}
+
 .insta-row {
   display: flex;
   gap: 1.5rem;
