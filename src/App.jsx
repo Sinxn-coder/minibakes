@@ -1015,22 +1015,9 @@ function App() {
                 @minibakes2021
               </a>
             </div>
-
-            <div className="insta-feed-container">
-              {/* This is a wrapper for the Instagram Widget. 
-              To make it live, you can use a free service like Behold.so 
-              and paste their embed code below. */}
-              <div className="insta-row">
-                {[...instaPosts, ...instaPosts, ...instaPosts].map((_, i) => (
-                  <InstaPost key={i} index={i} />
-                ))}
-              </div>
-
-              <div className="insta-footer">
-                <a href={storeSettings.instagram_link} target="_blank" rel="noopener noreferrer" className="insta-btn">
-                  View on Instagram
-                </a>
-              </div>
+            
+            <div className="insta-feed-container" style={{ padding: '0 2rem' }}>
+              <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
             </div>
           </section>
 
