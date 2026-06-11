@@ -3220,3 +3220,24 @@ body {
     opacity: 1;
   }
 }
+/* Force Behold.so Widget to Instagram Reel Aspect Ratio (9:16) */
+behold-widget {
+  --behold-aspect-ratio: 9/16;
+}
+
+behold-widget::part(post), behold-widget::part(image), behold-widget::part(video) {
+  aspect-ratio: 9/16 !important;
+  object-fit: cover !important;
+  height: 100% !important;
+}
+
+[data-behold-id] figure, [data-behold-id] img, [data-behold-id] video {
+  aspect-ratio: 9/16 !important;
+  object-fit: cover !important;
+  height: auto !important;
+}
+
+/* To ensure it stays proportional */
+[data-behold-id] {
+  display: block;
+}
