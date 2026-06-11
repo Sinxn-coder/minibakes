@@ -214,12 +214,14 @@ const clientReviews = [
   }
 ];
 
-const InstaPost = ({ index }) => {
+const InstaPost = ({ index, forceStatic }) => {
   const [currentIdx, setCurrentIdx] = useState(index % instaPosts.length);
   const [loaded, setLoaded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    if (forceStatic) return;
+
     // Stagger the intervals so cards don't change at the same time
     // Base 2500ms + variation based on index
     const intervalTime = 2500 + ((index % 7) * 400);
@@ -236,7 +238,7 @@ const InstaPost = ({ index }) => {
     }, (index % 5) * 600);
     
     return () => clearTimeout(timeoutId);
-  }, [index]);
+  }, [index, forceStatic]);
 
   const post = instaPosts[currentIdx];
 
@@ -266,6 +268,44 @@ const InstaPost = ({ index }) => {
         )}
       </a>
     </div>
+  );
+};
+
+const LiveInstagramFeed = () => {
+  const [useFallback, setUseFallback] = useState(false);
+
+  useEffect(() => {
+    const checkTimer = setTimeout(() => {
+      const el = document.querySelector('[data-behold-id="o0M2VzIL6Up3E2HsHNu4"]');
+      if (el) {
+        // Behold typically attaches a shadow root or adds content inside
+        const hasShadow = !!el.shadowRoot;
+        const html = hasShadow ? el.shadowRoot.innerHTML.toLowerCase() : el.innerHTML.toLowerCase();
+        
+        const hasErrorText = html.includes('error') || html.includes('not found') || html.includes('limit reached') || html.includes('suspended');
+        const isEmpty = !hasShadow && html.trim() === '';
+        
+        if (hasErrorText || isEmpty) {
+          setUseFallback(true);
+        }
+      }
+    }, 6000); // Check after 6 seconds
+
+    return () => clearTimeout(checkTimer);
+  }, []);
+
+  if (useFallback) {
+    return (
+      <div className="insta-row">
+        {instaPosts.slice(0, 6).map((_, i) => (
+          <InstaPost key={i} index={i} forceStatic={true} />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
   );
 };
 
@@ -1017,7 +1057,7 @@ function App() {
             </div>
             
             <div className="insta-feed-container" style={{ padding: '0 2rem' }}>
-              <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
+              <LiveInstagramFeed />
             </div>
           </section>
 
