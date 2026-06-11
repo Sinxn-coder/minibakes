@@ -948,3 +948,241 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ced4da;
 }
+/* ==========================================================================
+   Admin Settings Redesign
+   ========================================================================== */
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.04);
+  position: sticky;
+  top: 2rem;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fdf7f8, #f5e6e8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(128, 0, 0, 0.15);
+  color: var(--primary);
+}
+
+.profile-status-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background: #25D366;
+  border: 3px solid white;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.profile-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(128, 0, 0, 0.08);
+  color: var(--primary);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.profile-stats {
+  width: 100%;
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.3s ease;
+}
+
+.settings-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-card-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: #fdf7f8;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.settings-card-desc {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 2rem;
+  padding-left: calc(45px + 1rem);
+}
+
+.settings-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.settings-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.settings-input-icon {
+  position: absolute;
+  left: 1rem;
+  color: #999;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  border-radius: 12px;
+  border: 2px solid #f0f0f0;
+  background: #fafafa;
+  font-size: 0.95rem;
+  color: #333;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.settings-input:focus {
+  border-color: rgba(128, 0, 0, 0.3);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05);
+}
+
+.settings-button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.settings-button:hover:not(:disabled) {
+  background: #6a0000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(128, 0, 0, 0.2);
+}
+
+.settings-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

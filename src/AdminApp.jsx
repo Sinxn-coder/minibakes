@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw, Smartphone, Link, ShieldCheck } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
@@ -316,7 +316,7 @@ const analyticsData = {
   }
 };
 
-function AdminAppContent() {
+function AdminAppContent({ session }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState('this-month');
   const [orderSearchQuery, setOrderSearchQuery] = useState('');
@@ -2394,117 +2394,183 @@ function AdminAppContent() {
 
           {activeTab === 'settings' && (
             <div className="admin-panel" style={{ minHeight: '600px' }}>
-              <h2 className="admin-panel-title">Account Settings</h2>
-              
-              <div style={{ marginTop: '32px', maxWidth: '600px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee', marginBottom: '32px' }}>
-                <h3 style={{ fontSize: '18px', color: '#1a1a1a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Store & Branding Details
-                </h3>
-                <p style={{ fontSize: '13px', color: '#666', marginBottom: '24px' }}>
-                  Update your contact number and social media links. These changes will reflect immediately across the website.
-                </p>
-                <form onSubmit={handleSaveSettings}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>WhatsApp Number (Format: 35679820529)</label>
-                    <input 
-                      type="text" 
-                      required 
-                      value={storeSettings.whatsapp_number} 
-                      onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_number: e.target.value }))} 
-                      placeholder="e.g. 35679820529"
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
-                  </div>
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Instagram Link</label>
-                    <input 
-                      type="url" 
-                      required 
-                      value={storeSettings.instagram_link} 
-                      onChange={e => setStoreSettings(prev => ({ ...prev, instagram_link: e.target.value }))} 
-                      placeholder="https://instagram.com/..."
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
-                  </div>
-                  <div style={{ marginBottom: '24px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Facebook Link</label>
-                    <input 
-                      type="url" 
-                      required 
-                      value={storeSettings.facebook_link} 
-                      onChange={e => setStoreSettings(prev => ({ ...prev, facebook_link: e.target.value }))} 
-                      placeholder="https://facebook.com/..."
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
-                  </div>
-                  <button 
-                    type="submit" 
-                    disabled={isSavingSettings} 
-                    style={{ width: '100%', padding: '12px', background: '#800000', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: isSavingSettings ? 'not-allowed' : 'pointer', opacity: isSavingSettings ? 0.7 : 1 }}
-                  >
-                    {isSavingSettings ? 'Saving...' : 'Save Branding Details'}
-                  </button>
-                </form>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <div>
+                  <h2 className="admin-panel-title" style={{ margin: 0 }}>Account Settings</h2>
+                  <p style={{ color: '#666', marginTop: '0.5rem', fontSize: '0.95rem' }}>Manage your profile, branding, and security preferences.</p>
+                </div>
               </div>
+              
+              <div className="settings-layout">
+                {/* Left Column: Profile Card */}
+                <div className="profile-card">
+                  <div className="profile-avatar-wrapper">
+                    <div className="profile-avatar">
+                      <User size={60} strokeWidth={1.5} />
+                    </div>
+                    <div className="profile-status-badge"></div>
+                  </div>
+                  <h3 className="profile-name">Minibakes Admin</h3>
+                  <p className="profile-email">{session?.user?.email || 'admin@minibakes.com'}</p>
+                  <div className="profile-role">
+                    <ShieldCheck size={16} /> Super Admin
+                  </div>
+                  <div className="profile-stats">
+                    <div className="stat-item">
+                      <span className="stat-value">Active</span>
+                      <span className="stat-label">Status</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-value">Full</span>
+                      <span className="stat-label">Access</span>
+                    </div>
+                  </div>
+                </div>
 
-              <div style={{ maxWidth: '400px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
-                <h3 style={{ fontSize: '18px', color: '#1a1a1a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Change Admin Password
-                </h3>
-                <p style={{ fontSize: '13px', color: '#666', marginBottom: '24px' }}>
-                  Update the password used to access the Minibakes admin dashboard.
-                </p>
-                <form onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (newPassword !== confirmPassword) {
-                    triggerToast('Passwords do not match', 'error');
-                    return;
-                  }
-                  if (newPassword.length < 6) {
-                    triggerToast('Password must be at least 6 characters', 'error');
-                    return;
-                  }
-                  setIsUpdatingPassword(true);
-                  const { error } = await supabase.auth.updateUser({ password: newPassword });
-                  setIsUpdatingPassword(false);
-                  if (error) {
-                    triggerToast(error.message, 'error');
-                  } else {
-                    triggerToast('Password updated successfully! 🔒', 'success');
-                    setNewPassword('');
-                    setConfirmPassword('');
-                  }
-                }}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>New Password</label>
-                    <input 
-                      type="password" 
-                      required 
-                      value={newPassword} 
-                      onChange={e => setNewPassword(e.target.value)} 
-                      placeholder="Enter new password"
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
+                {/* Right Column: Settings Sections */}
+                <div className="settings-column">
+                  
+                  {/* Branding Card */}
+                  <div className="settings-card">
+                    <div className="settings-card-header">
+                      <div className="settings-card-icon">
+                        <Smartphone size={24} />
+                      </div>
+                      <h3 className="settings-card-title">Store & Branding Details</h3>
+                    </div>
+                    <p className="settings-card-desc">Update your contact number and social media links. These changes will reflect immediately across the website.</p>
+                    
+                    <form onSubmit={handleSaveSettings}>
+                      <div className="settings-form-group">
+                        <label className="settings-label">WhatsApp Number (Format: 35679820529)</label>
+                        <div className="settings-input-wrapper">
+                          <Phone size={18} className="settings-input-icon" />
+                          <input 
+                            type="text" 
+                            required 
+                            className="settings-input"
+                            value={storeSettings.whatsapp_number} 
+                            onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_number: e.target.value }))} 
+                            placeholder="e.g. 35679820529"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="settings-form-group">
+                        <label className="settings-label">Instagram Link</label>
+                        <div className="settings-input-wrapper">
+                          <Link size={18} className="settings-input-icon" />
+                          <input 
+                            type="url" 
+                            required 
+                            className="settings-input"
+                            value={storeSettings.instagram_link} 
+                            onChange={e => setStoreSettings(prev => ({ ...prev, instagram_link: e.target.value }))} 
+                            placeholder="https://instagram.com/..."
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="settings-form-group" style={{ marginBottom: '0' }}>
+                        <label className="settings-label">Facebook Link</label>
+                        <div className="settings-input-wrapper">
+                          <Link size={18} className="settings-input-icon" />
+                          <input 
+                            type="url" 
+                            required 
+                            className="settings-input"
+                            value={storeSettings.facebook_link} 
+                            onChange={e => setStoreSettings(prev => ({ ...prev, facebook_link: e.target.value }))} 
+                            placeholder="https://facebook.com/..."
+                          />
+                        </div>
+                      </div>
+                      
+                      <button 
+                        type="submit" 
+                        disabled={isSavingSettings} 
+                        className="settings-button"
+                      >
+                        {isSavingSettings ? <RefreshCw className="spin" size={20} /> : <Save size={20} />}
+                        {isSavingSettings ? 'Saving...' : 'Save Branding Details'}
+                      </button>
+                    </form>
                   </div>
-                  <div style={{ marginBottom: '24px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Confirm New Password</label>
-                    <input 
-                      type="password" 
-                      required 
-                      value={confirmPassword} 
-                      onChange={e => setConfirmPassword(e.target.value)} 
-                      placeholder="Confirm new password"
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
+
+                  {/* Security Card */}
+                  <div className="settings-card">
+                    <div className="settings-card-header">
+                      <div className="settings-card-icon" style={{ background: '#f5f7ff', color: '#3b82f6' }}>
+                        <Shield size={24} />
+                      </div>
+                      <h3 className="settings-card-title">Security & Authentication</h3>
+                    </div>
+                    <p className="settings-card-desc">Update the password used to access the Minibakes admin dashboard.</p>
+                    
+                    <form onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (newPassword !== confirmPassword) {
+                        triggerToast('Passwords do not match', 'error');
+                        return;
+                      }
+                      if (newPassword.length < 6) {
+                        triggerToast('Password must be at least 6 characters', 'error');
+                        return;
+                      }
+                      setIsUpdatingPassword(true);
+                      const { error } = await supabase.auth.updateUser({ password: newPassword });
+                      setIsUpdatingPassword(false);
+                      if (error) {
+                        triggerToast(error.message, 'error');
+                      } else {
+                        triggerToast('Password updated successfully! 🔒', 'success');
+                        setNewPassword('');
+                        setConfirmPassword('');
+                      }
+                    }}>
+                      <div className="settings-form-group">
+                        <label className="settings-label">New Password</label>
+                        <div className="settings-input-wrapper">
+                          <input 
+                            type="password" 
+                            required 
+                            className="settings-input"
+                            style={{ paddingLeft: '1rem' }}
+                            value={newPassword} 
+                            onChange={e => setNewPassword(e.target.value)} 
+                            placeholder="Enter new password"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="settings-form-group" style={{ marginBottom: '0' }}>
+                        <label className="settings-label">Confirm New Password</label>
+                        <div className="settings-input-wrapper">
+                          <input 
+                            type="password" 
+                            required 
+                            className="settings-input"
+                            style={{ paddingLeft: '1rem' }}
+                            value={confirmPassword} 
+                            onChange={e => setConfirmPassword(e.target.value)} 
+                            placeholder="Confirm new password"
+                          />
+                        </div>
+                      </div>
+                      
+                      <button 
+                        type="submit" 
+                        disabled={isUpdatingPassword} 
+                        className="settings-button"
+                        style={{ background: '#1a1a1a' }}
+                      >
+                        {isUpdatingPassword ? <RefreshCw className="spin" size={20} /> : <ShieldCheck size={20} />}
+                        {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                      </button>
+                    </form>
                   </div>
-                  <button 
-                    type="submit" 
-                    disabled={isUpdatingPassword} 
-                    style={{ width: '100%', padding: '14px', background: isUpdatingPassword ? '#aaa' : '#800000', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: isUpdatingPassword ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: '0.2s' }}
-                  >
-                    {isUpdatingPassword ? 'Updating...' : 'Update Password'}
-                  </button>
-                </form>
+
+                </div>
               </div>
             </div>
           )}
@@ -3607,7 +3673,7 @@ export default function AdminApp() {
     return <AdminLogin />;
   }
 
-  return <AdminAppContent />;
+  return <AdminAppContent session={session} />;
 }
 
 function AdminLogin() {
