@@ -223,7 +223,7 @@ const InstaPost = ({ post, index }) => {
         <div className="insta-card-icon-container">
           <InstagramIcon size={20} className="insta-card-icon" />
         </div>
-        {(!loaded || !post) && (
+        {(!loaded && (!post || !post.video)) && (
           <div className="insta-img-shimmer">
             <InstagramIcon size={32} opacity={0.2} />
           </div>
@@ -235,8 +235,7 @@ const InstaPost = ({ post, index }) => {
             loop 
             muted 
             playsInline
-            className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
-            onLoadedData={() => setLoaded(true)}
+            className="insta-real-img image-loaded"
           />
         ) : post && post.img ? (
           <img 
