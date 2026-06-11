@@ -323,6 +323,33 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [storeSettings, setStoreSettings] = useState({
+    whatsapp_number: '35679820529',
+    instagram_link: 'https://instagram.com/minibakes2021',
+    facebook_link: 'https://facebook.com/minibakes2021'
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase.from('store_settings').select('*').limit(1).single();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching settings:', error);
+          return;
+        }
+        if (data) {
+          setStoreSettings({
+            whatsapp_number: data.whatsapp_number || '35679820529',
+            instagram_link: data.instagram_link || 'https://instagram.com/minibakes2021',
+            facebook_link: data.facebook_link || 'https://facebook.com/minibakes2021'
+          });
+        }
+      } catch (e) {
+        console.error('Failed to fetch settings:', e);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -956,7 +983,7 @@ function App() {
           <section className="instagram-section">
             <div className="insta-header">
               <h2 className="insta-title">FOLLOW OUR JOURNEY</h2>
-              <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-handle">
+              <a href={storeSettings.instagram_link} target="_blank" rel="noopener noreferrer" className="insta-handle">
                 @minibakes2021
               </a>
             </div>
@@ -972,7 +999,7 @@ function App() {
               </div>
 
               <div className="insta-footer">
-                <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="insta-btn">
+                <a href={storeSettings.instagram_link} target="_blank" rel="noopener noreferrer" className="insta-btn">
                   View on Instagram
                 </a>
               </div>
@@ -1074,7 +1101,7 @@ function App() {
               </div>
               <div
                 className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
-                onClick={() => handleContactClick('instagram', 'https://instagram.com/minibakes2021')}
+                onClick={() => handleContactClick('instagram', storeSettings.instagram_link)}
               >
                 <InstagramIcon size={24} className="contact-icon" />
                 <span className="contact-label">Mini Bakes</span>
@@ -1088,7 +1115,7 @@ function App() {
               </div>
               <div
                 className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
-                onClick={() => handleContactClick('facebook', 'https://www.facebook.com/minibakes2021')}
+                onClick={() => handleContactClick('facebook', storeSettings.facebook_link)}
               >
                 <FacebookIcon size={24} className="contact-icon" />
                 <span className="contact-label">Mini Bakes</span>
@@ -1143,6 +1170,7 @@ function App() {
         setActiveCategory={setMenuActiveCategory}
         activeSubcategory={menuActiveSubcategory}
         setActiveSubcategory={setMenuActiveSubcategory}
+        storeSettings={storeSettings}
         onSelectProduct={(item) => {
           setPreviousView(currentView);
           setCustomizingProduct(item);
@@ -1155,12 +1183,15 @@ function App() {
         onBack={() => setCurrentView('home')}
         onRemoveItem={removeFromCart}
         onUpdateQuantity={updateQuantity}
+        storeSettings={storeSettings}
       />}
           {currentView === 'care' && (
             <CakeCarePage onBack={() => setCurrentView('home')} />
           )}
           {currentView === 'contact' && (
-            <ContactPage onBack={() => setCurrentView('home')} />
+            <div className="view-transition-content">
+              <ContactPage onBack={() => setCurrentView('home')} storeSettings={storeSettings} />
+            </div>
           )}
         </div>
       )}

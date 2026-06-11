@@ -38,7 +38,7 @@ const FacebookIcon = ({ size = 24, ...props }) => (
 );
 import './ContactPage.css';
 
-const ContactPage = ({ onBack }) => {
+const ContactPage = ({ onBack, storeSettings }) => {
   return (
     <div className="contact-page">
       <div className="contact-bg-text">CONTACT</div>
@@ -74,7 +74,7 @@ const ContactPage = ({ onBack }) => {
                 <h3>WhatsApp</h3>
                 <p>Quick chat for orders & inquiries</p>
                 <a 
-                  href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry." 
+                  href={`https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry.`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="contact-action-link"
@@ -118,11 +118,11 @@ const ContactPage = ({ onBack }) => {
             <h2>Follow Our Journey</h2>
             <p>Catch all our latest creations and behind-the-scenes moments on social media.</p>
             <div className="contact-social-links">
-              <a href="https://instagram.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="social-box instagram">
+              <a href={storeSettings?.instagram_link || "https://instagram.com/minibakes2021"} target="_blank" rel="noopener noreferrer" className="social-box instagram">
                 <InstagramIcon size={32} />
                 <span>Mini Bakes</span>
               </a>
-              <a href="https://facebook.com/minibakes2021" target="_blank" rel="noopener noreferrer" className="social-box facebook">
+              <a href={storeSettings?.facebook_link || "https://facebook.com/minibakes2021"} target="_blank" rel="noopener noreferrer" className="social-box facebook">
                 <FacebookIcon size={32} />
                 <span>Mini Bakes</span>
               </a>

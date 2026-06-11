@@ -218,7 +218,8 @@ export default function MenuPage({
   activeCategory: externalActiveCategory,
   setActiveCategory: externalSetActiveCategory,
   activeSubcategory: externalActiveSubcategory,
-  setActiveSubcategory: externalSetActiveSubcategory
+  setActiveSubcategory: externalSetActiveSubcategory,
+  storeSettings
 }) {
   const [localActiveCategory, localSetActiveCategory] = useState("Cakes");
   const [localActiveSubcategory, localSetActiveSubcategory] = useState(null);
@@ -496,7 +497,7 @@ export default function MenuPage({
           Special Request?
         </div>
         <a 
-          href="https://wa.me/35679820529?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request." 
+          href={`https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request.`} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="menu-fixed-whatsapp"

@@ -17,7 +17,7 @@ const WhatsAppIcon = ({ size = 16, ...props }) => (
   </svg>
 );
 
-export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity }) {
+export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQuantity, storeSettings }) {
   const [step, setStep] = useState('cart'); // 'cart' | 'checkout' | 'success' | 'processing'
   const [phoneCode, setPhoneCode] = useState('+356');
   const [whatsappCode, setWhatsappCode] = useState('+356');
@@ -297,7 +297,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   const getWhatsAppUrgentLink = () => {
     const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${whatsappCode} ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0APlease contact me as soon as possible. Thank you!`;
     
-    return `https://wa.me/35679820529?text=${messageText}`;
+    return `https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=${messageText}`;
   };
 
   if (step === 'success') {

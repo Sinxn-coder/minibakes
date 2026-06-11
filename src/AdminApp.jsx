@@ -329,7 +329,55 @@ function AdminAppContent() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [storeSettings, setStoreSettings] = useState({
+    whatsapp_number: '35679820529',
+    instagram_link: 'https://instagram.com/minibakes2021',
+    facebook_link: 'https://facebook.com/minibakes2021'
+  });
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
 
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase.from('store_settings').select('*').limit(1).single();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching settings:', error);
+          return;
+        }
+        if (data) {
+          setStoreSettings({
+            whatsapp_number: data.whatsapp_number || '35679820529',
+            instagram_link: data.instagram_link || 'https://instagram.com/minibakes2021',
+            facebook_link: data.facebook_link || 'https://facebook.com/minibakes2021'
+          });
+        }
+      } catch (e) {
+        console.error('Failed to fetch settings:', e);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const handleSaveSettings = async (e) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    try {
+      const { error } = await supabase.from('store_settings').upsert({
+        id: 1,
+        whatsapp_number: storeSettings.whatsapp_number,
+        instagram_link: storeSettings.instagram_link,
+        facebook_link: storeSettings.facebook_link,
+        updated_at: new Date().toISOString()
+      });
+      if (error) throw error;
+      triggerToast('Store branding settings updated successfully!');
+    } catch (err) {
+      console.error('Error updating settings:', err);
+      triggerToast('Failed to update settings', 'error');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
   const triggerToast = (message, type = 'success') => {
     setToast({ message, type });
   };
@@ -2347,7 +2395,59 @@ function AdminAppContent() {
           {activeTab === 'settings' && (
             <div className="admin-panel" style={{ minHeight: '600px' }}>
               <h2 className="admin-panel-title">Account Settings</h2>
-              <div style={{ marginTop: '32px', maxWidth: '400px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
+              
+              <div style={{ marginTop: '32px', maxWidth: '600px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee', marginBottom: '32px' }}>
+                <h3 style={{ fontSize: '18px', color: '#1a1a1a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  Store & Branding Details
+                </h3>
+                <p style={{ fontSize: '13px', color: '#666', marginBottom: '24px' }}>
+                  Update your contact number and social media links. These changes will reflect immediately across the website.
+                </p>
+                <form onSubmit={handleSaveSettings}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>WhatsApp Number (Format: 35679820529)</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={storeSettings.whatsapp_number} 
+                      onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_number: e.target.value }))} 
+                      placeholder="e.g. 35679820529"
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                    />
+                  </div>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Instagram Link</label>
+                    <input 
+                      type="url" 
+                      required 
+                      value={storeSettings.instagram_link} 
+                      onChange={e => setStoreSettings(prev => ({ ...prev, instagram_link: e.target.value }))} 
+                      placeholder="https://instagram.com/..."
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                    />
+                  </div>
+                  <div style={{ marginBottom: '24px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Facebook Link</label>
+                    <input 
+                      type="url" 
+                      required 
+                      value={storeSettings.facebook_link} 
+                      onChange={e => setStoreSettings(prev => ({ ...prev, facebook_link: e.target.value }))} 
+                      placeholder="https://facebook.com/..."
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={isSavingSettings} 
+                    style={{ width: '100%', padding: '12px', background: '#800000', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: isSavingSettings ? 'not-allowed' : 'pointer', opacity: isSavingSettings ? 0.7 : 1 }}
+                  >
+                    {isSavingSettings ? 'Saving...' : 'Save Branding Details'}
+                  </button>
+                </form>
+              </div>
+
+              <div style={{ maxWidth: '400px', padding: '24px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
                 <h3 style={{ fontSize: '18px', color: '#1a1a1a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   Change Admin Password
                 </h3>
