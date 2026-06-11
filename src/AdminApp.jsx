@@ -2405,19 +2405,19 @@ function AdminAppContent({ session }) {
               <div className="admin-tabs" style={{ marginBottom: '2rem', borderBottom: '1px solid #eee', display: 'flex', gap: '1rem' }}>
                 <button 
                   onClick={() => setActiveSettingsTab('profile')}
-                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'profile' ? 'var(--primary)' : '#666', borderBottom: activeSettingsTab === 'profile' ? '3px solid var(--primary)' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
+                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'profile' ? '#800000' : '#666', borderBottom: activeSettingsTab === 'profile' ? '3px solid #800000' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
                 >
                   Profile & Branding
                 </button>
                 <button 
                   onClick={() => setActiveSettingsTab('security')}
-                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'security' ? 'var(--primary)' : '#666', borderBottom: activeSettingsTab === 'security' ? '3px solid var(--primary)' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
+                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'security' ? '#800000' : '#666', borderBottom: activeSettingsTab === 'security' ? '3px solid #800000' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
                 >
                   Security
                 </button>
                 <button 
                   onClick={() => setActiveSettingsTab('store')}
-                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'store' ? 'var(--primary)' : '#666', borderBottom: activeSettingsTab === 'store' ? '3px solid var(--primary)' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
+                  style={{ background: 'none', border: 'none', padding: '1rem 0.5rem', fontSize: '1rem', fontWeight: '600', color: activeSettingsTab === 'store' ? '#800000' : '#666', borderBottom: activeSettingsTab === 'store' ? '3px solid #800000' : '3px solid transparent', cursor: 'pointer', transition: 'all 0.2s ease' }}
                 >
                   Store Status
                 </button>
