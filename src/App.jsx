@@ -297,8 +297,6 @@ const LiveInstagramFeed = () => {
         if (hasError || isSmallAndLoaded || isEmpty) {
            setUseFallback(true);
            clearInterval(checkTimer);
-           // Force remove behold element from DOM so it doesn't linger and overlap
-           beholdEl.remove();
         }
       }
       
@@ -318,11 +316,14 @@ const LiveInstagramFeed = () => {
     );
   }
 
-  // Wrap in a stable div so React doesn't lose the parent node if Behold replaces the child
+  // Use dangerouslySetInnerHTML so React doesn't track the replaced child node,
+  // preventing "Failed to execute 'removeChild' on 'Node'" crashes.
   return (
-    <div className="behold-wrapper" style={{ width: '100%' }}>
-      <div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>
-    </div>
+    <div 
+      className="behold-wrapper" 
+      style={{ width: '100%' }}
+      dangerouslySetInnerHTML={{ __html: '<div data-behold-id="o0M2VzIL6Up3E2HsHNu4"></div>' }}
+    />
   );
 };
 
