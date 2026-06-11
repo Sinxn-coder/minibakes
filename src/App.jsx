@@ -324,7 +324,8 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [storeSettings, setStoreSettings] = useState({
-    whatsapp_number: '35679820529',
+    whatsapp_country_code: '356',
+    whatsapp_number: '79820529',
     instagram_link: 'https://instagram.com/minibakes2021',
     facebook_link: 'https://facebook.com/minibakes2021'
   });
@@ -339,7 +340,8 @@ function App() {
         }
         if (data) {
           setStoreSettings({
-            whatsapp_number: data.whatsapp_number || '35679820529',
+            whatsapp_country_code: data.whatsapp_country_code || '356',
+            whatsapp_number: data.whatsapp_number || '79820529',
             instagram_link: data.instagram_link || 'https://instagram.com/minibakes2021',
             facebook_link: data.facebook_link || 'https://facebook.com/minibakes2021'
           });

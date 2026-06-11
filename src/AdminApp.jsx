@@ -330,7 +330,8 @@ function AdminAppContent() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [storeSettings, setStoreSettings] = useState({
-    whatsapp_number: '35679820529',
+    whatsapp_country_code: '356',
+    whatsapp_number: '79820529',
     instagram_link: 'https://instagram.com/minibakes2021',
     facebook_link: 'https://facebook.com/minibakes2021'
   });
@@ -346,7 +347,8 @@ function AdminAppContent() {
         }
         if (data) {
           setStoreSettings({
-            whatsapp_number: data.whatsapp_number || '35679820529',
+            whatsapp_country_code: data.whatsapp_country_code || '356',
+            whatsapp_number: data.whatsapp_number || '79820529',
             instagram_link: data.instagram_link || 'https://instagram.com/minibakes2021',
             facebook_link: data.facebook_link || 'https://facebook.com/minibakes2021'
           });
@@ -364,6 +366,7 @@ function AdminAppContent() {
     try {
       const { error } = await supabase.from('store_settings').upsert({
         id: 1,
+        whatsapp_country_code: storeSettings.whatsapp_country_code,
         whatsapp_number: storeSettings.whatsapp_number,
         instagram_link: storeSettings.instagram_link,
         facebook_link: storeSettings.facebook_link,
@@ -2405,15 +2408,32 @@ function AdminAppContent() {
                 </p>
                 <form onSubmit={handleSaveSettings}>
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>WhatsApp Number (Format: 35679820529)</label>
-                    <input 
-                      type="text" 
-                      required 
-                      value={storeSettings.whatsapp_number} 
-                      onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_number: e.target.value }))} 
-                      placeholder="e.g. 35679820529"
-                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
-                    />
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>WhatsApp Number</label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <select 
+                        value={storeSettings.whatsapp_country_code}
+                        onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_country_code: e.target.value }))}
+                        style={{ width: '120px', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', backgroundColor: 'white', boxSizing: 'border-box' }}
+                      >
+                        <option value="356">🇲🇹 +356</option>
+                        <option value="1">🇺🇸 +1</option>
+                        <option value="44">🇬🇧 +44</option>
+                        <option value="91">🇮🇳 +91</option>
+                        <option value="61">🇦🇺 +61</option>
+                        <option value="39">🇮🇹 +39</option>
+                        <option value="33">🇫🇷 +33</option>
+                        <option value="49">🇩🇪 +49</option>
+                        {/* More could be added as needed */}
+                      </select>
+                      <input 
+                        type="text" 
+                        required 
+                        value={storeSettings.whatsapp_number} 
+                        onChange={e => setStoreSettings(prev => ({ ...prev, whatsapp_number: e.target.value.replace(/[^0-9]/g, '') }))} 
+                        placeholder="e.g. 79820529"
+                        style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none', boxSizing: 'border-box' }} 
+                      />
+                    </div>
                   </div>
                   <div style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', color: '#444' }}>Instagram Link</label>

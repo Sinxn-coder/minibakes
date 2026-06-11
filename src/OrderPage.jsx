@@ -297,7 +297,7 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   const getWhatsAppUrgentLink = () => {
     const messageText = `*URGENT ENQUIRY*%0A%0AHello Mini Bakes! I have an urgent request regarding my order.%0A%0A*Order ID:* %23${orderId}%0A*Customer Name:* ${formData.name}%0A*WhatsApp:* ${whatsappCode} ${formData.whatsapp}%0A*Pickup Date:* ${formData.date}%0A%0APlease contact me as soon as possible. Thank you!`;
     
-    return `https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=${messageText}`;
+    return `https://wa.me/${storeSettings?.whatsapp_country_code || '356'}${storeSettings?.whatsapp_number || '79820529'}?text=${messageText}`;
   };
 
   if (step === 'success') {

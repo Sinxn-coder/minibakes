@@ -74,7 +74,7 @@ const ContactPage = ({ onBack, storeSettings }) => {
                 <h3>WhatsApp</h3>
                 <p>Quick chat for orders & inquiries</p>
                 <a 
-                  href={`https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry.`} 
+                  href={`https://wa.me/${storeSettings?.whatsapp_country_code || '356'}${storeSettings?.whatsapp_number || '79820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20an%20inquiry.`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="contact-action-link"
