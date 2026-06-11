@@ -3705,6 +3705,12 @@ function AdminAppContent({ session }) {
   );
 }
 
+const getUsername = (url) => {
+  if (!url) return '';
+  const cleanUrl = url.replace(/\/$/, '');
+  return cleanUrl.split('/').pop() || '';
+};
+
 export default function AdminApp() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
