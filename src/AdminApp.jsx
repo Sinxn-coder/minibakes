@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw, Smartphone, Link, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw, Smartphone, Link, ShieldCheck, AtSign } from 'lucide-react';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
@@ -2483,31 +2483,37 @@ function AdminAppContent({ session }) {
                           </div>
                           
                           <div className="settings-form-group">
-                            <label className="settings-label">Instagram Link</label>
+                            <label className="settings-label">Instagram Username</label>
                             <div className="settings-input-wrapper">
-                              <Link size={18} className="settings-input-icon" />
+                              <AtSign size={18} className="settings-input-icon" />
                               <input 
-                                type="url" 
+                                type="text" 
                                 required 
                                 className="settings-input"
-                                value={storeSettings.instagram_link} 
-                                onChange={e => setStoreSettings(prev => ({ ...prev, instagram_link: e.target.value }))} 
-                                placeholder="https://instagram.com/..."
+                                value={getUsername(storeSettings.instagram_link)} 
+                                onChange={e => {
+                                  const cleanValue = e.target.value.replace('@', '').trim();
+                                  setStoreSettings(prev => ({ ...prev, instagram_link: cleanValue ? `https://instagram.com/${cleanValue}` : '' }))
+                                }} 
+                                placeholder="minibakes2021"
                               />
                             </div>
                           </div>
                           
                           <div className="settings-form-group" style={{ marginBottom: '0' }}>
-                            <label className="settings-label">Facebook Link</label>
+                            <label className="settings-label">Facebook Username</label>
                             <div className="settings-input-wrapper">
-                              <Link size={18} className="settings-input-icon" />
+                              <AtSign size={18} className="settings-input-icon" />
                               <input 
-                                type="url" 
+                                type="text" 
                                 required 
                                 className="settings-input"
-                                value={storeSettings.facebook_link} 
-                                onChange={e => setStoreSettings(prev => ({ ...prev, facebook_link: e.target.value }))} 
-                                placeholder="https://facebook.com/..."
+                                value={getUsername(storeSettings.facebook_link)} 
+                                onChange={e => {
+                                  const cleanValue = e.target.value.replace('@', '').trim();
+                                  setStoreSettings(prev => ({ ...prev, facebook_link: cleanValue ? `https://facebook.com/${cleanValue}` : '' }))
+                                }} 
+                                placeholder="minibakes2021"
                               />
                             </div>
                           </div>
