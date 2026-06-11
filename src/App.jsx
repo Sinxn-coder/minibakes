@@ -107,7 +107,7 @@ import ig6 from './assets/instgram/ig6.webp';
 
 const instaPosts = [
   { 
-    video: 'https://res.cloudinary.com/dphkfsgul/video/upload/v1781192648/Because_behind_every_mom_is_just_a_girl_who_deserves_something_sweet_Limited_quantity_book_yo_lszvii.mp4', 
+    img: ig1, 
     link: 'https://www.instagram.com/p/DXyoQo_jn2t/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==' 
   },
   { 
@@ -214,37 +214,56 @@ const clientReviews = [
   }
 ];
 
-const InstaPost = ({ post, index }) => {
+const InstaPost = ({ index }) => {
+  const [currentIdx, setCurrentIdx] = useState(index % instaPosts.length);
   const [loaded, setLoaded] = useState(false);
-  
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    // Stagger the intervals so cards don't change at the same time
+    // Base 2500ms + variation based on index
+    const intervalTime = 2500 + ((index % 7) * 400);
+    
+    const timeoutId = setTimeout(() => {
+      const intervalId = setInterval(() => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIdx((prev) => (prev + 1) % instaPosts.length);
+          setIsTransitioning(false);
+        }, 300); // 300ms fade out before changing src
+      }, intervalTime);
+      return () => clearInterval(intervalId);
+    }, (index % 5) * 600);
+    
+    return () => clearTimeout(timeoutId);
+  }, [index]);
+
+  const post = instaPosts[currentIdx];
+
   return (
     <div className="insta-card-placeholder">
       <a href={post?.link} target="_blank" rel="noopener noreferrer" className="insta-card-link-wrapper">
         <div className="insta-card-icon-container">
           <InstagramIcon size={20} className="insta-card-icon" />
         </div>
-        {(!loaded && (!post || !post.video)) && (
+        {(!loaded || !post) && (
           <div className="insta-img-shimmer">
             <InstagramIcon size={32} opacity={0.2} />
           </div>
         )}
-        {post && post.video ? (
-          <video 
-            src={post.video} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="insta-real-img image-loaded"
-          />
-        ) : post && post.img ? (
+        {post && (
           <img 
             src={post.img} 
-            alt={`Instagram Reel ${index + 1}`} 
-            className={`insta-real-img ${loaded ? 'image-loaded' : 'image-loading'}`}
+            alt={`Instagram Feed ${currentIdx + 1}`} 
+            className={`insta-real-img ${loaded && !isTransitioning ? 'image-loaded' : 'image-loading'}`}
             onLoad={() => setLoaded(true)}
+            style={{ 
+              transition: 'opacity 0.4s ease-in-out, transform 0.4s ease-in-out',
+              opacity: isTransitioning ? 0 : 1,
+              transform: isTransitioning ? 'scale(0.95)' : 'scale(1)'
+            }}
           />
-        ) : null}
+        )}
       </a>
     </div>
   );
@@ -1002,8 +1021,8 @@ function App() {
               To make it live, you can use a free service like Behold.so 
               and paste their embed code below. */}
               <div className="insta-row">
-                {[...instaPosts, ...instaPosts, ...instaPosts].map((post, i) => (
-                  <InstaPost key={i} post={post} index={i} />
+                {[...instaPosts, ...instaPosts, ...instaPosts].map((_, i) => (
+                  <InstaPost key={i} index={i} />
                 ))}
               </div>
 
