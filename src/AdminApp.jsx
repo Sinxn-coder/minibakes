@@ -2664,7 +2664,7 @@ function AdminAppContent({ session }) {
                 )}
 
                 {activeSettingsTab === 'store' && (
-                  <div className="settings-column" style={{ maxWidth: '600px' }}>
+                  <div className="settings-column" style={{ maxWidth: '100%' }}>
                     <div className="settings-card">
                       <div className="settings-card-header">
                         <div className="settings-card-icon" style={{ background: '#fff5f5', color: '#e53e3e' }}>
