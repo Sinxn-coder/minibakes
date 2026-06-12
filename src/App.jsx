@@ -92,6 +92,7 @@ import ProductDetailsPage from './ProductDetailsPage';
 import StudioPage from './StudioPage';
 import CakeCarePage from './CakeCarePage';
 import ContactPage from './ContactPage';
+import StoreClosedPage from './StoreClosedPage';
 import review1 from './assets/reviews/one.webp';
 import review2 from './assets/reviews/two.webp';
 import review3 from './assets/reviews/three.webp';
@@ -434,8 +435,45 @@ function App() {
         console.error('Failed to fetch settings:', e);
       }
     };
+    
+    const fetchAvailability = async () => {
+      try {
+        const { data, error } = await supabase.from('store_availability').select('*').limit(1).single();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching availability:', error);
+          return;
+        }
+        if (data) {
+          setStoreAvailability(data);
+        }
+      } catch (e) {
+        console.error('Failed to fetch availability:', e);
+      }
+    };
+    
     fetchSettings();
+    fetchAvailability();
   }, []);
+
+  const [storeAvailability, setStoreAvailability] = useState(null);
+  const [isStoreClosed, setIsStoreClosed] = useState(false);
+
+  useEffect(() => {
+    if (!storeAvailability) return;
+    let closed = false;
+    if (storeAvailability.is_taking_orders_today === false) {
+      closed = true;
+    } else if (storeAvailability.vacation_start_date && storeAvailability.vacation_end_date) {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      const start = new Date(storeAvailability.vacation_start_date);
+      const end = new Date(storeAvailability.vacation_end_date);
+      if (now >= start && now <= end) {
+        closed = true;
+      }
+    }
+    setIsStoreClosed(closed);
+  }, [storeAvailability]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -782,6 +820,27 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const staticCategories = [
+    { name: 'Custom Cakes', img: cakeImg },
+    { name: 'Cupcakes', img: cupcakeImg },
+    { name: 'Brownies & Blondies', img: brownieImg },
+    { name: 'Cake Pops', img: orbitPop },
+    { name: 'Breakable Hearts', img: orbitBreakableHeart }
+  ];
+
+  if (isStoreClosed) {
+    return (
+      <StoreClosedPage 
+        storeAvailability={storeAvailability} 
+        categories={staticCategories} 
+        clientReviews={clientReviews} 
+        storeSettings={storeSettings} 
+        founderImg={founderImg} 
+        FacebookIcon={FacebookIcon} 
+      />
+    );
+  }
 
   return (
     <div className="main-layout">
