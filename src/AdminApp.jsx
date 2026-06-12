@@ -340,6 +340,7 @@ function AdminAppContent({ session }) {
 
   const [storeAvailability, setStoreAvailability] = useState({
     is_taking_orders_today: true,
+    daily_pause_message: 'We are not taking any more orders today. Please check back tomorrow!',
     vacation_start_date: '',
     vacation_end_date: '',
     vacation_message: 'We are currently away on vacation. Check back soon!'
@@ -377,6 +378,7 @@ function AdminAppContent({ session }) {
         if (data) {
           setStoreAvailability({
             is_taking_orders_today: data.is_taking_orders_today ?? true,
+            daily_pause_message: data.daily_pause_message || 'We are not taking any more orders today. Please check back tomorrow!',
             vacation_start_date: data.vacation_start_date || '',
             vacation_end_date: data.vacation_end_date || '',
             vacation_message: data.vacation_message || 'We are currently away on vacation. Check back soon!'
@@ -420,6 +422,7 @@ function AdminAppContent({ session }) {
       const { error } = await supabase.from('store_availability').upsert({
         id: 1,
         is_taking_orders_today: storeAvailability.is_taking_orders_today,
+        daily_pause_message: storeAvailability.daily_pause_message,
         vacation_start_date: storeAvailability.vacation_start_date || null,
         vacation_end_date: storeAvailability.vacation_end_date || null,
         vacation_message: storeAvailability.vacation_message,
@@ -2686,7 +2689,21 @@ function AdminAppContent({ session }) {
                               <div style={{ width: '22px', height: '22px', background: '#fff', borderRadius: '50%', position: 'absolute', top: '2px', left: storeAvailability.is_taking_orders_today ? '24px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
                             </div>
                           </label>
-                          <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0.5rem 0 0 0' }}>If turned off, customers cannot access the menu to place orders regardless of vacation dates.</p>
+                          <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0.5rem 0 1rem 0' }}>If turned off, customers cannot access the menu to place orders regardless of vacation dates.</p>
+                          
+                          {!storeAvailability.is_taking_orders_today && (
+                            <div style={{ marginTop: '1rem', borderTop: '1px dashed #ddd', paddingTop: '1rem' }}>
+                              <label className="settings-label" style={{ fontSize: '0.9rem' }}>Daily Pause Message</label>
+                              <textarea 
+                                required 
+                                className="settings-input"
+                                value={storeAvailability.daily_pause_message} 
+                                onChange={e => setStoreAvailability(prev => ({ ...prev, daily_pause_message: e.target.value }))} 
+                                placeholder="e.g., We are not taking any more orders today. Please check back tomorrow!"
+                                style={{ minHeight: '80px', padding: '0.75rem 1rem', resize: 'vertical' }}
+                              />
+                            </div>
+                          )}
                         </div>
                         
                         <h4 style={{ fontSize: '1rem', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '1rem', marginTop: '2rem' }}>Scheduled Vacation / Pause Mode</h4>
