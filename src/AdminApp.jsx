@@ -338,6 +338,15 @@ function AdminAppContent({ session }) {
   });
   const [isSavingSettings, setIsSavingSettings] = useState(false);
 
+  const [storeAvailability, setStoreAvailability] = useState({
+    is_taking_orders_today: true,
+    vacation_start_date: '',
+    vacation_end_date: '',
+    vacation_message: 'We are currently away on vacation. Check back soon!'
+  });
+  const [isSavingAvailability, setIsSavingAvailability] = useState(false);
+
+
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -357,7 +366,29 @@ function AdminAppContent({ session }) {
         console.error('Failed to fetch settings:', e);
       }
     };
+    
+    const fetchAvailability = async () => {
+      try {
+        const { data, error } = await supabase.from('store_availability').select('*').limit(1).single();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching availability:', error);
+          return;
+        }
+        if (data) {
+          setStoreAvailability({
+            is_taking_orders_today: data.is_taking_orders_today ?? true,
+            vacation_start_date: data.vacation_start_date || '',
+            vacation_end_date: data.vacation_end_date || '',
+            vacation_message: data.vacation_message || 'We are currently away on vacation. Check back soon!'
+          });
+        }
+      } catch (e) {
+        console.error('Failed to fetch availability:', e);
+      }
+    };
+    
     fetchSettings();
+    fetchAvailability();
   }, []);
 
   const handleSaveSettings = async (e) => {
@@ -378,6 +409,29 @@ function AdminAppContent({ session }) {
       triggerToast('Failed to update settings', 'error');
     } finally {
       setIsSavingSettings(false);
+      setIsSavingSettings(false);
+    }
+  };
+
+  const handleSaveAvailability = async (e) => {
+    e.preventDefault();
+    setIsSavingAvailability(true);
+    try {
+      const { error } = await supabase.from('store_availability').upsert({
+        id: 1,
+        is_taking_orders_today: storeAvailability.is_taking_orders_today,
+        vacation_start_date: storeAvailability.vacation_start_date || null,
+        vacation_end_date: storeAvailability.vacation_end_date || null,
+        vacation_message: storeAvailability.vacation_message,
+        updated_at: new Date().toISOString()
+      });
+      if (error) throw error;
+      triggerToast('Store availability updated successfully!');
+    } catch (err) {
+      console.error('Error updating availability:', err);
+      triggerToast('Failed to update availability', 'error');
+    } finally {
+      setIsSavingAvailability(false);
     }
   };
   const triggerToast = (message, type = 'success') => {
@@ -2620,11 +2674,72 @@ function AdminAppContent({ session }) {
                       </div>
                       <p className="settings-card-desc">Configure your store opening hours, vacation mode, and order accepting status.</p>
                       
-                      <div style={{ padding: '3rem 2rem', textAlign: 'center', background: '#fafafa', borderRadius: '12px', border: '2px dashed #eee' }}>
-                        <Clock size={48} style={{ color: '#ccc', marginBottom: '1rem' }} />
-                        <h4 style={{ margin: '0 0 0.5rem 0', color: '#555', fontSize: '1.2rem' }}>Coming Soon</h4>
-                        <p style={{ margin: 0, color: '#888', fontSize: '0.95rem' }}>Store status and availability controls will be available in the next update.</p>
-                      </div>
+                      <form onSubmit={handleSaveAvailability}>
+                        <div className="settings-form-group" style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px', border: '1px solid #e9ecef' }}>
+                          <label className="settings-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 0 }}>
+                            <span style={{ fontWeight: '600', fontSize: '1rem', color: '#2b2b2b' }}>Taking Orders Today?</span>
+                            <div 
+                              className={`toggle-switch ${storeAvailability.is_taking_orders_today ? 'active' : ''}`}
+                              onClick={() => setStoreAvailability(prev => ({ ...prev, is_taking_orders_today: !prev.is_taking_orders_today }))}
+                              style={{ width: '48px', height: '26px', background: storeAvailability.is_taking_orders_today ? '#4CAF50' : '#e0e0e0', borderRadius: '13px', position: 'relative', cursor: 'pointer', transition: 'background 0.3s' }}
+                            >
+                              <div style={{ width: '22px', height: '22px', background: '#fff', borderRadius: '50%', position: 'absolute', top: '2px', left: storeAvailability.is_taking_orders_today ? '24px' : '2px', transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
+                            </div>
+                          </label>
+                          <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0.5rem 0 0 0' }}>If turned off, customers cannot access the menu to place orders regardless of vacation dates.</p>
+                        </div>
+                        
+                        <h4 style={{ fontSize: '1rem', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '1rem', marginTop: '2rem' }}>Scheduled Vacation / Pause Mode</h4>
+                        
+                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                          <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
+                            <label className="settings-label">Start Date</label>
+                            <div className="settings-input-wrapper">
+                              <Calendar size={18} className="settings-input-icon" />
+                              <input 
+                                type="date" 
+                                className="settings-input"
+                                value={storeAvailability.vacation_start_date} 
+                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_start_date: e.target.value }))} 
+                              />
+                            </div>
+                          </div>
+                          <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
+                            <label className="settings-label">End Date</label>
+                            <div className="settings-input-wrapper">
+                              <Calendar size={18} className="settings-input-icon" />
+                              <input 
+                                type="date" 
+                                className="settings-input"
+                                value={storeAvailability.vacation_end_date} 
+                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_end_date: e.target.value }))} 
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="settings-form-group">
+                          <label className="settings-label">Store Closed Message</label>
+                          <textarea 
+                            required 
+                            className="settings-input"
+                            value={storeAvailability.vacation_message} 
+                            onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_message: e.target.value }))} 
+                            placeholder="e.g., We are fully booked for the week. Check back next Monday!"
+                            style={{ minHeight: '100px', padding: '0.75rem 1rem', resize: 'vertical' }}
+                          />
+                        </div>
+
+                        <button 
+                          type="submit" 
+                          disabled={isSavingAvailability} 
+                          className="settings-button"
+                          style={{ marginTop: '1rem' }}
+                        >
+                          {isSavingAvailability ? <RefreshCw className="spin" size={20} /> : <Save size={20} />}
+                          {isSavingAvailability ? 'Saving...' : 'Save Store Operations'}
+                        </button>
+                      </form>
                     </div>
                   </div>
                 )}
