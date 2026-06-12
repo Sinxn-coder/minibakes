@@ -2706,7 +2706,18 @@ function AdminAppContent({ session }) {
                           )}
                         </div>
                         
-                        <h4 style={{ fontSize: '1rem', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '1rem', marginTop: '2rem' }}>Scheduled Vacation / Pause Mode</h4>
+                        <h4 style={{ fontSize: '1rem', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', marginBottom: '1rem', marginTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span>Scheduled Vacation / Pause Mode</span>
+                          {(storeAvailability.vacation_start_date || storeAvailability.vacation_end_date) && (
+                            <button 
+                              type="button"
+                              onClick={() => setStoreAvailability(prev => ({ ...prev, vacation_start_date: '', vacation_end_date: '' }))}
+                              style={{ background: '#fff0f0', border: '1px solid #ffcdd2', color: '#d32f2f', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '16px', fontWeight: '500' }}
+                            >
+                              <Trash2 size={14} /> Cancel Scheduled Vacation
+                            </button>
+                          )}
+                        </h4>
                         
                         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
                           <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
