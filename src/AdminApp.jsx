@@ -1113,9 +1113,9 @@ function AdminAppContent({ session }) {
   };
 
   const [featuredDesserts, setFeaturedDesserts] = useState([
-    { slot: 1, name: 'Bespoke Cupcakes', price: '12 for €28', description: 'Handcrafted perfection tailored to your theme.', img: null, highlights: [], isEmpty: false },
-    { slot: 2, name: 'Signature Mini Cakes', price: 'Starts at €15', description: 'Elegant layers of flavor in a personal size.', img: null, highlights: [], isEmpty: false },
-    { slot: 3, name: 'Gourmet Cookie Cups', price: '6 for €18', description: 'Crispy edges, gooey centers, irresistible flavors.', img: null, highlights: [], isEmpty: false },
+    { slot: 1, name: 'Brownie Selection', price: '€xx', description: 'Our most popular brownie assortment, baked fresh daily with premium chocolate.', img: null, highlights: [], isEmpty: false },
+    { slot: 2, name: 'Signature Cupcakes', price: '€xx', description: 'A curated selection of our most loved cupcake flavors, perfect for any occasion.', img: null, highlights: [], isEmpty: false },
+    { slot: 3, name: 'Best Seller cake', price: '€xx', description: 'Our signature masterpiece cake, loved by everyone for its perfect balance of flavor.', img: null, highlights: [], isEmpty: false },
   ]);
   const [editingFeatured, setEditingFeatured] = useState(null);
   const [highlightModal, setHighlightModal] = useState(null); // { slot: 1 } or null
