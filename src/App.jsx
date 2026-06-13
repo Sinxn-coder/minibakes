@@ -1404,6 +1404,19 @@ function App() {
         </div>
       </div>
 
+      {/* Floating WhatsApp Button */}
+      <a 
+        href={`https://wa.me/${storeSettings.whatsapp_number}?text=${encodeURIComponent("Hello! I have a special request.")}`}
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="floating-whatsapp"
+      >
+        <span className="whatsapp-icon-container">
+          <WhatsAppIcon size={28} />
+        </span>
+        <span className="whatsapp-text">Special Request</span>
+      </a>
+
     </div>
   );
 }
