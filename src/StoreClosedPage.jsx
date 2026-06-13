@@ -242,7 +242,7 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
         </div>
 
         {/* Client Reviews */}
-        <section className="reviews-section reveal" style={{ padding: '4rem 0', background: '#fcfcfc' }}>
+        <section className="reviews-section reveal">
           <h2 className="reviews-title">CLIENT REVIEWS</h2>
           <div className="reviews-grid">
             {[...(clientReviews || [])].slice(0, 4).map((review, idx) => (
