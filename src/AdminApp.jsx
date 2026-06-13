@@ -2800,7 +2800,10 @@ function AdminAppContent({ session }) {
                                     type="date" 
                                     className="settings-input"
                                     value={storeAvailability.vacation_start_date} 
-                                    onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_start_date: e.target.value }))} 
+                                    onChange={e => {
+                                      setStoreAvailability(prev => ({ ...prev, vacation_start_date: e.target.value }));
+                                      setIsEditingVacation(true);
+                                    }} 
                                   />
                                 </div>
                               </div>
@@ -2812,7 +2815,10 @@ function AdminAppContent({ session }) {
                                     type="date" 
                                     className="settings-input"
                                     value={storeAvailability.vacation_end_date} 
-                                    onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_end_date: e.target.value }))} 
+                                    onChange={e => {
+                                      setStoreAvailability(prev => ({ ...prev, vacation_end_date: e.target.value }));
+                                      setIsEditingVacation(true);
+                                    }} 
                                   />
                                 </div>
                               </div>
@@ -2824,7 +2830,10 @@ function AdminAppContent({ session }) {
                                 required 
                                 className="settings-input"
                                 value={storeAvailability.vacation_message} 
-                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_message: e.target.value }))} 
+                                onChange={e => {
+                                  setStoreAvailability(prev => ({ ...prev, vacation_message: e.target.value }));
+                                  setIsEditingVacation(true);
+                                }} 
                                 placeholder="e.g., We are fully booked for the week. Check back next Monday!"
                                 style={{ minHeight: '100px', padding: '0.75rem 1rem', resize: 'vertical' }}
                               />
