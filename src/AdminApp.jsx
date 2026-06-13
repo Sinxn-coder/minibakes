@@ -1177,26 +1177,31 @@ function AdminAppContent({ session }) {
       try {
         const optimizedFile = await optimizeAndConvertToWebP(newImageFile);
         
-        let fileName = `slot-${slot}.webp`;
-        if (item.img && item.img.includes('featured-images')) {
+        const newFileName = `slot-${slot}-${Date.now()}.webp`;
+        
+        // Delete old image if it exists in the bucket
+        if (item.img && item.img.includes('featured-images/')) {
           const bucketIndex = item.img.indexOf('featured-images/');
           if (bucketIndex !== -1) {
-            fileName = item.img.substring(bucketIndex + 'featured-images/'.length).split('?')[0];
+            const oldFileName = item.img.substring(bucketIndex + 'featured-images/'.length).split('?')[0];
+            if (oldFileName) {
+              await supabase.storage.from('featured-images').remove([oldFileName]);
+            }
           }
         }
         
         // Upload new image
         const { error: uploadError } = await supabase.storage
           .from('featured-images')
-          .upload(fileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
+          .upload(newFileName, optimizedFile, { upsert: true, contentType: 'image/webp' });
           
         if (uploadError) throw uploadError;
         
         const { data: { publicUrl } } = supabase.storage
           .from('featured-images')
-          .getPublicUrl(fileName);
+          .getPublicUrl(newFileName);
           
-        finalImageUrl = `${publicUrl}?t=${Date.now()}`;
+        finalImageUrl = publicUrl;
       } catch (err) {
         console.error('Error uploading image:', err);
         triggerToast('Failed to upload image', 'error');
@@ -3354,16 +3359,6 @@ function AdminAppContent({ session }) {
                 </div>
               </div>
 
-              <div className="form-group">
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#666', marginBottom: '6px' }}>OR USE URL / PATH</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. ./assets/cupcakes/new.webp" 
-                  value={newImageUrl.startsWith('data:') ? '' : newImageUrl}
-                  onChange={(e) => setNewImageUrl(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                />
-              </div>
 
               <button 
                 onClick={handleImageSave}
