@@ -43,10 +43,12 @@ const ContactPage = ({ onBack, storeSettings }) => {
     <div className="contact-page">
       <div className="contact-bg-text">CONTACT</div>
       <div className="contact-container">
-        <button className="contact-back-btn" onClick={onBack}>
-          <ArrowLeft size={20} />
-          <span>Back</span>
-        </button>
+        {onBack && (
+          <button className="contact-back-btn" onClick={onBack}>
+            <ArrowLeft size={20} />
+            <span>Back</span>
+          </button>
+        )}
 
         <div className="contact-header">
           <h1>Get in Touch</h1>

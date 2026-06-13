@@ -331,7 +331,6 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
         {/* Contact Page as Footer */}
         <ContactPage 
           storeSettings={storeSettings} 
-          onBack={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
         />
       </main>
     </div>
