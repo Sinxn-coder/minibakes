@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Circle, Heart, Palette, Droplet, Flame, X, Star, AlignJustify, Sparkles, Sun, ChevronUp, ChevronDown, GripHorizontal, Flower, MessageSquare, MessageCircle, ChevronLeft, ChevronRight, Image as ImageIcon, Gift } from 'lucide-react';
 import './MenuPage.css';
 import ErrorBoundary from './ErrorBoundary';
@@ -491,21 +492,24 @@ export default function MenuPage({
         )}
       </div>
 
-      {/* Fixed WhatsApp Button */}
-      <div className="menu-fixed-whatsapp-wrapper">
-        <div className={`whatsapp-popup ${showWaPopup ? 'show' : ''}`}>
-          Special Request?
-        </div>
-        <a 
-          href={`https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request.`} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="menu-fixed-whatsapp"
-          aria-label="Contact Special Request on WhatsApp"
-        >
-          <MessageCircle size={28} color="white" />
-        </a>
-      </div>
+      {/* Fixed WhatsApp Button using Portal to avoid transform issues */}
+      {createPortal(
+        <div className="menu-fixed-whatsapp-wrapper">
+          <div className={`whatsapp-popup ${showWaPopup ? 'show' : ''}`}>
+            Special Request?
+          </div>
+          <a 
+            href={`https://wa.me/${storeSettings?.whatsapp_number || '35679820529'}?text=Hi%20Mini%20Bakes!%20I'd%20like%20to%20make%20a%20special%20request.`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="menu-fixed-whatsapp"
+            aria-label="Contact Special Request on WhatsApp"
+          >
+            <MessageCircle size={28} color="white" />
+          </a>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
