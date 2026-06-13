@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Star } from 'lucide-react';
 import { supabase } from './supabase';
 import ContactPage from './ContactPage';
+import logo from './assets/mini_logo.webp';
 import './App.css'; // Reuse App styles
 import './MenuPage.css'; // Reuse Menu styles for category chips
 
@@ -189,6 +190,21 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
               <span className="hero-sans">Freshly baked for every</span><br />
               <span className="hero-serif-accent">celebration</span>
             </h1>
+          </div>
+          
+          {/* Center Logo */}
+          <div style={{ zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img 
+              src={logo} 
+              alt="Mini Bakes Logo" 
+              style={{ 
+                width: '350px', 
+                maxWidth: '70vw', 
+                opacity: 0.9, 
+                filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))',
+                transform: 'translateY(-2rem)'
+              }} 
+            />
           </div>
         </section>
 
