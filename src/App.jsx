@@ -1079,10 +1079,9 @@ function App() {
                     <div className="expanded-image-wrapper">
                       <SafeImage src={featuredItems[expandedDesktopCard].img} alt={featuredItems[expandedDesktopCard].name} />
                     </div>
-                    <div className="expanded-info">
-                      <h3>{featuredItems[expandedDesktopCard].name}</h3>
-                      <p className="expanded-price">{featuredItems[expandedDesktopCard].price}</p>
-                      <p className="expanded-description">
+                      <div className="expanded-info">
+                        <h3>{featuredItems[expandedDesktopCard].name}</h3>
+                        <p className="expanded-description">
                         {featuredItems[expandedDesktopCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                       </p>
                       
@@ -1268,7 +1267,6 @@ function App() {
                 </div>
                 <div className="popup-info">
                   <h3>{featuredItems[expandedMobileCard].name}</h3>
-                  <p className="popup-price">{featuredItems[expandedMobileCard].price}</p>
                   <p className="popup-description">
                     {featuredItems[expandedMobileCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                   </p>

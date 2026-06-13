@@ -1937,7 +1937,6 @@ function AdminAppContent({ session }) {
                         
                         <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'New Featured Product' : item.name}</h3>
                         
-                        <p style={{ margin: '0 0 8px 0', color: '#800000', fontWeight: 'bold', fontSize: '14px', opacity: item.isEmpty ? 0.3 : 1 }}>{item.isEmpty ? 'Price Label' : item.price}</p>
                         <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#666', lineHeight: '1.4', minHeight: '3.2em', opacity: item.isEmpty ? 0.3 : 1 }}>
                           {item.isEmpty ? 'Add a description for your new featured highlight...' : item.description}
                         </p>
@@ -2023,15 +2022,6 @@ function AdminAppContent({ session }) {
                             />
                           </div>
                           <div className="form-group">
-                            <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>PRICE TEXT</label>
-                            <input 
-                              type="text" 
-                              defaultValue={item.price} 
-                              id={`price-${item.slot}`}
-                              style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
-                            />
-                          </div>
-                          <div className="form-group">
                             <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>DESCRIPTION</label>
                             <textarea 
                               defaultValue={item.description} 
@@ -2077,7 +2067,7 @@ function AdminAppContent({ session }) {
                                 const updated = {
                                   ...item,
                                   name: document.getElementById(`name-${item.slot}`).value,
-                                  price: document.getElementById(`price-${item.slot}`).value,
+                                  price: '',
                                   description: document.getElementById(`desc-${item.slot}`).value,
                                 };
                                 handleUpdateFeatured(item.slot, updated);
