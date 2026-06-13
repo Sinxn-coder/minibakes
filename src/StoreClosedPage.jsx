@@ -61,20 +61,23 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
             text-align: center;
             font-weight: bold;
             font-size: 1.1rem;
+            font-size: 1.1rem;
             z-index: 100;
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             animation: slideShine 3s linear infinite;
             border-bottom: 2px solid #ef9a9a;
             box-shadow: 0 4px 15px rgba(183, 28, 28, 0.15);
           }
         `}</style>
-        {/* Closed Banner */}
-        <div className="shimmer-banner">
-          {titleText}: {message}
-        </div>
-
         {/* Hero Section */}
-        <section className="hero-section" style={{ height: '60vh', minHeight: '400px' }}>
+        <section className="hero-section">
+          {/* Closed Banner */}
+          <div className="shimmer-banner">
+            {titleText}: {message}
+          </div>
           <div className="hero-top-left-content">
             <h1 className="hero-celebration-text">
               <span className="hero-sans">Freshly baked for every</span><br />
