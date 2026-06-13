@@ -185,15 +185,8 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
           <div className="shimmer-banner">
             {titleText}: {message}
           </div>
-          <div className="hero-top-left-content">
-            <h1 className="hero-celebration-text">
-              <span className="hero-sans">Freshly baked for every</span><br />
-              <span className="hero-serif-accent">celebration</span>
-            </h1>
-          </div>
-          
-          {/* Center Logo */}
-          <div style={{ zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* Center Content */}
+          <div style={{ zIndex: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <img 
               src={logo} 
               alt="Mini Bakes Logo" 
@@ -202,9 +195,14 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
                 maxWidth: '70vw', 
                 opacity: 0.9, 
                 filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))',
-                transform: 'translateY(-2rem)'
+                transform: 'translateY(-1rem)',
+                marginBottom: '0.5rem'
               }} 
             />
+            <h1 style={{ fontSize: '1.2rem', color: '#fff', textAlign: 'center', fontWeight: '400', letterSpacing: '0.5px', opacity: 0.9 }}>
+              <span>Freshly baked for every</span><br />
+              <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.4rem' }}>celebration</span>
+            </h1>
           </div>
         </section>
 
