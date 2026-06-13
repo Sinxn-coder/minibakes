@@ -738,7 +738,7 @@ function App() {
               ...item,
               id: item.id || `featured-${item.slot}`,
               price: item.price ? item.price.replace(/Starting\s*From\s*/gi, '').replace(/Starting\s*/gi, '') : '',
-              img: item.img || [brownieImg, cupcakeImg, cakeImg][item.slot - 1]
+              img: item.img || null
             }));
           
           if (activeFeatured.length > 0) {
