@@ -57,12 +57,13 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
 
       return {
         category: cat,
+        items: parsedCatProducts.filter(p => !p.subcategory),
         sections: subcategories.map(sub => ({
           title: sub,
           items: parsedCatProducts.filter(p => p.subcategory === sub)
         }))
       };
-    }).filter(cat => cat.sections.length > 0);
+    }).filter(cat => cat.sections.length > 0 || cat.items?.length > 0);
   }, [liveProducts]);
 
   useEffect(() => {
@@ -146,43 +147,64 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
           </div>
         </section>
 
-        {/* Categories Grid (No details/cart) */}
-        <section className="menu-page" style={{ padding: '4rem 2rem', background: '#fff', minHeight: '600px' }}>
-          <h2 className="section-title">OUR CREATIONS</h2>
-          
-          <div className="menu-categories" style={{ marginTop: '2rem' }}>
-            {mergedMenuData.map(cat => (
-              <button 
-                key={cat.category}
-                className={`category-btn ${activeCategory === cat.category ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.category)}
-              >
-                {cat.category}
-              </button>
-            ))}
-          </div>
-
-          {activeData.sections?.length > 0 && (
-            <div className="menu-subcategory-selector">
-              {activeData.sections.map(section => (
+        {/* Categories / Menu Container */}
+        <div style={{ background: '#fff', width: '100%' }}>
+          <section className="menu-page" style={{ padding: '4rem 2rem', minHeight: '600px' }}>
+            <h2 className="section-title">OUR CREATIONS</h2>
+            
+            <div className="menu-categories" style={{ marginTop: '2rem' }}>
+              {mergedMenuData.map(cat => (
                 <button 
-                  key={section.title}
-                  className={`subcategory-btn ${activeSubcategory === section.title ? 'active' : ''}`}
-                  onClick={() => setActiveSubcategory(section.title)}
+                  key={cat.category}
+                  className={`category-btn ${activeCategory === cat.category ? 'active' : ''}`}
+                  onClick={() => setActiveCategory(cat.category)}
                 >
-                  {section.title}
-                  <div className="subcategory-indicator" />
+                  {cat.category}
                 </button>
               ))}
             </div>
-          )}
 
-          <div className="menu-grid" style={{ marginTop: '2rem' }}>
-            {activeData.sections?.length > 0 && activeData.sections
-              .filter(section => section.title === activeSubcategory)
-              .map(section => (
-                <React.Fragment key={section.title}>
-                  {section.items.map(item => (
+            {activeData.sections?.length > 0 && (
+              <div className="menu-subcategory-selector">
+                {activeData.sections.map(section => (
+                  <button 
+                    key={section.title}
+                    className={`subcategory-btn ${activeSubcategory === section.title ? 'active' : ''}`}
+                    onClick={() => setActiveSubcategory(section.title)}
+                  >
+                    {section.title}
+                    <div className="subcategory-indicator" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="menu-grid" style={{ marginTop: '2rem' }}>
+              {activeData.sections?.length > 0 ? (
+                <>
+                  {activeData.sections
+                    .filter(section => section.title === activeSubcategory)
+                    .map(section => (
+                      <React.Fragment key={section.title}>
+                        {section.items.map(item => (
+                          <div key={item.id} className="menu-card" style={{ opacity: 0.9, position: 'relative' }}>
+                            <div className="menu-card-image" style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
+                              <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                            <div className="menu-card-content" style={{ padding: '1rem', textAlign: 'left' }}>
+                              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>{item.name}</h3>
+                              <p className="menu-card-desc" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>{item.description}</p>
+                              <div className="menu-card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span className="menu-card-price" style={{ fontWeight: 'bold' }}>{item.price}</span>
+                                <span style={{ fontSize: '0.8rem', color: '#d32f2f', fontWeight: 'bold', background: '#ffebee', padding: '4px 8px', borderRadius: '4px' }}>Closed</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </React.Fragment>
+                    ))
+                  }
+                  {activeData.items?.map(item => (
                     <div key={item.id} className="menu-card" style={{ opacity: 0.9, position: 'relative' }}>
                       <div className="menu-card-image" style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
                         <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -197,11 +219,27 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
                       </div>
                     </div>
                   ))}
-                </React.Fragment>
-              ))
-            }
-          </div>
-        </section>
+                </>
+              ) : (
+                activeData.items?.map(item => (
+                  <div key={item.id} className="menu-card" style={{ opacity: 0.9, position: 'relative' }}>
+                    <div className="menu-card-image" style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
+                      <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div className="menu-card-content" style={{ padding: '1rem', textAlign: 'left' }}>
+                      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>{item.name}</h3>
+                      <p className="menu-card-desc" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>{item.description}</p>
+                      <div className="menu-card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="menu-card-price" style={{ fontWeight: 'bold' }}>{item.price}</span>
+                        <span style={{ fontSize: '0.8rem', color: '#d32f2f', fontWeight: 'bold', background: '#ffebee', padding: '4px 8px', borderRadius: '4px' }}>Closed</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
 
         {/* Client Reviews */}
         <section className="reviews-section reveal" style={{ padding: '4rem 0', background: '#fcfcfc' }}>
