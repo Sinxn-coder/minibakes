@@ -859,27 +859,31 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   </div>
                   <button 
                     className="add-to-order-final-btn"
-                    disabled={currentStepIndex < formSteps.length}
-                    style={{ opacity: currentStepIndex < formSteps.length ? 0.5 : 1, cursor: currentStepIndex < formSteps.length ? 'not-allowed' : 'pointer' }}
+                    disabled={currentStepIndex < formSteps.length || product.status === 'Out of Stock'}
+                    style={{ opacity: (currentStepIndex < formSteps.length || product.status === 'Out of Stock') ? 0.5 : 1, cursor: (currentStepIndex < formSteps.length || product.status === 'Out of Stock') ? 'not-allowed' : 'pointer' }}
                     onClick={() => {
-                      if (currentStepIndex < formSteps.length) return;
+                      if (currentStepIndex < formSteps.length || product.status === 'Out of Stock') return;
                       onConfirm({ ...product, quantity, options });
                       setShowNotification(true);
                       setTimeout(() => setShowNotification(false), 3000);
                       setIsMobileOverlayOpen(false);
                     }}
                   >
-                    Add to Order • {(grandTotal === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) ? (
-                      <span 
-                        className="price-wa-tag tooltip-trigger" 
-                        style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
-                        data-tooltip="Total includes items that will be quoted via WhatsApp."
-                      >
-                        <WhatsAppIcon size={14} />
-                        <span style={{ marginLeft: '4px' }}>WA</span>
-                      </span>
-                    ) : (
-                      isFeatured && grandTotal === 0 ? product.price : `€${grandTotal.toFixed(2)}`
+                    {product.status === 'Out of Stock' ? 'Out of Stock' : (
+                      <>
+                        Add to Order • {(grandTotal === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) ? (
+                          <span 
+                            className="price-wa-tag tooltip-trigger" 
+                            style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
+                            data-tooltip="Total includes items that will be quoted via WhatsApp."
+                          >
+                            <WhatsAppIcon size={14} />
+                            <span style={{ marginLeft: '4px' }}>WA</span>
+                          </span>
+                        ) : (
+                          isFeatured && grandTotal === 0 ? product.price : `€${grandTotal.toFixed(2)}`
+                        )}
+                      </>
                     )}
                   </button>
                 </div>
