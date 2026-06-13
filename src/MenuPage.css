@@ -229,9 +229,13 @@
 
 @media (hover: hover) {
   .menu-fixed-whatsapp:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 50px rgba(37,211,102,0.4);
     background: #128C7E;
+  }
+  
+  .menu-fixed-whatsapp-wrapper:hover .whatsapp-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
   }
 }
 
