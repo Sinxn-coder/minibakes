@@ -238,9 +238,12 @@ export default function MenuPage({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setShowWaPopup(true);
-      setTimeout(() => setShowWaPopup(false), 2000);
-    }, 10000);
+      if (window.innerWidth <= 768) {
+        setShowWaPopup(true);
+        setTimeout(() => setShowWaPopup(false), 2000);
+      }
+    }, 5000);
+    
     return () => clearInterval(interval);
   }, []);
 
