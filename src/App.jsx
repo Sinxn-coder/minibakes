@@ -837,7 +837,8 @@ function App() {
         clientReviews={clientReviews} 
         storeSettings={storeSettings} 
         founderImg={founderImg} 
-        FacebookIcon={FacebookIcon} 
+        FacebookIcon={FacebookIcon}
+        bg1={bg1}
       />
     );
   }

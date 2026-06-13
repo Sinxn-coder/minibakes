@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; // Reuse App styles
 
-export default function StoreClosedPage({ storeAvailability, categories, clientReviews, storeSettings, founderImg, FacebookIcon }) {
+export default function StoreClosedPage({ storeAvailability, categories, clientReviews, storeSettings, founderImg, FacebookIcon, bg1 }) {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
@@ -24,6 +24,14 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
 
   return (
     <div className="main-layout" style={{ paddingTop: 0 }}>
+      {/* Fixed Background Layer */}
+      <div className="global-fixed-bg visible">
+        <div 
+          className="hero-bg-image active" 
+          style={{ backgroundImage: `url("${bg1}")` }} 
+        />
+        <div className="hero-overlay"></div>
+      </div>
       {/* Initial Popup */}
       {showPopup && (
         <div onClick={() => setShowPopup(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
