@@ -320,6 +320,7 @@ const analyticsData = {
 function AdminAppContent({ session }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [activeSettingsTab, setActiveSettingsTab] = useState('profile');
+  const [isEditingVacation, setIsEditingVacation] = useState(false);
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState('this-month');
   const [orderSearchQuery, setOrderSearchQuery] = useState('');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
@@ -2711,7 +2712,10 @@ function AdminAppContent({ session }) {
                           {(storeAvailability.vacation_start_date || storeAvailability.vacation_end_date) && (
                             <button 
                               type="button"
-                              onClick={() => setStoreAvailability(prev => ({ ...prev, vacation_start_date: '', vacation_end_date: '' }))}
+                              onClick={() => {
+                                setStoreAvailability(prev => ({ ...prev, vacation_start_date: '', vacation_end_date: '' }));
+                                setIsEditingVacation(true);
+                              }}
                               style={{ background: '#fff0f0', border: '1px solid #ffcdd2', color: '#d32f2f', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '16px', fontWeight: '500' }}
                             >
                               <Trash2 size={14} /> Cancel Scheduled Vacation
@@ -2719,44 +2723,82 @@ function AdminAppContent({ session }) {
                           )}
                         </h4>
                         
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                          <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
-                            <label className="settings-label">Start Date</label>
-                            <div className="settings-input-wrapper">
-                              <Calendar size={18} className="settings-input-icon" />
-                              <input 
-                                type="date" 
-                                className="settings-input"
-                                value={storeAvailability.vacation_start_date} 
-                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_start_date: e.target.value }))} 
-                              />
+                        {(storeAvailability.vacation_start_date || storeAvailability.vacation_end_date) && !isEditingVacation ? (
+                          <div style={{ background: '#fffcfc', border: '1px solid #ffcdd2', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem', boxShadow: '0 4px 12px rgba(211, 47, 47, 0.05)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                              <div>
+                                <strong style={{ color: '#d32f2f', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.2rem', marginBottom: '0.5rem' }}>
+                                  <Calendar size={20} /> Store on Vacation
+                                </strong>
+                                <div style={{ color: '#555', fontSize: '1rem' }}>
+                                  From <strong style={{ color: '#333' }}>{storeAvailability.vacation_start_date}</strong> to <strong style={{ color: '#333' }}>{storeAvailability.vacation_end_date}</strong>
+                                </div>
+                              </div>
+                              <button 
+                                type="button"
+                                onClick={() => setIsEditingVacation(true)}
+                                style={{ background: '#fff', border: '1px solid #ddd', color: '#333', padding: '8px 16px', borderRadius: '8px', fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '500', transition: 'all 0.2s' }}
+                              >
+                                Edit Details
+                              </button>
+                            </div>
+                            <div style={{ background: '#fff', padding: '1.25rem', borderRadius: '8px', border: '1px solid #ffebee' }}>
+                              <strong style={{ display: 'block', fontSize: '0.85rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Store Message</strong>
+                              <p style={{ margin: 0, color: '#333', whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>{storeAvailability.vacation_message}</p>
                             </div>
                           </div>
-                          <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
-                            <label className="settings-label">End Date</label>
-                            <div className="settings-input-wrapper">
-                              <Calendar size={18} className="settings-input-icon" />
-                              <input 
-                                type="date" 
-                                className="settings-input"
-                                value={storeAvailability.vacation_end_date} 
-                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_end_date: e.target.value }))} 
-                              />
+                        ) : (
+                          <>
+                            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                              <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
+                                <label className="settings-label">Start Date</label>
+                                <div className="settings-input-wrapper">
+                                  <Calendar size={18} className="settings-input-icon" />
+                                  <input 
+                                    type="date" 
+                                    className="settings-input"
+                                    value={storeAvailability.vacation_start_date} 
+                                    onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_start_date: e.target.value }))} 
+                                  />
+                                </div>
+                              </div>
+                              <div className="settings-form-group" style={{ flex: 1, marginBottom: 0 }}>
+                                <label className="settings-label">End Date</label>
+                                <div className="settings-input-wrapper">
+                                  <Calendar size={18} className="settings-input-icon" />
+                                  <input 
+                                    type="date" 
+                                    className="settings-input"
+                                    value={storeAvailability.vacation_end_date} 
+                                    onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_end_date: e.target.value }))} 
+                                  />
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
 
-                        <div className="settings-form-group">
-                          <label className="settings-label">Store Closed Message</label>
-                          <textarea 
-                            required 
-                            className="settings-input"
-                            value={storeAvailability.vacation_message} 
-                            onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_message: e.target.value }))} 
-                            placeholder="e.g., We are fully booked for the week. Check back next Monday!"
-                            style={{ minHeight: '100px', padding: '0.75rem 1rem', resize: 'vertical' }}
-                          />
-                        </div>
+                            <div className="settings-form-group">
+                              <label className="settings-label">Store Closed Message</label>
+                              <textarea 
+                                required 
+                                className="settings-input"
+                                value={storeAvailability.vacation_message} 
+                                onChange={e => setStoreAvailability(prev => ({ ...prev, vacation_message: e.target.value }))} 
+                                placeholder="e.g., We are fully booked for the week. Check back next Monday!"
+                                style={{ minHeight: '100px', padding: '0.75rem 1rem', resize: 'vertical' }}
+                              />
+                            </div>
+                            
+                            {isEditingVacation && (storeAvailability.vacation_start_date || storeAvailability.vacation_end_date) && (
+                              <button 
+                                type="button"
+                                onClick={() => setIsEditingVacation(false)}
+                                style={{ background: 'none', border: 'none', color: '#666', textDecoration: 'underline', cursor: 'pointer', marginBottom: '1rem', fontSize: '0.9rem', padding: 0 }}
+                              >
+                                Cancel Editing
+                              </button>
+                            )}
+                          </>
+                        )}
 
                         <button 
                           type="submit" 
