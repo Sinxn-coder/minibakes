@@ -54,7 +54,15 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
   const [finalOrderTotal, setFinalOrderTotal] = useState(0);
 
   const getItemTotal = (item) => {
-    let unitPrice = parseFloat((item.price || '0').replace(/[^\d.]/g, '')) || 0;
+    const isFeatured = item.id?.toString().startsWith('featured') || item.id?.toString().includes('-featured');
+    let unitPrice = 0;
+    
+    if (isFeatured) {
+      const priceMatches = (item.price || '').match(/\d+(\.\d+)?/g);
+      unitPrice = priceMatches ? parseFloat(priceMatches[priceMatches.length - 1]) : 0;
+    } else {
+      unitPrice = parseFloat((item.price || '0').replace(/[^\d.]/g, '')) || 0;
+    }
 
     // Tiered pricing for cakesicles-bulk
     if (item.id === 'cakesicles-bulk') {
@@ -195,17 +203,25 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
           itemType: cart[0]?.name || 'Sweet Assortment',
           quantity: cart.reduce((acc, item) => acc + item.quantity, 0),
           flavor: cart[0]?.options?.flavor || 'Assorted',
-          items: itemsWithUrls.map(item => ({
-            itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
-            quantity: item.quantity,
-            color: item.options?.color || '',
-            flavor: (item.options?.flavor || 'Assorted') 
-              + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
-              + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
-              + (item.options?.innerMessage ? ` (Inner Note: "${item.options.innerMessage}")` : ''),
-            price: `€${getItemTotal(item).toFixed(2)}`,
-            refImageUrl: item.refImageUrl
-          }))
+          items: itemsWithUrls.map(item => {
+            const isFeatured = item.id?.toString().startsWith('featured') || item.id?.toString().includes('-featured');
+            const total = getItemTotal(item);
+            const displayPrice = (total === 0 && isFeatured && item.price && item.price !== 'WA') 
+              ? item.price 
+              : `€${total.toFixed(2)}`;
+              
+            return {
+              itemType: item.name + (item.options?.individualPackaging ? ' (Individually Packaged)' : ''),
+              quantity: item.quantity,
+              color: item.options?.color || '',
+              flavor: (item.options?.flavor || 'Assorted') 
+                + (item.options?.spreads && item.options.spreads.length > 0 ? ` + ${item.options.spreads.join(', ')} Spread` : '')
+                + (item.options?.message ? ` (Text: "${item.options.message}")` : '')
+                + (item.options?.innerMessage ? ` (Inner Note: "${item.options.innerMessage}")` : ''),
+              price: displayPrice,
+              refImageUrl: item.refImageUrl
+            };
+          })
         }
       };
 
@@ -439,15 +455,22 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
                     )}
                     <div className="order-item-price-qty">
                       <span className="order-item-price">
-                        {getItemTotal(item) === 0 ? (
-                          <span
-                            className="price-wa-tag tooltip-trigger"
-                            data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
-                          >
-                            <WhatsAppIcon size={14} />
-                            <span>WA</span>
-                          </span>
-                        ) : `€${getItemTotal(item).toFixed(2)}`}
+                        {(() => {
+                          const isFeatured = item.id?.toString().startsWith('featured') || item.id?.toString().includes('-featured');
+                          const total = getItemTotal(item);
+                          if (total === 0 && (!isFeatured || item.price === 'WA' || !item.price)) {
+                            return (
+                              <span
+                                className="price-wa-tag tooltip-trigger"
+                                data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
+                              >
+                                <WhatsAppIcon size={14} />
+                                <span>WA</span>
+                              </span>
+                            );
+                          }
+                          return isFeatured && total === 0 ? item.price : `€${total.toFixed(2)}`;
+                        })()}
                       </span>
                       <div className="order-qty-selector">
                         <button onClick={() => handleDecrementCart(item)}><Minus size={14} /></button>
@@ -560,7 +583,10 @@ export default function OrderPage({ cart = [], onBack, onRemoveItem, onUpdateQua
           <span>{step === 'cart' ? 'Subtotal' : 'Total Amount'}</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             €{totalPrice.toFixed(2)}
-            {cart.some(item => getItemTotal(item) === 0) && (
+            {cart.some(item => {
+              const isFeatured = item.id?.toString().startsWith('featured') || item.id?.toString().includes('-featured');
+              return getItemTotal(item) === 0 && (!isFeatured || item.price === 'WA' || !item.price);
+            }) && (
               <span
                 className="price-wa-tag tooltip-trigger"
                 style={{ fontSize: '0.9rem' }}

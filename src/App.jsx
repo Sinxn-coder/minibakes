@@ -700,7 +700,14 @@ function App() {
 
   const calculateTotal = () => {
     return cart.reduce((acc, item) => {
-      const priceNum = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+      const isFeatured = item.id?.toString().startsWith('featured') || item.id?.toString().includes('-featured');
+      let priceNum = 0;
+      if (isFeatured) {
+        const priceMatches = (item.price || '').match(/\d+(\.\d+)?/g);
+        priceNum = priceMatches ? parseFloat(priceMatches[priceMatches.length - 1]) : 0;
+      } else {
+        priceNum = parseFloat((item.price || '0').replace(/[^\d.]/g, '')) || 0;
+      }
       return acc + (priceNum * item.quantity);
     }, 0);
   };

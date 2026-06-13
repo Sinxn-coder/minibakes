@@ -160,7 +160,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                     ? ['Nutella', 'Biscoff', 'Pistachio', 'Kinder', 'White Chocolate', 'Ferrero Rocher']
                     : ['Nutella', 'Biscoff', 'Pistachio', 'Kinder']);
 
-  const basePrice = parseFloat((product?.price || '0').replace(/[^\d.]/g, '')) || 0;
+  const isFeatured = product?.id?.toString().startsWith('featured') || product?.id?.toString().includes('-featured');
+  const priceMatches = (product?.price || '').match(/\d+(\.\d+)?/g);
+  const basePrice = priceMatches ? parseFloat(priceMatches[priceMatches.length - 1]) : 0;
   
   let currentUnitPrice = basePrice;
   if (isCakesicleBulk) {
@@ -666,7 +668,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   <div className="price-row">
                     <span className="price-row-label">{product.name}</span>
                     <span className="price-row-value">
-                      {currentUnitPrice === 0 ? (
+                      {(currentUnitPrice === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) ? (
                         <span 
                           className="price-wa-tag tooltip-trigger" 
                           data-tooltip="We will provide the final quote for this custom design via WhatsApp once your order is received."
@@ -674,7 +676,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                           <WhatsAppIcon size={14} />
                           <span>WA</span>
                         </span>
-                      ) : `€${currentUnitPrice.toFixed(2)}`}
+                      ) : (
+                        isFeatured && currentUnitPrice === 0 ? product.price : `€${currentUnitPrice.toFixed(2)}`
+                      )}
                     </span>
                   </div>
 
@@ -718,7 +722,7 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                   <div className="price-row price-row-total">
                     <span className="price-row-label">Total</span>
                     <span className="price-row-value">
-                      {grandTotal === 0 ? (
+                      {(grandTotal === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) ? (
                         <span 
                           className="price-wa-tag tooltip-trigger" 
                           data-tooltip="Total includes items that will be quoted via WhatsApp."
@@ -726,7 +730,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                           <WhatsAppIcon size={14} />
                           <span>WA</span>
                         </span>
-                      ) : `€${grandTotal.toFixed(2)}`}
+                      ) : (
+                        isFeatured && grandTotal === 0 ? product.price : `€${grandTotal.toFixed(2)}`
+                      )}
                     </span>
                   </div>
                 </div>
@@ -789,7 +795,9 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                         <div className="price-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                           <span className="price-row-label" style={{ fontWeight: '600' }}>{product.name}</span>
                           <span className="price-row-value" style={{ fontWeight: '600' }}>
-                            {currentUnitPrice === 0 ? 'WA' : `€${currentUnitPrice.toFixed(2)}`}
+                            {(currentUnitPrice === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) 
+                              ? 'WA' 
+                              : (isFeatured && currentUnitPrice === 0 ? product.price : `€${currentUnitPrice.toFixed(2)}`)}
                           </span>
                         </div>
                         
@@ -861,16 +869,18 @@ export default function ProductDetailsPage({ product, onBack, onConfirm, cartCou
                       setIsMobileOverlayOpen(false);
                     }}
                   >
-                    Add to Order • {grandTotal === 0 ? (
+                    Add to Order • {(grandTotal === 0 && (!isFeatured || product?.price === 'WA' || !product?.price)) ? (
                       <span 
                         className="price-wa-tag tooltip-trigger" 
                         style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '5px' }}
-                        data-tooltip="Final price will be provided via WhatsApp."
+                        data-tooltip="Total includes items that will be quoted via WhatsApp."
                       >
                         <WhatsAppIcon size={14} />
                         <span style={{ marginLeft: '4px' }}>WA</span>
                       </span>
-                    ) : `€${grandTotal.toFixed(2)}`}
+                    ) : (
+                      isFeatured && grandTotal === 0 ? product.price : `€${grandTotal.toFixed(2)}`
+                    )}
                   </button>
                 </div>
                 {isMiniCake && (
