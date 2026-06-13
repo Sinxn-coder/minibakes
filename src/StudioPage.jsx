@@ -115,7 +115,7 @@ const StudioCalendar = ({ onDateSelect, selectedDate }) => {
 
 export default function ClassesPage() {
   const [bookingStatus, setBookingStatus] = useState(null);
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [currentImgIndex, setCurrentImgIndex] = useState(2); // Start with classImg3 (3.webp)
   const [phoneCode, setPhoneCode] = useState('+356');
   const [formData, setFormData] = useState({
     name: '',
