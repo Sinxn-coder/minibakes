@@ -165,12 +165,6 @@ export default function ClassesPage() {
     }
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImgIndex((prev) => (prev + 1) % classImages.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleBooking = async (e) => {
     e.preventDefault();
