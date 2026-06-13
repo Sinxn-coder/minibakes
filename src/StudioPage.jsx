@@ -4,16 +4,16 @@ import './ClassesPage.css';
 import SafeImage from './components/SafeImage';
 import { supabase } from './supabase';
 
-const classImg1 = `${import.meta.env.BASE_URL}studio1.jpeg`;
-const classImg2 = `${import.meta.env.BASE_URL}studio2.jpeg`;
-const classImg3 = `${import.meta.env.BASE_URL}studio3.png`;
-const classImg4 = `${import.meta.env.BASE_URL}studio4.jpeg`;
-const classImg5 = `${import.meta.env.BASE_URL}studio5.png`;
-const classImg6 = `${import.meta.env.BASE_URL}studio6.png`;
-const classImg7 = `${import.meta.env.BASE_URL}studio7.png`;
-const classImg8 = `${import.meta.env.BASE_URL}studio8.png`;
+import classImg1 from './assets/class/1.webp';
+import classImg2 from './assets/class/2.webp';
+import classImg3 from './assets/class/3.webp';
+import classImg4 from './assets/class/4.webp';
+import classImg5 from './assets/class/5.webp';
+import classImg6 from './assets/class/6.webp';
+import classImg7 from './assets/class/7.webp';
+import classImg8 from './assets/class/8.webp';
 
-// 8 unique class images from public folder
+// 8 unique class images from assets/class folder
 const classImages = [classImg1, classImg2, classImg3, classImg4, classImg5, classImg6, classImg7, classImg8];
 
 // Booked dates are now managed via Admin Panel and stored in Supabase
