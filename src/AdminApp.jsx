@@ -438,6 +438,35 @@ function AdminAppContent({ session }) {
       setIsSavingAvailability(false);
     }
   };
+
+  const handleCancelVacation = async () => {
+    if (!window.confirm('Are you sure you want to cancel the scheduled vacation? This will make the store available again.')) {
+      return;
+    }
+    
+    setIsSavingAvailability(true);
+    try {
+      const { error } = await supabase.from('store_availability').upsert({
+        id: 1,
+        is_taking_orders_today: storeAvailability.is_taking_orders_today,
+        daily_pause_message: storeAvailability.daily_pause_message,
+        vacation_start_date: null,
+        vacation_end_date: null,
+        vacation_message: storeAvailability.vacation_message,
+        updated_at: new Date().toISOString()
+      });
+      if (error) throw error;
+      
+      setStoreAvailability(prev => ({ ...prev, vacation_start_date: '', vacation_end_date: '' }));
+      setIsEditingVacation(false);
+      triggerToast('Scheduled vacation cancelled successfully!');
+    } catch (err) {
+      console.error('Error cancelling vacation:', err);
+      triggerToast('Failed to cancel vacation', 'error');
+    } finally {
+      setIsSavingAvailability(false);
+    }
+  };
   const triggerToast = (message, type = 'success') => {
     setToast({ message, type });
   };
@@ -2712,13 +2741,26 @@ function AdminAppContent({ session }) {
                           {(storeAvailability.vacation_start_date || storeAvailability.vacation_end_date) && (
                             <button 
                               type="button"
-                              onClick={() => {
-                                setStoreAvailability(prev => ({ ...prev, vacation_start_date: '', vacation_end_date: '' }));
-                                setIsEditingVacation(true);
+                              onClick={handleCancelVacation}
+                              disabled={isSavingAvailability}
+                              style={{ 
+                                background: '#d32f2f', 
+                                border: 'none', 
+                                color: '#fff', 
+                                fontSize: '0.85rem', 
+                                cursor: isSavingAvailability ? 'not-allowed' : 'pointer', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                padding: '6px 14px', 
+                                borderRadius: '20px', 
+                                fontWeight: '600',
+                                opacity: isSavingAvailability ? 0.7 : 1,
+                                boxShadow: '0 4px 10px rgba(211, 47, 47, 0.2)',
+                                transition: 'all 0.2s'
                               }}
-                              style={{ background: '#fff0f0', border: '1px solid #ffcdd2', color: '#d32f2f', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '16px', fontWeight: '500' }}
                             >
-                              <Trash2 size={14} /> Cancel Scheduled Vacation
+                              <Trash2 size={16} /> Cancel Scheduled Vacation
                             </button>
                           )}
                         </h4>
