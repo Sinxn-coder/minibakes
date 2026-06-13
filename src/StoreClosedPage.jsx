@@ -40,8 +40,28 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
       {/* Main Content */}
       <main className="main-content">
         
+        <style>{`
+          @keyframes slideShine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+          }
+          .shimmer-banner {
+            background: linear-gradient(90deg, #ffcdd2 25%, #ffffff 50%, #ffcdd2 75%);
+            background-size: 200% auto;
+            color: #b71c1c;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 100;
+            position: relative;
+            animation: slideShine 3s linear infinite;
+            border-bottom: 2px solid #ef9a9a;
+            box-shadow: 0 4px 15px rgba(183, 28, 28, 0.15);
+          }
+        `}</style>
         {/* Closed Banner */}
-        <div className="pulsing-closed-banner">
+        <div className="shimmer-banner">
           {titleText}: {message}
         </div>
 
