@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Star } from 'lucide-react';
 import { supabase } from './supabase';
 import './App.css'; // Reuse App styles
 import './MenuPage.css'; // Reuse Menu styles for category chips
@@ -23,6 +24,49 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
   const titleText = isDailyPause 
     ? "Paused for Today"
     : `Closed from ${storeAvailability?.vacation_start_date} to ${storeAvailability?.vacation_end_date}`;
+
+  const reviewsGridRef = useRef(null);
+
+  useEffect(() => {
+    const grid = reviewsGridRef.current;
+    if (!grid) return;
+
+    let isHovered = false;
+    const handleMouseEnter = () => { isHovered = true; };
+    const handleMouseLeave = () => { isHovered = false; };
+
+    grid.addEventListener('mouseenter', handleMouseEnter);
+    grid.addEventListener('mouseleave', handleMouseLeave);
+    grid.addEventListener('touchstart', handleMouseEnter, { passive: true });
+    grid.addEventListener('touchend', handleMouseLeave, { passive: true });
+
+    let animationFrameId;
+    const scroll = () => {
+      if (!isHovered) {
+        grid.scrollLeft += 0.8;
+      }
+      
+      const N = grid.children.length / 2;
+      if (N > 0 && grid.children[N]) {
+        const singleSetWidth = grid.children[N].offsetLeft - grid.children[0].offsetLeft;
+        if (grid.scrollLeft >= singleSetWidth) {
+          grid.scrollLeft -= singleSetWidth;
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      grid.removeEventListener('mouseenter', handleMouseEnter);
+      grid.removeEventListener('mouseleave', handleMouseLeave);
+      grid.removeEventListener('touchstart', handleMouseEnter);
+      grid.removeEventListener('touchend', handleMouseLeave);
+    };
+  }, [clientReviews]);
 
   const [liveProducts, setLiveProducts] = useState([]);
   const [activeCategory, setActiveCategory] = useState("Cakes");
@@ -244,18 +288,24 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
         {/* Client Reviews */}
         <section className="reviews-section reveal">
           <h2 className="reviews-title">CLIENT REVIEWS</h2>
-          <div className="reviews-grid">
-            {[...(clientReviews || [])].slice(0, 4).map((review, idx) => (
+          <div className="reviews-grid" ref={reviewsGridRef}>
+            {[...(clientReviews || []), ...(clientReviews || [])].map((review, idx) => (
               <div key={idx} className="review-card">
-                {review.fbLink && (
+                {review.fbLink ? (
                   <a href={review.fbLink} target="_blank" rel="noopener noreferrer" className="review-fb-link">
                     <FacebookIcon size={22} className="review-fb-icon" />
                   </a>
+                ) : (
+                  <FacebookIcon size={22} className="review-fb-icon" />
                 )}
                 <div className="review-client-photo">
                   <img src={review.img} alt={review.author} />
                 </div>
-                <div className="review-stars">★★★★★</div>
+                <div className="review-stars">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={24} fill="currentColor" strokeWidth={0} />
+                  ))}
+                </div>
                 <p className="review-text">"{review.text}"</p>
                 <p className="review-author">— {review.author}</p>
               </div>
