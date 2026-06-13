@@ -3988,14 +3988,11 @@ export default function AdminApp() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Minimum 5s delay for the oven animation
-    const minDelay = new Promise(resolve => setTimeout(resolve, 5000));
-    
     Promise.all([
       supabase.auth.getSession(),
-      minDelay
-    ]).then(([sessionResponse]) => {
-      setSession(sessionResponse.data.session);
+      new Promise(resolve => setTimeout(resolve, 4000))
+    ]).then(([{ data: { session } }]) => {
+      setSession(session);
       setLoading(false);
     });
 

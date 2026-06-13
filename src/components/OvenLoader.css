@@ -1,260 +1,115 @@
-/* OvenLoader.css */
 .oven-loader-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
-  width: 100vw;
-  align-items: center;
-  justify-content: center;
-  background: #fdf2f2;
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-}
-
-.oven-loader-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-/* The Shaker Wrapper */
-.oven-shaker {
-  animation: bakeShake 5s ease-in-out infinite;
-  transform-origin: bottom center;
-}
-
-/* The Main Oven Body */
-.oven-body {
-  position: relative;
-  width: 180px;
-  height: 200px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 
-    0 20px 40px rgba(128, 0, 0, 0.1),
-    inset 0 0 0 8px #eee;
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  box-sizing: border-box;
-  animation: bakePulse 5s ease-in-out infinite;
-}
-
-/* Controls */
-.oven-controls {
-  height: 35px;
-  background: #f5f5f5;
-  border-radius: 12px 12px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 0 10px;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.knob {
-  width: 12px;
-  height: 12px;
-  background: #ccc;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.digital-display {
-  background: #222;
-  color: #ff3333;
-  font-size: 10px;
-  font-family: monospace;
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 1px;
-}
-
-/* Cavity */
-.oven-cavity {
-  position: relative;
-  flex: 1;
-  background: #333;
-  border-radius: 0 0 12px 12px;
-  overflow: hidden;
-  margin-top: 4px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
-}
-
-.oven-light {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(255, 150, 0, 0.4) 0%, transparent 70%);
-  opacity: 0;
-  animation: bakeLight 5s ease-in-out infinite;
-}
-
-/* Tray and Baking Item */
-.oven-tray {
-  position: relative;
-  width: 120px;
-  height: 6px;
-  background: #555;
-  border-radius: 3px;
-  margin-bottom: 20px;
-  transform: translateZ(0) translateY(100px); /* Initially out */
-  animation: traySlide 5s ease-in-out infinite;
-  display: flex;
-  justify-content: center;
-  z-index: 2;
-}
-
-.baking-item {
-  position: absolute;
-  bottom: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: itemRise 5s ease-in-out infinite;
-}
-
-.cupcake-base {
-  width: 30px;
-  height: 25px;
-  background: #d4a373;
-  border-radius: 4px 4px 10px 10px;
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
-}
-
-.cupcake-frosting {
-  width: 40px;
-  height: 30px;
-  background: #ffb7b2;
-  border-radius: 50% 50% 10% 10%;
-  margin-bottom: -5px;
-  position: relative;
-  z-index: 1;
-  animation: frostingColor 5s ease-in-out infinite;
-}
-
-/* Door */
-.oven-door {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
-  height: 140px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 0 0 12px 12px;
-  border: 4px solid #eee;
-  box-sizing: border-box;
-  transform-origin: bottom;
-  transform: perspective(600px) rotateX(0deg);
-  transition: transform 0.3s;
-  animation: doorSwing 5s ease-in-out infinite;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  backdrop-filter: blur(2px);
-}
-
-.door-handle {
-  width: 80px;
-  height: 6px;
-  background: #ccc;
-  border-radius: 4px;
-  margin-top: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.door-window {
-  width: 120px;
-  height: 80px;
-  background: rgba(0,0,0,0.1);
-  border-radius: 10px;
-  margin-top: 15px;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
-  border: 2px solid rgba(255,255,255,0.5);
-}
-
-/* Text */
-.loading-text {
+  background: #fdfdfd;
   color: #800000;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin: 0;
+  font-family: inherit;
 }
 
-.loading-text span {
-  animation: dots 1.5s infinite;
+.oven-pulse-wrapper {
+  animation: fullPulse 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.oven-svg {
+  animation: ovenShake 4s ease-in-out infinite;
+  overflow: visible;
+}
+
+/* Door swings open to the side */
+.oven-door {
+  transform-origin: left center;
+  transform-box: fill-box;
+  animation: doorSwing 4s ease-in-out infinite;
+}
+
+.oven-door-handle {
+  transform-origin: left center;
+  transform-box: fill-box;
+  animation: doorSwing 4s ease-in-out infinite;
+}
+
+/* Tray entering and exiting */
+.oven-tray {
+  transform-origin: center center;
+  transform-box: fill-box;
+  animation: trayInsert 4s ease-in-out infinite;
+}
+
+/* Cupcake rising */
+.cupcake-body {
+  transform-origin: bottom center;
+  transform-box: fill-box;
+  animation: bakeRise 4s ease-in-out infinite;
+}
+
+/* Orange/Yellow glow inside */
+.oven-glow {
   opacity: 0;
+  animation: ovenGlow 4s ease-in-out infinite;
 }
-.loading-text span:nth-child(1) { animation-delay: 0s; }
-.loading-text span:nth-child(2) { animation-delay: 0.3s; }
-.loading-text span:nth-child(3) { animation-delay: 0.6s; }
 
-/* KEYFRAMES (5s total) */
+.oven-text {
+  margin-top: 1.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  animation: textPulse 2s ease-in-out infinite;
+}
 
-/* Door: 0s open, 1s close, 3.5s open, 5s open */
+/* --- KEYFRAMES --- */
+
 @keyframes doorSwing {
-  0%, 5% { transform: perspective(600px) rotateX(85deg); }
-  20%, 70% { transform: perspective(600px) rotateX(0deg); }
-  85%, 100% { transform: perspective(600px) rotateX(85deg); }
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  /* Open to put in */
+  5% { transform: scaleX(0.1); opacity: 0; }
+  18% { transform: scaleX(0.1); opacity: 0; }
+  23% { transform: scaleX(1); opacity: 1; }
+  /* Closed while baking */
+  65% { transform: scaleX(1); opacity: 1; }
+  /* Open to take out */
+  70% { transform: scaleX(0.1); opacity: 0; }
+  83% { transform: scaleX(0.1); opacity: 0; }
+  88% { transform: scaleX(1); opacity: 1; }
 }
 
-/* Tray: 0s out, 1s in, 3.5s in, 4.5s out */
-@keyframes traySlide {
-  0% { transform: translateY(80px) scale(1.2); opacity: 0; }
-  5% { opacity: 1; }
-  15%, 75% { transform: translateY(0px) scale(1); opacity: 1; z-index: 2; }
-  85%, 100% { transform: translateY(80px) scale(1.2); opacity: 1; z-index: 20; }
+@keyframes trayInsert {
+  0%, 4% { transform: translate(0, 30px) scale(0.5); opacity: 0; }
+  6% { transform: translate(0, 30px) scale(0.5); opacity: 1; }
+  15% { transform: translate(0, 0) scale(1); opacity: 1; }
+  73% { transform: translate(0, 0) scale(1); opacity: 1; }
+  82% { transform: translate(0, 30px) scale(0.5); opacity: 1; }
+  84% { transform: translate(0, 30px) scale(0.5); opacity: 0; }
+  100% { transform: translate(0, 30px) scale(0.5); opacity: 0; }
 }
 
-/* Light: Glows between 25% and 65% */
-@keyframes bakeLight {
+@keyframes bakeRise {
+  0%, 25% { transform: scaleY(0.4); }
+  60%, 100% { transform: scaleY(1); }
+}
+
+@keyframes ovenShake {
+  0%, 30% { transform: rotate(0); }
+  32%, 40%, 48%, 56%, 64% { transform: rotate(-3deg); }
+  36%, 44%, 52%, 60% { transform: rotate(3deg); }
+  68%, 100% { transform: rotate(0); }
+}
+
+@keyframes ovenGlow {
   0%, 25% { opacity: 0; }
-  35%, 60% { opacity: 1; }
+  30%, 65% { opacity: 1; }
   70%, 100% { opacity: 0; }
 }
 
-/* Shake: 35% to 60% */
-@keyframes bakeShake {
-  0%, 35% { transform: rotate(0deg); }
-  37% { transform: rotate(1deg); }
-  40% { transform: rotate(-1deg); }
-  43% { transform: rotate(1deg); }
-  46% { transform: rotate(-1deg); }
-  49% { transform: rotate(1deg); }
-  52% { transform: rotate(-1deg); }
-  55% { transform: rotate(1deg); }
-  58% { transform: rotate(-1deg); }
-  60%, 100% { transform: rotate(0deg); }
+@keyframes fullPulse {
+  0%, 88% { transform: scale(1); }
+  93% { transform: scale(1.15); }
+  98%, 100% { transform: scale(1); }
 }
 
-/* Item Rise: small at start, bigger at end of bake */
-@keyframes itemRise {
-  0%, 25% { transform: scale(0.8); }
-  65%, 100% { transform: scale(1.1); }
-}
-
-/* Frosting Color: Changes slightly when baked */
-@keyframes frostingColor {
-  0%, 25% { background: #ffe4e1; }
-  65%, 100% { background: #ffb7b2; } /* gets richer/darker */
-}
-
-/* Full oven pulse at end: 85% to 95% */
-@keyframes bakePulse {
-  0%, 80% { transform: scale(1); box-shadow: 0 20px 40px rgba(128, 0, 0, 0.1), inset 0 0 0 8px #eee; }
-  85% { transform: scale(1.05); box-shadow: 0 30px 60px rgba(128, 0, 0, 0.3), inset 0 0 0 8px #eee; }
-  95%, 100% { transform: scale(1); box-shadow: 0 20px 40px rgba(128, 0, 0, 0.1), inset 0 0 0 8px #eee; }
-}
-
-@keyframes dots {
-  0%, 100% { opacity: 0; }
+@keyframes textPulse {
+  0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
