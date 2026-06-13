@@ -41,7 +41,7 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
       <main className="main-content">
         
         {/* Closed Banner */}
-        <div style={{ background: '#ffcdd2', color: '#b71c1c', padding: '1rem', textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem', zIndex: 100, position: 'relative' }}>
+        <div className="pulsing-closed-banner">
           {titleText}: {message}
         </div>
 
