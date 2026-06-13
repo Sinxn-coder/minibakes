@@ -2022,6 +2022,15 @@ function AdminAppContent({ session }) {
                             />
                           </div>
                           <div className="form-group">
+                            <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>PRICE TEXT</label>
+                            <input 
+                              type="text" 
+                              defaultValue={item.price} 
+                              id={`price-${item.slot}`}
+                              style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                            />
+                          </div>
+                          <div className="form-group">
                             <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#888' }}>DESCRIPTION</label>
                             <textarea 
                               defaultValue={item.description} 
@@ -2067,7 +2076,7 @@ function AdminAppContent({ session }) {
                                 const updated = {
                                   ...item,
                                   name: document.getElementById(`name-${item.slot}`).value,
-                                  price: '',
+                                  price: document.getElementById(`price-${item.slot}`).value,
                                   description: document.getElementById(`desc-${item.slot}`).value,
                                 };
                                 handleUpdateFeatured(item.slot, updated);

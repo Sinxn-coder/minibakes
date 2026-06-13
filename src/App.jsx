@@ -336,7 +336,6 @@ const FeaturedCard = ({ item, onClick, className = "" }) => {
       </div>
       <div className="card-info">
         <h3>{item.name}</h3>
-        <p>{item.price}</p>
         <button className="view-details-btn" onClick={onClick}>View Details</button>
       </div>
     </div>
@@ -1079,9 +1078,10 @@ function App() {
                     <div className="expanded-image-wrapper">
                       <SafeImage src={featuredItems[expandedDesktopCard].img} alt={featuredItems[expandedDesktopCard].name} />
                     </div>
-                      <div className="expanded-info">
-                        <h3>{featuredItems[expandedDesktopCard].name}</h3>
-                        <p className="expanded-description">
+                    <div className="expanded-info">
+                      <h3>{featuredItems[expandedDesktopCard].name}</h3>
+                      <p className="expanded-price">{featuredItems[expandedDesktopCard].price}</p>
+                      <p className="expanded-description">
                         {featuredItems[expandedDesktopCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                       </p>
                       
@@ -1267,6 +1267,7 @@ function App() {
                 </div>
                 <div className="popup-info">
                   <h3>{featuredItems[expandedMobileCard].name}</h3>
+                  <p className="popup-price">{featuredItems[expandedMobileCard].price}</p>
                   <p className="popup-description">
                     {featuredItems[expandedMobileCard].description || "Delicious and freshly baked just for you. Customize your order with our various options, premium ingredients, and boundless love."}
                   </p>
@@ -1403,19 +1404,6 @@ function App() {
           </div>
         </div>
       </div>
-
-      {/* Floating WhatsApp Button */}
-      <a 
-        href={`https://wa.me/${storeSettings.whatsapp_number}?text=${encodeURIComponent("Hello! I have a special request.")}`}
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="floating-whatsapp"
-      >
-        <span className="whatsapp-icon-container">
-          <WhatsAppIcon size={28} />
-        </span>
-        <span className="whatsapp-text">Special Request</span>
-      </a>
 
     </div>
   );
