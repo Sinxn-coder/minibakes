@@ -1,34 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Star, MapPin, Mail } from 'lucide-react';
-
-const InstagramIcon = ({ size = 24, color, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={color || "url(#instaGradient)"}
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <defs>
-      <linearGradient id="instaGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="0%" style={{ stopColor: '#f09433' }} />
-        <stop offset="25%" style={{ stopColor: '#e6683c' }} />
-        <stop offset="50%" style={{ stopColor: '#dc2743' }} />
-        <stop offset="75%" style={{ stopColor: '#cc2366' }} />
-        <stop offset="100%" style={{ stopColor: '#bc1888' }} />
-      </linearGradient>
-    </defs>
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
+import { Star } from 'lucide-react';
 import { supabase } from './supabase';
+import ContactPage from './ContactPage';
 import './App.css'; // Reuse App styles
 import './MenuPage.css'; // Reuse Menu styles for category chips
 
@@ -54,26 +27,6 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
     : `Closed from ${storeAvailability?.vacation_start_date} to ${storeAvailability?.vacation_end_date}`;
 
   const reviewsGridRef = useRef(null);
-  const contactFooterRef = useRef(null);
-  const [expandedContactId, setExpandedContactId] = useState(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (contactFooterRef.current && !contactFooterRef.current.contains(event.target)) {
-        setExpandedContactId(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleContactClick = (id, link) => {
-    if (expandedContactId === id || window.innerWidth > 768) {
-      window.open(link, id === 'phone' ? '_self' : '_blank');
-    } else {
-      setExpandedContactId(id);
-    }
-  };
 
   useEffect(() => {
     const grid = reviewsGridRef.current;
@@ -361,46 +314,11 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="contact-section">
-          <div className="contact-main">
-            <h2 className="contact-title">CONTACT US</h2>
-            <p className="contact-subtitle">
-              Have a custom order or question? We'd love to hear from you.
-            </p>
-          </div>
-
-          <div className="contact-footer" ref={contactFooterRef}>
-            <div
-              className={`contact-item ${expandedContactId === 'location' ? 'expanded' : ''}`}
-              onClick={() => handleContactClick('location', 'https://maps.google.com?q=Together%20Turnkey%20Contractors%20Ltd,%20The%20Cottage,%2046%20Triq%20%C4%A6al%20Dwin,%20%C5%BBebbu%C4%A1&ftid=0x130e512c90f392f7:0xc38e40f6185a3f54&entry=gps&shh=CAE&lucs=,94297699,94284475,94231188,94280568,47071704,94218641,94282134,94286869&g_st=ic')}
-            >
-              <MapPin size={24} className="contact-icon" />
-              <span className="contact-label">Ħaż-Żebbuġ, Malta</span>
-            </div>
-            <div
-              className={`contact-item ${expandedContactId === 'instagram' ? 'expanded' : ''}`}
-              onClick={() => handleContactClick('instagram', storeSettings?.instagram_link)}
-            >
-              <InstagramIcon size={24} className="contact-icon" />
-              <span className="contact-label">Mini Bakes</span>
-            </div>
-            <div
-              className={`contact-item ${expandedContactId === 'email' ? 'expanded' : ''}`}
-              onClick={() => handleContactClick('email', 'mailto:meganbriffa2001@gmail.com')}
-            >
-              <Mail size={24} className="contact-icon" />
-              <span className="contact-label">meganbriffa2001@gmail.com</span>
-            </div>
-            <div
-              className={`contact-item ${expandedContactId === 'facebook' ? 'expanded' : ''}`}
-              onClick={() => handleContactClick('facebook', storeSettings?.facebook_link)}
-            >
-              <FacebookIcon size={24} className="contact-icon" />
-              <span className="contact-label">Mini Bakes</span>
-            </div>
-          </div>
-        </section>
+        {/* Contact Page as Footer */}
+        <ContactPage 
+          storeSettings={storeSettings} 
+          onBack={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+        />
       </main>
     </div>
   );
