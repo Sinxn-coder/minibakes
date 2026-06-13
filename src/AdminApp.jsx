@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut, Bell, Search, X, User, Phone, Calendar, Clock, FileText, Cake, Palette, CheckCircle2, MessageCircle, Trash2, Sparkles, TrendingUp, Plus, ChevronLeft, ChevronRight, Edit3, Save, Image as ImageIcon, Upload, Mail, Shield, BarChart3, Database, Activity, RefreshCw, Smartphone, Link, ShieldCheck, AtSign } from 'lucide-react';
+import OvenLoader from './components/OvenLoader';
 import { supabase } from './supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './AdminApp.css';
@@ -3987,8 +3988,14 @@ export default function AdminApp() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    // Minimum 5s delay for the oven animation
+    const minDelay = new Promise(resolve => setTimeout(resolve, 5000));
+    
+    Promise.all([
+      supabase.auth.getSession(),
+      minDelay
+    ]).then(([sessionResponse]) => {
+      setSession(sessionResponse.data.session);
       setLoading(false);
     });
 
@@ -4000,7 +4007,7 @@ export default function AdminApp() {
   }, []);
 
   if (loading) {
-    return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', color: '#800000', fontWeight: 'bold' }}>Loading Admin Panel...</div>;
+    return <OvenLoader />;
   }
 
   if (!session) {
