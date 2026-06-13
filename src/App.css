@@ -3242,21 +3242,5 @@ behold-widget::part(post), behold-widget::part(image), behold-widget::part(video
   display: block;
 }
 
-@keyframes pulse-banner {
-  0% { background-color: #ffebee; box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.4); }
-  50% { background-color: #ffcdd2; box-shadow: 0 0 0 10px rgba(229, 57, 53, 0); }
-  100% { background-color: #ffebee; box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
-}
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
 
-.pulsing-closed-banner {
-  animation: pulse-banner 2s infinite ease-in-out;
-  color: #b71c1c;
-  padding: 1.5rem;
-  text-align: center;
-  font-weight: 800;
-  font-size: 1.4rem;
-  z-index: 100;
-  position: relative;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid #e53935;
-}

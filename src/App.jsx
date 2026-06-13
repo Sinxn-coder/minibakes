@@ -394,11 +394,9 @@ function FeaturedCarousel({ items, onViewDetails }) {
 
 // Premium Page Loader Component
 const PageLoader = () => (
-  <div className="page-transition-loader">
-    <div className="loader-content">
-      <div className="loader-shimmer"></div>
-      <p>Crafting Sweetness...</p>
-    </div>
+  <div className="page-transition-loader" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100vw', background: '#f8f9fa', position: 'fixed', top: 0, left: 0, zIndex: 9999 }}>
+    <Cake size={48} color="#800000" style={{ animation: 'splashScaleIn 0.5s ease-out, bounce 2s infinite' }} />
+    <p style={{ marginTop: '1.5rem', color: '#800000', fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '1px', animation: 'splashTextFadeIn 1.5s infinite alternate' }}>Loading Menu...</p>
   </div>
 );
 
@@ -406,6 +404,7 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -602,6 +601,13 @@ function App() {
   }, [currentView]); // Re-run when view changes to find new elements
 
   const navigateTo = (view) => {
+    if (view === 'menu' && currentView !== 'menu') {
+      setIsPageLoading(true);
+      setTimeout(() => {
+        setIsPageLoading(false);
+      }, 2000);
+    }
+    
     if (currentView !== 'product-details') {
       setPreviousView(currentView);
     }
@@ -851,6 +857,7 @@ function App() {
 
   return (
     <div className="main-layout">
+      {isPageLoading && <PageLoader />}
       {/* Premium Elegant Splash Screen */}
       {showSplash && (
         <div className={`splash-screen-overlay ${isSplashFading ? 'fade-out' : ''}`}>
