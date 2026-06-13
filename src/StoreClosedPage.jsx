@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { supabase } from './supabase';
 import './App.css'; // Reuse App styles
+import './MenuPage.css'; // Reuse Menu styles for category chips
 
-export default function StoreClosedPage({ storeAvailability, categories, clientReviews, storeSettings, founderImg, FacebookIcon, bg1 }) {
+export default function StoreClosedPage({ storeAvailability, clientReviews, storeSettings, founderImg, FacebookIcon, bg1 }) {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,64 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
   const titleText = isDailyPause 
     ? "Paused for Today"
     : `Closed from ${storeAvailability?.vacation_start_date} to ${storeAvailability?.vacation_end_date}`;
+
+  const [liveProducts, setLiveProducts] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("Cakes");
+  const [activeSubcategory, setActiveSubcategory] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
+        if (error && !error.message?.includes('fetch')) throw error;
+        if (data) setLiveProducts(data);
+      } catch (err) {
+        console.error('Error fetching live products:', err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const mergedMenuData = useMemo(() => {
+    if (liveProducts.length === 0) return [];
+
+    const categoryNames = [...new Set(liveProducts.map(p => p.category))];
+    
+    return categoryNames.map(cat => {
+      const catProducts = liveProducts.filter(p => p.category === cat);
+      const parsedCatProducts = catProducts.map(p => ({
+        ...p,
+        isFullWidth: p.name.toLowerCase().includes('3d')
+      })).filter(p => !p.isFullWidth);
+      
+      const subcategories = [...new Set(parsedCatProducts.map(p => p.subcategory).filter(Boolean))];
+
+      return {
+        category: cat,
+        sections: subcategories.map(sub => ({
+          title: sub,
+          items: parsedCatProducts.filter(p => p.subcategory === sub)
+        }))
+      };
+    }).filter(cat => cat.sections.length > 0);
+  }, [liveProducts]);
+
+  useEffect(() => {
+    if (mergedMenuData.length > 0 && !mergedMenuData.find(c => c.category === activeCategory)) {
+      setActiveCategory(mergedMenuData[0].category);
+    }
+  }, [mergedMenuData, activeCategory]);
+
+  useEffect(() => {
+    const data = mergedMenuData.find(c => c.category === activeCategory);
+    if (data?.sections?.length > 0) {
+      setActiveSubcategory(data.sections[0].title);
+    } else {
+      setActiveSubcategory(null);
+    }
+  }, [activeCategory, mergedMenuData]);
+
+  const activeData = mergedMenuData.find(c => c.category === activeCategory) || mergedMenuData[0] || {};
 
   return (
     <div className="main-layout" style={{ paddingTop: 0 }}>
@@ -87,19 +147,59 @@ export default function StoreClosedPage({ storeAvailability, categories, clientR
         </section>
 
         {/* Categories Grid (No details/cart) */}
-        <section className="menu-categories-section" style={{ padding: '4rem 2rem', background: '#fff' }}>
+        <section className="menu-page" style={{ padding: '4rem 2rem', background: '#fff', minHeight: '600px' }}>
           <h2 className="section-title">OUR CREATIONS</h2>
-          <div className="categories-grid" style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
-            {categories?.map((cat, idx) => (
-              <div key={idx} className="category-card" style={{ cursor: 'default', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', background: '#fff' }}>
-                <div className="category-image-wrapper" style={{ height: '250px', width: '100%' }}>
-                  <img src={cat.img} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div className="category-card-content" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                  <h3 style={{ margin: 0, color: '#333', fontSize: '1.25rem' }}>{cat.name}</h3>
-                </div>
-              </div>
+          
+          <div className="menu-categories" style={{ marginTop: '2rem' }}>
+            {mergedMenuData.map(cat => (
+              <button 
+                key={cat.category}
+                className={`category-btn ${activeCategory === cat.category ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat.category)}
+              >
+                {cat.category}
+              </button>
             ))}
+          </div>
+
+          {activeData.sections?.length > 0 && (
+            <div className="menu-subcategory-selector">
+              {activeData.sections.map(section => (
+                <button 
+                  key={section.title}
+                  className={`subcategory-btn ${activeSubcategory === section.title ? 'active' : ''}`}
+                  onClick={() => setActiveSubcategory(section.title)}
+                >
+                  {section.title}
+                  <div className="subcategory-indicator" />
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="menu-grid" style={{ marginTop: '2rem' }}>
+            {activeData.sections?.length > 0 && activeData.sections
+              .filter(section => section.title === activeSubcategory)
+              .map(section => (
+                <React.Fragment key={section.title}>
+                  {section.items.map(item => (
+                    <div key={item.id} className="menu-card" style={{ opacity: 0.9, position: 'relative' }}>
+                      <div className="menu-card-image" style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
+                        <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                      <div className="menu-card-content" style={{ padding: '1rem', textAlign: 'left' }}>
+                        <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>{item.name}</h3>
+                        <p className="menu-card-desc" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>{item.description}</p>
+                        <div className="menu-card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="menu-card-price" style={{ fontWeight: 'bold' }}>{item.price}</span>
+                          <span style={{ fontSize: '0.8rem', color: '#d32f2f', fontWeight: 'bold', background: '#ffebee', padding: '4px 8px', borderRadius: '4px' }}>Closed</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))
+            }
           </div>
         </section>
 
