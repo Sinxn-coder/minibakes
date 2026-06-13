@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Star } from 'lucide-react';
+import { Star, CalendarClock } from 'lucide-react';
 import { supabase } from './supabase';
 import ContactPage from './ContactPage';
 import logo from './assets/mini_logo.webp';
@@ -141,13 +141,26 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
       </div>
       {/* Initial Popup */}
       {showPopup && (
-        <div onClick={() => setShowPopup(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: '16px', maxWidth: '500px', width: '90%', textAlign: 'center', padding: '3rem 2rem', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-            <h2 style={{ fontSize: '1.5rem', color: '#d32f2f', marginBottom: '1rem' }}>{titleText}</h2>
-            <p style={{ fontSize: '1rem', color: '#555', marginBottom: '2rem', whiteSpace: 'pre-wrap' }}>{message}</p>
-            <button className="hero-cta-btn primary" onClick={() => setShowPopup(false)}>
-              Okay, I understand
-            </button>
+        <div onClick={() => setShowPopup(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'fadeInPopup 0.3s ease-out' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: '24px', maxWidth: '420px', width: '90%', textAlign: 'center', padding: '0', boxShadow: '0 20px 40px rgba(0,0,0,0.2)', overflow: 'hidden', animation: 'slideUpPopup 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #ffcdd2 0%, #ffebee 100%)', padding: '2rem 1rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ background: '#fff', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', boxShadow: '0 4px 10px rgba(211, 47, 47, 0.15)' }}>
+                <CalendarClock size={32} color="#d32f2f" />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', color: '#b71c1c', margin: 0, fontWeight: '700', letterSpacing: '0.5px' }}>{titleText}</h2>
+            </div>
+            
+            <div style={{ padding: '2rem' }}>
+              <p style={{ fontSize: '1.05rem', color: '#555', marginBottom: '2rem', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{message}</p>
+              <button 
+                onClick={() => setShowPopup(false)}
+                style={{ background: '#d32f2f', color: '#fff', border: 'none', padding: '14px 32px', borderRadius: '30px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', boxShadow: '0 4px 14px rgba(211, 47, 47, 0.3)', transition: 'all 0.2s', width: '100%' }}
+                onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(211, 47, 47, 0.4)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(211, 47, 47, 0.3)'; }}
+              >
+                Got it, thanks!
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -156,6 +169,14 @@ export default function StoreClosedPage({ storeAvailability, clientReviews, stor
       <main className="main-content">
         
         <style>{`
+          @keyframes fadeInPopup {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes slideUpPopup {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+          }
           @keyframes slideShine {
             0% { background-position: 200% center; }
             100% { background-position: -200% center; }
