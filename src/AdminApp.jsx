@@ -337,9 +337,21 @@ function AdminAppContent({ session }) {
     instagram_link: 'https://instagram.com/minibakes2021',
     facebook_link: 'https://facebook.com/minibakes2021'
   });
+  const [originalStoreSettings, setOriginalStoreSettings] = useState({
+    whatsapp_number: '35679820529',
+    instagram_link: 'https://instagram.com/minibakes2021',
+    facebook_link: 'https://facebook.com/minibakes2021'
+  });
   const [isSavingSettings, setIsSavingSettings] = useState(false);
 
   const [storeAvailability, setStoreAvailability] = useState({
+    is_taking_orders_today: true,
+    daily_pause_message: 'We are not taking any more orders today. Please check back tomorrow!',
+    vacation_start_date: '',
+    vacation_end_date: '',
+    vacation_message: 'We are currently away on vacation. Check back soon!'
+  });
+  const [originalStoreAvailability, setOriginalStoreAvailability] = useState({
     is_taking_orders_today: true,
     daily_pause_message: 'We are not taking any more orders today. Please check back tomorrow!',
     vacation_start_date: '',
@@ -358,11 +370,13 @@ function AdminAppContent({ session }) {
           return;
         }
         if (data) {
-          setStoreSettings({
+          const newSettings = {
             whatsapp_number: data.whatsapp_number || '35679820529',
             instagram_link: data.instagram_link || 'https://instagram.com/minibakes2021',
             facebook_link: data.facebook_link || 'https://facebook.com/minibakes2021'
-          });
+          };
+          setStoreSettings(newSettings);
+          setOriginalStoreSettings(newSettings);
         }
       } catch (e) {
         console.error('Failed to fetch settings:', e);
@@ -377,13 +391,15 @@ function AdminAppContent({ session }) {
           return;
         }
         if (data) {
-          setStoreAvailability({
+          const newAvailability = {
             is_taking_orders_today: data.is_taking_orders_today ?? true,
             daily_pause_message: data.daily_pause_message || 'We are not taking any more orders today. Please check back tomorrow!',
             vacation_start_date: data.vacation_start_date || '',
             vacation_end_date: data.vacation_end_date || '',
             vacation_message: data.vacation_message || 'We are currently away on vacation. Check back soon!'
-          });
+          };
+          setStoreAvailability(newAvailability);
+          setOriginalStoreAvailability(newAvailability);
         }
       } catch (e) {
         console.error('Failed to fetch availability:', e);
@@ -406,6 +422,7 @@ function AdminAppContent({ session }) {
         updated_at: new Date().toISOString()
       });
       if (error) throw error;
+      setOriginalStoreSettings(storeSettings);
       triggerToast('Store branding settings updated successfully!');
     } catch (err) {
       console.error('Error updating settings:', err);
@@ -430,6 +447,7 @@ function AdminAppContent({ session }) {
         updated_at: new Date().toISOString()
       });
       if (error) throw error;
+      setOriginalStoreAvailability(storeAvailability);
       triggerToast('Store availability updated successfully!');
     } catch (err) {
       console.error('Error updating availability:', err);
@@ -1385,8 +1403,31 @@ function AdminAppContent({ session }) {
   });
 
 
+  const hasUnsavedSettingsChanges = JSON.stringify(storeSettings) !== JSON.stringify(originalStoreSettings);
+  const hasUnsavedAvailabilityChanges = JSON.stringify(storeAvailability) !== JSON.stringify(originalStoreAvailability);
+  const hasAnyUnsavedChanges = activeTab === 'settings' && (hasUnsavedSettingsChanges || hasUnsavedAvailabilityChanges);
+
   return (
     <div className="admin-layout">
+      {hasAnyUnsavedChanges && (
+        <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', background: '#333', color: '#fff', padding: '12px 24px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)', zIndex: 99999, animation: 'slideUpPopup 0.3s ease-out' }}>
+          <span style={{ fontSize: '0.95rem', fontWeight: '500' }}>You have unsaved changes in settings.</span>
+          <button 
+            onClick={async () => {
+              if (hasUnsavedSettingsChanges) {
+                await handleSaveSettings({ preventDefault: () => {} });
+              }
+              if (hasUnsavedAvailabilityChanges) {
+                await handleSaveAvailability({ preventDefault: () => {} });
+              }
+            }}
+            disabled={isSavingSettings || isSavingAvailability}
+            style={{ background: '#4caf50', color: '#fff', border: 'none', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600', cursor: (isSavingSettings || isSavingAvailability) ? 'not-allowed' : 'pointer', opacity: (isSavingSettings || isSavingAvailability) ? 0.7 : 1 }}
+          >
+            {(isSavingSettings || isSavingAvailability) ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      )}
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="admin-logo">
