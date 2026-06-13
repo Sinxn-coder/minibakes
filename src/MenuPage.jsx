@@ -185,8 +185,9 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
               <button 
                 className="menu-add-btn" 
                 onClick={() => onSelectProduct(item)}
+                disabled={item.status === 'Out of Stock'}
               >
-                <span className="hide-on-mobile">Add to </span>Order
+                {item.status === 'Out of Stock' ? 'Out of Stock' : <><span className="hide-on-mobile">Add to </span>Order</>}
               </button>
             </div>
           </>
@@ -197,13 +198,13 @@ const MenuCard = ({ item, cakeLayers, setCakeLayers, selectedLayerIndex, setSele
           <button 
             className="designer-order-btn" 
             onClick={() => onSelectProduct({ ...item, layers: cakeLayers })}
-            disabled={cakeLayers.length === 0}
+            disabled={cakeLayers.length === 0 || item.status === 'Out of Stock'}
           >
             <div className="designer-price-label">
               <WhatsAppIcon size={12} />
               <span>WA</span>
             </div>
-            <span>ORDER</span>
+            <span>{item.status === 'Out of Stock' ? 'OUT OF STOCK' : 'ORDER'}</span>
           </button>
         </div>
       )}

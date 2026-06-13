@@ -371,8 +371,15 @@
   transition: opacity 0.3s ease;
 }
 
-.menu-add-btn:hover {
+.menu-add-btn:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.menu-add-btn:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* 3D Designer UI Styles */
